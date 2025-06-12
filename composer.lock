@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "88970a0117c062eed55fa8728fc43833",
+    "content-hash": "6d379d2abf7cc3dfc18989b429a12a8c",
     "packages": [
         {
             "name": "brick/math",
@@ -1456,6 +1456,151 @@
             "time": "2025-01-27T14:24:01+00:00"
         },
         {
+            "name": "laravel/ui",
+            "version": "v4.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/ui.git",
+                "reference": "7d6ffa38d79f19c9b3e70a751a9af845e8f41d88"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/ui/zipball/7d6ffa38d79f19c9b3e70a751a9af845e8f41d88",
+                "reference": "7d6ffa38d79f19c9b3e70a751a9af845e8f41d88",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^9.21|^10.0|^11.0|^12.0",
+                "illuminate/filesystem": "^9.21|^10.0|^11.0|^12.0",
+                "illuminate/support": "^9.21|^10.0|^11.0|^12.0",
+                "illuminate/validation": "^9.21|^10.0|^11.0|^12.0",
+                "php": "^8.0",
+                "symfony/console": "^6.0|^7.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^7.35|^8.15|^9.0|^10.0",
+                "phpunit/phpunit": "^9.3|^10.4|^11.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Ui\\UiServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-master": "4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Ui\\": "src/",
+                    "Illuminate\\Foundation\\Auth\\": "auth-backend/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "Laravel UI utilities and presets.",
+            "keywords": [
+                "laravel",
+                "ui"
+            ],
+            "support": {
+                "source": "https://github.com/laravel/ui/tree/v4.6.1"
+            },
+            "time": "2025-01-28T15:15:29+00:00"
+        },
+        {
+            "name": "laravolt/indonesia",
+            "version": "v0.36",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravolt/indonesia.git",
+                "reference": "f1499a4cecf83b6f09a40a61aff084f7445bee4c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravolt/indonesia/zipball/f1499a4cecf83b6f09a40a61aff084f7445bee4c",
+                "reference": "f1499a4cecf83b6f09a40a61aff084f7445bee4c",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0",
+                "php": "^7.3|^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0|^7.0|^8.0|^9.0|^10.0",
+                "php-coveralls/php-coveralls": "^2.1",
+                "phpunit/phpunit": "^9.0|^10.5|^11.5.3"
+            },
+            "suggest": {
+                "laravolt/suitable": "Required if you want to access editor panel",
+                "spatie/geocoder": "Synchronize latitude longitude data directly using Google's Geocoding Service"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Indonesia": "Laravolt\\Indonesia\\Facade"
+                    },
+                    "providers": [
+                        "Laravolt\\Indonesia\\ServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravolt\\Indonesia\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bayu Hendra Winata",
+                    "email": "bayu.hendra@javan.co.id"
+                },
+                {
+                    "name": "Akbar Adhatama",
+                    "email": "am.adhatama@gmail.com"
+                },
+                {
+                    "name": "Deri Ramdani",
+                    "email": "deri.ramdani1@gmail.com"
+                }
+            ],
+            "description": "Package Laravel yang berisi data Provinsi, Kabupaten/Kota, Kecamatan, dan Keluarahan/Desa di seluruh Indonesia.",
+            "keywords": [
+                "desa",
+                "indonesia",
+                "kabupaten",
+                "kecamatan",
+                "kelurahan",
+                "kota",
+                "laravel",
+                "laravolt",
+                "provinsi"
+            ],
+            "support": {
+                "issues": "https://github.com/laravolt/indonesia/issues",
+                "source": "https://github.com/laravolt/indonesia/tree/v0.36"
+            },
+            "time": "2025-02-28T12:19:57+00:00"
+        },
+        {
             "name": "league/commonmark",
             "version": "2.7.0",
             "source": {
@@ -2005,6 +2150,82 @@
                 }
             ],
             "time": "2024-12-08T08:18:47+00:00"
+        },
+        {
+            "name": "livewire/livewire",
+            "version": "v3.6.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/livewire/livewire.git",
+                "reference": "56aa1bb63a46e06181c56fa64717a7287e19115e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/livewire/livewire/zipball/56aa1bb63a46e06181c56fa64717a7287e19115e",
+                "reference": "56aa1bb63a46e06181c56fa64717a7287e19115e",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^10.0|^11.0|^12.0",
+                "illuminate/routing": "^10.0|^11.0|^12.0",
+                "illuminate/support": "^10.0|^11.0|^12.0",
+                "illuminate/validation": "^10.0|^11.0|^12.0",
+                "laravel/prompts": "^0.1.24|^0.2|^0.3",
+                "league/mime-type-detection": "^1.9",
+                "php": "^8.1",
+                "symfony/console": "^6.0|^7.0",
+                "symfony/http-kernel": "^6.2|^7.0"
+            },
+            "require-dev": {
+                "calebporzio/sushi": "^2.1",
+                "laravel/framework": "^10.15.0|^11.0|^12.0",
+                "mockery/mockery": "^1.3.1",
+                "orchestra/testbench": "^8.21.0|^9.0|^10.0",
+                "orchestra/testbench-dusk": "^8.24|^9.1|^10.0",
+                "phpunit/phpunit": "^10.4|^11.5",
+                "psy/psysh": "^0.11.22|^0.12"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Livewire": "Livewire\\Livewire"
+                    },
+                    "providers": [
+                        "Livewire\\LivewireServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Livewire\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Caleb Porzio",
+                    "email": "calebporzio@gmail.com"
+                }
+            ],
+            "description": "A front-end framework for Laravel.",
+            "support": {
+                "issues": "https://github.com/livewire/livewire/issues",
+                "source": "https://github.com/livewire/livewire/tree/v3.6.3"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/livewire",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-04-12T22:26:52+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -3271,6 +3492,89 @@
                 "source": "https://github.com/ramsey/uuid/tree/4.8.1"
             },
             "time": "2025-06-01T06:28:46+00:00"
+        },
+        {
+            "name": "spatie/laravel-permission",
+            "version": "6.19.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-permission.git",
+                "reference": "0cd412dcad066d75caf0b977716809be7e7642fd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/0cd412dcad066d75caf0b977716809be7e7642fd",
+                "reference": "0cd412dcad066d75caf0b977716809be7e7642fd",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/auth": "^8.12|^9.0|^10.0|^11.0|^12.0",
+                "illuminate/container": "^8.12|^9.0|^10.0|^11.0|^12.0",
+                "illuminate/contracts": "^8.12|^9.0|^10.0|^11.0|^12.0",
+                "illuminate/database": "^8.12|^9.0|^10.0|^11.0|^12.0",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "laravel/passport": "^11.0|^12.0",
+                "laravel/pint": "^1.0",
+                "orchestra/testbench": "^6.23|^7.0|^8.0|^9.0|^10.0",
+                "phpunit/phpunit": "^9.4|^10.1|^11.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\Permission\\PermissionServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "6.x-dev",
+                    "dev-master": "6.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Spatie\\Permission\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Permission handling for Laravel 8.0 and up",
+            "homepage": "https://github.com/spatie/laravel-permission",
+            "keywords": [
+                "acl",
+                "laravel",
+                "permission",
+                "permissions",
+                "rbac",
+                "roles",
+                "security",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/laravel-permission/issues",
+                "source": "https://github.com/spatie/laravel-permission/tree/6.19.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-05-31T00:50:27+00:00"
         },
         {
             "name": "symfony/clock",
@@ -5506,6 +5810,68 @@
                 }
             ],
             "time": "2025-04-27T18:39:23+00:00"
+        },
+        {
+            "name": "takielias/tablar",
+            "version": "12.03",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/takielias/tablar.git",
+                "reference": "685f5ec42e7496bf6fc199431e170e3e1610678a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/takielias/tablar/zipball/685f5ec42e7496bf6fc199431e170e3e1610678a",
+                "reference": "685f5ec42e7496bf6fc199431e170e3e1610678a",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~10|~11|~12",
+                "laravel/ui": "~4"
+            },
+            "require-dev": {
+                "orchestra/testbench": ">=9.0",
+                "phpunit/phpunit": ">=10.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "TakiElias\\Tablar\\TablarServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "TakiElias\\Tablar\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taki Elias",
+                    "email": "taki.elias@gmail.com"
+                }
+            ],
+            "description": "Tablar: A Laravel Dashboard Preset Featuring Dark Mode and Dynamic Menu Generation for Effortless Navigation and Fast Development.",
+            "keywords": [
+                "bootstrap",
+                "laravel",
+                "preset",
+                "tabler",
+                "vite"
+            ],
+            "support": {
+                "issues": "https://github.com/takielias/tablar/issues",
+                "source": "https://github.com/takielias/tablar/tree/12.03"
+            },
+            "time": "2025-05-30T10:13:16+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
