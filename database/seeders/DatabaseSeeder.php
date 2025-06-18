@@ -28,7 +28,8 @@ class DatabaseSeeder extends Seeder
             // VillagesSeeder::class,
             AdmissionCategorySeeder::class,
             BatchSeeder::class,
-            FacultyAndProgramSeeder::class
+            FacultyAndProgramSeeder::class,
+            ReligionSeeder::class
         ]);
     }
 }
