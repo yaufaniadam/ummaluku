@@ -33,6 +33,12 @@ return new class extends Migration
             $table->string('mother_name')->nullable();
             $table->string('father_occupation')->nullable();
             $table->string('mother_occupation')->nullable();
+            $table->string('parent_phone')->nullable();
+            
+            // Kolom wali tetap sama
+            $table->string('guardian_name')->nullable();
+            $table->string('guardian_phone')->nullable();
+            $table->string('guardian_occupation')->nullable();
 
             // Relasi ke tabel master lain
             $table->foreignId('religion_id')->nullable()->constrained('religions')->onDelete('set null');

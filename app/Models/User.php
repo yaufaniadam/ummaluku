@@ -5,7 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles; // <-- Import Trait
+use Spatie\Permission\Traits\HasRoles; 
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\Prospective; 
+use App\Models\Student; 
 
 class User extends Authenticatable
 {
@@ -41,4 +44,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function prospective(): HasOne
+    {
+        return $this->hasOne(Prospective::class);
+    }
+
+    public function student(): HasOne
+    {
+        return $this->hasOne(Student::class);
+    }
 }
