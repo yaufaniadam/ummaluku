@@ -29,7 +29,11 @@ class DatabaseSeeder extends Seeder
             AdmissionCategorySeeder::class,
             BatchSeeder::class,
             FacultyAndProgramSeeder::class,
-            ReligionSeeder::class
+            SettingSeeder::class,
+            ReligionSeeder::class,
+            HighSchoolSeeder::class,
+            DocumentRequirementSeeder::class, 
+            AdmissionCategoryDocumentSeeder::class, 
         ]);
     }
 }

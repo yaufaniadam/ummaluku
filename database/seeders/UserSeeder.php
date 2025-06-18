@@ -33,42 +33,42 @@ class UserSeeder extends Seeder
         // 2. Membuat User untuk setiap Role Staf/Admin
         $superAdmin = User::create([
             'name' => 'Super Admin',
-            'email' => 'superadmin@example.com',
+            'email' => 'superadmin@ummaluku.ac.id',
             'password' => Hash::make('password'),
         ]);
         $superAdmin->assignRole('Super Admin');
 
         $adminPmb = User::create([
             'name' => 'Admin PMB',
-            'email' => 'admin.pmb@example.com',
+            'email' => 'admin.pmb@ummaluku.ac.id',
             'password' => Hash::make('password'),
         ]);
         $adminPmb->assignRole('Admin PMB');
 
         $stafAkademik = User::create([
             'name' => 'Staf Akademik',
-            'email' => 'staf.akademik@example.com',
+            'email' => 'staf.akademik@ummaluku.ac.id',
             'password' => Hash::make('password'),
         ]);
         $stafAkademik->assignRole('Staf Akademik');
 
         $stafSdm = User::create([
             'name' => 'Staf SDM',
-            'email' => 'staf.sdm@example.com',
+            'email' => 'staf.sdm@ummaluku.ac.id',
             'password' => Hash::make('password'),
         ]);
         $stafSdm->assignRole('Staf SDM');
 
         $eksekutif = User::create([
             'name' => 'Pimpinan Eksekutif',
-            'email' => 'eksekutif@example.com',
+            'email' => 'eksekutif@ummaluku.ac.id',
             'password' => Hash::make('password'),
         ]);
         $eksekutif->assignRole('Eksekutif');
         
         $dosen = User::create([
             'name' => 'Dosen Contoh',
-            'email' => 'dosen@example.com',
+            'email' => 'dosen@ummaluku.ac.id',
             'password' => Hash::make('password'),
         ]);
         $dosen->assignRole('Pegawai/Dosen');
