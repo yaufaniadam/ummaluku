@@ -5,11 +5,12 @@
         <div class="container-xl">
             <div class="row g-2 align-items-center">
                 <div class="col">
+                    {{-- Judul Halaman Dinamis --}}
                     <h2 class="page-title">
-                        Formulir Pendaftaran Mahasiswa Baru
+                        Formulir Pendaftaran: {{ $category->name }}
                     </h2>
                     <div class="text-muted mt-1">
-                        Silakan lengkapi semua data yang diperlukan di bawah ini.
+                        {{ $batch->name }} - Tahun Ajaran {{ $batch->year }}
                     </div>
                 </div>
             </div>
@@ -17,14 +18,10 @@
     </div>
     <div class="page-body">
         <div class="container-xl">
-            {{-- 
-                Di sinilah kita memanggil komponen Livewire.
-                Kita juga meneruskan variabel $categorySlug dan $batchId dari Controller
-                ke dalam komponen Livewire.
-            --}}
+            {{-- Meneruskan slug dan id ke komponen Livewire seperti sebelumnya --}}
             @livewire('pendaftaran.form-pendaftaran', [
-                'categorySlug' => $categorySlug, 
-                'batchId' => $batchId
+                'categorySlug' => $category->slug, 
+                'batchId' => $batch->id
             ])
         </div>
     </div>

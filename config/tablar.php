@@ -10,11 +10,11 @@ return [
     |
     */
 
-    'title' => 'Tablar',
+    'title' => 'UM Maluku',
     'title_prefix' => '',
     'title_postfix' => '',
-    'bottom_title' => 'Tablar',
-    'current_version' => 'v11.11',
+    'bottom_title' => 'UM Maluku',
+    'current_version' => 'v1.0',
 
 
     /*
@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'logo' => '<b>Tab</b>LAR',
+    'logo' => '<b>UM</b>Maluku',
     'logo_img_alt' => 'Admin Logo',
 
     /*
@@ -67,12 +67,12 @@ return [
     |
     */
 
-    'layout' => 'horizontal',
+    'layout' => 'fluid',
     //boxed, combo, condensed, fluid, fluid-vertical, horizontal, navbar-overlap, navbar-sticky, rtl, vertical, vertical-right, vertical-transparent
 
-    'layout_light_sidebar' => null,
+    'layout_light_sidebar' => false,
     'layout_light_topbar' => true,
-    'layout_enable_top_header' => false,
+    'layout_enable_top_header' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -118,8 +118,8 @@ return [
     'register_url' => 'register',
     'password_reset_url' => 'password.request',
     'password_email_url' => 'password.email',
-    'profile_url' => false,
-    'setting_url' => false,
+    'profile_url' => true,
+    'setting_url' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -129,7 +129,7 @@ return [
     | Display Alert Visibility.
     |
     */
-    'display_alert' => false,
+    'display_alert' => true,
 
     /*
     |--------------------------------------------------------------------------

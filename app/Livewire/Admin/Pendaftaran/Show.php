@@ -14,8 +14,14 @@ class Show extends Component
 
     public function mount(Application $application)
     {
-        // Kita load relasi yang dibutuhkan agar tidak terjadi N+1 problem
-        $this->application->load(['prospective.user', 'batch', 'admissionCategory', 'programChoices.program']);
+        // Kita tambahkan relasi baru untuk dimuat di sini
+        $this->application->load([
+            'prospective.user',
+            'batch',
+            'admissionCategory.documentRequirements', // <-- Ambil syarat dokumen dari kategori
+            'programChoices.program',
+            'documents' // <-- Ambil dokumen yang sudah di-upload oleh pendaftar
+        ]);
     }
 
     public function render()

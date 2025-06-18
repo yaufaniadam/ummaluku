@@ -14,4 +14,9 @@ class AdmissionCategory extends Model
     {
         return $this->belongsToMany(DocumentRequirement::class, 'admission_category_document_requirement');
     }
+
+    public function batches()
+    {
+        return $this->belongsToMany(Batch::class, 'admission_category_batch');
+    }
 }

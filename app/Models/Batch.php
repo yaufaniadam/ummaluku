@@ -10,11 +10,21 @@ class Batch extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'is_active' => 'boolean',
+    ];
+
     /**
      * Mendapatkan semua pendaftaran yang ada di gelombang ini.
      */
     public function applications(): HasMany
     {
         return $this->hasMany(Application::class);
+    }
+    public function admissionCategories()
+    {
+        return $this->belongsToMany(AdmissionCategory::class, 'admission_category_batch');
     }
 }

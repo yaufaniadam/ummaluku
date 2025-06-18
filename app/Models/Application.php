@@ -41,4 +41,8 @@ class Application extends Model
     {
         return $this->hasMany(ApplicationProgramChoice::class);
     }
+    public function documents()
+    {
+        return $this->hasMany(ApplicationDocument::class);
+    }
 }

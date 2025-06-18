@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             HighSchoolSeeder::class,
             DocumentRequirementSeeder::class, 
             AdmissionCategoryDocumentSeeder::class, 
+            AdmissionCategoryBatchSeeder::class,
         ]);
     }
 }
