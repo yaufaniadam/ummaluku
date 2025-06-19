@@ -1,20 +1,8 @@
-@extends('tablar::page')
+@extends('layouts.pendaftar')
+
 
 @section('content')
-<div class="page-header d-print-none">
-    <div class="container-xl">
-        <div class="row g-2 align-items-center">
-            <div class="col">
-                <h2 class="page-title">
-                    Penerimaan Mahasiswa Baru
-                </h2>
-                <div class="text-muted mt-1">
-                    Universitas Muhammadiyah Maluku - Tahun Ajaran 2025/2026
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 <div class="page-body">
     <div class="container-xl">
         @if (session('error'))
@@ -66,4 +54,5 @@
         </div>
     </div>
 </div>
-@endsection
+@endsection 
+

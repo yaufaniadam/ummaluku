@@ -31,7 +31,7 @@ class PendaftaranController extends Controller
     //     ]);
     // }
 
-     public function index(Request $request)
+    public function index(Request $request)
     {
         // Ambil slug dan id dari URL
         $categorySlug = $request->query('type');
@@ -50,11 +50,22 @@ class PendaftaranController extends Controller
         if (!$batch) {
             return redirect()->route('home')->with('error', 'Gelombang pendaftaran tidak ditemukan.');
         }
-        
+
         // Kirim semua data yang kita butuhkan ke view "wadah"
         return view('pendaftaran.form', [
             'category' => $category,
             'batch' => $batch,
         ]);
+    }
+
+    public function showCategoryDetail(AdmissionCategory $category)
+    {
+        // Load relasi gelombang yang aktif saja untuk kategori ini
+        $category->load(['batches' => function ($query) {
+            $query->where('is_active', true);
+        }]);
+
+        // Tampilkan view baru, kirim data kategori beserta gelombangnya
+        return view('pendaftaran.category-detail', ['category' => $category]);
     }
 }

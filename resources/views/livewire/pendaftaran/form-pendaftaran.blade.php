@@ -7,7 +7,7 @@
             <div class="col-md-12">
                 <div class="card card-stacked">
                     <div class="card-header">
-                        <h3 class="card-title">1. Data Diri Calon Mahasiswa</h3>
+                        <h5 class="card-title">1. Data Diri Calon Mahasiswa</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -94,7 +94,7 @@
             <div class="col-md-12">
                 <div class="card card-stacked">
                     <div class="card-header">
-                        <h3 class="card-title">2. Data Akademik & Pilihan Program Studi</h3>
+                        <h5 class="card-title">2. Data Akademik & Pilihan Program Studi</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -169,7 +169,7 @@
             <div class="col-md-12">
                 <div class="card card-stacked">
                     <div class="card-header">
-                        <h3 class="card-title">3. Data Orang Tua / Wali</h3>
+                        <h5 class="card-title">3. Data Orang Tua / Wali</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -254,7 +254,7 @@
         </div>
 
         {{-- Tombol Submit --}}
-        <div class="d-flex justify-content-end mt-4">
+        <div class="d-flex justify-content-end mt-4 pb-5">
             <button type="submit" class="btn btn-primary btn-lg">
                 <div wire:loading.remove wire:target="save">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-device-floppy"

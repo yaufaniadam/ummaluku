@@ -1,45 +1,60 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Pendaftaran\FormPendaftaran; 
+use App\Http\Controllers\Modules\PMB\PendaftaranController;
 use App\Livewire\Admin\Pendaftaran\Index as PendaftaranIndex;
 use App\Livewire\Admin\Pendaftaran\Show as PendaftaranShow;
 use App\Livewire\Pendaftar\Dashboard as PendaftarDashboard;
-use App\Http\Controllers\Modules\PMB\PendaftaranController;
+use App\Http\Controllers\Modules\PMB\DocumentUploadController;
+use App\Models\Batch; 
 use App\Models\AdmissionCategory;
-
-Auth::routes();
-//sebelum pindah ke breeze
-
-Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+use App\Livewire\Admin\Seleksi\Index as SeleksiIndex;
 
 Route::get('/', function () {
-    // Ambil kategori yang aktif DAN memiliki setidaknya satu gelombang aktif yang terhubung
-    $categories = AdmissionCategory::where('is_active', true)
-        ->whereHas('batches', function ($query) {
-            $query->where('is_active', true);
-        })
-        ->with(['batches' => function ($query) {
-            // Saat mengambil data kategori, sertakan HANYA gelombang yang aktif
-            $query->where('is_active', true);
-        }])
-        ->get();
+    // Ambil semua kategori pendaftaran yang aktif
+    $categories = AdmissionCategory::where('is_active', true)->get();
 
-    return view('welcome', ['categories' => $categories]);
+    // Ambil satu gelombang yang sedang aktif saat ini
+    $activeBatch = Batch::where('is_active', true)->first();
+    
+    // Kirim KEDUA variabel ($categories dan $activeBatch) ke view 'home'
+    return view('user.home', [
+        'categories' => $categories,
+        'activeBatch' => $activeBatch,
+    ]);
 })->name('home');
 
-Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.form');
-    
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/jalur/{category:slug}', [PendaftaranController::class, 'showCategoryDetail'])->name('pendaftaran.category.detail');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // admin pendaftaran
+    Route::get('/admin/pendaftaran', PendaftaranIndex::class)->name('admin.pendaftaran.index');
+Route::get('/admin/pendaftaran/{application}', PendaftaranShow::class)->name('admin.pendaftaran.show');
+Route::get('/admin/seleksi', SeleksiIndex::class)->name('admin.seleksi.index');
+
+});
+
+
+Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.form');
 Route::get('/pendaftaran/sukses', function () {
     return view('sukses'); 
 })->name('pendaftaran.sukses');
 
-Route::get('/admin/pendaftaran', PendaftaranIndex::class)->name('admin.pendaftaran.index');
-Route::get('/admin/pendaftaran/{application}', PendaftaranShow::class)->name('admin.pendaftaran.show');
-
-Route::get('/camaru/dashboard', PendaftarDashboard::class)
-    ->middleware('auth') // <-- Hanya untuk yang sudah login
-    ->name('pendaftar.dashboard');
 
 
+Route::middleware('auth')->group(function () {
+    Route::get('/camaru/dashboard', PendaftarDashboard::class)->name('pendaftar.dashboard');
+    Route::post('/camaru/dashboard/upload-document/{application}', [DocumentUploadController::class, 'store'])->name('pendaftar.document.store');
+});
+    
+require __DIR__.'/auth.php';

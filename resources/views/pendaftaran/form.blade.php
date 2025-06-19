@@ -1,7 +1,7 @@
-@extends('tablar::page')
+@extends('layouts.frontend')
 
 @section('content')
-    <div class="page-header d-print-none">
+    <div class="page-header d-print-none pt-5 pb-5">
         <div class="container-xl">
             <div class="row g-2 align-items-center">
                 <div class="col">

@@ -1,1 +1,1 @@
-@extends('tablar::auth.login')
+@extends('adminlte::auth.login')

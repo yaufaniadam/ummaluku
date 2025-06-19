@@ -1,7 +1,5 @@
-@extends('tablar::page')
 
-@section('content')
 
-show
-
-@endsection
+<div>
+    show
+</div>

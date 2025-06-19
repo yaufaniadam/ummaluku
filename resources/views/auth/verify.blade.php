@@ -1,1 +1,1 @@
-@extends('tablar::auth.verify')
+@extends('adminlte::auth.verify')

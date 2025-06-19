@@ -1,6 +1,4 @@
-@extends('tablar::page') 
 
-@section('content')
 <div class="page-body">
     <div class="container-tight py-4">
         <div class="empty">
@@ -20,4 +18,3 @@
         </div>
     </div>
 </div>
-@endsection
