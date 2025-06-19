@@ -9,6 +9,7 @@ use App\Http\Controllers\Modules\PMB\PendaftaranController;
 use App\Models\AdmissionCategory;
 
 Auth::routes();
+//sebelum pindah ke breeze
 
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
