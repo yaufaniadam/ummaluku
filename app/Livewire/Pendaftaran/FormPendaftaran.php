@@ -13,6 +13,9 @@ use App\Models\Program;
 use App\Models\Religion;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use App\Notifications\PendaftaranBerhasil;
 
 
 class FormPendaftaran extends Component
@@ -33,7 +36,7 @@ class FormPendaftaran extends Component
     // public string $mother_name = '';
     // public string $father_occupation = '';
     // public string $mother_occupation = '';
-    public string $parent_phone = ''; 
+    public string $parent_phone = '';
 
     // Properti untuk data Wali
     // public string $guardian_name = '';       
@@ -63,7 +66,7 @@ class FormPendaftaran extends Component
             // 'address' => 'required|string',
             // 'nisn' => 'required|string|max:20|unique:prospectives,nisn',
             // 'id_number' => 'required|string|max:20|unique:prospectives,id_number',
-            
+
             // Aturan untuk data orang tua
             // 'father_name' => 'required|string|max:255',
             // 'mother_name' => 'required|string|max:255',
@@ -75,14 +78,14 @@ class FormPendaftaran extends Component
             // 'guardian_name' => 'nullable|string|max:255',       
             // 'guardian_phone' => 'nullable|string|max:15',      
             // 'guardian_occupation' => 'nullable|string|max:255', 
-            
+
             // Aturan untuk relasi
             // 'religion_id' => 'required|exists:religions,id',
             // 'high_school_id' => 'required|exists:high_schools,id',
             'program_choice_1' => 'required|exists:programs,id',
             'program_choice_2' => 'nullable|exists:programs,id|different:program_choice_1',
 
-            
+
         ];
     }
 
@@ -130,19 +133,23 @@ class FormPendaftaran extends Component
         // 1. Jalankan validasi
         $validatedData = $this->validate();
 
+        // 2. Hasilkan password acak yang aman
+        $generatedPassword = Str::random(10);
+
         // 2. Mulai Database Transaction
-        DB::transaction(function () use ($validatedData) {
+        $user = DB::transaction(function () use ($validatedData, $generatedPassword) {
             // 3. Buat User baru (tanpa password) dan beri role 'Camaru'
-            $user = User::create([
+            $newUser = User::create([
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
-                'password' => null, // Password akan di-set oleh user nanti
+                'password' => Hash::make($generatedPassword), // Password di-set oleh sistem
             ]);
-            $user->assignRole('Camaru');
+
+            $newUser->assignRole('Camaru');
 
             // 4. Buat data Prospective (biodata)
             $prospective = Prospective::create([
-                'user_id' => $user->id,
+                'user_id' => $newUser->id,
                 // 'id_number' => $validatedData['id_number'],
                 // 'nisn' => $validatedData['nisn'],
                 'birth_place' => $validatedData['birth_place'],
@@ -165,12 +172,14 @@ class FormPendaftaran extends Component
             // 5. Buat data Application (pendaftaran)
             $application = Application::create([
                 'prospective_id' => $prospective->id,
-                'batch_id' => 1, // Ganti dengan ID gelombang aktif
-                'admission_category_id' => 1, // Ganti dengan ID jalur pendaftaran yang dipilih
+                'batch_id' => $this->selectedBatch->id, // <-- Diperbaiki
+                'admission_category_id' => $this->selectedCategory->id,
                 'registration_number' => 'PMB' . date('Y') . '-' . str_pad(Application::count() + 1, 5, '0', STR_PAD_LEFT),
-                'status' => 'awaiting_verification',
+                'status' => config('settings.payment_flow_enabled', false) // digunakan saat setting sudah dipakai
+                        ? 'awaiting_payment' 
+                        : 'awaiting_document_completion',
             ]);
-            
+
             // 6. Simpan Pilihan Prodi
             ApplicationProgramChoice::create([
                 'application_id' => $application->id,
@@ -185,18 +194,25 @@ class FormPendaftaran extends Component
                     'choice_order' => 2,
                 ]);
             }
+            return $newUser;
         });
 
-        // 7. Redirect ke halaman sukses
-        // Kita juga akan kirim email notifikasi di sini nanti
-        return redirect()->route('pendaftaran.sukses'); // Asumsi ada route bernama 'pendaftaran.sukses'
+        if ($user) {
+            $user->notify(new PendaftaranBerhasil($generatedPassword));
+        }
+
+        // 5. Redirect ke halaman sukses dengan membawa data login
+        return redirect()->route('pendaftaran.sukses')->with('registration_data', [
+            'email' => $user->email,
+            'password' => $generatedPassword, // Kirim password mentah (belum di-hash)
+        ]);
     }
 
     public function render()
     {
         // 1. Ambil semua data dari tabel master
-        $religions = Religion::orderBy('name')->get();
-        $highSchools = HighSchool::orderBy('name')->get();
+        // $religions = Religion::orderBy('name')->get();
+        // $highSchools = HighSchool::orderBy('name')->get();
         // Kita ambil program studi dan kita kelompokkan berdasarkan fakultasnya
         $programs = Program::with('faculty')->orderBy('faculty_id')->get()->groupBy('faculty.name_id');
 

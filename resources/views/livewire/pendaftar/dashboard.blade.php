@@ -49,7 +49,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Kelengkapan Dokumen Persyaratan</h3>
+                            <p class="card-title">Kelengkapan Dokumen Persyaratan</p>
                         </div>
                         <div class="card-body p-0">
                             <table class="table table-striped table-valign-middle">
@@ -80,7 +80,7 @@
                                                         {{ Str::title(str_replace('_', ' ', $uploadedDocument->status)) }}
                                                     </span>
                                                 @else
-                                                    <span class="badge badge-secondary">Belum Diunggah</span>
+                                                    <span class="bdadge">Belum Diunggah</span>
                                                 @endif
                                             </td>
                                             <td>
