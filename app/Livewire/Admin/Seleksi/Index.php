@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Seleksi;
 
 use App\Models\Application;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
@@ -11,12 +12,40 @@ use Livewire\Attributes\Layout;
 class Index extends Component
 {
     use WithPagination;
+    public array $selectedPrograms = [];
 
-    public function acceptApplicant(Application $application)
+    public function saveAcceptanceDecision(Application $application)
     {
-        // Logika untuk menerima pendaftar
-        $application->update(['status' => 'accepted']);
-        $this->dispatch('show-alert', ['message' => 'Pendaftar berhasil diterima.', 'type' => 'success']);
+        // 1. Ambil ID prodi yang dipilih dari properti kita
+        $selectedProgramId = $this->selectedPrograms[$application->id] ?? null;
+
+        // 2. Validasi: pastikan admin sudah memilih prodi
+        if (is_null($selectedProgramId)) {
+            $this->dispatch('show-alert', [
+                'message' => 'Silakan pilih program studi terlebih dahulu.', 
+                'type' => 'error'
+            ]);
+            return;
+        }
+
+        // 3. Gunakan Transaction untuk memastikan semua update berhasil
+        DB::transaction(function () use ($application, $selectedProgramId) {
+            // Update status utama aplikasi menjadi 'accepted'
+            $application->update(['status' => 'accepted']);
+
+            // Loop semua pilihan prodi dari pendaftar ini
+            foreach ($application->programChoices as $choice) {
+                // Jika ID-nya cocok dengan yang dipilih admin, set is_accepted = true
+                // Jika tidak, set is_accepted = false
+                $choice->update(['is_accepted' => ($choice->program_id == $selectedProgramId)]);
+            }
+        });
+
+        // Kirim notifikasi sukses
+        $this->dispatch('show-alert', [
+            'message' => 'Pendaftar berhasil diterima di prodi yang dipilih.', 
+            'type' => 'success'
+        ]);
     }
 
     public function rejectApplicant(Application $application)

@@ -189,7 +189,7 @@
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <a href="{{ route('admin.pendaftaran.index') }}" class="btn btn-primary">Kembali</a>
                     @if ($application->status == 'awaiting_verification')
-                        <button class="btn btn-primary" wire:click="advanceToSelection"
+                        <button class="btn btn-warning" wire:click="advanceToSelection"
                             wire:confirm="Anda yakin semua dokumen sudah diperiksa dan pendaftar ini lolos ke tahap seleksi?">
 
                             Loloskan ke Tahap Seleksi</button>

@@ -22,10 +22,10 @@ class DatabaseSeeder extends Seeder
  
         $this->call([
             UserSeeder::class,
-            // ProvincesSeeder::class,
-            // CitiesSeeder::class,
-            // DistrictsSeeder::class,
-            // VillagesSeeder::class,
+            ProvincesSeeder::class,
+            CitiesSeeder::class,
+            DistrictsSeeder::class,
+            VillagesSeeder::class,
             AdmissionCategorySeeder::class,
             BatchSeeder::class,
             FacultyAndProgramSeeder::class,

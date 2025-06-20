@@ -3,13 +3,14 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Modules\PMB\PendaftaranController;
-use App\Livewire\Admin\Pendaftaran\Index as PendaftaranIndex;
+// use App\Livewire\Admin\Pendaftaran\Index as PendaftaranIndex;
 use App\Livewire\Admin\Pendaftaran\Show as PendaftaranShow;
 use App\Livewire\Pendaftar\Dashboard as PendaftarDashboard;
 use App\Http\Controllers\Modules\PMB\DocumentUploadController;
-use App\Models\Batch; 
+use App\Models\Batch;
 use App\Models\AdmissionCategory;
-use App\Livewire\Admin\Seleksi\Index as SeleksiIndex;
+use App\Http\Controllers\Modules\PMB\AdminSeleksiController;
+use App\Http\Controllers\Modules\PMB\AdminPendaftaranController;
 
 Route::get('/', function () {
     // Ambil semua kategori pendaftaran yang aktif
@@ -17,7 +18,7 @@ Route::get('/', function () {
 
     // Ambil satu gelombang yang sedang aktif saat ini
     $activeBatch = Batch::where('is_active', true)->first();
-    
+
     // Kirim KEDUA variabel ($categories dan $activeBatch) ke view 'home'
     return view('user.home', [
         'categories' => $categories,
@@ -38,16 +39,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // admin pendaftaran
-    Route::get('/admin/pendaftaran', PendaftaranIndex::class)->name('admin.pendaftaran.index');
-Route::get('/admin/pendaftaran/{application}', PendaftaranShow::class)->name('admin.pendaftaran.show');
-Route::get('/admin/seleksi', SeleksiIndex::class)->name('admin.seleksi.index');
-
+    // Route::get('/admin/pendaftaran', PendaftaranIndex::class)->name('admin.pendaftaran.index');
+    Route::get('/admin/pendaftaran', [AdminPendaftaranController::class, 'index'])->name('admin.pendaftaran.index');
+        
+    Route::get('/admin/pendaftaran/{application}', PendaftaranShow::class)->name('admin.pendaftaran.show');
+    Route::get('/admin/seleksi', [AdminSeleksiController::class, 'index'])->name('admin.seleksi.index');
+    Route::get('/admin/seleksi/data', [AdminSeleksiController::class, 'data'])->name('admin.seleksi.data');
+    Route::post('/seleksi/{application}/accept', [AdminSeleksiController::class, 'accept'])->name('admin.seleksi.accept');
+    Route::post('/seleksi/{application}/reject', [AdminSeleksiController::class, 'reject'])->name('admin.seleksi.reject');
 });
 
 
 Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.form');
 Route::get('/pendaftaran/sukses', function () {
-    return view('sukses'); 
+    return view('sukses');
 })->name('pendaftaran.sukses');
 
 
@@ -56,5 +61,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/camaru/dashboard', PendaftarDashboard::class)->name('pendaftar.dashboard');
     Route::post('/camaru/dashboard/upload-document/{application}', [DocumentUploadController::class, 'store'])->name('pendaftar.document.store');
 });
-    
-require __DIR__.'/auth.php';
+
+require __DIR__ . '/auth.php';

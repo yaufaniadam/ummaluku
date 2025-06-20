@@ -7,7 +7,7 @@
             <div class="col-md-12">
                 <div class="card card-stacked">
                     <div class="card-header">
-                        <h5 class="card-title">1. Data Diri Calon Mahasiswa</h5>
+                        <p class="card-title">1. Data Diri Calon Mahasiswa</p>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -63,42 +63,42 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-6 mb-3">
+                            {{-- <div class="col-md-6 mb-3">
                                 <label class="form-label required">NIK (Nomor Induk Kependudukan)</label>
                                 <input type="text" class="form-control @error('id_number') is-invalid @enderror"
                                     wire:model.defer="id_number">
                                 @error('id_number')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
+                            </div> --}}
+                            {{-- <div class="col-md-6 mb-3">
                                 <label class="form-label required">NISN (Nomor Induk Siswa Nasional)</label>
                                 <input type="text" class="form-control @error('nisn') is-invalid @enderror"
                                     wire:model.defer="nisn">
                                 @error('nisn')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
-                            <div class="col-md-12 mb-3">
+                            </div> --}}
+                            {{-- <div class="col-md-12 mb-3">
                                 <label class="form-label required">Alamat Lengkap</label>
                                 <textarea class="form-control @error('address') is-invalid @enderror" wire:model.defer="address" rows="3"></textarea>
                                 @error('address')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-12">
+            <div class="col-md-12 mt-3 mb-3">
                 <div class="card card-stacked">
                     <div class="card-header">
-                        <h5 class="card-title">2. Data Akademik & Pilihan Program Studi</h5>
+                        <p class="card-title">2. Pilihan Program Studi</p>
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-12 mb-3">
+                            {{-- <div class="col-md-12 mb-3">
                                 <label class="form-label required">Agama</label>
                                 <select class="form-select @error('religion_id') is-invalid @enderror"
                                     wire:model.defer="religion_id">
@@ -110,8 +110,8 @@
                                 @error('religion_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
-                            <div class="col-md-12 mb-3">
+                            </div> --}}
+                            {{-- <div class="col-md-12 mb-3">
                                 <label class="form-label required">Asal Sekolah</label>
                                 <select class="form-select @error('high_school_id') is-invalid @enderror"
                                     wire:model.defer="high_school_id">
@@ -123,7 +123,7 @@
                                 @error('high_school_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
+                            </div> --}}
                             <div class="col-md-6 mb-3">
                                 <label class="form-label required">Pilihan Program Studi 1</label>
                                 <select class="form-select @error('program_choice_1') is-invalid @enderror"
@@ -169,19 +169,19 @@
             <div class="col-md-12">
                 <div class="card card-stacked">
                     <div class="card-header">
-                        <h5 class="card-title">3. Data Orang Tua / Wali</h5>
+                        <p class="card-title">3. Data Orang Tua / Wali</p>
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            {{-- <div class="col-md-6 mb-3">
                                 <label class="form-label required">Nama Ayah</label>
                                 <input type="text" class="form-control @error('father_name') is-invalid @enderror"
                                     wire:model.defer="father_name">
                                 @error('father_name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
+                            </div> --}}
+                            {{-- <div class="col-md-6 mb-3">
                                 <label class="form-label required">Pekerjaan Ayah</label>
                                 <input type="text"
                                     class="form-control @error('father_occupation') is-invalid @enderror"
@@ -189,16 +189,16 @@
                                 @error('father_occupation')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
+                            </div> --}}
+                            {{-- <div class="col-md-6 mb-3">
                                 <label class="form-label required">Nama Ibu</label>
                                 <input type="text" class="form-control @error('mother_name') is-invalid @enderror"
                                     wire:model.defer="mother_name">
                                 @error('mother_name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
+                            </div> --}}
+                            {{-- <div class="col-md-6 mb-3">
                                 <label class="form-label required">Pekerjaan Ibu</label>
                                 <input type="text"
                                     class="form-control @error('mother_occupation') is-invalid @enderror"
@@ -206,7 +206,7 @@
                                 @error('mother_occupation')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
+                            </div> --}}
                             <div class="col-md-12 mb-3">
                                 <label class="form-label required">No. Telepon Orang Tua/Wali</label>
                                 <input type="text"
@@ -217,8 +217,8 @@
                                 @enderror
                             </div>
                         </div>
-                        <hr>
-                        <div class="row mt-3">
+                        {{-- <hr> --}}
+                        {{-- <div class="row mt-3">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Nama Wali (Jika ada)</label>
                                 <input type="text"
@@ -246,7 +246,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
