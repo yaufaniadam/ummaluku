@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Modules\PMB\PendaftaranController;
 // use App\Livewire\Admin\Pendaftaran\Index as PendaftaranIndex;
 use App\Livewire\Admin\Pendaftaran\Show as PendaftaranShow;
-use App\Livewire\Pendaftar\Dashboard as PendaftarDashboard;
+// use App\Livewire\Pendaftar\Dashboard as PendaftarDashboard;
+use App\Http\Controllers\Modules\PMB\PendaftarDashboardController;
 use App\Http\Controllers\Modules\PMB\DocumentUploadController;
 use App\Models\Batch;
 use App\Models\AdmissionCategory;
@@ -58,7 +59,7 @@ Route::get('/pendaftaran/sukses', function () {
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/camaru/dashboard', PendaftarDashboard::class)->name('pendaftar.dashboard');
+    Route::get('/camaru/dashboard', [PendaftarDashboardController::class, 'showDashboard'])->name('pendaftar.dashboard');
     Route::post('/camaru/dashboard/upload-document/{application}', [DocumentUploadController::class, 'store'])->name('pendaftar.document.store');
 });
 

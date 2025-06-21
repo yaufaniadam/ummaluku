@@ -21,11 +21,11 @@ class DatabaseSeeder extends Seeder
 
  
         $this->call([
-            UserSeeder::class,
             ProvincesSeeder::class,
             CitiesSeeder::class,
             DistrictsSeeder::class,
             VillagesSeeder::class,
+            UserSeeder::class,
             AdmissionCategorySeeder::class,
             BatchSeeder::class,
             FacultyAndProgramSeeder::class,

@@ -1,0 +1,123 @@
+<div>
+    @section('title', 'Dashboard Pendaftar')
+
+    @section('content')
+        <div class="container px-5 py-5">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h3 class="card-title">Selamat Datang, {{ $application->prospective->user->name }}!</h3>
+                        </div>
+                        <div class="card-body">
+
+
+                            @if (session('success'))
+                                <div class="alert alert-success">{{ session('success') }}</div>
+                            @endif
+
+                            {{-- Informasi Pendaftaran --}}
+                            <table class="table table-striped">
+                                <tr class="datagrid-item">
+                                    <td class="datagrid-title">No. Pendaftaran</td>
+                                    <td class="datagrid-content">{{ $application->registration_number }}</td>
+                                </tr>
+                                <tr class="datagrid-item">
+                                    <td class="datagrid-title">Jalur Pendaftaran</td>
+                                    <td class="datagrid-content">{{ $application->admissionCategory->name }}</td>
+                                </tr>
+                                <tr class="datagrid-item">
+                                    <td class="datagrid-title">Gelombang</td>
+                                    <td class="datagrid-content">{{ $application->batch->name }}
+                                        ({{ $application->batch->year }})</td>
+                                </tr>
+                                <tr class="datagrid-item">
+                                    <td class="datagrid-title">Status Saat Ini</td>
+                                    <td class="datagrid-content">
+                                        <span
+                                            class="text-danger">{{ Str::title(str_replace('_', ' ', $application->status)) }}</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                           
+
+                            <p>Langkah selanjutnya adalah melengkapi semua dokumen persyaratan di bawah ini.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <hp class="card-title">Kelengkapan Dokumen Persyaratan</p>
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="table table-striped table-valign-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Nama Dokumen</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($requiredDocuments as $requirement)
+                                        @php
+                                            $uploadedDocument = $application->documents->firstWhere(
+                                                'document_requirement_id',
+                                                $requirement->id,
+                                            );
+                                        @endphp
+                                        <tr>
+                                            <td>
+                                                <strong>{{ $requirement->name }}</strong>
+                                                <p class="text-muted mb-0">{{ $requirement->description }}</p>
+                                            </td>
+                                            <td>
+                                                @if ($uploadedDocument)
+                                                    <span
+                                                        class="text-{{ $uploadedDocument->status == 'verified' ? 'success' : 'warning' }}">
+                                                        {{ Str::title(str_replace('_', ' ', $uploadedDocument->status)) }}
+                                                    </span>
+                                                @else
+                                                    <span class="bdadge">Belum Diunggah</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if (!$uploadedDocument || $uploadedDocument->status == 'revision_needed')
+                                                    <form action="{{ route('pendaftar.document.store', $application) }}"
+                                                        method="POST" enctype="multipart/form-data">
+                                                        @csrf
+                                                        <input type="hidden" name="document_id"
+                                                            value="{{ $requirement->id }}">
+                                                        <div class="input-group">
+                                                            <div class="custom-file">
+                                                                <input type="file" name="file_upload"
+                                                                    class="custom-file-input" required>
+                                                                <label class="custom-file-label">Pilih file...</label>
+                                                            </div>
+                                                            <div class="input-group-append">
+                                                                <button type="submit"
+                                                                    class="btn btn-outline-secondary">Upload</button>
+                                                            </div>
+                                                        </div>
+                                                        @error('file_upload')
+                                                            <span class="text-danger d-block">{{ $message }}</span>
+                                                        @enderror
+                                                    </form>
+                                                @else
+                                                    <a href="{{ Storage::url($uploadedDocument->file_path) }}"
+                                                        target="_blank" class="btn btn-sm btn-info">Lihat File</a>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @stop
+</div>

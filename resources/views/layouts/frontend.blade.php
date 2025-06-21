@@ -18,6 +18,7 @@
 
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
+    @livewireStyles
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -110,8 +111,10 @@
 
     <!-- Core theme JS-->
     <script src="{{ asset('js/scripts.js') }}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-     @stack('js')
+    @livewireScripts
+    @stack('js')
 </body>
 
 </html>
