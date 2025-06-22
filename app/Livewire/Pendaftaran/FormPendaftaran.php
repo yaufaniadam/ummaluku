@@ -176,8 +176,8 @@ class FormPendaftaran extends Component
                 'admission_category_id' => $this->selectedCategory->id,
                 'registration_number' => 'PMB' . date('Y') . '-' . str_pad(Application::count() + 1, 5, '0', STR_PAD_LEFT),
                 'status' => config('settings.payment_flow_enabled', false) // digunakan saat setting sudah dipakai
-                        ? 'awaiting_payment' 
-                        : 'awaiting_document_completion',
+                        ? 'menunggu_pembayaran' 
+                        : 'menunggu_data_lengkap',
             ]);
 
             // 6. Simpan Pilihan Prodi

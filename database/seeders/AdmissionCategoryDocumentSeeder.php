@@ -15,33 +15,61 @@ class AdmissionCategoryDocumentSeeder extends Seeder
 
         // 2. Definisikan relasi menggunakan slug yang sudah pasti unik
         $relations = [
-            // Jalur Prestasi
-            ['category' => 'prestasi', 'document' => 'ijazah-sma-smk-sederajat'],
-            ['category' => 'prestasi', 'document' => 'pas-foto-3x4'],
-            ['category' => 'prestasi', 'document' => 'kartu-keluarga'],
-            ['category' => 'prestasi', 'document' => 'ktp-kartu-identitas'],
-            ['category' => 'prestasi', 'document' => 'nilai-rapor-semester-1-5'],
-            ['category' => 'prestasi', 'document' => 'sertifikat-prestasi'],
-
-            // Jalur Tes
-            ['category' => 'tes', 'document' => 'ijazah-sma-smk-sederajat'],
-            ['category' => 'tes', 'document' => 'pas-foto-3x4'],
-            ['category' => 'tes', 'document' => 'kartu-keluarga'],
-            ['category' => 'tes', 'document' => 'ktp-kartu-identitas'],
-
-            // Jalur Mandiri
-            ['category' => 'mandiri', 'document' => 'ijazah-sma-smk-sederajat'],
-            ['category' => 'mandiri', 'document' => 'pas-foto-3x4'],
-            ['category' => 'mandiri', 'document' => 'kartu-keluarga'],
-            ['category' => 'mandiri', 'document' => 'ktp-kartu-identitas'],
+            // Jalur jalur-nilai-rapor
+            // ['category' => 'jalur-nilai-rapor', 'document' => 'ijazah-sma-smk-sederajat'],
+            ['category' => 'jalur-nilai-rapor', 'document' => 'pas-foto-3x4'],
+            ['category' => 'jalur-nilai-rapor', 'document' => 'kartu-keluarga'],
+            ['category' => 'jalur-nilai-rapor', 'document' => 'ktp-kartu-identitas'],
+            ['category' => 'jalur-nilai-rapor', 'document' => 'nilai-rapor-semester-1-5'],
             
+            // Jalur Prestasi
+            // ['category' => 'jalur-prestasi', 'document' => 'ijazah-sma-smk-sederajat'],
+            ['category' => 'jalur-prestasi', 'document' => 'nilai-rapor-semester-1-5'],
+            ['category' => 'jalur-prestasi', 'document' => 'pas-foto-3x4'],
+            ['category' => 'jalur-prestasi', 'document' => 'kartu-keluarga'],
+            ['category' => 'jalur-prestasi', 'document' => 'ktp-kartu-identitas'],
+            ['category' => 'jalur-prestasi', 'document' => 'sertifikat-prestasi'],
+
+            // Jalur Persyarikatan
+            // ['category' => 'jalur-prestasi', 'document' => 'ijazah-sma-smk-sederajat'],
+            ['category' => 'jalur-persyarikatan', 'document' => 'nilai-rapor-semester-1-5'],
+            ['category' => 'jalur-persyarikatan', 'document' => 'pas-foto-3x4'],
+            ['category' => 'jalur-persyarikatan', 'document' => 'kartu-keluarga'],
+            ['category' => 'jalur-persyarikatan', 'document' => 'ktp-kartu-identitas'],
+            ['category' => 'jalur-persyarikatan', 'document' => 'sertifikat-aktif-organisasi'],
+
+            // Jalur CBT
+            // ['category' => 'jalur-cbt', 'document' => 'ijazah-sma-smk-sederajat'],
+            // ['category' => 'jalur-cbt', 'document' => 'nilai-rapor-semester-1-5'],
+            ['category' => 'jalur-cbt', 'document' => 'surat-keterangan-lulus'],
+            ['category' => 'jalur-cbt', 'document' => 'pas-foto-3x4'],
+            ['category' => 'jalur-cbt', 'document' => 'kartu-keluarga'],
+            ['category' => 'jalur-cbt', 'document' => 'ktp-kartu-identitas'],      
+
+            // Jalur SKL
+            ['category' => 'jalur-skl', 'document' => 'ijazah-sma-smk-sederajat'],
+            ['category' => 'jalur-skl', 'document' => 'surat-keterangan-lulus'],
+            // ['category' => 'jalur-skl', 'document' => 'nilai-rapor-semester-1-5'],
+            ['category' => 'jalur-skl', 'document' => 'pas-foto-3x4'],
+            ['category' => 'jalur-skl', 'document' => 'kartu-keluarga'],
+            ['category' => 'jalur-skl', 'document' => 'ktp-kartu-identitas'],
+
+            // Jalur UTBK
+            ['category' => 'jalur-utbk', 'document' => 'ijazah-sma-smk-sederajat'],
+            ['category' => 'jalur-utbk', 'document' => 'skhun'],
+            // ['category' => 'jalur-utbk', 'document' => 'nilai-rapor-semester-1-5'],
+            ['category' => 'jalur-utbk', 'document' => 'pas-foto-3x4'],
+            ['category' => 'jalur-utbk', 'document' => 'kartu-keluarga'],
+            ['category' => 'jalur-utbk', 'document' => 'ktp-kartu-identitas'],
+
+                       
             // Jalur Beasiswa
-            ['category' => 'beasiswa', 'document' => 'ijazah-sma-smk-sederajat'],
-            ['category' => 'beasiswa', 'document' => 'pas-foto-3x4'],
-            ['category' => 'beasiswa', 'document' => 'kartu-keluarga'],
-            ['category' => 'beasiswa', 'document' => 'ktp-kartu-identitas'],
-            ['category' => 'beasiswa', 'document' => 'nilai-rapor-semester-1-5'],
-            ['category' => 'beasiswa', 'document' => 'surat-keterangan-tidak-mampu'],
+            ['category' => 'jalur-kip', 'document' => 'ijazah-sma-smk-sederajat'],
+            ['category' => 'jalur-kip', 'document' => 'pas-foto-3x4'],
+            ['category' => 'jalur-kip', 'document' => 'kartu-keluarga'],
+            ['category' => 'jalur-kip', 'document' => 'ktp-kartu-identitas'],
+            ['category' => 'jalur-kip', 'document' => 'nilai-rapor-semester-1-5'],
+            ['category' => 'jalur-kip', 'document' => 'surat-keterangan-tidak-mampu'],
         ];
 
         $insertData = [];

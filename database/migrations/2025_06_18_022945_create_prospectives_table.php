@@ -32,6 +32,7 @@ return new class extends Migration
             $table->string('birth_place')->nullable();
             $table->date('birth_date')->nullable();
             $table->enum('gender', ['Laki-laki', 'Perempuan'])->nullable();
+            $table->enum('citizenship', ['WNI', 'WNA'])->nullable();
             $table->string('phone')->nullable();
             $table->text('address')->nullable();
             $table->string('postal_code', 10)->nullable();
@@ -40,15 +41,16 @@ return new class extends Migration
             // Data Keluarga
             $table->string('father_name')->nullable();
             $table->string('father_nik', 20)->nullable();
-            $table->unsignedBigInteger('father_income')->nullable();
+            $table->string('father_income')->nullable();
             $table->string('father_occupation')->nullable();
             $table->string('mother_name')->nullable();
             $table->string('mother_nik', 20)->nullable();
-            $table->unsignedBigInteger('mother_income')->nullable();
+            $table->string('mother_income')->nullable();
             $table->string('mother_occupation')->nullable();
             $table->string('parent_phone')->nullable();
 
             // Kolom wali tetap sama
+            $table->boolean('with_guardian')->nullable();
             $table->string('guardian_name')->nullable();
             $table->string('guardian_phone')->nullable();
             $table->string('guardian_occupation')->nullable();
@@ -57,6 +59,7 @@ return new class extends Migration
             // Relasi ke tabel master lain
             $table->foreignId('religion_id')->nullable()->constrained('religions')->onDelete('set null');
             $table->foreignId('high_school_id')->nullable()->constrained('high_schools')->onDelete('set null');
+            $table->foreignId('high_school_major_id')->nullable()->constrained('high_school_majors')->onDelete('set null');
 
             // Gunakan char/string sesuai tipe kolom 'code' di laravolt
             $table->char('province_code', 2)->nullable();

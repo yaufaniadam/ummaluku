@@ -6,6 +6,7 @@ use App\Models\Application;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use App\Models\HighSchool;
+use App\Models\HighSchoolMajor;
 use App\Models\Religion;
 use Laravolt\Indonesia\Models\City;
 use Laravolt\Indonesia\Models\District;
@@ -30,29 +31,45 @@ class Dashboard extends Component
 
     // Properti BARU untuk menampung data biodata yang akan diisi
     public $nisn, $id_number, $address, $religion_id, $high_school_id;
-    public $father_name, $mother_name, $father_occupation, $mother_occupation, $parent_phone;
-    public $guardian_name, $guardian_phone, $guardian_occupation;
+    public $father_name, $mother_name, $father_occupation, $mother_occupation, $father_income, $mother_income, $parent_phone;
+    public $guardian_name, $guardian_phone, $guardian_occupation, $guardian_income, $high_school_major_id;
+    // public $npwp;
+    public $is_kps_recipient = false; // Beri nilai default false
+    public $with_guardian = false;
+    public $citizenship;
+
+    public bool $isBiodataComplete = false;
 
     protected function rules(): array
     {
+        $prospectiveId = $this->application->prospective->id;
+
         return [
-            'nisn' => 'required|numeric|digits:10',
-            'id_number' => 'required|numeric|digits:16',
+            'nisn'      => 'required|numeric|digits:10|unique:prospectives,nisn,' . $prospectiveId,
+            'id_number' => 'required|numeric|digits:16|unique:prospectives,id_number,' . $prospectiveId,
             'address' => 'required|string',
             'religion_id' => 'required|exists:religions,id',
             'high_school_id' => 'required|exists:high_schools,id',
-            // 'father_name' => 'required|string|max:255',
-            // 'mother_name' => 'required|string|max:255',
-            // 'father_occupation' => 'required|string|max:255',
-            // 'mother_occupation' => 'required|string|max:255',
-            // 'parent_phone' => 'required|string|max:15',
-            // 'guardian_name' => 'nullable|string|max:255',
-            // 'guardian_phone' => 'nullable|string|max:15',
-            // 'guardian_occupation' => 'nullable|string|max:255',
+            'father_name' => 'required|string|max:255',
+            'father_occupation' => 'required|string|max:255',
+            'father_income' => 'required|numeric',
+            'mother_income' => 'required|numeric',
+            'mother_name' => 'required|string|max:255',
+            'mother_occupation' => 'required|string|max:255',
+            'parent_phone' => 'required|string|max:15',
+            'guardian_name' => 'nullable|string|max:255',
+            'guardian_occupation' => 'nullable|string|max:255',
+            'guardian_income' => 'nullable|numeric',
             'province_code' => 'required|exists:indonesia_provinces,code',
             'city_code' => 'required|exists:indonesia_cities,code',
-            // 'district_code' => 'required|exists:indonesia_districts,code',
-            // 'village_code' => 'required|exists:indonesia_villages,code',
+            'district_code' => 'required|exists:indonesia_districts,code',
+            'village_code' => 'required|exists:indonesia_villages,code',
+            // 'npwp' => 'nullable|string|max:20',
+            'is_kps_recipient' => 'required|boolean',
+            'with_guardian' => 'nullable|boolean',
+            'citizenship' => 'required|string|in:WNI,WNA',
+            'high_school_major_id' => 'required',
+            
         ];
     }
     public function messages(): array
@@ -71,6 +88,19 @@ class Dashboard extends Component
             'high_school_id.required' => 'Asal Sekolah wajib diisi',
             'province_code.required' => 'Propinsi wajib diisi',
             'city_code.required' => 'Kabupaten/Kota wajib diisi',
+            'district_code.required' => 'Kecamatan wajib diisi',
+            'village_code.required' => 'Desa/Kelurahan wajib diisi',
+            'father_name.required' => 'Nama Ayah wajib diisi',
+            'father_occupation.required' => 'Pekerjaan Ayah wajib diisi',
+            'father_income.required' => 'Penghasilan Ayah wajib diisi',
+            'father_income.numeric' => 'Penghasilan Ayah harus berupa angka',
+            'mother_name.required' => 'Nama Ibu wajib diisi',
+            'mother_occupation.required' => 'Pekerjaan Ibu wajib diisi',
+            'mother_income.required' => 'Penghasilan Ibu wajib diisi',
+            'mother_income.numeric' => 'Penghasilan Ibu harus berupa angka',
+            'guardian_income.numeric' => 'Penghasilan Wali harus berupa angka',
+            'is_kps_recipient.required' => 'Opsi KPS harus dipilih',
+            'citizenship.required' => 'Kewarganegaraan harus dipilih',
         ];
     }
     public function updated($propertyName)
@@ -91,7 +121,7 @@ class Dashboard extends Component
         ])->firstOrFail();
 
         // // Isi semua properti form dengan data yang sudah ada di database
-         $this->fill($this->application->prospective->toArray());
+        $this->fill($this->application->prospective->toArray());
 
         $this->provinces = Province::all();
 
@@ -130,6 +160,26 @@ class Dashboard extends Component
         $this->reset('village_code');
     }
 
+    // public function checkBiodataCompletion()
+    // {
+    //     $prospective = $this->application->prospective;
+
+    //     // Daftar semua field yang wajib diisi di biodata
+    //     $requiredFields = [
+    //         'nisn', 'id_number'
+    //     ];
+
+    //     $this->isBiodataComplete = true; // Asumsikan lengkap terlebih dahulu
+
+    //     foreach ($requiredFields as $field) {
+    //         // Jika ada satu saja field yang kosong, langsung set ke false dan hentikan pengecekan
+    //         if (empty($prospective->{$field})) {
+    //             $this->isBiodataComplete = false;
+    //             return;
+    //         }
+    //     }
+    // }
+
     /**
      * Method BARU khusus untuk menyimpan biodata
      */
@@ -141,6 +191,11 @@ class Dashboard extends Component
         // Update data di tabel prospectives
         $this->application->prospective->update($validatedData);
 
+        // 3. Update status langsung di tabel applications
+        $this->application->update([
+            'status' => 'menunggu_upload_dokumen'
+        ]);
+
         // Beri notifikasi sukses menggunakan SweetAlert
         $this->dispatch('swal-success', [
             'message' => 'Biodata Anda berhasil diperbarui!',
@@ -151,6 +206,8 @@ class Dashboard extends Component
     {
         $religions = Religion::orderBy('id')->get();
         $highSchools = HighSchool::orderBy('name')->get();
+        $highSchoolMajor = highSchoolMajor::orderBy('name')->get();
+
 
         $this->application->refresh();
 
@@ -158,6 +215,7 @@ class Dashboard extends Component
         return view('livewire.pendaftar.dashboard', [
             'religions' => $religions,
             'highSchools' => $highSchools,
+            'highSchoolMajor' => $highSchoolMajor,
         ]);
     }
 }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('description')->nullable(); // Deskripsi singkat jalur pendaftaran 
             $table->unsignedBigInteger('price')->default(0); // Biaya pendaftaran, default 0 
             $table->boolean('is_active')->default(true); // Untuk menonaktifkan/mengaktifkan jalur
+            $table->string('display_group')->nullable(); // pengelompokan gelombang
             $table->timestamps();
         });
     }

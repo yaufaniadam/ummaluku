@@ -39,8 +39,14 @@ class UserSeeder extends Seeder
         $superAdmin->assignRole('Super Admin');
 
         $adminPmb = User::create([
-            'name' => 'Admin PMB',
-            'email' => 'admin.pmb@ummaluku.ac.id',
+            'name' => 'Direktur Admisi',
+            'email' => 'dir.admisi@ummaluku.ac.id',
+            'password' => Hash::make('password'),
+        ]);
+
+        $adminPmb = User::create([
+            'name' => 'Staf Admisi',
+            'email' => 'staf.admisi@ummaluku.ac.id',
             'password' => Hash::make('password'),
         ]);
         $adminPmb->assignRole('Admin PMB');

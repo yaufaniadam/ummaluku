@@ -5,8 +5,6 @@ namespace App\Livewire\Admin\Pendaftaran;
 use App\Models\Application;
 use App\Models\ApplicationDocument;
 use Livewire\Component;
-use Livewire\Attributes\Layout;
-use Illuminate\Support\Facades\Auth;
 
 class Show extends Component
 {
@@ -20,9 +18,12 @@ class Show extends Component
         $this->application->load([
             'prospective.user',
             'batch',
-            'admissionCategory.documentRequirements', // <-- Ambil syarat dokumen dari kategori
+            'admissionCategory.documentRequirements',
             'programChoices.program',
-            'documents' // <-- Ambil dokumen yang sudah di-upload oleh pendaftar
+            'documents',
+            'prospective.religion',
+            'prospective.highSchool',
+            'prospective.highSchoolMajor',
         ]);
     }
 
@@ -51,18 +52,19 @@ class Show extends Component
             $this->dispatch('show-alert', ['message' => 'Dokumen telah ditolak.']);
         }
     }
+ 
 
-    // Method untuk meminta revisi
+    // Method untuk meminta revisi (akan kita lengkapi dengan modal)
     public function requireRevision($documentId, $notes)
     {
         $document = ApplicationDocument::find($documentId);
         if ($document) {
             $document->update([
                 'status' => 'revision_needed',
-                'notes' => $notes, // Simpan catatan revisi
+                'notes' => $notes,
                 'verified_by' => auth()->id(),
             ]);
-            $this->dispatch('show-alert', ['message' => 'Pemberitahuan revisi telah disimpan.']);
+            $this->dispatch('show-alert', ['type' => 'warning', 'message' => 'Catatan revisi telah disimpan.']);
         }
     }
 
@@ -95,6 +97,32 @@ class Show extends Component
         $this->dispatch('show-alert', [
             'message' => 'Status pendaftar berhasil diperbarui dan siap untuk tahap seleksi.',
             'type' => 'success'
+        ]);
+    }
+
+    public function finalizeVerification()
+    {
+
+        $requiredDocuments = $this->application->admissionCategory->documentRequirements;
+        $verifiedDocuments = $this->application->documents()->where('status', 'verified')->pluck('document_requirement_id');
+
+        foreach ($requiredDocuments as $requirement) {
+            // Jika dokumen ini wajib TAPI tidak ada di daftar yang sudah diverifikasi
+            if ($requirement->is_mandatory && !$verifiedDocuments->contains($requirement->id)) {
+                $this->dispatch('show-alert', [
+                    'type' => 'error', 
+                    'message' => 'Gagal! Masih ada dokumen wajib ("' . $requirement->name . '") yang belum diverifikasi.'
+                ]);
+                return; // Hentikan proses
+            }
+        }
+
+        // 3. Jika semua pengecekan lolos, update status aplikasi
+        $this->application->update(['status' => 'ready_for_selection']);
+
+        $this->dispatch('show-alert', [
+            'type' => 'success', 
+            'message' => 'Verifikasi Selesai! Pendaftar berhasil diloloskan ke tahap seleksi.'
         ]);
     }
 

@@ -17,15 +17,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
- 
+        // User::factory(10)->create(); 
         $this->call([
             ProvincesSeeder::class,
             CitiesSeeder::class,
             DistrictsSeeder::class,
             VillagesSeeder::class,
             UserSeeder::class,
+            HighSchoolMajorSeeder::class,
             AdmissionCategorySeeder::class,
             BatchSeeder::class,
             FacultyAndProgramSeeder::class,

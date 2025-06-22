@@ -42,8 +42,10 @@ Route::middleware('auth')->group(function () {
     // admin pendaftaran
     // Route::get('/admin/pendaftaran', PendaftaranIndex::class)->name('admin.pendaftaran.index');
     Route::get('/admin/pendaftaran', [AdminPendaftaranController::class, 'index'])->name('admin.pendaftaran.index');
-        
+    // Route::get('/admin/pendaftaran/{application}', [AdminPendaftaranController::class, 'show'])->name('admin.pendaftaran.show');
     Route::get('/admin/pendaftaran/{application}', PendaftaranShow::class)->name('admin.pendaftaran.show');
+
+    
     Route::get('/admin/seleksi', [AdminSeleksiController::class, 'index'])->name('admin.seleksi.index');
     Route::get('/admin/seleksi/data', [AdminSeleksiController::class, 'data'])->name('admin.seleksi.data');
     Route::post('/seleksi/{application}/accept', [AdminSeleksiController::class, 'accept'])->name('admin.seleksi.accept');

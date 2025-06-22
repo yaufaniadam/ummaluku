@@ -1,5 +1,11 @@
 
-
 <div>
-    show
+  <div class="card mt-3">
+                <div class="card-header">
+                    <h3 class="card-title">Verifikasi Dokumen Persyaratan</h3>
+                </div>
+                <div class="card-body">
+                    @livewire('admin.pendaftaran.document-manager', ['application' => $application], key($application->id))
+                </div>
+            </div>
 </div>

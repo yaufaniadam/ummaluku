@@ -19,18 +19,23 @@ class AdmissionCategoryBatchSeeder extends Seeder
         // 2. Definisikan hubungan yang kita inginkan
         // Pastikan 'slug' dan 'name' di bawah ini cocok dengan yang ada di seeder lain
         $relations = [
-            // Jalur Prestasi (slug: 'prestasi') dibuka di Gelombang 1 & 2
-            ['category_slug' => 'prestasi', 'batch_name' => 'Gelombang 1'],
-            ['category_slug' => 'prestasi', 'batch_name' => 'Gelombang 2'],
+            // Jalur Prestasi (slug: 'prestasi') dibuka di Gelombang 1 
+            ['category_slug' => 'jalur-nilai-rapor', 'batch_name' => 'Gelombang 1'],
 
-            // Jalur Tes (slug: 'tes') hanya dibuka di Gelombang 2
-            ['category_slug' => 'tes', 'batch_name' => 'Gelombang 2'],
+            // Jalur Tes (slug: 'tes') hanya dibuka di Gelombang 1
+            ['category_slug' => 'jalur-prestasi', 'batch_name' => 'Gelombang 1'],
             
-            // Jalur Mandiri (slug: 'mandiri') hanya dibuka di Gelombang 2
-            ['category_slug' => 'mandiri', 'batch_name' => 'Gelombang 2'],
+            // Jalur Mandiri (slug: 'mandiri') hanya dibuka di Gelombang 1
+            ['category_slug' => 'jalur-persyarikatan', 'batch_name' => 'Gelombang 1'],
 
             // Jalur Beasiswa (slug: 'beasiswa') hanya dibuka di Gelombang 1
-            ['category_slug' => 'beasiswa', 'batch_name' => 'Gelombang 1'],
+            ['category_slug' => 'jalur-cbt', 'batch_name' => 'Gelombang 1'],
+
+            ['category_slug' => 'jalur-skl', 'batch_name' => 'Gelombang 1'],
+
+            ['category_slug' => 'jalur-nilai-utbk', 'batch_name' => 'Gelombang 1'],
+
+            ['category_slug' => 'jalur-kip', 'batch_name' => 'Gelombang 1'],
         ];
 
         $insertData = [];
