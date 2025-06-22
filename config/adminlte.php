@@ -315,19 +315,40 @@ return [
                 [
                     'text' => 'Data Pendaftar',
                     // Menggunakan array agar menu tetap aktif di halaman index dan show
-                    'route'  => ['admin.pendaftaran.index', 'admin.pendaftaran.show'],
+                    'route'  => ['admin.pendaftaran.index', 'admin.seleksi.index'],
                     'icon' => 'fas fa-fw fa-users',
                 ],
                 [
-                    'text' => 'Proses Seleksi', // <-- MENU BARU
+                    'text' => 'Proses Seleksi', // 
                     'route'  => 'admin.seleksi.index',
                     'icon' => 'fas fa-fw fa-check-double',
                 ],
                 [
-                    'text' => 'Pengaturan PMB',
-                    'route'  => '', // Asumsi nama route
-                    'icon' => 'fas fa-fw fa-cogs',
+                    'text' => 'Diterima', 
+                    'route'  => 'admin.diterima.index',
+                    'icon' => 'fas fa-fw fa-check',
+                ],               
+            ],
+        ],
+        [
+            'text'    => 'Pengaturan PMB',
+            'icon'    => 'fas fa-fw fa-user-plus',
+            'submenu' => [
+                [
+                    'text' => 'Jalur Pendaftaran', 
+                    'route'  => '', //admin.settings.category
+                    'icon' => 'fas fa-fw fa-folder',
                 ],
+                [
+                    'text' => 'Gelombang',
+                    'route'  => '', //admin.settings.batch'
+                    'icon' => 'fas fa-fw fa-calendar',
+                ],
+                [
+                    'text' => 'Kelola Gelombang', 
+                    'route'  => '', //admin.settings.category-batch
+                    'icon' => 'fas fa-fw fa-check',
+                ],               
             ],
         ],
 

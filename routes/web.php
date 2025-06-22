@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Modules\PMB\AcceptedStudentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Modules\PMB\PendaftaranController;
@@ -12,6 +13,7 @@ use App\Models\Batch;
 use App\Models\AdmissionCategory;
 use App\Http\Controllers\Modules\PMB\AdminSeleksiController;
 use App\Http\Controllers\Modules\PMB\AdminPendaftaranController;
+use App\Http\Controllers\Modules\PMB\AdmissionCategoryController;
 
 Route::get('/', function () {
     // Ambil semua kategori pendaftaran yang aktif
@@ -50,6 +52,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/seleksi/data', [AdminSeleksiController::class, 'data'])->name('admin.seleksi.data');
     Route::post('/seleksi/{application}/accept', [AdminSeleksiController::class, 'accept'])->name('admin.seleksi.accept');
     Route::post('/seleksi/{application}/reject', [AdminSeleksiController::class, 'reject'])->name('admin.seleksi.reject');
+    Route::get('/admin/diterima', [AcceptedStudentController::class, 'index'])->name('admin.diterima.index');
+
+
+    Route::resource('/jalur-pendaftaran', AdmissionCategoryController::class, [
+    'as' => 'pmb']);
 });
 
 
@@ -57,6 +64,15 @@ Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('penda
 Route::get('/pendaftaran/sukses', function () {
     return view('sukses');
 })->name('pendaftaran.sukses');
+
+Route::prefix('admin')->middleware(['role:Super Admin|Admin PMB'])->name('admin.')->group(function () {
+        
+     
+       Route::resource('jalur-pendaftaran', AdmissionCategoryController::class, [
+    'as' => 'pmb' // <-- KEMBALIKAN PARAMETER INI
+]);
+
+    });
 
 
 

@@ -25,7 +25,7 @@ class AdminSeleksiController extends Controller
     {
         // Ambil data pendaftar yang siap seleksi
         $query = Application::with(['prospective.user', 'programChoices.program'])
-            ->where('status', 'ready_for_selection');
+            ->where('status', 'lolos_verifikasi');
 
         return DataTables::of($query)
             // Tambah kolom nomor urut

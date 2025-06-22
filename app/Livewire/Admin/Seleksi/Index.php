@@ -31,7 +31,7 @@ class Index extends Component
         // 3. Gunakan Transaction untuk memastikan semua update berhasil
         DB::transaction(function () use ($application, $selectedProgramId) {
             // Update status utama aplikasi menjadi 'accepted'
-            $application->update(['status' => 'accepted']);
+            $application->update(['status' => 'diterima']);
 
             // Loop semua pilihan prodi dari pendaftar ini
             foreach ($application->programChoices as $choice) {
@@ -51,14 +51,14 @@ class Index extends Component
     public function rejectApplicant(Application $application)
     {
         // Logika untuk menolak pendaftar
-        $application->update(['status' => 'rejected']);
+        $application->update(['status' => 'ditolak']);
         $this->dispatch('show-alert', ['message' => 'Pendaftar telah ditolak.', 'type' => 'error']);
     }
 
     public function render()
     {
         $applications = Application::with('prospective.user', 'programChoices.program')
-            ->where('status', 'ready_for_selection') // <-- Filter utama kita
+            ->where('status', 'lolos_seleksi') // <-- Filter utama kita
             ->paginate(10);
 
         return view('livewire.admin.seleksi.index', [

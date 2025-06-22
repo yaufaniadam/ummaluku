@@ -7,12 +7,12 @@
 @stop
 
 @section('content')
-    <p>Halaman ini berisi daftar calon mahasiswa yang telah lolos verifikasi dokumen dan siap untuk proses seleksi akhir.</p>
+    {{-- <p>Halaman ini berisi daftar calon mahasiswa yang telah lolos verifikasi dokumen dan siap untuk proses seleksi akhir.</p> --}}
     
     <div class="card">
-        <div class="card-header">
+        {{-- <div class="card-header">
             <h3 class="card-title">Pendaftar Siap Seleksi</h3>
-        </div>
+        </div> --}}
         <div class="card-body">
             <table class="table table-bordered table-hover" id="selection-table" style="width:100%">
                 <thead>

@@ -119,7 +119,7 @@
                     @if ($application->status == 'menunggu_upload_dokumen')
                         <button class="btn btn-warning" wire:click="finalizeVerification"
                             wire:confirm="Anda yakin semua dokumen sudah diperiksa dan pendaftar ini lolos ke tahap seleksi?">
-                            Loloskan ke Tahap Seleksi</button>
+                            Loloskan Verifikasi</button>
                     @endif
                 </div>
 

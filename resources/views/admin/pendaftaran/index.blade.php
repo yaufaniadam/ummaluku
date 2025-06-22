@@ -9,9 +9,9 @@
 
 @section('content')
     <div class="card mb-4">
-        <div class="card-header">
+        {{-- <div class="card-header">
             <h3 class="card-title">Filter Data</h3>
-        </div>
+        </div> --}}
         <div class="card-body">
             <div class="row">
                 <div class="col-md-4">
