@@ -30,7 +30,7 @@ class AdmissionCategoryController extends Controller
 
         AdmissionCategory::create($validated);
 
-        return redirect()->route('admin.pmb.jalur-pendaftaran.index')->with('success', 'Jalur pendaftaran berhasil ditambahkan.');
+        return redirect()->route('admin.jalur-pendaftaran.index')->with('success', 'Jalur pendaftaran berhasil ditambahkan.');
     }
 
     public function edit(AdmissionCategory $jalur_pendaftaran)
@@ -43,18 +43,19 @@ class AdmissionCategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:admission_categories,name,' . $jalur_pendaftaran->id,
             'description' => 'nullable|string',
+            'price' => 'nullable|numeric',
             'display_group' => 'nullable|string|max:50',
             'is_active' => 'required|boolean',
         ]);
 
         $jalur_pendaftaran->update($validated);
 
-        return redirect()->route('admin.pmb.jalur-pendaftaran.index')->with('success', 'Jalur pendaftaran berhasil diperbarui.');
+        return redirect()->route('admin.jalur-pendaftaran.index')->with('success', 'Jalur pendaftaran berhasil diperbarui.');
     }
 
     public function destroy(AdmissionCategory $jalur_pendaftaran)
     {
         $jalur_pendaftaran->delete();
-        return redirect()->route('admin.pmb.jalur-pendaftaran.index')->with('success', 'Jalur pendaftaran berhasil dihapus.');
+        return redirect()->route('admin.jalur-pendaftaran.index')->with('success', 'Jalur pendaftaran berhasil dihapus.');
     }
 }

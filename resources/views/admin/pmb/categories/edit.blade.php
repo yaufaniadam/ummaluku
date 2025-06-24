@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="card">
-    <form action="{{ route('admin.pmb.jalur-pendaftaran.update', $category) }}" method="POST">
+    <form action="{{ route('admin.jalur-pendaftaran.update', $category) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="card-body">
@@ -14,7 +14,7 @@
         </div>
         <div class="card-footer">
             <button type="submit" class="btn btn-primary">Update</button>
-            <a href="{{ route('admin.pmb.jalur-pendaftaran.index') }}" class="btn btn-secondary">Batal</a>
+            <a href="{{ route('admin.jalur-pendaftaran.index') }}" class="btn btn-secondary">Batal</a>
         </div>
     </form>
 </div>

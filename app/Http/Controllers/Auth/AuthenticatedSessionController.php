@@ -31,7 +31,7 @@ class AuthenticatedSessionController extends Controller
         $user = $request->user();
 
         // Cek peran pengguna dan arahkan ke dashboard yang sesuai
-        if ($user->hasRole(['Super Admin', 'Admin PMB', 'Staf Akademik', 'Staf SDM', 'Eksekutif'])) {
+        if ($user->hasRole(['Super Admin', 'Direktur Admisi', 'Staf Admisi'])) {
             return redirect()->intended(route('admin.pendaftaran.index'));
         }
 

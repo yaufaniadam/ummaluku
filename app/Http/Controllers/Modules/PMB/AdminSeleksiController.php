@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Modules\PMB;
 
 use App\Http\Controllers\Controller;
 use App\Models\Application;
+use App\Notifications\MahasiswaDiterima;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Facades\DataTables; // <-- Import Yajra
+use Yajra\DataTables\Facades\DataTables; 
 use Illuminate\Support\Facades\DB;
 
 class AdminSeleksiController extends Controller
@@ -92,6 +93,8 @@ class AdminSeleksiController extends Controller
                 $choice->update(['is_accepted' => ($choice->program_id == $selectedProgramId)]);
             }
         });
+
+           $application->prospective->user->notify(new MahasiswaDiterima($application));
 
         // 3. Kembalikan ke halaman seleksi dengan pesan sukses
         return back()->with('success', 'Keputusan penerimaan untuk ' . $application->prospective->user->name . ' berhasil disimpan.');

@@ -16,7 +16,7 @@ class AcceptedStudentsDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-           ->addColumn('action', function ($row) {
+            ->addColumn('action', function ($row) {
                 // Membuat tombol aksi untuk setiap baris
                 $viewUrl = route('admin.pendaftaran.show', $row->id);
                 return '<a href="' . $viewUrl . '" class="btn btn-info btn-sm">Lihat Detail</a>';
@@ -27,6 +27,33 @@ class AcceptedStudentsDataTable extends DataTable
                 return $acceptedChoice ? $acceptedChoice->program->name_id : 'N/A';
             })
             ->editColumn('status', fn($row) => '<span class="badge badge-success">Diterima</span>')
+            ->addColumn('action', function ($row) {
+                $finalisasiUrl = '#';
+                $testWaUrl = route('admin.diterima.test-whatsapp', $row->id);
+                $testEmailUrl = route('admin.diterima.test-email', $row->id); // <-- URL untuk tombol baru
+
+                // Tombol Finalisasi
+                $finalisasiBtn = '<a href="' . $finalisasiUrl . '" class="btn btn-primary btn-sm">Finalisasi</a>';
+
+                // Form untuk tombol Tes WA
+                $testWaForm = '
+                    <form action="' . $testWaUrl . '" method="POST" class="d-inline">
+                        ' . csrf_field() . '
+                        <button type="submit" class="btn btn-success btn-sm">Tes WA</button>
+                    </form>
+                ';
+
+                // Form untuk tombol Tes Email
+                $testEmailForm = '
+                    <form action="' . $testEmailUrl . '" method="POST" class="d-inline">
+                        ' . csrf_field() . '
+                        <button type="submit" class="btn btn-info btn-sm">Tes Email</button>
+                    </form>
+                ';
+
+                // Gabungkan semua tombol dalam satu grup
+                return '<div class="btn-group">' . $finalisasiBtn . $testWaForm . $testEmailForm . '</div>';
+            })
             ->rawColumns(['action', 'status']);
     }
 
@@ -39,7 +66,7 @@ class AcceptedStudentsDataTable extends DataTable
             ->when(request('batch'), fn($q, $v) => $q->where('batch_id', $v))
             ->when(request('program'), function ($q, $programId) {
                 // Filter berdasarkan prodi yang diterima
-                return $q->whereHas('programChoices', function($query) use ($programId) {
+                return $q->whereHas('programChoices', function ($query) use ($programId) {
                     $query->where('program_id', $programId)->where('is_accepted', true);
                 });
             });
@@ -78,4 +105,4 @@ class AcceptedStudentsDataTable extends DataTable
             Column::computed('action')->addClass('text-center'),
         ];
     }
-}   
+}

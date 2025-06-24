@@ -302,15 +302,17 @@ return [
         // MENU UTAMA
         [
             'text' => 'Dashboard',
-            'route'  => 'dashboard', // Asumsi kita akan punya route bernama admin.dashboard
+            'route'  => 'admin.dashboard', // Asumsi kita akan punya route bernama admin.dashboard
             'icon' => 'fas fa-fw fa-tachometer-alt',
-            // 'can' => 'view_dashboard', // Contoh jika nanti dibatasi oleh permission
+            'role'    => 'Super Admin',
         ],
-
+        
         // MODUL PENDAFTARAN MAHASISWA BARU
         [
             'text'    => 'PMB',
             'icon'    => 'fas fa-fw fa-user-plus',
+            // 'can' => 'view_dashboard', // Contoh jika nanti dibatasi oleh permission
+            
             'submenu' => [
                 [
                     'text' => 'Data Pendaftar',
@@ -336,7 +338,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Jalur Pendaftaran', 
-                    'route'  => '', //admin.settings.category
+                    'route'  => 'admin.jalur-pendaftaran.index', //admin.settings.category
                     'icon' => 'fas fa-fw fa-folder',
                 ],
                 [

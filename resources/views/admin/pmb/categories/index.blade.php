@@ -9,32 +9,41 @@
         <div class="card-header">
             <h3 class="card-title">Daftar Jalur</h3>
             <div class="card-tools">
-                <a href="{{ route('admin.pmb.jalur-pendaftaran.create') }}" class="btn btn-primary">Tambah Baru</a>
+                <a href="{{ route('admin.jalur-pendaftaran.create') }}" class="btn btn-primary">Tambah Baru</a>
             </div>
         </div>
         <div class="card-body">
-            @if(session('success'))
+            @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
             <table class="table table-bordered">
                 <thead>
-                    <tr><th>Nama Jalur</th><th>Grup</th><th>Status</th><th>Aksi</th></tr>
+                    <tr>
+                        <th>Nama Jalur</th>
+                        <th>Grup</th>
+                        <th>Biaya (Rp)</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
                 </thead>
                 <tbody>
-                    @foreach($categories as $category)
-                    <tr>
-                        <td>{{ $category->name }}</td>
-                        <td>{{ $category->display_group }}</td>
-                        <td>{{ $category->is_active ? 'Aktif' : 'Tidak Aktif' }}</td>
-                        <td>
-                            <a href="{{ route('admin.pmb.jalur-pendaftaran.edit', $category) }}" class="btn btn-xs btn-warning">Edit</a>
-                            <form action="{{ route('admin.pmb.jalur-pendaftaran.destroy', $category) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                {{-- <button type="submit" class="btn btn-xs btn-danger" onclick="return confirm('Anda yakin?')">Hapus</button> --}}
-                            </form>
-                        </td>
-                    </tr>
+                    @foreach ($categories as $category)
+                        <tr>
+                            <td>{{ $category->name }}</td>
+                            <td>{{ $category->display_group }}</td>
+                            <td>{{ number_format($category->price) }}</td>
+                            <td>{{ $category->is_active ? 'Aktif' : 'Tidak Aktif' }}</td>
+                            <td>
+                                <a href="{{ route('admin.jalur-pendaftaran.edit', $category) }}"
+                                    class="btn btn-xs btn-warning">Edit</a>
+                                <form action="{{ route('admin.jalur-pendaftaran.destroy', $category) }}" method="POST"
+                                    class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    {{-- <button type="submit" class="btn btn-xs btn-danger" onclick="return confirm('Anda yakin?')">Hapus</button> --}}
+                                </form>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>

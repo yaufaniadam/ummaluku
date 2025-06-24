@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class AdmissionCategory extends Model
 {
     use HasFactory;
+    protected $fillable = ['name','slug','description','is_active','price','display_group'];
 
     public function documentRequirements(): BelongsToMany
     {

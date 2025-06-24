@@ -17,11 +17,15 @@ class UserSeeder extends Seeder
         // 1. Membuat Roles
         $roles = [
             'Super Admin',      // 
-            'Admin PMB',        // 
+            'Direktur Admisi',        // 
+            'Staf Admisi',        // 
+            'Direktur Akademik',    // 
             'Staf Akademik',    // 
+            'Direktur SDM',         // 
             'Staf SDM',         // 
             'Eksekutif',        // 
-            'Pegawai/Dosen',    // 
+            'Tendik',    // 
+            'Dosen',    // 
             'Mahasiswa',        // 
             'Camaru',           // 
         ];
@@ -43,13 +47,21 @@ class UserSeeder extends Seeder
             'email' => 'dir.admisi@ummaluku.ac.id',
             'password' => Hash::make('password'),
         ]);
+        $adminPmb->assignRole('Direktur Admisi');      
 
         $adminPmb = User::create([
             'name' => 'Staf Admisi',
             'email' => 'staf.admisi@ummaluku.ac.id',
             'password' => Hash::make('password'),
         ]);
-        $adminPmb->assignRole('Admin PMB');
+        $adminPmb->assignRole('Staf Admisi');
+
+        $adminPmb = User::create([
+            'name' => 'Direktur Akademik',
+            'email' => 'dir.akademik@ummaluku.ac.id',
+            'password' => Hash::make('password'),
+        ]);
+        $adminPmb->assignRole('Direktur Akademik');
 
         $stafAkademik = User::create([
             'name' => 'Staf Akademik',
@@ -57,6 +69,13 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
         $stafAkademik->assignRole('Staf Akademik');
+
+        $adminPmb = User::create([
+            'name' => 'Direktur SDM',
+            'email' => 'dir.sdm@ummaluku.ac.id',
+            'password' => Hash::make('password'),
+        ]);
+        $adminPmb->assignRole('Direktur SDM');
 
         $stafSdm = User::create([
             'name' => 'Staf SDM',
@@ -77,6 +96,13 @@ class UserSeeder extends Seeder
             'email' => 'dosen@ummaluku.ac.id',
             'password' => Hash::make('password'),
         ]);
-        $dosen->assignRole('Pegawai/Dosen');
+        $dosen->assignRole('Dosen');
+
+        $dosen = User::create([
+            'name' => 'Tendik Contoh',
+            'email' => 'tendik@ummaluku.ac.id',
+            'password' => Hash::make('password'),
+        ]);
+        $dosen->assignRole('Tendik');
     }
 }

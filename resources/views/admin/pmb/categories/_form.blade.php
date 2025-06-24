@@ -17,6 +17,10 @@
     <textarea name="description" class="form-control" id="description">{{ old('description', $category->description ?? '') }}</textarea>
 </div>
 <div class="form-group">
+    <label for="price">Biaya Pendaftaran (Rp)<small class="text-muted"> (isi dengan '0' jika gratis)</small></label>
+    <input type="text" name="price" class="form-control" id="price" value="{{ old('price', $category->price ?? '') }}" required>
+</div>
+<div class="form-group">
     <label for="display_group">Grup Tampilan</label>
     <input type="text" name="display_group" class="form-control" id="display_group" value="{{ old('display_group', $category->display_group ?? '') }}" placeholder="e.g., beasiswa, reguler">
 </div>
