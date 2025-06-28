@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Notifications\MahasiswaDiterima;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Facades\DataTables; 
+use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
+use App\Models\ReRegistrationInvoice;
+use App\Models\Setting;
 
 class AdminSeleksiController extends Controller
 {
@@ -58,8 +60,8 @@ class AdminSeleksiController extends Controller
                     </form>
                 ';
 
-                            // ---- Form untuk Aksi Tolak ----
-                            $rejectForm = '
+                // ---- Form untuk Aksi Tolak ----
+                $rejectForm = '
                     <form action="' . route('admin.seleksi.reject', $application) . '" method="POST" class="d-inline-block ms-1">
                         ' . csrf_field() . '
                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Anda yakin ingin MENOLAK pendaftar ini?\')">Tolak</button>
@@ -94,7 +96,21 @@ class AdminSeleksiController extends Controller
             }
         });
 
-           $application->prospective->user->notify(new MahasiswaDiterima($application));
+       // Ambil total biaya dari settings
+        $totalAmount = (int) Setting::where('key', 're_registration_fee')->first()->value;
+
+        // Buat invoice induk
+        ReRegistrationInvoice::updateOrCreate(
+            ['application_id' => $application->id], // Cari berdasarkan application_id
+            [
+                'invoice_number' => 'REG-' . $application->batch->year . '-' . $application->registration_number,
+                'total_amount' => $totalAmount,
+                'due_date' => now()->addMonths(3), // Batas akhir semua cicilan
+                'status' => 'unpaid',
+            ]
+        );     
+
+        $application->prospective->user->notify(new MahasiswaDiterima($application));
 
         // 3. Kembalikan ke halaman seleksi dengan pesan sukses
         return back()->with('success', 'Keputusan penerimaan untuk ' . $application->prospective->user->name . ' berhasil disimpan.');

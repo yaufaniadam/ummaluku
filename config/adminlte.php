@@ -306,13 +306,13 @@ return [
             'icon' => 'fas fa-fw fa-tachometer-alt',
             'role'    => 'Super Admin',
         ],
-        
+
         // MODUL PENDAFTARAN MAHASISWA BARU
         [
             'text'    => 'PMB',
             'icon'    => 'fas fa-fw fa-user-plus',
             // 'can' => 'view_dashboard', // Contoh jika nanti dibatasi oleh permission
-            
+
             'submenu' => [
                 [
                     'text' => 'Data Pendaftar',
@@ -323,13 +323,18 @@ return [
                 [
                     'text' => 'Proses Seleksi', // 
                     'route'  => 'admin.seleksi.index',
-                    'icon' => 'fas fa-fw fa-check-double',
+                    'icon' => 'fas fa-fw fa-search',
                 ],
                 [
-                    'text' => 'Diterima', 
+                    'text' => 'Diterima',
                     'route'  => 'admin.diterima.index',
                     'icon' => 'fas fa-fw fa-check',
-                ],               
+                ],
+                [
+                    'text' => 'Pembayaran Registrasi',
+                    'route'  => 'admin.payment.index',
+                    'icon' => 'fas fa-fw fa-cash-register',
+                ],
             ],
         ],
         [
@@ -337,7 +342,7 @@ return [
             'icon'    => 'fas fa-fw fa-user-plus',
             'submenu' => [
                 [
-                    'text' => 'Jalur Pendaftaran', 
+                    'text' => 'Jalur Pendaftaran',
                     'route'  => 'admin.jalur-pendaftaran.index', //admin.settings.category
                     'icon' => 'fas fa-fw fa-folder',
                 ],
@@ -347,10 +352,10 @@ return [
                     'icon' => 'fas fa-fw fa-calendar',
                 ],
                 [
-                    'text' => 'Kelola Gelombang', 
+                    'text' => 'Kelola Gelombang',
                     'route'  => '', //admin.settings.category-batch
                     'icon' => 'fas fa-fw fa-check',
-                ],               
+                ],
             ],
         ],
 

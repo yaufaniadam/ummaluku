@@ -17,31 +17,44 @@ class SettingSeeder extends Seeder
                 'key' => 'university_name',
                 'value' => 'Universitas Muhammadiyah Maluku',
                 'type' => 'string',
-                'created_at' => now(), 'updated_at' => now()
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'key' => 'university_short_name',
                 'value' => 'UNIMAL',
                 'type' => 'string',
-                'created_at' => now(), 'updated_at' => now()
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'key' => 'university_address',
                 'value' => 'Jl. Pendidikan No. 1, Ambon, Maluku',
                 'type' => 'text',
-                'created_at' => now(), 'updated_at' => now()
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'key' => 'university_phone',
                 'value' => '(0911) 123-456',
                 'type' => 'string',
-                'created_at' => now(), 'updated_at' => now()
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'key' => 'active_batch_id',
                 'value' => '1', // ID gelombang pendaftaran yang sedang aktif
                 'type' => 'integer',
-                'created_at' => now(), 'updated_at' => now()
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+
+            [
+                'key' => 're_registration_fee',
+                'value' => '1500000', // Biaya tahun ini sesuai permintaan Anda
+                'type' => 'integer',
+                'created_at' => now(),
+                'updated_at' => now()
             ],
         ]);
     }

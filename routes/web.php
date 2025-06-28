@@ -14,6 +14,10 @@ use App\Models\AdmissionCategory;
 use App\Http\Controllers\Modules\PMB\AdminSeleksiController;
 use App\Http\Controllers\Modules\PMB\AdminPendaftaranController;
 use App\Http\Controllers\Modules\PMB\AdmissionCategoryController;
+use App\Http\Controllers\Pendaftar\ReRegistrationController;
+use App\Http\Controllers\Modules\PMB\PaymentVerificationController;
+use App\Http\Controllers\Pendaftar\InstallmentPaymentController;
+
 
 Route::get('/', function () {
     // Ambil semua kategori pendaftaran yang aktif
@@ -42,15 +46,15 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () {
 
-    
+
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    
+
     Route::get('/pendaftaran', [AdminPendaftaranController::class, 'index'])->name('pendaftaran.index');
     Route::get('/pendaftaran/{application}', PendaftaranShow::class)->name('pendaftaran.show');
-    
-    
+
+
     Route::get('/seleksi', [AdminSeleksiController::class, 'index'])->name('seleksi.index');
     Route::get('/seleksi/data', [AdminSeleksiController::class, 'data'])->name('seleksi.data');
     Route::post('/seleksi/{application}/accept', [AdminSeleksiController::class, 'accept'])->name('seleksi.accept');
@@ -59,6 +63,14 @@ Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () 
     Route::post('/diterima/{application}/test-whatsapp', [AcceptedStudentController::class, 'testWhatsApp'])->name('diterima.test-whatsapp');
 
     Route::post('/diterima/{application}/test-email', [AcceptedStudentController::class, 'testEmail'])->name('diterima.test-email');
+
+    // ... di dalam grup admin ...
+    Route::get('/verifikasi-pembayaran', [PaymentVerificationController::class, 'index'])->name('payment.index');
+    Route::get('/verifikasi-pembayaran/{invoice}', [PaymentVerificationController::class, 'show'])->name('payment.show');
+    // Route::post('/verifikasi-pembayaran/{invoice}/approve', [PaymentVerificationController::class, 'approve'])->name('payment.approve');
+
+    Route::post('/verifikasi-pembayaran/installment/{installment}/approve', [PaymentVerificationController::class, 'approveInstallment'])->name('payment.approve');
+    Route::post('/verifikasi-pembayaran/installment/{installment}/reject', [PaymentVerificationController::class, 'rejectInstallment'])->name('payment.reject');
 });
 
 
@@ -66,6 +78,9 @@ Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () 
 Route::middleware('auth')->group(function () {
     Route::get('/camaru/dashboard', [PendaftarDashboardController::class, 'showDashboard'])->name('pendaftar.dashboard');
     Route::post('/camaru/dashboard/upload-document/{application}', [DocumentUploadController::class, 'store'])->name('pendaftar.document.store');
+    Route::get('/camaru/registrasi', [ReRegistrationController::class, 'show'])->name('pendaftar.registrasi');
+    Route::post('/camaru/registrasi/pilih-skema', [ReRegistrationController::class, 'choosePaymentScheme'])->name('pendaftar.registrasi.scheme');
+    Route::post('/camaru/pembayaran-cicilan/{installment}', [InstallmentPaymentController::class, 'store'])->name('pendaftar.installment.store');
 });
 
 // No Login

@@ -2,6 +2,26 @@
     {{-- Mulai dari sini, tidak perlu @extends atau @section --}}
     <div class="container py-4">
 
+
+        <div class="stepper-wrapper">
+            <div class="step-item completed">
+                <div class="step-counter d-flex justify-content-center align-items-center">1</div>
+                <div class="step-name small">Info Pribadi</div>
+            </div>
+            <div class="step-item active">
+                <div class="step-counter d-flex justify-content-center align-items-center">2</div>
+                <div class="step-name small">Detail Alamat</div>
+            </div>
+            <div class="step-item">
+                <div class="step-counter d-flex justify-content-center align-items-center">3</div>
+                <div class="step-name small">Pembayaran</div>
+            </div>
+            <div class="step-item">
+                <div class="step-counter d-flex justify-content-center align-items-center">4</div>
+                <div class="step-name small">Konfirmasi</div>
+            </div>
+        </div>
+
         <div class="row align-items-center">
             <div class="col-md-8">
                 <h4 class="card-title">Selamat Datang, {{ $application->prospective->user->name }}!</h4>
@@ -23,12 +43,28 @@
             @endphp
             <div class="alert alert-success" role="alert">
                 <h4 class="alert-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-confetti" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 5h2"></path><path d="M5 4v2"></path><path d="M11.5 4l-.5 2"></path><path d="M18 5h2"></path><path d="M19 4v2"></path><path d="M15 9l-1 1"></path><path d="M18 13l2 -.5"></path><path d="M18 19h2"></path><path d="M19 18v2"></path><path d="M14 16.518l-6.518 -6.518l-4.39 9.58a1.003 1.003 0 0 0 1.329 1.329l9.579 -4.39z"></path></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-confetti" width="24"
+                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M4 5h2"></path>
+                        <path d="M5 4v2"></path>
+                        <path d="M11.5 4l-.5 2"></path>
+                        <path d="M18 5h2"></path>
+                        <path d="M19 4v2"></path>
+                        <path d="M15 9l-1 1"></path>
+                        <path d="M18 13l2 -.5"></path>
+                        <path d="M18 19h2"></path>
+                        <path d="M19 18v2"></path>
+                        <path d="M14 16.518l-6.518 -6.518l-4.39 9.58a1.003 1.003 0 0 0 1.329 1.329l9.579 -4.39z"></path>
+                    </svg>
                     Selamat! Anda Diterima!
                 </h4>
                 <div class="text-muted">
-                    Anda telah diterima sebagai calon mahasiswa baru di Program Studi <strong>{{ $acceptedProgram->name_id }}</strong>.
-                    Silakan <a href="">klik di sini</a> untuk informasi selanjutnya mengenai pembayaran dan registrasi ulang.
+                    Anda telah diterima sebagai calon mahasiswa baru di Program Studi
+                    <strong>{{ $acceptedProgram->name_id }}</strong>.
+                    Silakan <a href="{{ route('pendaftar.registrasi') }}">klik di sini</a> untuk informasi selanjutnya
+                    mengenai pembayaran dan registrasi ulang.
                 </div>
             </div>
         @endif
@@ -157,7 +193,8 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label required">Kabupaten/Kota</label>
 
-                            <div wire:loading wire:target="province_code" class="text-muted">Mencari kabupaten...</div>
+                            <div wire:loading wire:target="province_code" class="text-muted">Mencari kabupaten...
+                            </div>
                             <select class="form-select  @error('city_code') is-invalid @enderror"
                                 wire:model.live="city_code" ...>
                                 <option value="">-- Pilih Kabupaten/Kota --</option>

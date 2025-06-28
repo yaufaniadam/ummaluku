@@ -16,6 +16,108 @@
     <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
 
+    <style>
+        /* style.css */
+
+        .stepper-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+            margin-bottom: 2rem;
+            /* Memberi jarak ke konten di bawahnya */
+        }
+
+        .step-item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            /* Membuat counter dan nama tersusun vertikal */
+            align-items: center;
+            /* Menengahkan secara horizontal */
+            flex: 1;
+            /* Memastikan setiap item mengambil ruang yang sama */
+        }
+
+        /* Garis Penghubung */
+        .step-item::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            /* Setengah dari tinggi .step-counter (40px / 2) */
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            /* Ketebalan garis */
+            background-color: #e0e0e0;
+            /* Warna garis default */
+            z-index: 1;
+            /* Diletakkan di belakang counter */
+        }
+
+        /* Sembunyikan garis untuk item terakhir */
+        .step-item:last-child::after {
+            display: none;
+        }
+
+        /* Lingkaran Angka */
+        .step-counter {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #e0e0e0;
+            /* Border default */
+            background-color: #ffffff;
+            color: #6c757d;
+            /* Warna angka default */
+            z-index: 2;
+            /* Diletakkan di depan garis */
+            position: relative;
+            /* Diperlukan agar z-index berfungsi */
+        }
+
+        /* Judul Langkah */
+        .step-name {
+            margin-top: 0.5rem;
+            color: #6c757d;
+        }
+
+        /*
+ * ----- PENGATURAN STATUS -----
+ */
+
+        /* Status: Selesai (Completed) */
+        .step-item.completed .step-counter {
+            background-color: var(--bs-primary);
+            /* Menggunakan warna primary Bootstrap */
+            border-color: var(--bs-primary);
+            color: #ffffff;
+        }
+
+        .step-item.completed::after {
+            background-color: var(--bs-primary);
+            /* Garis juga berubah warna */
+        }
+
+        .step-item.completed .step-name {
+            color: #212529;
+            /* Warna teks menjadi lebih jelas */
+        }
+
+        /* Status: Aktif (Active) */
+        .step-item.active .step-counter {
+            border-color: var(--bs-primary);
+            color: var(--bs-primary);
+            font-weight: bold;
+        }
+
+        .step-item.active .step-name {
+            color: var(--bs-primary);
+            font-weight: bold;
+        }
+    </style>
+
+
+
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
     @livewireStyles
