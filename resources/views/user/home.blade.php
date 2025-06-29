@@ -7,18 +7,18 @@
 @section('content')
 
     <!-- Hero Section -->
-    <header class="bg-dark py-5">
+    <header class="bg-light py-5">
         <div class="container px-5">
             <div class="row gx-5 align-items-center justify-content-center">
                 <div class="col-lg-8 col-xl-7 col-xxl-6">
                     <div class="my-5 text-center text-xl-start">
-                        <h1 class="display-5 fw-bolder text-white mb-2">Bergabung Bersama Universitas Muhammadiyah Maluku
+                        <h1 class="display-6 fw-bolder text-dark mb-2">Mari Bergabung Bersama Universitas Muhammadiyah Maluku
                         </h1>
-                        <p class="lead fw-normal text-white-50 mb-4">Wujudkan cita-citamu dan jadilah bagian dari generasi
-                            unggul, islami, dan berwawasan global. Pendaftaran mahasiswa baru telah dibuka!</p>
+                        <p class="lead fw-normal text-dark-60 mb-4">Wujudkan cita-citamu dan jadilah bagian dari generasi
+                            unggul, islami, dan berwawasan global.</p>
                         <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-                            <a class="btn btn-primary btn-lg px-4 me-sm-3" href="#pendaftaran">Daftar Sekarang</a>
-                            <a class="btn btn-outline-light btn-lg px-4" href="#prodi">Lihat Program Studi</a>
+                            <a class="btn btn-warning btn-lg px-4 me-sm-3" href="#pendaftaran">Daftar Sekarang</a>
+                            <a class="btn btn-outline-warning btn-lg px-4" href="#prodi">Lihat Program Studi</a>
                         </div>
                     </div>
                 </div>

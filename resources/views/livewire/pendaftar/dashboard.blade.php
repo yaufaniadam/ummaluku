@@ -1,40 +1,36 @@
 <div>
+
+    <div class="page-header d-print-none pt-5 pb-5 bg-light">
+        <div class="container-xl">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-6">
+                    {{-- Judul Halaman Dinamis --}}
+                    <h2 class="page-title">
+                        {{ $application->admissionCategory->name }}
+                    </h2>
+                    <div class="text-muted mt-1">
+                        {{ $application->batch->name }} - Tahun Ajaran {{ $application->batch->year }}
+                    </div>
+
+                    </p>
+                </div>
+                <div class="col-md-6 text-lg-end ">
+                    <h5 class="card-title">Selamat Datang, {{ $application->prospective->user->name }}!</h5 >
+                    <small class="text-muted">No. {{ $application->registration_number }}</small><br>
+                    <span>Status: {{ Str::title(str_replace('_', ' ', $application->status)) }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- Mulai dari sini, tidak perlu @extends atau @section --}}
     <div class="container py-4">
 
+        <x-stepper current-step="2" step1-text="Pendaftaran Awal" step2-text="Lengkapi Biodata"
+            step3-text="Upload Dokumen" step4-text="Selesai" />
 
-        <div class="stepper-wrapper">
-            <div class="step-item completed">
-                <div class="step-counter d-flex justify-content-center align-items-center">1</div>
-                <div class="step-name small">Info Pribadi</div>
-            </div>
-            <div class="step-item active">
-                <div class="step-counter d-flex justify-content-center align-items-center">2</div>
-                <div class="step-name small">Detail Alamat</div>
-            </div>
-            <div class="step-item">
-                <div class="step-counter d-flex justify-content-center align-items-center">3</div>
-                <div class="step-name small">Pembayaran</div>
-            </div>
-            <div class="step-item">
-                <div class="step-counter d-flex justify-content-center align-items-center">4</div>
-                <div class="step-name small">Konfirmasi</div>
-            </div>
-        </div>
 
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h4 class="card-title">Selamat Datang, {{ $application->prospective->user->name }}!</h4>
-                <small class="text-muted">No. {{ $application->registration_number }}</small>
-                <p>{{ $application->admissionCategory->name }}
-                    <small class="text-muted">({{ $application->batch->name }})</small>
-                </p>
-            </div>
-            <div class="col-md-4 text-lg-end text-sm-start">
-                <div class="text-danger"><i class="bi bi-shield-fill-exclamation"></i>
-                    {{ Str::title(str_replace('_', ' ', $application->status)) }}</div>
-            </div>
-        </div>
+        
 
         {{-- BLOK PENGUMUMAN KELULUSAN --}}
         @if ($application->status == 'accepted')
@@ -377,118 +373,44 @@
                                 Menyimpan...
                             </div>
                         </button>
+
+
                     </div>
 
                 </form>
             </div>
         </div>
 
-        @if ($application->status === 'menunggu_upload_dokumen')
-            <div class="card">
-                <div class="card-header">
-                    <h6 class="card-title">Lengkapi Dokumen</h6>
-                    <small class="text-muted"><i class="bi bi-info-circle"></i> Unggah berkas satu per satu.</small>
-                </div>
-                <div class="card-body p-0">
-
-                    @if (session('success'))
-                        <div class="alert alert-success">{{ session('success') }}</div>
-                    @endif
-
-                    {{-- Tampilkan error validasi upload jika ada --}}
-                    @if ($errors->any())
-                        <div class="alert alert-danger m-3 4 pb-0">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
-                    @foreach ($requiredDocuments as $requirement)
-                        @php
-                            // Cek apakah pendaftar sudah mengupload dokumen ini
-                            $uploadedDocument = $application->documents->firstWhere(
-                                'document_requirement_id',
-                                $requirement->id,
-                            );
-                        @endphp
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="py-2 px-3">
-                                    <span><strong>{{ $requirement->name }}</strong>
-
-                                        @if ($uploadedDocument)
-                                            @if ($uploadedDocument->status == 'verified')
-                                                <span class="badge bg-success">Terverifikasi</span>
-                                            @elseif($uploadedDocument->status == 'revision_needed')
-                                                <span class="badge bg-danger">Perlu Direvisi</span>
-                                                {{-- @elseif($uploadedDocument->status == 'rejected')
-                                    <span class="badge bg-danger">Ditolak</span> --}}
-                                            @else
-                                                <span class="badge bg-info">Menunggu Verifikasi</span>
-                                            @endif
-                                        @else
-                                            <span class="badge bg-secondary">Belum Diunggah</span>
-                                        @endif
-                                    </span>
-                                    <p class="text-muted mb-0">{{ $requirement->description }}</p>
-                                    {{-- Tampilkan catatan revisi dari admin jika ada --}}
-                                    @if ($uploadedDocument && $uploadedDocument->status == 'revision_needed' && $uploadedDocument->notes)
-                                        <div class="text-danger mt-2" style="font-size: 0.8rem;">
-                                            <strong>Catatan Revisi:</strong> {{ $uploadedDocument->notes }}
-                                        </div>
-                                    @endif
-
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="py-2 px-3">
-                                    {{-- Tampilkan form upload HANYA JIKA dokumen belum ada ATAU perlu revisi --}}
-                                    @if (!$uploadedDocument || $uploadedDocument->status == 'revision_needed')
-                                        <form action="{{ route('pendaftar.document.store', $application->id) }}"
-                                            method="POST" enctype="multipart/form-data">
-                                            @csrf
-                                            <input type="hidden" name="document_id" value="{{ $requirement->id }}">
-                                            <div class="input-group">
-                                                <input type="file" name="file_upload" class="form-control"
-                                                    required>
-                                                <button type="submit" class="btn btn-outline-primary">Upload</button>
-                                            </div>
-                                        </form>
-                                    @else
-                                        {{-- Jika sudah diupload dan sedang diverifikasi/diterima, tampilkan link untuk melihat --}}
-                                        <a href="{{ Storage::url($uploadedDocument->file_path) }}" target="_blank"
-                                            class="btn btn-sm btn-secondary">
-                                            Lihat File
-                                        </a>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-    </div>
-@else
-    @endif
-
-
-    @push('js')
-        {{-- Listener untuk SweetAlert tetap kita perlukan --}}
-        <script>
-            // Mendengarkan event 'swal-success' yang dikirim dari komponen Livewire
-            document.addEventListener('swal-success', event => {
-                Swal.fire({
-                    title: 'Berhasil!',
-                    text: 'Biodata Anda berhasil diperbarui!',
-                    icon: 'success',
-                    confirmButtonText: 'Oke'
+        @push('js')
+            {{-- Listener untuk SweetAlert tetap kita perlukan --}}
+            {{-- <script>
+                // Mendengarkan event 'swal-success' yang dikirim dari komponen Livewire
+                document.addEventListener('swal-success', event => {
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Biodata Anda berhasil diperbarui!',
+                        icon: 'success',
+                        confirmButtonText: 'Oke'
+                    });
                 });
-            });
-        </script>
-    @endpush
-</div>
+            </script> --}}
+
+            <script>
+                // Listener untuk menangkap event dari komponen Livewire
+                document.addEventListener('swal-success', event => {
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: event.detail.message,
+                        icon: 'success',
+                        confirmButtonText: 'Lanjutkan'
+                    }).then((result) => {
+                        // JIKA USER MENGKLIK TOMBOL "LANJUTKAN"
+                        if (result.isConfirmed) {
+                            // Lakukan redirect ke halaman upload dokumen
+                            window.location.href = "{{ route('pendaftar.document.form') }}";
+                        }
+                    });
+                });
+            </script>
+        @endpush
+    </div>

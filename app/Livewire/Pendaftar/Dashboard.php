@@ -162,18 +162,21 @@ class Dashboard extends Component
 
     // public function checkBiodataCompletion()
     // {
-    //     $prospective = $this->application->prospective;
-
     //     // Daftar semua field yang wajib diisi di biodata
     //     $requiredFields = [
-    //         'nisn', 'id_number'
+    //         'nisn'
+    //         // , 'id_number', 'address', 'religion_id', 'high_school_id',
+    //         // 'father_name', 'mother_name',
     //     ];
 
-    //     $this->isBiodataComplete = true; // Asumsikan lengkap terlebih dahulu
+    //     // Kita asumsikan dulu semuanya lengkap (saklar ON)
+    //     $this->isBiodataComplete = true; 
 
+    //     // Lalu kita periksa satu per satu
     //     foreach ($requiredFields as $field) {
-    //         // Jika ada satu saja field yang kosong, langsung set ke false dan hentikan pengecekan
-    //         if (empty($prospective->{$field})) {
+    //         // Jika ada SATU SAJA field yang kosong...
+    //         if (empty($this->{$field})) {
+    //             // ...maka matikan saklarnya dan hentikan pemeriksaan.
     //             $this->isBiodataComplete = false;
     //             return;
     //         }

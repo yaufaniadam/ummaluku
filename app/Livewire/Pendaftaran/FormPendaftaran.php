@@ -176,8 +176,8 @@ class FormPendaftaran extends Component
                 'admission_category_id' => $this->selectedCategory->id,
                 'registration_number' => 'PMB' . date('Y') . '-' . str_pad(Application::count() + 1, 5, '0', STR_PAD_LEFT),
                 'status' => config('settings.payment_flow_enabled', false) // digunakan saat setting sudah dipakai
-                        ? 'menunggu_pembayaran' 
-                        : 'menunggu_data_lengkap',
+                    ? 'menunggu_pembayaran'
+                    : 'menunggu_data_lengkap',
             ]);
 
             // 6. Simpan Pilihan Prodi
@@ -205,8 +205,13 @@ class FormPendaftaran extends Component
         return redirect()->route('pendaftaran.sukses')->with('registration_data', [
             'email' => $user->email,
             'password' => $generatedPassword, // Kirim password mentah (belum di-hash)
+            'category_name' => $this->selectedCategory->name, 
+            'batch_name' => $this->selectedBatch->name,     
+            'batch_year' => $this->selectedBatch->year,  
         ]);
     }
+
+
 
     public function render()
     {

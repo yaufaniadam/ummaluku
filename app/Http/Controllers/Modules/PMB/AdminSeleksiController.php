@@ -88,7 +88,7 @@ class AdminSeleksiController extends Controller
         // 2. Gunakan Transaction untuk keamanan data
         DB::transaction(function () use ($application, $selectedProgramId) {
             // Update status utama aplikasi
-            $application->update(['status' => 'accepted']);
+            $application->update(['status' => 'diterima']);
 
             // Update status di setiap pilihan prodi
             foreach ($application->programChoices as $choice) {

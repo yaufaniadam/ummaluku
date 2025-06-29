@@ -44,6 +44,9 @@ class ApplicationsDataTable extends DataTable
         // Kita mulai dengan query dasar
         $query = $model->newQuery()->with(['prospective.user', 'batch', 'admissionCategory']);
 
+        // Ambil nilai status dari request, jika tidak ada, gunakan default
+        $status = request('status', 'awaiting_verification');
+
         // Terapkan filter secara kondisional
         $query->when(request('category'), function ($q, $categoryId) {
             return $q->where('admission_category_id', $categoryId);
@@ -53,8 +56,9 @@ class ApplicationsDataTable extends DataTable
             return $q->where('batch_id', $batchId);
         });
 
-        $query->when(request('status'), function ($q, $status) {
-            return $q->where('status', $status);
+        // Terapkan filter status, KECUALI jika nilainya adalah string kosong
+        $query->when($status, function ($q, $statusValue) {
+            return $q->where('status', $statusValue);
         });
 
         return $query;
@@ -72,14 +76,14 @@ class ApplicationsDataTable extends DataTable
             ->dom('Bfrtip')
             ->orderBy(1)
             ->ajax([
-            'data' => "
+                'data' => "
                 function(d) {
                     d.category = $('#category-filter').val();
                     d.batch = $('#batch-filter').val();
                     d.status = $('#status-filter').val();
                 }
             "
-        ])
+            ])
             ->buttons([
                 Button::make('export'),
                 Button::make('print'),

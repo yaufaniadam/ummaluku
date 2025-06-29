@@ -42,7 +42,9 @@
                         <select id="status-filter" class="form-control">
                             <option value="">Semua Status</option>
                             @foreach ($statuses as $status)
-                                <option value="{{ $status }}">{{ Str::title(str_replace('_', ' ', $status)) }}
+                                <option value="{{ $status }}" {{-- Tambahkan 'selected' jika status ini adalah default --}}
+                                    {{ $defaultStatus == $status ? 'selected' : '' }}>
+                                    {{ Str::title(str_replace('_', ' ', $status)) }}
                                 </option>
                             @endforeach
                         </select>

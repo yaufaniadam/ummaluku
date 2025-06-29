@@ -8,7 +8,7 @@ use App\Http\Controllers\Modules\PMB\PendaftaranController;
 use App\Livewire\Admin\Pendaftaran\Show as PendaftaranShow;
 // use App\Livewire\Pendaftar\Dashboard as PendaftarDashboard;
 use App\Http\Controllers\Modules\PMB\PendaftarDashboardController;
-use App\Http\Controllers\Modules\PMB\DocumentUploadController;
+// use App\Http\Controllers\Modules\PMB\DocumentUploadController;
 use App\Models\Batch;
 use App\Models\AdmissionCategory;
 use App\Http\Controllers\Modules\PMB\AdminSeleksiController;
@@ -16,7 +16,9 @@ use App\Http\Controllers\Modules\PMB\AdminPendaftaranController;
 use App\Http\Controllers\Modules\PMB\AdmissionCategoryController;
 use App\Http\Controllers\Pendaftar\ReRegistrationController;
 use App\Http\Controllers\Modules\PMB\PaymentVerificationController;
+use App\Http\Controllers\Pendaftar\DocumentUploadController;
 use App\Http\Controllers\Pendaftar\InstallmentPaymentController;
+
 
 
 Route::get('/', function () {
@@ -60,11 +62,11 @@ Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () 
     Route::post('/seleksi/{application}/accept', [AdminSeleksiController::class, 'accept'])->name('seleksi.accept');
     Route::post('/seleksi/{application}/reject', [AdminSeleksiController::class, 'reject'])->name('seleksi.reject');
     Route::get('/diterima', [AcceptedStudentController::class, 'index'])->name('diterima.index');
-    Route::post('/diterima/{application}/test-whatsapp', [AcceptedStudentController::class, 'testWhatsApp'])->name('diterima.test-whatsapp');
 
+    //for debug notif
+    Route::post('/diterima/{application}/test-whatsapp', [AcceptedStudentController::class, 'testWhatsApp'])->name('diterima.test-whatsapp');
     Route::post('/diterima/{application}/test-email', [AcceptedStudentController::class, 'testEmail'])->name('diterima.test-email');
 
-    // ... di dalam grup admin ...
     Route::get('/verifikasi-pembayaran', [PaymentVerificationController::class, 'index'])->name('payment.index');
     Route::get('/verifikasi-pembayaran/{invoice}', [PaymentVerificationController::class, 'show'])->name('payment.show');
     // Route::post('/verifikasi-pembayaran/{invoice}/approve', [PaymentVerificationController::class, 'approve'])->name('payment.approve');
@@ -77,6 +79,7 @@ Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () 
 // Untuk Calon Mahasiswa
 Route::middleware('auth')->group(function () {
     Route::get('/camaru/dashboard', [PendaftarDashboardController::class, 'showDashboard'])->name('pendaftar.dashboard');
+    Route::get('/camaru/upload-dokumen', [PendaftarDashboardController::class, 'showDocumentUploadForm'])->name('pendaftar.document.form');
     Route::post('/camaru/dashboard/upload-document/{application}', [DocumentUploadController::class, 'store'])->name('pendaftar.document.store');
     Route::get('/camaru/registrasi', [ReRegistrationController::class, 'show'])->name('pendaftar.registrasi');
     Route::post('/camaru/registrasi/pilih-skema', [ReRegistrationController::class, 'choosePaymentScheme'])->name('pendaftar.registrasi.scheme');

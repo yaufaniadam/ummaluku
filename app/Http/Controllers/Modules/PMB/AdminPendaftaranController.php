@@ -17,18 +17,21 @@ class AdminPendaftaranController extends Controller
     public function index(ApplicationsDataTable $dataTable)
     {
         // Siapkan data untuk dropdown filter
-        $categories = AdmissionCategory::all(); 
+        $categories = AdmissionCategory::all();
         $batches = Batch::all();
         // Daftar status yang mungkin ada
-        $statuses = ['menunggu_pembayaran','menunggu_data_lengkap','menunggu_upload_dokumen', 'menunggu_verifikasi', 'lolos_verifikasi', 'diterima', 'ditolak'];
+        $statuses = ['menunggu_pembayaran', 'menunggu_data_lengkap', 'menunggu_upload_dokumen', 'menunggu_verifikasi', 'lolos_verifikasi', 'diterima', 'ditolak'];
+
+        // Tentukan nilai default untuk filter status
+        $defaultStatus = 'menunggu_verifikasi';
 
         // Render DataTable dan kirim data filter ke view
-        return $dataTable->render('admin.pendaftaran.index', compact('categories', 'batches', 'statuses'));
+        return $dataTable->render('admin.pendaftaran.index', compact('categories', 'batches', 'statuses', 'defaultStatus'));
     }
 
     public function show(Application $application)
     {
-        
+
         return view('admin.pendaftaran.show'); // <-- livewire dipanggil di blade ini
     }
 }

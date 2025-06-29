@@ -116,7 +116,7 @@
             <div class="card">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <a href="{{ route('admin.pendaftaran.index') }}" class="btn btn-primary">Kembali</a>
-                    @if ($application->status == 'menunggu_upload_dokumen')
+                    @if ($application->status == 'menunggu_verifikasi_dokumen')
                         <button class="btn btn-warning" wire:click="finalizeVerification"
                             wire:confirm="Anda yakin semua dokumen sudah diperiksa dan pendaftar ini lolos ke tahap seleksi?">
                             Loloskan Verifikasi</button>
