@@ -42,15 +42,15 @@
                         <dd class="col-7">{{ $application->prospective->user->email }}</dd>
                         <dt class="col-5">No. Telepon:</dt>
                         <dd class="col-7">{{ $application->prospective->phone }}</dd>
-                       
+
                         <dt class="col-5">Alamat:</dt>
                         <dd class="col-7">
-                            {{ $application->prospective->address ?? '-' }}<br>                     
+                            {{ $application->prospective->address ?? '-' }}<br>
                             Desa {{ ucwords(strtolower($application->prospective->village->name)) }},
-                            Kecamatan {{ ucwords(strtolower($application->prospective->district->name)) }}, 
-                            {{ ucwords(strtolower($application->prospective->city->name)) }}, 
+                            Kecamatan {{ ucwords(strtolower($application->prospective->district->name)) }},
+                            {{ ucwords(strtolower($application->prospective->city->name)) }},
                             {{ ucwords(strtolower($application->prospective->province->name)) }}
-                            
+
                         </dd>
                         <dt class="col-5">Asal Sekolah:</dt>
                         <dd class="col-7">{{ $application->prospective->highSchool->name }}</dd>
@@ -116,10 +116,16 @@
             <div class="card">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <a href="{{ route('admin.pendaftaran.index') }}" class="btn btn-primary">Kembali</a>
-                    @if ($application->status == 'menunggu_verifikasi_dokumen')
+                    @if ($application->status == 'proses_verifikasi')
+                        {{-- Tombol terima --}}
                         <button class="btn btn-warning" wire:click="finalizeVerification"
                             wire:confirm="Anda yakin semua dokumen sudah diperiksa dan pendaftar ini lolos ke tahap seleksi?">
                             Loloskan Verifikasi</button>
+
+                        {{-- Tombol tolak --}}
+                        <button class="btn btn-danger" onclick="promptForApplicationRejection()">
+                            Tolak Pendaftaran
+                        </button>
                     @endif
                 </div>
 
@@ -156,4 +162,35 @@
         </div>
 
     </div>
+
+    
 @stop
+
+@push('js')
+<script>
+    // ... fungsi promptForRevision dan listener show-alert sudah ada ...
+
+    // Fungsi baru untuk memunculkan prompt penolakan aplikasi
+    function promptForApplicationRejection() {
+        Swal.fire({
+            title: 'Tolak Pendaftaran Ini?',
+            input: 'textarea',
+            inputPlaceholder: 'Tuliskan alasan penolakan di sini (wajib diisi)...',
+            inputValidator: (value) => {
+                if (!value) {
+                    return 'Anda harus mengisi alasan penolakan!'
+                }
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Tolak Pendaftaran',
+            confirmButtonColor: '#dc3545',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed && result.value) {
+                // Panggil method Livewire dengan alasan dari SweetAlert
+                @this.call('rejectApplication', result.value);
+            }
+        });
+    }
+</script>
+@endpush

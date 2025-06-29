@@ -24,9 +24,12 @@ class FormPendaftaran extends Component
     public string $name = '';
     public string $email = '';
     public string $phone = '';
-    public string $birth_place = '';
     public string $birth_date = '';
     public string $gender = '';
+    public string $parent_phone = '';
+    public ?int $program_choice_1 = null;
+    public ?int $program_choice_2 = null;
+    public string $birth_place = '';
     // public string $address = '';
     // public string $nisn = '';
     // public string $id_number = ''; // NIK
@@ -36,7 +39,6 @@ class FormPendaftaran extends Component
     // public string $mother_name = '';
     // public string $father_occupation = '';
     // public string $mother_occupation = '';
-    public string $parent_phone = '';
 
     // Properti untuk data Wali
     // public string $guardian_name = '';       
@@ -48,8 +50,6 @@ class FormPendaftaran extends Component
     // public ?int $high_school_id = null;
 
     // Properti untuk Pilihan Prodi
-    public ?int $program_choice_1 = null;
-    public ?int $program_choice_2 = null;
 
     public $selectedCategory;
     public $selectedBatch;
@@ -59,10 +59,13 @@ class FormPendaftaran extends Component
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'phone' => 'required|string|max:15',
-            'birth_place' => 'required|string|max:255',
+            'phone' => 'required|string|regex:/^[0-9]+$/|between:10,15',
             'birth_date' => 'required|date',
             'gender' => 'required|in:Laki-laki,Perempuan',
+            'parent_phone' => 'required|string|regex:/^[0-9]+$/|between:10,15',
+            'program_choice_1' => 'required|exists:programs,id',
+            'program_choice_2' => 'nullable|exists:programs,id|different:program_choice_1',
+            'birth_place' => 'required|string|max:255',
             // 'address' => 'required|string',
             // 'nisn' => 'required|string|max:20|unique:prospectives,nisn',
             // 'id_number' => 'required|string|max:20|unique:prospectives,id_number',
@@ -72,7 +75,6 @@ class FormPendaftaran extends Component
             // 'mother_name' => 'required|string|max:255',
             // 'father_occupation' => 'required|string|max:255',
             // 'mother_occupation' => 'required|string|max:255',
-            'parent_phone' => 'required|string|max:15',
 
             // Aturan untuk data wali (semua opsional)
             // 'guardian_name' => 'nullable|string|max:255',       
@@ -82,8 +84,6 @@ class FormPendaftaran extends Component
             // Aturan untuk relasi
             // 'religion_id' => 'required|exists:religions,id',
             // 'high_school_id' => 'required|exists:high_schools,id',
-            'program_choice_1' => 'required|exists:programs,id',
-            'program_choice_2' => 'nullable|exists:programs,id|different:program_choice_1',
 
 
         ];
@@ -99,10 +99,21 @@ class FormPendaftaran extends Component
             'birth_place.required' => 'Tempat lahir wajib diisi.',
             'gender.required' => 'Jenis kelamin wajib diisi.',
             'phone.required' => 'Nomor telepon wajib diisi.',
+            'phone.regex' => 'Nomor telepon harus berupa angka.',
+            'phone.between' => 'Nomor telepon minimal 10 digit dan maksimal 15 digit.',
             'parent_phone.required' => 'Nomor telepon Orang Tua / Wali wajib diisi.',
+            'parent_phone.regex' => 'Nomor telepon harus berupa angka.',
+            'parent_phone.between' => 'Nomor telepon minimal 10 digit dan maksimal 15 digit.',            
             'program_choice_1.required' => 'Anda harus memilih minimal satu Program Studi.',
             'program_choice_2.different' => 'Anda harus memilih program studi yang berbeda.',
         ];
+    }
+
+    public function updated($propertyName)
+    {
+        // Jalankan validasi hanya untuk properti yang baru saja diubah
+        // untuk efisiensi.
+        $this->validateOnly($propertyName);
     }
 
 
@@ -176,8 +187,8 @@ class FormPendaftaran extends Component
                 'admission_category_id' => $this->selectedCategory->id,
                 'registration_number' => 'PMB' . date('Y') . '-' . str_pad(Application::count() + 1, 5, '0', STR_PAD_LEFT),
                 'status' => config('settings.payment_flow_enabled', false) // digunakan saat setting sudah dipakai
-                    ? 'menunggu_pembayaran'
-                    : 'menunggu_data_lengkap',
+                    ? 'lakukan_pembayaran'
+                    : 'lengkapi_data',
             ]);
 
             // 6. Simpan Pilihan Prodi

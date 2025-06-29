@@ -118,7 +118,7 @@ class Show extends Component
         }
 
         // 3. Jika semua pengecekan lolos, update status aplikasi
-        $this->application->update(['status' => 'lolos_verifikasi']);
+        $this->application->update(['status' => 'lolos_verifikasi_data']);
 
         // Ganti dengan perintah redirect
         return redirect()->route('admin.seleksi.index')->with('success', 'Verifikasi Selesai! Pendaftar berhasil diloloskan ke tahap seleksi.');
@@ -127,6 +127,33 @@ class Show extends Component
         //     'type' => 'success', 
         //     'message' => 'Verifikasi Selesai! Pendaftar berhasil diloloskan ke tahap seleksi.'
         // ]);
+    }
+
+    public function rejectApplication($reason)
+    {
+        // 1. Validasi untuk memastikan alasan diisi
+        if (empty($reason)) {
+            $this->dispatch('show-alert', [
+                'type' => 'error', 
+                'message' => 'Alasan penolakan wajib diisi.'
+            ]);
+            return;
+        }
+
+        // 2. Update status aplikasi dan simpan alasan penolakan
+        $this->application->update([
+            'status' => 'documents_rejected',
+            'rejection_reason' => $reason
+        ]);
+
+        // 3. Kirim notifikasi ke calon mahasiswa (di background)
+        // $this->application->prospective->user->notify(new PendaftaranDitolak($reason));
+
+        // 4. Beri notifikasi sukses ke admin
+        $this->dispatch('show-alert', [
+            'type' => 'success', 
+            'message' => 'Pendaftaran telah ditolak. Notifikasi telah dikirim ke pendaftar.'
+        ]);
     }
 
     public function render()

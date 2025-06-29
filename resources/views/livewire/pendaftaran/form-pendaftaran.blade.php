@@ -1,18 +1,20 @@
 <div>
     {{-- Komentar: Karena ini komponen Livewire, semua elemen harus berada di dalam satu div utama. --}}
 
+    <div class="alert alert-warning"><i class="bi bi-exclamation-octagon"></i> Silahkan lengkapi data-data berikut ini.</div>
+
     <form wire:submit.prevent="save">
         <div class="row row-cards">
 
             <div class="col-md-12">
                 <div class="card card-stacked">
                     <div class="card-header">
-                        <p class="card-title">1. Data Diri Calon Mahasiswa</p>
+                        <h4 class="card-title mb-0">Data Diri Calon Mahasiswa</h4>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label required">Nama Lengkap</label>
+                                <label class="form-label required">Nama Lengkap <sup class="text-danger">*</sup></label>
                                 <input type="text" class="form-control @error('name') is-invalid @enderror"
                                     wire:model.defer="name" placeholder="Sesuai Ijazah">
                                 @error('name')
@@ -20,7 +22,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label required">Alamat Email Aktif</label>
+                                <label class="form-label required">Alamat Email Aktif <sup class="text-danger">*</sup></label>
                                 <input type="email" class="form-control @error('email') is-invalid @enderror"
                                     wire:model.defer="email" placeholder="contoh@email.com">
                                 @error('email')
@@ -28,15 +30,24 @@
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label required">Nomor Telepon (WhatsApp)</label>
+                                <label class="form-label required">Nomor Telepon (WhatsApp) <sup class="text-danger">*</sup></label>
                                 <input type="text" class="form-control @error('phone') is-invalid @enderror"
-                                    wire:model.defer="phone" placeholder="08...">
+                                    wire:model.live="phone" placeholder="08...">
                                 @error('phone')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label required">Jenis Kelamin</label>
+                                <label class="form-label required">No. Telepon Orang Tua/Wali <sup class="text-danger">*</sup></label>
+                                <input type="text"
+                                    class="form-control @error('parent_phone') is-invalid @enderror" 
+                                    wire:model.live="parent_phone" placeholder="08...">
+                                @error('parent_phone')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label required">Jenis Kelamin <sup class="text-danger">*</sup></label>
                                 <select class="form-select @error('gender') is-invalid @enderror"
                                     wire:model.defer="gender">
                                     <option value="">-- Pilih Jenis Kelamin --</option>
@@ -47,16 +58,16 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label required">Tempat Lahir</label>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label required">Tempat Lahir <sup class="text-danger">*</sup></label>
                                 <input type="text" class="form-control @error('birth_place') is-invalid @enderror"
                                     wire:model.defer="birth_place">
                                 @error('birth_place')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label required">Tanggal Lahir</label>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label required">Tanggal Lahir <sup class="text-danger">*</sup></label>
                                 <input type="date" class="form-control @error('birth_date') is-invalid @enderror"
                                     wire:model.defer="birth_date">
                                 @error('birth_date')
@@ -94,7 +105,7 @@
             <div class="col-md-12 mt-3 mb-3">
                 <div class="card card-stacked">
                     <div class="card-header">
-                        <p class="card-title">2. Pilihan Program Studi</p>
+                        Pilihan Program Studi
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -125,9 +136,9 @@
                                 @enderror
                             </div> --}}
                             <div class="col-md-6 mb-3">
-                                <label class="form-label required">Pilihan Program Studi 1</label>
+                                <label class="form-label required">Pilihan Program Studi 1 <sup class="text-danger">*</sup></label>
                                 <select class="form-select @error('program_choice_1') is-invalid @enderror"
-                                    wire:model.defer="program_choice_1">
+                                    wire:model.live="program_choice_1">
                                     <option value="">-- Pilih Program Studi --</option>
                                     @foreach ($programs as $facultyName => $facultyPrograms)
                                         <optgroup label="{{ $facultyName }}">
@@ -146,7 +157,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Pilihan Program Studi 2 (Opsional)</label>
                                 <select class="form-select @error('program_choice_2') is-invalid @enderror"
-                                    wire:model.defer="program_choice_2">
+                                    wire:model.live="program_choice_2">
                                     <option value="">-- Pilih Program Studi --</option>
                                     @foreach ($programs as $facultyName => $facultyPrograms)
                                         <optgroup label="{{ $facultyName }}">
@@ -164,92 +175,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-md-12">
-                <div class="card card-stacked">
-                    <div class="card-header">
-                        <p class="card-title">3. Data Orang Tua / Wali</p>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            {{-- <div class="col-md-6 mb-3">
-                                <label class="form-label required">Nama Ayah</label>
-                                <input type="text" class="form-control @error('father_name') is-invalid @enderror"
-                                    wire:model.defer="father_name">
-                                @error('father_name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div> --}}
-                            {{-- <div class="col-md-6 mb-3">
-                                <label class="form-label required">Pekerjaan Ayah</label>
-                                <input type="text"
-                                    class="form-control @error('father_occupation') is-invalid @enderror"
-                                    wire:model.defer="father_occupation">
-                                @error('father_occupation')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div> --}}
-                            {{-- <div class="col-md-6 mb-3">
-                                <label class="form-label required">Nama Ibu</label>
-                                <input type="text" class="form-control @error('mother_name') is-invalid @enderror"
-                                    wire:model.defer="mother_name">
-                                @error('mother_name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div> --}}
-                            {{-- <div class="col-md-6 mb-3">
-                                <label class="form-label required">Pekerjaan Ibu</label>
-                                <input type="text"
-                                    class="form-control @error('mother_occupation') is-invalid @enderror"
-                                    wire:model.defer="mother_occupation">
-                                @error('mother_occupation')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div> --}}
-                            <div class="col-md-12 mb-3">
-                                <label class="form-label required">No. Telepon Orang Tua/Wali</label>
-                                <input type="text"
-                                    class="form-control @error('parent_phone') is-invalid @enderror"
-                                    wire:model.defer="parent_phone">
-                                @error('parent_phone')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        {{-- <hr> --}}
-                        {{-- <div class="row mt-3">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Nama Wali (Jika ada)</label>
-                                <input type="text"
-                                    class="form-control @error('guardian_name') is-invalid @enderror"
-                                    wire:model.defer="guardian_name">
-                                @error('guardian_name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Pekerjaan Wali</label>
-                                <input type="text"
-                                    class="form-control @error('guardian_occupation') is-invalid @enderror"
-                                    wire:model.defer="guardian_occupation">
-                                @error('guardian_occupation')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-12 mb-3">
-                                <label class="form-label">No. Telepon Wali</label>
-                                <input type="text"
-                                    class="form-control @error('guardian_phone') is-invalid @enderror"
-                                    wire:model.defer="guardian_phone">
-                                @error('guardian_phone')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div> --}}
-                    </div>
-                </div>
-            </div>
+            </div>           
 
         </div>
 

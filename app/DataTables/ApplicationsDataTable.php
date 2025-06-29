@@ -45,7 +45,7 @@ class ApplicationsDataTable extends DataTable
         $query = $model->newQuery()->with(['prospective.user', 'batch', 'admissionCategory']);
 
         // Ambil nilai status dari request, jika tidak ada, gunakan default
-        $status = request('status', 'awaiting_verification');
+        $status = request('status', 'lengkapi_data');
 
         // Terapkan filter secara kondisional
         $query->when(request('category'), function ($q, $categoryId) {

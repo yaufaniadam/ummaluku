@@ -22,7 +22,7 @@ class ApplicationFactory extends Factory
             'batch_id' => 1,
             'admission_category_id' => fake()->numberBetween(1, 4),
             'registration_number' => 'PMB' . date('Y') . '-' . fake()->unique()->numerify('#####'),
-            'status' => 'menunggu_verifikasi',
+            'status' => 'lengkapi_data',
         ];
     }
 

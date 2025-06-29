@@ -22,7 +22,7 @@ class ReRegistrationController extends Controller
         // 3. Penjaga Gerbang: Jika tidak ada tagihan, atau statusnya bukan 'accepted'
         if (!$invoice || $invoice->application->status !== 'diterima') {
             // Arahkan ke dashboard dengan pesan error
-            return redirect()->route('pendaftar.dashboard')->with('error', 'Anda belum bisa mengakses halaman registrasi ulang saat ini.');
+            return redirect()->route('pendaftar')->with('error', 'Anda belum bisa mengakses halaman registrasi ulang saat ini.');
         }
 
         // 4. Jika lolos, tampilkan view dan kirim data tagihan

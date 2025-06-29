@@ -15,7 +15,7 @@
                     </p>
                 </div>
                 <div class="col-md-6 text-lg-end ">
-                    <h5 class="card-title">Selamat Datang, {{ $application->prospective->user->name }}!</h5 >
+                    <h5 class="card-title">Selamat Datang, {{ $application->prospective->user->name }}!</h5>
                     <small class="text-muted">No. {{ $application->registration_number }}</small><br>
                     <span>Status: {{ Str::title(str_replace('_', ' ', $application->status)) }}</span>
                 </div>
@@ -26,48 +26,11 @@
     {{-- Mulai dari sini, tidak perlu @extends atau @section --}}
     <div class="container py-4">
 
-        <x-stepper current-step="2" step1-text="Pendaftaran Awal" step2-text="Lengkapi Biodata"
-            step3-text="Upload Dokumen" step4-text="Selesai" />
-
-
-        
-
-        {{-- BLOK PENGUMUMAN KELULUSAN --}}
-        @if ($application->status == 'accepted')
-            @php
-                $acceptedProgram = $application->programChoices->where('is_accepted', true)->first()->program;
-            @endphp
-            <div class="alert alert-success" role="alert">
-                <h4 class="alert-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-confetti" width="24"
-                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M4 5h2"></path>
-                        <path d="M5 4v2"></path>
-                        <path d="M11.5 4l-.5 2"></path>
-                        <path d="M18 5h2"></path>
-                        <path d="M19 4v2"></path>
-                        <path d="M15 9l-1 1"></path>
-                        <path d="M18 13l2 -.5"></path>
-                        <path d="M18 19h2"></path>
-                        <path d="M19 18v2"></path>
-                        <path d="M14 16.518l-6.518 -6.518l-4.39 9.58a1.003 1.003 0 0 0 1.329 1.329l9.579 -4.39z"></path>
-                    </svg>
-                    Selamat! Anda Diterima!
-                </h4>
-                <div class="text-muted">
-                    Anda telah diterima sebagai calon mahasiswa baru di Program Studi
-                    <strong>{{ $acceptedProgram->name_id }}</strong>.
-                    Silakan <a href="{{ route('pendaftar.registrasi') }}">klik di sini</a> untuk informasi selanjutnya
-                    mengenai pembayaran dan registrasi ulang.
-                </div>
-            </div>
-        @endif
+       <x-breadcrumb current="{{ $application->status }}" />        
 
         <div class="card mb-4">
             <div class="card-header">
-                <h6 class="card-title">Lengkapi Biodata Anda</h6>
+               <h4 class="card-title mb-0">Lengkapi Biodata Anda</h4> 
             </div>
             <div class="card-body">
                 <form wire:submit.prevent="saveBiodata">
@@ -355,17 +318,13 @@
                     <div class="d-flex mt-4">
                         <button type="submit" class="btn btn-primary ms-auto">
                             <div wire:loading.remove wire:target="saveBiodata">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-device-floppy" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2">
-                                    </path>
-                                    <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                    <path d="M14 4l0 4l-6 0l0 -4"></path>
+
+                                Lanjutkan Pendaftaran
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                    fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
                                 </svg>
-                                Simpan Perubahan Biodata
                             </div>
                             <div wire:loading wire:target="saveBiodata">
                                 <span class="spinner-border spinner-border-sm" role="status"

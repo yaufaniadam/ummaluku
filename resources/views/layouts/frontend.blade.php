@@ -17,68 +17,101 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
 
     <style>
-        /* style.css */
-
-        .stepper-wrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            position: relative;
-            margin-bottom: 2rem;
-            /* Memberi jarak ke konten di bawahnya */
+        .steps {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
         .step-item {
-            position: relative;
             display: flex;
-            flex-direction: column;
-            /* Membuat counter dan nama tersusun vertikal */
-            align-items: center;
-            /* Menengahkan secara horizontal */
-            flex: 1;
-            /* Memastikan setiap item mengambil ruang yang sama */
+            align-items: flex-start;
+            position: relative;
+            padding-bottom: 1.5rem;
         }
 
-        /* Garis Penghubung */
-        .step-item::after {
+        .step-item:not(:last-child)::before {
             content: '';
             position: absolute;
-            top: 20px;
-            /* Setengah dari tinggi .step-counter (40px / 2) */
-            left: 50%;
-            width: 100%;
-            height: 2px;
-            /* Ketebalan garis */
-            background-color: #e0e0e0;
-            /* Warna garis default */
+            left: 12px;
+            /* Pusatkan dengan step-marker */
+            top: 24px;
+            width: 2px;
+            height: 100%;
+            background-color: #e9ecef;
+        }
+
+        .step-marker {
+            min-width: 26px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            border: 2px solid #adb5bd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             z-index: 1;
-            /* Diletakkan di belakang counter */
+            color: #fff;
+            font-weight: bold;
         }
 
-        /* Sembunyikan garis untuk item terakhir */
-        .step-item:last-child::after {
-            display: none;
+        .step-details {
+            margin-left: 1rem;
+            padding-top: 2px;
         }
 
-        /* Lingkaran Angka */
-        .step-counter {
-            width: 40px;
-            height: 40px;
-            border: 2px solid #e0e0e0;
-            /* Border default */
-            background-color: #ffffff;
+        .step-title {
+            font-weight: 500;
             color: #6c757d;
-            /* Warna angka default */
-            z-index: 2;
-            /* Diletakkan di depan garis */
-            position: relative;
-            /* Diperlukan agar z-index berfungsi */
+            /* Warna untuk pending */
         }
 
-        /* Judul Langkah */
-        .step-name {
-            margin-top: 0.5rem;
-            color: #6c757d;
+        /* Status: Completed */
+        .step-item.completed .step-marker {
+            background-color: #198754;
+            /* Warna success Bootstrap */
+            border-color: #198754;
+        }
+
+        .step-item.completed .step-marker::before {
+            content: '\2713';
+            /* Simbol centang */
+            font-size: 14px;
+        }
+
+        .step-item.completed .step-title {
+            color: #212529;
+        }
+
+        /* Status: Active */
+        .step-item.active .step-marker {
+            background-color: #fff;
+            border-color: #0d6efd;
+            /* Warna primary Bootstrap */
+        }
+
+        .step-item.active .step-title {
+            font-weight: bold;
+            color: #0d6efd;
+        }
+
+        /* Status: Active-Danger (untuk Ditolak) */
+        .step-item.active-danger .step-marker {
+            background-color: #dc3545;
+            /* Warna danger Bootstrap */
+            border-color: #dc3545;
+        }
+
+        .step-item.active-danger .step-marker::before {
+            content: '\2717';
+            /* Simbol silang */
+            font-size: 16px;
+        }
+
+        .step-item.active-danger .step-title {
+            font-weight: bold;
+            color: #dc3545;
         }
 
         /*
@@ -116,7 +149,7 @@
         }
 
         .bg-ummaluku {
-            background-color:#38b6ff;
+            background-color: #38b6ff;
         }
     </style>
 
@@ -131,8 +164,9 @@
     <main class="flex-shrink-0">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-ummaluku">
-            <div class="container px-5">             
-                 <a class="navbar-brand" href="#"><img src="{{ asset('assets/logoummaluku.png') }}" width="" /></a>
+            <div class="container px-5">
+                <a class="navbar-brand" href="#"><img src="{{ asset('assets/logoummaluku.png') }}"
+                        width="" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation"><span
@@ -152,7 +186,7 @@
 
                         @auth
                             {{-- MENU INI HANYA MUNCUL JIKA USER SUDAH LOGIN --}}
-                            <li class="nav-item"><a class="nav-link" href="{{ route('pendaftar.dashboard') }}">Dashboard
+                            <li class="nav-item"><a class="nav-link" href="{{ route('pendaftar') }}">Dashboard
                                     Saya</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"

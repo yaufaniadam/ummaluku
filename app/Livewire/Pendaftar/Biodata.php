@@ -14,7 +14,7 @@ use Laravolt\Indonesia\Models\Province;
 use Laravolt\Indonesia\Models\Village;
 use PhpParser\Node\Expr\Cast\Array_;
 
-class Dashboard extends Component
+class Biodata extends Component
 {
     public Application $application;
     public $requiredDocuments;
@@ -39,6 +39,8 @@ class Dashboard extends Component
     public $citizenship;
 
     public bool $isBiodataComplete = false;
+
+    public array $workflowSteps = [];
 
     protected function rules(): array
     {
@@ -140,6 +142,7 @@ class Dashboard extends Component
         $this->fill($this->application->prospective->toArray());
 
         $this->requiredDocuments = $this->application->admissionCategory->documentRequirements;
+
     }
 
     public function updatedProvinceCode($value)
@@ -160,29 +163,7 @@ class Dashboard extends Component
         $this->reset('village_code');
     }
 
-    // public function checkBiodataCompletion()
-    // {
-    //     // Daftar semua field yang wajib diisi di biodata
-    //     $requiredFields = [
-    //         'nisn'
-    //         // , 'id_number', 'address', 'religion_id', 'high_school_id',
-    //         // 'father_name', 'mother_name',
-    //     ];
-
-    //     // Kita asumsikan dulu semuanya lengkap (saklar ON)
-    //     $this->isBiodataComplete = true; 
-
-    //     // Lalu kita periksa satu per satu
-    //     foreach ($requiredFields as $field) {
-    //         // Jika ada SATU SAJA field yang kosong...
-    //         if (empty($this->{$field})) {
-    //             // ...maka matikan saklarnya dan hentikan pemeriksaan.
-    //             $this->isBiodataComplete = false;
-    //             return;
-    //         }
-    //     }
-    // }
-
+    
     /**
      * Method BARU khusus untuk menyimpan biodata
      */
@@ -196,7 +177,7 @@ class Dashboard extends Component
 
         // 3. Update status langsung di tabel applications
         $this->application->update([
-            'status' => 'menunggu_upload_dokumen'
+            'status' => 'upload_dokumen'
         ]);
 
         // Beri notifikasi sukses menggunakan SweetAlert
@@ -215,7 +196,7 @@ class Dashboard extends Component
         $this->application->refresh();
 
         // Kirim semua data (termasuk data untuk dropdown) ke view
-        return view('livewire.pendaftar.dashboard', [
+        return view('livewire.pendaftar.biodata', [
             'religions' => $religions,
             'highSchools' => $highSchools,
             'highSchoolMajor' => $highSchoolMajor,

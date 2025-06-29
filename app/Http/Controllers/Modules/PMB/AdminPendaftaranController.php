@@ -20,10 +20,12 @@ class AdminPendaftaranController extends Controller
         $categories = AdmissionCategory::all();
         $batches = Batch::all();
         // Daftar status yang mungkin ada
-        $statuses = ['menunggu_pembayaran', 'menunggu_data_lengkap', 'menunggu_upload_dokumen', 'menunggu_verifikasi', 'lolos_verifikasi', 'diterima', 'ditolak'];
+        // $statuses = ['menunggu_pembayaran', 'menunggu_data_lengkap', 'menunggu_upload_dokumen', 'menunggu_verifikasi', 'lolos_verifikasi', 'diterima', 'ditolak'];
+        $statuses = ['lakukan_pembayaran', 'lengkapi_data', 'upload_dokumen', 'proses_verifikasi', 'lolos_verifikasi_data', 'diterima', 'ditolak'];
 
         // Tentukan nilai default untuk filter status
-        $defaultStatus = 'menunggu_verifikasi';
+        $defaultStatus = 'proses_verifikasi';
+        // $defaultStatus = 'menunggu_verifikasi';
 
         // Render DataTable dan kirim data filter ke view
         return $dataTable->render('admin.pendaftaran.index', compact('categories', 'batches', 'statuses', 'defaultStatus'));

@@ -24,11 +24,7 @@
             </div>
         </div>
     @endif
-    <div class="container py-4">
-
-        {{-- Kita set stepper ke langkah 3 --}}
-        <x-stepper current-step="1" step1-text="Pendaftaran Awal" step2-text="Lengkapi Biodata" step3-text="Upload Dokumen"
-            step4-text="Selesai" />
+    <div class="container py-4">       
 
         <div class="text-center">
             <div class="mb-3">

@@ -18,7 +18,16 @@ class AcceptedStudentController extends Controller
         $batches = Batch::all();
         $programs = Program::all();
 
-        return $dataTable->render('admin.accepted.index', compact('categories', 'batches', 'programs'));
+        // Data baru untuk filter status pembayaran
+        $payment_statuses = [
+            'unpaid' => 'Belum Dibayar',
+            'partially_paid' => 'Dibayar Sebagian',
+            'pending_verification' => 'Menunggu Verifikasi',
+            'paid' => 'Lunas',
+        ];
+
+
+        return $dataTable->render('admin.accepted.index', compact('categories', 'batches', 'programs', 'payment_statuses'));
     }
 
     public function testWhatsApp(Application $application)

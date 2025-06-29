@@ -8,17 +8,19 @@ use App\Http\Controllers\Modules\PMB\PendaftaranController;
 use App\Livewire\Admin\Pendaftaran\Show as PendaftaranShow;
 // use App\Livewire\Pendaftar\Dashboard as PendaftarDashboard;
 use App\Http\Controllers\Modules\PMB\PendaftarDashboardController;
+use App\Http\Controllers\Modules\PMB\PendaftarBiodataController;
 // use App\Http\Controllers\Modules\PMB\DocumentUploadController;
 use App\Models\Batch;
 use App\Models\AdmissionCategory;
 use App\Http\Controllers\Modules\PMB\AdminSeleksiController;
 use App\Http\Controllers\Modules\PMB\AdminPendaftaranController;
 use App\Http\Controllers\Modules\PMB\AdmissionCategoryController;
+use App\Http\Controllers\Modules\PMB\FinalizeRegistrationController;
 use App\Http\Controllers\Pendaftar\ReRegistrationController;
 use App\Http\Controllers\Modules\PMB\PaymentVerificationController;
 use App\Http\Controllers\Pendaftar\DocumentUploadController;
 use App\Http\Controllers\Pendaftar\InstallmentPaymentController;
-
+use App\Http\Controllers\Admin\StudentController;
 
 
 Route::get('/', function () {
@@ -73,13 +75,19 @@ Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () 
 
     Route::post('/verifikasi-pembayaran/installment/{installment}/approve', [PaymentVerificationController::class, 'approveInstallment'])->name('payment.approve');
     Route::post('/verifikasi-pembayaran/installment/{installment}/reject', [PaymentVerificationController::class, 'rejectInstallment'])->name('payment.reject');
+    // finalisasi pendaftaran
+    Route::post('/diterima/{application}/finalize', [FinalizeRegistrationController::class, 'finalize'])->name('accepted.finalize');
+
+    //mahasiswa
+    Route::get('/mahasiswa', [StudentController::class, 'index'])->name('students.index');
 });
 
 
 // Untuk Calon Mahasiswa
 Route::middleware('auth')->group(function () {
-    Route::get('/camaru/dashboard', [PendaftarDashboardController::class, 'showDashboard'])->name('pendaftar.dashboard');
-    Route::get('/camaru/upload-dokumen', [PendaftarDashboardController::class, 'showDocumentUploadForm'])->name('pendaftar.document.form');
+    Route::get('/camaru', [PendaftarDashboardController::class, 'showDashboard'])->name('pendaftar');
+    Route::get('/camaru/biodata', [PendaftarBiodataController::class, 'showDashboard'])->name('pendaftar.biodata');
+    Route::get('/camaru/upload-dokumen', [PendaftarBiodataController::class, 'showDocumentUploadForm'])->name('pendaftar.document.form');
     Route::post('/camaru/dashboard/upload-document/{application}', [DocumentUploadController::class, 'store'])->name('pendaftar.document.store');
     Route::get('/camaru/registrasi', [ReRegistrationController::class, 'show'])->name('pendaftar.registrasi');
     Route::post('/camaru/registrasi/pilih-skema', [ReRegistrationController::class, 'choosePaymentScheme'])->name('pendaftar.registrasi.scheme');

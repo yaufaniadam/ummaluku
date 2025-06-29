@@ -2,24 +2,31 @@
 
 namespace App\View\Components;
 
-use Closure;
-use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Illuminate\Support\Str;
 
-class breadcrumb extends Component
+class Breadcrumb extends Component
 {
+    public string $current;
+
     /**
      * Create a new component instance.
+     *
+     * @param string $current Halaman aktif saat ini.
+     * @param string $home Teks untuk halaman utama.
+     * @return void
      */
-    public function __construct()
-    {
-        //
+    public function __construct(string $current)
+    {       
+        $this->current = $current;
     }
 
     /**
      * Get the view / contents that represent the component.
+     *
+     * @return \Illuminate\Contracts\View\View
      */
-    public function render(): View|Closure|string
+    public function render()
     {
         return view('components.breadcrumb');
     }

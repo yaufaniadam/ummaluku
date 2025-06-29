@@ -28,7 +28,7 @@ class AdminSeleksiController extends Controller
     {
         // Ambil data pendaftar yang siap seleksi
         $query = Application::with(['prospective.user', 'programChoices.program'])
-            ->where('status', 'lolos_verifikasi');
+            ->where('status', 'lolos_verifikasi_data');
 
         return DataTables::of($query)
             // Tambah kolom nomor urut
@@ -117,7 +117,7 @@ class AdminSeleksiController extends Controller
     }
     public function reject(Application $application)
     {
-        $application->update(['status' => 'rejected']);
+        $application->update(['status' => 'ditolak']);
 
         return back()->with('success', 'Pendaftar ' . $application->prospective->user->name . ' telah ditolak.');
     }

@@ -5,5 +5,5 @@
 @section('content')
 
     {{-- View "Wadah" ini hanya bertugas memanggil komponen Livewire --}}
-    @livewire('pendaftar.dashboard')
+    @livewire('pendaftar.biodata')
 @endsection

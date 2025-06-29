@@ -366,7 +366,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Data Mahasiswa',
-                    'route'  => '',
+                    'route'  => 'admin.students.index',
                     'icon' => 'fas fa-fw fa-user-graduate',
                 ],
                 [

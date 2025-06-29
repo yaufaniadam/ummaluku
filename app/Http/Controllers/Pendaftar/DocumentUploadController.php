@@ -68,7 +68,7 @@ class DocumentUploadController extends Controller
 
         if ($allRequiredDocsUploaded) {
             // Jika semua sudah lengkap, update status aplikasi utama
-            $application->update(['status' => 'menunggu_verifikasi_dokumen']);
+            $application->update(['status' => 'proses_verifikasi']);
         }
     }
 }

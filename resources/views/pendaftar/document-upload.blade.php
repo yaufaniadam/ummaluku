@@ -4,7 +4,7 @@
 
 @section('content')
 
-<div class="page-header d-print-none pt-5 pb-5 bg-light">
+    <div class="page-header d-print-none pt-5 pb-5 bg-light">
         <div class="container-xl">
             <div class="row g-2 align-items-center">
                 <div class="col-md-6">
@@ -19,22 +19,24 @@
                     </p>
                 </div>
                 <div class="col-md-6 text-lg-end ">
-                    <h5 class="card-title">Selamat Datang, {{ $application->prospective->user->name }}!</h5 >
+                    <h5 class="card-title">Selamat Datang, {{ $application->prospective->user->name }}!</h5>
                     <small class="text-muted">No. {{ $application->registration_number }}</small><br>
-                    <span>Status: {{ Str::title(str_replace('_', ' ', $application->status)) }}</span>
+                    <span>Status: <strong>{{ Str::title(str_replace('_', ' ', $application->status)) }}</strong></span>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="container py-5">
-        {{-- Kita set stepper ke langkah 3 --}}
-        <x-stepper current-step="3" step1-text="Pendaftaran Awal" step2-text="Lengkapi Biodata" step3-text="Upload Dokumen"
-            step4-text="Selesai" />
+    <div class="container py-4">
+
+         <x-breadcrumb current="{{ $application->status }}" />
+       
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Upload Dokumen Persyaratan</h3>
+                <h4 class="card-title mb-0">Upload Dokumen Persyaratan</h4>
+                <small class="text-muted"><i class="bi bi-exclamation-triangle"></i> Upload dokumen satu-persatu. Jenis file
+                    JPG/JPEG/PDF maksimal 1 MB</small>
             </div>
             <div class="card-body">
                 @if (session('success'))
