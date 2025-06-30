@@ -51,6 +51,10 @@ Route::middleware('auth')->group(function () {
 Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () {
 
 
+    Route::get('/', function () {
+        return view('dashboard');
+    })->name('dashboard');
+    
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -96,10 +100,20 @@ Route::middleware('auth')->group(function () {
 
 // No Login
 
+
 Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.form');
 Route::get('/pendaftaran/sukses', function () {
     return view('sukses');
 })->name('pendaftaran.sukses');
 Route::get('/jalur/{category:slug}', [PendaftaranController::class, 'showCategoryDetail'])->name('pendaftaran.category.detail');
+
+use App\Http\Controllers\EmailNotificationController;
+
+Route::get('/welcome', function () {
+    return view('welcome');
+});
+
+Route::post('/send-notification', [EmailNotificationController::class, 'send'])->name('send.notification');
+
 
 require __DIR__ . '/auth.php';

@@ -3,33 +3,30 @@
 namespace App\Channels;
 
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Http;
-
-/**
- * @method array toWhatsApp(object $notifiable)
- */
 
 class WhatsAppChannel
 {
-    public function send(object $notifiable, Notification $notification): void
+    public function send($notifiable, Notification $notification)
     {
-        // Panggil method toWhatsApp dari class notifikasi
-        $data = $notification->toWhatsApp($notifiable);
+        $message = $notification->toWhatsApp($notifiable);
 
-        if (!$data || empty($data['phone']) || empty($data['message'])) {
-            return;
-        }
+        $token = "uOw1hkJsad6NtRjOdJ0ESgeDfxx6PFjsy9mR6fXreDYeVTFcqNEanc3";
+        $secret_key = "T17RBPFm";
 
-        // Ambil token dari file .env untuk keamanan
-        $token = config('services.wablas.token');
-        $secret_key = config('services.wablas.secret');
+        $phone = $message['phone'];  // E.g. 6281223xxx
+        $text = urlencode($message['message']);
 
-        // Gunakan Http Client Laravel
-        Http::asForm()->withHeaders([
-            "Authorization" => "{$token}.{$secret_key}",
-        ])->post("https://sby.wablas.com/api/send-message", [
-            'phone' => $data['phone'],
-            'message' => $data['message'],
-        ]);
+        $url = "https://sby.wablas.com/api/send-message?token=$token.$secret_key&phone=$phone&message=$text";
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        // Optional: log or handle response
+        return $response;
     }
 }
