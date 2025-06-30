@@ -116,4 +116,16 @@ Route::get('/welcome', function () {
 Route::post('/send-notification', [EmailNotificationController::class, 'send'])->name('send.notification');
 
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NotifikasiPendaftaran;
+
+Route::get('/tesmail', function () {
+    try {
+        Mail::to('yaufaniadam@gmail.com')->send(new NotifikasiPendaftaran());
+        return 'Email berhasil dikirim!';
+    } catch (\Exception $e) {
+        return 'Gagal mengirim email: '. $e->getMessage();
+    }
+});
+
 require __DIR__ . '/auth.php';
