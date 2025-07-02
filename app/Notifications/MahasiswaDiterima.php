@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Channels\WhatsAppChannel; 
+use App\Channels\WhatsAppChannel;
 
 class MahasiswaDiterima extends Notification implements ShouldQueue
 {
@@ -30,20 +30,20 @@ class MahasiswaDiterima extends Notification implements ShouldQueue
     /**
      * Mendefinisikan format pesan email.
      */
-    // public function toMail(object $notifiable): MailMessage
-    // {
-    //     $acceptedProgram = $this->application->programChoices->where('is_accepted', true)->first()->program;
+    public function toMail(object $notifiable): MailMessage
+    {
+        $acceptedProgram = $this->application->programChoices->where('is_accepted', true)->first()->program;
 
-    //     return (new MailMessage)
-    //                 ->subject('Selamat! Anda Diterima di Universitas Muhammadiyah Maluku')
-    //                 ->greeting('Assalamualaikum Wr. Wb. ' . $notifiable->name . ',')
-    //                 ->line('Selamat! Berdasarkan hasil seleksi, Anda dinyatakan DITERIMA sebagai calon mahasiswa baru di Universitas Muhammadiyah Maluku.')
-    //                 ->line('Program Studi: **' . $acceptedProgram->name_id . ' (' . $acceptedProgram->degree . ')**')
-    //                 ->line('Silakan login ke dashboard pendaftar Anda untuk melihat informasi mengenai registrasi ulang dan pembayaran.')
-    //                 ->action('Buka Dashboard Pendaftar', route('pendaftar.dashboard'))
-    //                 ->line('Terima kasih atas partisipasi Anda.');
-    // }
-    
+        return (new MailMessage)
+            ->subject('Selamat! Anda Diterima di Universitas Muhammadiyah Maluku')
+            ->greeting('Assalamualaikum Wr. Wb. ' . $notifiable->name . ',')
+            ->line('Selamat! Berdasarkan hasil seleksi, Anda dinyatakan DITERIMA sebagai calon mahasiswa baru di Universitas Muhammadiyah Maluku.')
+            ->line('Program Studi: **' . $acceptedProgram->name_id . ' (' . $acceptedProgram->degree . ')**')
+            ->line('Silakan login ke dashboard pendaftar Anda untuk melihat informasi mengenai registrasi ulang dan pembayaran.')
+            ->action('Buka Dashboard Pendaftar', route('login'))
+            ->line('Terima kasih atas partisipasi Anda.');
+    }
+
     /**
      * Mendefinisikan format pesan WhatsApp.
      */
@@ -51,7 +51,7 @@ class MahasiswaDiterima extends Notification implements ShouldQueue
     {
         return [
             'phone' => '08562563456', // Ambil nomor HP dari data prospective
-            'message' => "Assalamualaikum  Selamat! Anda dinyatakan DITERIMA di Universitas Muhammadiyah Maluku."
+            'message' => "Assalamualaikum  Selamat! Anda dinyatakan DITERIMA di Universitas Muhammadiyah Maluku. Silakan login ke dashboard pendaftar Anda untuk melihat informasi mengenai registrasi ulang dan pembayaran."
         ];
     }
 }

@@ -7,6 +7,9 @@ use App\Models\Application;
 use App\Models\ApplicationDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\MenungguVerifikasi;
+use App\Models\User;
+use Illuminate\Support\Facades\Notification;
 
 class DocumentUploadController extends Controller
 {
@@ -69,6 +72,9 @@ class DocumentUploadController extends Controller
         if ($allRequiredDocsUploaded) {
             // Jika semua sudah lengkap, update status aplikasi utama
             $application->update(['status' => 'proses_verifikasi']);
+
+            $admins = User::role(['Super Admin', 'Staf Admisi', 'Direktur Admisi'])->get();  
+            Notification::send($admins, new MenungguVerifikasi($application)); 
         }
     }
 }

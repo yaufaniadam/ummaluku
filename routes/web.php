@@ -60,10 +60,7 @@ Route::prefix('admin')->middleware(['auth','permission:view pmb'])->name('admin.
     Route::post('/seleksi/{application}/reject', [AdminSeleksiController::class, 'reject'])->name('seleksi.reject');
     Route::get('/diterima', [AcceptedStudentController::class, 'index'])->name('diterima.index');
 
-    //for debug notif
-    Route::post('/diterima/{application}/test-whatsapp', [AcceptedStudentController::class, 'testWhatsApp'])->name('diterima.test-whatsapp');
-    Route::post('/diterima/{application}/test-email', [AcceptedStudentController::class, 'testEmail'])->name('diterima.test-email');
-
+ 
     Route::get('/verifikasi-pembayaran', [PaymentVerificationController::class, 'index'])->name('payment.index');
     Route::get('/verifikasi-pembayaran/{invoice}', [PaymentVerificationController::class, 'show'])->name('payment.show');
     // Route::post('/verifikasi-pembayaran/{invoice}/approve', [PaymentVerificationController::class, 'approve'])->name('payment.approve');
@@ -79,7 +76,7 @@ Route::prefix('admin')->middleware(['auth','permission:view pmb'])->name('admin.
 
 
 // Untuk Calon Mahasiswa
-Route::middleware('auth')->group(function () {
+Route::middleware('auth','role:Camaru')->group(function () {
     Route::get('/camaru', [PendaftarDashboardController::class, 'showDashboard'])->name('pendaftar');
     Route::get('/camaru/biodata', [PendaftarBiodataController::class, 'showDashboard'])->name('pendaftar.biodata');
     Route::get('/camaru/upload-dokumen', [PendaftarBiodataController::class, 'showDocumentUploadForm'])->name('pendaftar.document.form');

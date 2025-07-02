@@ -93,7 +93,7 @@ class AdminSeleksiController extends Controller
             // Update status di setiap pilihan prodi
             foreach ($application->programChoices as $choice) {
                 $choice->update(['is_accepted' => ($choice->program_id == $selectedProgramId)]);
-            }
+            }              
         });
 
        // Ambil total biaya dari settings
