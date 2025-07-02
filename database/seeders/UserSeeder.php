@@ -9,100 +9,99 @@ use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // 1. Membuat Roles
-        $roles = [
-            'Super Admin',      // 
-            'Direktur Admisi',        // 
-            'Staf Admisi',        // 
-            'Direktur Akademik',    // 
-            'Staf Akademik',    // 
-            'Direktur SDM',         // 
-            'Staf SDM',         // 
-            'Eksekutif',        // 
-            'Tendik',    // 
-            'Dosen',    // 
-            'Mahasiswa',        // 
-            'Camaru',           // 
-        ];
+        // === BUAT ROLES ===
+        $superAdminRole = Role::create(['name' => 'Super Admin']); // Super Admin secara otomatis mendapat semua izin
+        
+        $dirAdmisiRole = Role::create(['name' => 'Direktur Admisi']);
+        $stafAdmisiRole = Role::create(['name' => 'Staf Admisi']);
+        
+        $dirAkademikRole = Role::create(['name' => 'Direktur Akademik']);
+        $stafAkademikRole = Role::create(['name' => 'Staf Akademik']);
 
-        foreach ($roles as $role) {
-            Role::create(['name' => $role]);
-        }
+        $dirSdmRole = Role::create(['name' => 'Direktur SDM']);
+        $stafSdmRole = Role::create(['name' => 'Staf SDM']);
 
-        // 2. Membuat User untuk setiap Role Staf/Admin
-        $superAdmin = User::create([
+        $eksekutifRole = Role::create(['name' => 'Eksekutif']);
+        $dosenRole = Role::create(['name' => 'Dosen']);
+        $tendikRole = Role::create(['name' => 'Tendik']);
+        
+        Role::create(['name' => 'Mahasiswa']);
+        Role::create(['name' => 'Camaru']);
+
+        // === BERI PERMISSIONS KE ROLES ===
+        $dirAdmisiRole->givePermissionTo(['view pmb', 'manage pmb']);
+        $stafAdmisiRole->givePermissionTo(['view pmb']);
+
+        $dirAkademikRole->givePermissionTo(['view akademik', 'manage akademik']);
+        $stafAkademikRole->givePermissionTo(['view akademik']);
+
+        $dirSdmRole->givePermissionTo(['view sdm', 'manage sdm']);
+        $stafSdmRole->givePermissionTo(['view sdm']);
+        
+        $eksekutifRole->givePermissionTo(['view executive dashboard']);
+
+
+        // === BUAT USERS DAN TUGASKAN ROLE ===
+        User::create([
             'name' => 'Super Admin',
             'email' => 'superadmin@ummaluku.ac.id',
             'password' => Hash::make('password'),
-        ]);
-        $superAdmin->assignRole('Super Admin');
+        ])->assignRole($superAdminRole);
 
-        $adminPmb = User::create([
+        User::create([
             'name' => 'Direktur Admisi',
             'email' => 'dir.admisi@ummaluku.ac.id',
             'password' => Hash::make('password'),
-        ]);
-        $adminPmb->assignRole('Direktur Admisi');      
+        ])->assignRole($dirAdmisiRole);
 
-        $adminPmb = User::create([
+        User::create([
             'name' => 'Staf Admisi',
             'email' => 'staf.admisi@ummaluku.ac.id',
             'password' => Hash::make('password'),
-        ]);
-        $adminPmb->assignRole('Staf Admisi');
+        ])->assignRole($stafAdmisiRole);
 
-        $adminPmb = User::create([
+        User::create([
             'name' => 'Direktur Akademik',
             'email' => 'dir.akademik@ummaluku.ac.id',
             'password' => Hash::make('password'),
-        ]);
-        $adminPmb->assignRole('Direktur Akademik');
+        ])->assignRole($dirAkademikRole);
 
-        $stafAkademik = User::create([
+        User::create([
             'name' => 'Staf Akademik',
             'email' => 'staf.akademik@ummaluku.ac.id',
             'password' => Hash::make('password'),
-        ]);
-        $stafAkademik->assignRole('Staf Akademik');
+        ])->assignRole($stafAkademikRole);
 
-        $adminPmb = User::create([
+        User::create([
             'name' => 'Direktur SDM',
             'email' => 'dir.sdm@ummaluku.ac.id',
             'password' => Hash::make('password'),
-        ]);
-        $adminPmb->assignRole('Direktur SDM');
+        ])->assignRole($dirSdmRole);
 
-        $stafSdm = User::create([
+        User::create([
             'name' => 'Staf SDM',
             'email' => 'staf.sdm@ummaluku.ac.id',
             'password' => Hash::make('password'),
-        ]);
-        $stafSdm->assignRole('Staf SDM');
+        ])->assignRole($stafSdmRole);
 
-        $eksekutif = User::create([
+        User::create([
             'name' => 'Pimpinan Eksekutif',
             'email' => 'eksekutif@ummaluku.ac.id',
             'password' => Hash::make('password'),
-        ]);
-        $eksekutif->assignRole('Eksekutif');
+        ])->assignRole($eksekutifRole);
         
-        $dosen = User::create([
+        User::create([
             'name' => 'Dosen Contoh',
             'email' => 'dosen@ummaluku.ac.id',
             'password' => Hash::make('password'),
-        ]);
-        $dosen->assignRole('Dosen');
+        ])->assignRole($dosenRole);
 
-        $dosen = User::create([
+        User::create([
             'name' => 'Tendik Contoh',
             'email' => 'tendik@ummaluku.ac.id',
             'password' => Hash::make('password'),
-        ]);
-        $dosen->assignRole('Tendik');
+        ])->assignRole($tendikRole);
     }
 }

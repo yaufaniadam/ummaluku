@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('batches', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // e.g., "Gelombang 1", "Gelombang Khusus"
+            $table->string('description'); // e.g., "Gelombang 1", "Gelombang Khusus"
             $table->year('year'); // Tahun ajaran, e.g., 2025
             $table->date('start_date'); // Tanggal mulai pendaftaran
             $table->date('end_date'); // Tanggal akhir pendaftaran

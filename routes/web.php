@@ -21,6 +21,9 @@ use App\Http\Controllers\Modules\PMB\PaymentVerificationController;
 use App\Http\Controllers\Pendaftar\DocumentUploadController;
 use App\Http\Controllers\Pendaftar\InstallmentPaymentController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Modules\PMB\BatchController;
+use App\Http\Controllers\Modules\PMB\PmbSettingsController;
+
 
 
 Route::get('/', function () {
@@ -37,8 +40,12 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-Route::prefix('admin')->middleware(['role:Super Admin'])->name('admin.')->group(function () {
+// permission minimal manage pmb/role dir pmb
+Route::prefix('admin')->middleware(['auth','permission:manage pmb'])->name('admin.')->group(function () {
     Route::resource('jalur-pendaftaran', AdmissionCategoryController::class);
+    Route::resource('gelombang', BatchController::class); 
+    Route::get('pengaturan-pmb', [PmbSettingsController::class, 'index'])->name('pmb-settings.index');
+    
 });
 
 //akses untuk user login ke profil
@@ -48,7 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () {
+Route::prefix('admin')->middleware(['auth','permission:view pmb'])->name('admin.')->group(function () {
 
 
     Route::get('/', function () {

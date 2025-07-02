@@ -10,7 +10,7 @@ class AdmissionCategoryController extends Controller
 {
     public function index()
     {
-        $categories = AdmissionCategory::latest()->paginate(10);
+        $categories = AdmissionCategory::with('batches')->latest()->paginate(10);
         return view('admin.pmb.categories.index', compact('categories'));
     }
 

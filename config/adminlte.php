@@ -304,14 +304,14 @@ return [
             'text' => 'Dashboard',
             'route'  => 'admin.dashboard', // Asumsi kita akan punya route bernama admin.dashboard
             'icon' => 'fas fa-fw fa-tachometer-alt',
-            'can'    => ['Super Admin','Direktur Admisi','Staf Admisi'],
+            'can'    => ['view pmb'],
         ],
 
         // MODUL PENDAFTARAN MAHASISWA BARU
         [
             'text'    => 'PMB',
             'icon'    => 'fas fa-fw fa-user-plus',
-            // 'can' => 'view_dashboard', // Contoh jika nanti dibatasi oleh permission
+            'can' => 'view pmb', // Contoh jika nanti dibatasi oleh permission
 
             'submenu' => [
                 [
@@ -319,42 +319,50 @@ return [
                     // Menggunakan array agar menu tetap aktif di halaman index dan show
                     'route'  => ['admin.pendaftaran.index', 'admin.seleksi.index'],
                     'icon' => 'fas fa-fw fa-users',
+                    'can' => 'view pmb',
                 ],
                 [
                     'text' => 'Proses Seleksi', // 
                     'route'  => 'admin.seleksi.index',
                     'icon' => 'fas fa-fw fa-search',
+                    'can' => 'view pmb',
                 ],
                 [
                     'text' => 'Diterima',
                     'route'  => 'admin.diterima.index',
                     'icon' => 'fas fa-fw fa-check',
+                    'can' => 'view pmb',
                 ],
                 [
                     'text' => 'Pembayaran Registrasi',
                     'route'  => 'admin.payment.index',
                     'icon' => 'fas fa-fw fa-cash-register',
+                    'can' => 'view pmb',
                 ],
             ],
         ],
         [
             'text'    => 'Pengaturan PMB',
             'icon'    => 'fas fa-fw fa-user-plus',
+            'can' => 'manage pmb',
             'submenu' => [
                 [
                     'text' => 'Jalur Pendaftaran',
                     'route'  => 'admin.jalur-pendaftaran.index', //admin.settings.category
                     'icon' => 'fas fa-fw fa-folder',
+                    'can' => 'manage pmb',
                 ],
                 [
                     'text' => 'Gelombang',
-                    'route'  => '', //admin.settings.batch'
+                    'route'  => 'admin.gelombang.index', //admin.settings.batch'
                     'icon' => 'fas fa-fw fa-calendar',
+                    'can' => 'manage pmb',
                 ],
                 [
                     'text' => 'Kelola Gelombang',
-                    'route'  => '', //admin.settings.category-batch
+                    'route'  => 'admin.pmb-settings.index', 
                     'icon' => 'fas fa-fw fa-check',
+                    'can' => 'manage pmb',
                 ],
             ],
         ],
@@ -363,21 +371,25 @@ return [
         [
             'text'    => 'Akademik',
             'icon'    => 'fas fa-fw fa-graduation-cap',
+            'can' => 'view akademik',
             'submenu' => [
                 [
                     'text' => 'Data Mahasiswa',
                     'route'  => 'admin.students.index',
                     'icon' => 'fas fa-fw fa-user-graduate',
+                    'can' => 'view akademik',
                 ],
                 [
                     'text' => 'Master Mata Kuliah',
                     'route'  => '',
                     'icon' => 'fas fa-fw fa-book',
+                    'can' => 'view akademik',
                 ],
                 [
                     'text' => 'Data Perkuliahan',
                     'route'  => '',
                     'icon' => 'fas fa-fw fa-chalkboard-teacher',
+                    'can' => 'view akademik',
                 ],
             ],
         ],
@@ -386,11 +398,13 @@ return [
         [
             'text'    => 'Kepegawaian',
             'icon'    => 'fas fa-fw fa-briefcase',
+            'can' => 'view sdm',
             'submenu' => [
                 [
                     'text' => 'Data Pegawai & Dosen',
                     'route'  => '',
                     'icon' => 'fas fa-fw fa-id-card',
+                    'can' => 'view sdm',
                 ],
             ],
         ],
@@ -398,26 +412,30 @@ return [
         // PENGATURAN SISTEM (HANYA UNTUK SUPER ADMIN)
         [
             'header' => 'PENGATURAN SISTEM',
-            'can'  => 'manage-settings', // Hanya bisa dilihat oleh role yg punya permission ini
+            'can'  => 'manage settings', // Hanya bisa dilihat oleh role yg punya permission ini
         ],
         [
             'text'    => 'Pengaturan',
             'icon'    => 'fas fa-fw fa-cogs',
+            'can'  => 'manage settings', 
             'submenu' => [
                 [
                     'text' => 'Manajemen User',
                     'route'  => '',
                     'icon' => 'fas fa-fw fa-users-cog',
+                    'can'  => 'manage settings', 
                 ],
                 [
                     'text' => 'Roles & Permissions',
                     'route'  => '',
                     'icon' => 'fas fa-fw fa-key',
+                    'can'  => 'manage settings', 
                 ],
                 [
                     'text' => 'Pengaturan Umum',
                     'route'  => '',
                     'icon' => 'fas fa-fw fa-sliders-h',
+                    'can'  => 'manage settings', 
                 ],
             ],
         ],

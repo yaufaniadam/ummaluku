@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
             CitiesSeeder::class,
             DistrictsSeeder::class,
             VillagesSeeder::class,
-            UserSeeder::class,
             HighSchoolMajorSeeder::class,
             AdmissionCategorySeeder::class,
             BatchSeeder::class,
@@ -33,7 +32,9 @@ class DatabaseSeeder extends Seeder
             HighSchoolSeeder::class,
             DocumentRequirementSeeder::class, 
             AdmissionCategoryDocumentSeeder::class, 
-            AdmissionCategoryBatchSeeder::class,
+            AdmissionCategoryBatchSeeder::class,            
+            PermissionSeeder::class,
+            UserSeeder::class,
             DummyDataSeeder::class,
         ]);
     }
