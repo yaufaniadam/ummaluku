@@ -27,7 +27,7 @@ class NotifikasiPendaftaran extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.pendaftaran', // <-- Arahkan ke view yang dibuat
+            view: 'emails.pendaftaran', 
         );
     }
 

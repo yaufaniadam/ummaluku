@@ -8,9 +8,7 @@ use App\Models\ApplicationProgramChoice;
 use App\Models\Batch;
 use App\Models\Prospective;
 use App\Models\User;
-use App\Models\HighSchool;
 use App\Models\Program;
-use App\Models\Religion;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Illuminate\Support\Str;
@@ -205,12 +203,13 @@ class FormPendaftaran extends Component
                     'choice_order' => 2,
                 ]);
             }
+            
+            $newUser->notify(new PendaftaranBerhasil($newUser, $generatedPassword));    
+
             return $newUser;
         });
 
-        if ($user) {
-            $user->notify(new PendaftaranBerhasil($generatedPassword));
-        }
+       
 
         // 5. Redirect ke halaman sukses dengan membawa data login
         return redirect()->route('pendaftaran.sukses')->with('registration_data', [

@@ -2,26 +2,33 @@
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
+// use Illuminate\Bus\Queueable;
+// use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Channels\WhatsAppChannel;
+use App\Models\User;
 
-class PendaftaranBerhasil extends Notification implements ShouldQueue // <-- Implementasi ShouldQueue
+class PendaftaranBerhasil extends Notification 
+// implements ShouldQueue // <-- Implementasi ShouldQueue
 {
-    use Queueable; // <-- Gunakan trait Queueable
+    // use Queueable; 
 
+    protected $user;
     protected $password;
 
-    public function __construct($generatedPassword)
+     public function __construct(User $user, string $password)
     {
-        $this->password = $generatedPassword;
+        $this->user = $user;
+        $this->password = $password; 
     }
+
 
     public function via(object $notifiable): array
     {
         // Untuk saat ini kita aktifkan email. WhatsApp bisa ditambahkan nanti.
-        return ['mail']; 
+        return ['mail', WhatsAppChannel::class]; 
+        // return ['mail']; 
     }
 
     public function toMail(object $notifiable): MailMessage
@@ -38,7 +45,16 @@ class PendaftaranBerhasil extends Notification implements ShouldQueue // <-- Imp
                     ->line('Terima kasih telah mendaftar!');
     }
     
-    // public function toWhatsapp(...) {
-    //     // Logika untuk mengirim via WhatsApp API (seperti Twilio, WATI, dll.) akan ada di sini
-    // }
+   public function toWhatsApp(object $notifiable): string
+    {
+
+        return "Assalamualaikum Wr. Wb. $notifiable->name \n\n" .
+               "Pendaftaran awal Anda di Universitas Muhammadiyah Maluku telah berhasil kami terima.\n" .
+               "Berikut ini data login Anda:\n" .
+               "Email: *{$notifiable->email}*\n" .
+               "Password: *{$this->password}*\n\n" .
+               "Mohon segera login di sini " . url('login') . " dan mengganti password Anda demi keamanan.";
+               "Terima kasih!";
+        // return "Assalamualaikum Wr. W";
+    }
 }

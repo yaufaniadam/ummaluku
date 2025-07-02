@@ -3,30 +3,27 @@
 namespace App\Channels;
 
 use Illuminate\Notifications\Notification;
+use App\Services\WhatsAppService;
 
 class WhatsAppChannel
 {
+    /**
+     * Send the given notification.
+     *
+     * @param  mixed  $notifiable
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return void
+     */
     public function send($notifiable, Notification $notification)
     {
+        // Panggil method toWhatsApp dari class notifikasi
         $message = $notification->toWhatsApp($notifiable);
 
-        $token = "uOw1hkJsad6NtRjOdJ0ESgeDfxx6PFjsy9mR6fXreDYeVTFcqNEanc3";
-        $secret_key = "T17RBPFm";
+        // Ambil nomor telepon dari user/student
+        // Pastikan model User punya relasi prospective, dan prospective punya parent_phone_number
+        $targetNumber = $notifiable->prospective->parent_phone;
 
-        $phone = $message['phone'];  // E.g. 6281223xxx
-        $text = urlencode($message['message']);
-
-        $url = "https://sby.wablas.com/api/send-message?token=$token.$secret_key&phone=$phone&message=$text";
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        // Optional: log or handle response
-        return $response;
+        // Kirim pesan menggunakan service yang sudah ada
+        (new WhatsAppService())->sendMessage($targetNumber, $message);
     }
 }

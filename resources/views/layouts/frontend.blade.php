@@ -149,7 +149,10 @@
         }
 
         .bg-ummaluku {
-            background-color: #38b6ff;
+            background-color: #0193de;
+        }
+        .bg-ummaluku-orange {
+            background-color: #f76603;
         }
     </style>
 
@@ -163,7 +166,7 @@
 <body class="d-flex flex-column h-100">
     <main class="flex-shrink-0">
         <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-ummaluku">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-ummaluku-orange">
             <div class="container px-5">
                 <a class="navbar-brand" href="#"><img src="{{ asset('assets/logoummaluku.png') }}"
                         width="" /></a>
