@@ -260,9 +260,9 @@ return [
     'dashboard_url' => '/',
     'logout_url' => 'logout',
     'login_url' => 'login',
-    'register_url' => 'register',
-    'password_reset_url' => 'password/reset',
-    'password_email_url' => 'password/email',
+    'register_url' => '',
+    'password_reset_url' => '',
+    'password_email_url' => '',
     'profile_url' => false,
     'disable_darkmode_routes' => false,
 
@@ -304,7 +304,7 @@ return [
             'text' => 'Dashboard',
             'route'  => 'admin.dashboard', // Asumsi kita akan punya route bernama admin.dashboard
             'icon' => 'fas fa-fw fa-tachometer-alt',
-            'role'    => 'Super Admin',
+            'can'    => ['Super Admin','Direktur Admisi','Staf Admisi'],
         ],
 
         // MODUL PENDAFTARAN MAHASISWA BARU
