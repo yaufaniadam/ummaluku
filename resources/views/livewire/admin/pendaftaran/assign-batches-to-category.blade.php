@@ -1,10 +1,10 @@
 <div>
-    {{-- Tombol untuk memicu modal --}}
+ 
     <button wire:click="openModal" class="btn btn-xs btn-default text-warning">
         Atur Gelombang
     </button>
 
-    {{-- Modal --}}
+
     <div class="modal fade" id="assignModal-{{ $category->id }}" tabindex="-1" wire:ignore.self>
         <div class="modal-dialog">
             <div class="modal-content">

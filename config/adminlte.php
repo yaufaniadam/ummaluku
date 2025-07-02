@@ -347,21 +347,15 @@ return [
             'can' => 'manage pmb',
             'submenu' => [
                 [
-                    'text' => 'Jalur Pendaftaran',
-                    'route'  => 'admin.jalur-pendaftaran.index', //admin.settings.category
-                    'icon' => 'fas fa-fw fa-folder',
-                    'can' => 'manage pmb',
-                ],
-                [
                     'text' => 'Gelombang',
                     'route'  => 'admin.gelombang.index', //admin.settings.batch'
                     'icon' => 'fas fa-fw fa-calendar',
                     'can' => 'manage pmb',
-                ],
+                ],               
                 [
-                    'text' => 'Kelola Gelombang',
-                    'route'  => 'admin.pmb-settings.index', 
-                    'icon' => 'fas fa-fw fa-check',
+                    'text' => 'Jalur Pendaftaran',
+                    'route'  => 'admin.jalur-pendaftaran.index', //admin.settings.category
+                    'icon' => 'fas fa-fw fa-folder',
                     'can' => 'manage pmb',
                 ],
             ],

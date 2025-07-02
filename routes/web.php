@@ -22,9 +22,6 @@ use App\Http\Controllers\Pendaftar\DocumentUploadController;
 use App\Http\Controllers\Pendaftar\InstallmentPaymentController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Modules\PMB\BatchController;
-use App\Http\Controllers\Modules\PMB\PmbSettingsController;
-
-
 
 Route::get('/', function () {
     // Ambil semua kategori pendaftaran yang aktif
@@ -33,7 +30,6 @@ Route::get('/', function () {
     // Ambil satu gelombang yang sedang aktif saat ini
     $activeBatch = Batch::where('is_active', true)->first();
 
-    // Kirim KEDUA variabel ($categories dan $activeBatch) ke view 'home'
     return view('user.home', [
         'categories' => $categories,
         'activeBatch' => $activeBatch,
@@ -43,9 +39,7 @@ Route::get('/', function () {
 // permission minimal manage pmb/role dir pmb
 Route::prefix('admin')->middleware(['auth','permission:manage pmb'])->name('admin.')->group(function () {
     Route::resource('jalur-pendaftaran', AdmissionCategoryController::class);
-    Route::resource('gelombang', BatchController::class); 
-    Route::get('pengaturan-pmb', [PmbSettingsController::class, 'index'])->name('pmb-settings.index');
-    
+    Route::resource('gelombang', BatchController::class);     
 });
 
 //akses untuk user login ke profil

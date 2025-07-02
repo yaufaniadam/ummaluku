@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
 
         // Cek peran pengguna dan arahkan ke dashboard yang sesuai
         if ($user->hasRole(['Super Admin', 'Direktur Admisi', 'Staf Admisi'])) {
-            return redirect()->intended(route('admin.pendaftaran.index'));
+            return redirect()->intended(route('admin.dashboard'));
         }
 
         if ($user->hasRole('Camaru')) {

@@ -45,11 +45,13 @@
                                 {{-- Tombol Edit standar --}}
                                 <a href="{{ route('admin.jalur-pendaftaran.edit', $category) }}" class="btn btn-xs btn-default text-primary">Edit</a>
                                 
+                                @hasrole('Super Admin')
                                 {{-- Tombol Hapus standar --}}
                                 <form action="{{ route('admin.jalur-pendaftaran.destroy', $category) }}" method="POST" class="d-inline">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="btn btn-xs btn-default text-danger" onclick="return confirm('Anda yakin?')">Hapus</button>
                                 </form>
+                                @endhasrole
 
                                 {{-- Panggil komponen Livewire untuk mengatur gelombang --}}
                                 @livewire('admin.pendaftaran.assign-batches-to-category', ['category' => $category], key($category->id))
