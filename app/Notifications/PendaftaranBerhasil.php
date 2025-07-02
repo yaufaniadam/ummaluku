@@ -7,6 +7,7 @@ namespace App\Notifications;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Channels\WhatsAppChannel;
+use App\Models\Application;
 use App\Models\User;
 
 class PendaftaranBerhasil extends Notification
@@ -16,13 +17,13 @@ class PendaftaranBerhasil extends Notification
 
     protected $user;
     protected $password;
-    protected $applicationId;
+    public Application $application;
 
-    public function __construct(User $user, string $password, string $applicationId)
+    public function __construct(User $user, string $password, Application $application)
     {
         $this->user = $user;
         $this->password = $password;
-        $this->applicationId = $applicationId;
+        $this->application = $application;
     }
 
 
@@ -57,9 +58,9 @@ class PendaftaranBerhasil extends Notification
             "Password: *{$this->password}*\n\n" .
             "Mohon segera login di sini " . url('login') . " dan mengganti password Anda demi keamanan.\n\n". 
             "Terima kasih!";
-
+        
         return [
-            'phone' => $notifiable->prospectives->phone, // Ambil nomor HP dari data prospective
+            'phone' => $notifiable->prospective->phone, // Ambil nomor HP dari data prospective
             'message' => $message
         ];
     }
@@ -68,7 +69,7 @@ class PendaftaranBerhasil extends Notification
         return [
             'message' => 'Pendaftar baru telah masuk: ' . $notifiable->name,
             'icon'    => 'fas fa-user-plus text-info', // Ikon dari Font Awesome
-            'url'     => route('admin.pendaftaran.show', $this->applicationId),
+            'url'     => route('admin.pendaftaran.show', $this->application->id),
         ];
     }
 }

@@ -6,7 +6,6 @@ namespace App\Notifications;
 // use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Channels\WhatsAppChannel;
 use App\Models\User;
 
 class MenungguVerifikasi extends Notification
@@ -34,6 +33,8 @@ class MenungguVerifikasi extends Notification
             ->subject('Dokumen Menunggu Verifikasi - PMB UM Maluku')
             ->greeting('Assalamualaikum Wr. Wb. ' . $notifiable->name . ',')
             ->line('Dokumen pendaftaran menunggu verifikasi Anda.')
+            ->line('Dokumen pendaftaran menunggu verifikasi Anda.')
+            ->action('Buka dashboard admin.', route('admin.pendaftaran.show', $this->applicationId))
             ->line('Terima kasih');
     }
 

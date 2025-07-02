@@ -50,7 +50,7 @@ class MahasiswaDiterima extends Notification implements ShouldQueue
     public function toWhatsApp(object $notifiable): array
     {
         return [
-            'phone' => '08562563456', // Ambil nomor HP dari data prospective
+            'phone' => $this->application->prospective->phone, // Ambil nomor HP dari data prospective
             'message' => "Assalamualaikum  Selamat! Anda dinyatakan DITERIMA di Universitas Muhammadiyah Maluku. Silakan login ke dashboard pendaftar Anda untuk melihat informasi mengenai registrasi ulang dan pembayaran."
         ];
     }

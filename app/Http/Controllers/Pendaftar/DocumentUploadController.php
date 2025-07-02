@@ -73,8 +73,8 @@ class DocumentUploadController extends Controller
             // Jika semua sudah lengkap, update status aplikasi utama
             $application->update(['status' => 'proses_verifikasi']);
 
-            $admins = User::role(['Super Admin', 'Staf Admisi', 'Direktur Admisi'])->get();  
-            Notification::send($admins, new MenungguVerifikasi($application)); 
+            $admins = User::role(['Staf Admisi'])->get();  
+            Notification::send($admins, new MenungguVerifikasi($application->id)); 
         }
     }
 }

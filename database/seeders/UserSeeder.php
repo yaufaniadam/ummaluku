@@ -46,7 +46,7 @@ class UserSeeder extends Seeder
         // === BUAT USERS DAN TUGASKAN ROLE ===
         User::create([
             'name' => 'Super Admin',
-            'email' => 'superadmin@ummaluku.ac.id',
+            'email' => 'ummaluku.ac.id@gmail.com',
             'password' => Hash::make('password'),
         ])->assignRole($superAdminRole);
 
@@ -58,7 +58,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Staf Admisi',
-            'email' => 'staf.admisi@ummaluku.ac.id',
+            'email' => 'admisi@ummaluku.ac.id',
             'password' => Hash::make('password'),
         ])->assignRole($stafAdmisiRole);
 
