@@ -27,7 +27,7 @@
     <div class="container py-4">
 
         <div class="row g-2 align-items-center">
-            <div class="col-9">
+            <div class="col-12">
 
                 <div class="text-center">
                     <div class="mb-3">

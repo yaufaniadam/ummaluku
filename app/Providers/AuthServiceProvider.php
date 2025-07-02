@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\User; 
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -22,15 +22,18 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
+    // app/Providers/AuthServiceProvider.php
+
     public function boot()
     {
         $this->registerPolicies();
 
-        // Secara implisit memberikan semua hak akses ke super-admin
-        // Method ini akan berjalan sebelum semua pengecekan Gate & Policy lainnya
-        Gate::before(function (User $user, $ability) {
-            // Cek jika user memiliki role 'superadmin'
-            return $user->hasRole('Super Admin') ? true : null;
+        Gate::before(function ($user, $ability) {
+            // PERIKSA DULU APAKAH $user ADA, BARU CEK ROLENYA
+            if ($user && $user->hasRole('Super Admin')) {
+                return true;
+            }
+            return null; // Jika bukan superadmin atau user adalah guest, lanjutkan pengecekan normal
         });
     }
 }

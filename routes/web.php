@@ -10,8 +10,8 @@ use App\Livewire\Admin\Pendaftaran\Show as PendaftaranShow;
 use App\Http\Controllers\Modules\PMB\PendaftarDashboardController;
 use App\Http\Controllers\Modules\PMB\PendaftarBiodataController;
 // use App\Http\Controllers\Modules\PMB\DocumentUploadController;
-use App\Models\Batch;
-use App\Models\AdmissionCategory;
+
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Modules\PMB\AdminSeleksiController;
 use App\Http\Controllers\Modules\PMB\AdminPendaftaranController;
 use App\Http\Controllers\Modules\PMB\AdmissionCategoryController;
@@ -23,18 +23,8 @@ use App\Http\Controllers\Pendaftar\InstallmentPaymentController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Modules\PMB\BatchController;
 
-Route::get('/', function () {
-    // Ambil semua kategori pendaftaran yang aktif
-    $categories = AdmissionCategory::where('is_active', true)->get();
 
-    // Ambil satu gelombang yang sedang aktif saat ini
-    $activeBatch = Batch::where('is_active', true)->first();
-
-    return view('user.home', [
-        'categories' => $categories,
-        'activeBatch' => $activeBatch,
-    ]);
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // permission minimal manage pmb/role dir pmb
 Route::prefix('admin')->middleware(['auth','permission:manage pmb'])->name('admin.')->group(function () {

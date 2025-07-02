@@ -32,7 +32,7 @@
         </div>
     </header>
 
-    <!-- Section Program Studi -->
+    <!-- Section Program Studi (DINAMIS) -->
     <section class="py-5" id="prodi">
         <div class="container px-5 my-5">
             <div class="row gx-5 justify-content-center">
@@ -45,85 +45,30 @@
                 </div>
             </div>
             <div class="row gx-5">
-                {{-- Setiap kartu prodi sekarang bisa diklik --}}
-                <div class="col-lg-4 mb-5">
-                    <a href="#!" class="text-decoration-none">
-                        <div class="card h-100 shadow border-0">
-                            <div class="card-body p-4">
-                                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3 mt-n1"><i
-                                        class="bi bi-tree"></i></div>
-                                <h5 class="card-title mb-3 text-dark">Pendidikan Biologi</h5>
-                                <p class="card-text mb-0 text-muted">Menjadi pendidik biologi yang kompeten dan inovatif.
-                                </p>
+                {{-- Melakukan perulangan untuk setiap prodi yang dikirim dari controller --}}
+                @forelse ($prodis as $prodi)
+                    <div class="col-lg-4 mb-5">
+                        {{-- Arahkan link ke halaman detail prodi menggunakan slug --}}
+                        <a href="" class="text-decoration-none">
+                            <div class="card h-100 shadow border-0">
+                                <div class="card-body p-4">
+                                    {{-- Tampilkan ikon dari database, jika tidak ada, gunakan ikon default --}}
+                                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3 mt-n1"><i
+                                            class="{{ $prodi->icon_class ?? 'bi bi-book-fill' }}"></i></div>
+                                    {{-- Tampilkan nama prodi --}}
+                                    <h5 class="card-title mb-3 text-dark">{{ $prodi->name_id }} ({{ $prodi->degree }})</h5>
+                                    {{-- Tampilkan deskripsi singkat --}}
+                                    <p class="card-text mb-0 text-muted">{{ $prodi->short_description }}</p>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 mb-5">
-                    <a href="#!" class="text-decoration-none">
-                        <div class="card h-100 shadow border-0">
-                            <div class="card-body p-4">
-                                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3 mt-n1"><i
-                                        class="bi bi-calculator"></i></div>
-                                <h5 class="card-title mb-3 text-dark">Pendidikan Matematika</h5>
-                                <p class="card-text mb-0 text-muted">Menguasai ilmu matematika dan metode pengajaran modern.
-                                </p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 mb-5">
-                    <a href="#!" class="text-decoration-none">
-                        <div class="card h-100 shadow border-0">
-                            <div class="card-body p-4">
-                                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3 mt-n1"><i
-                                        class="bi bi-water"></i></div>
-                                <h5 class="card-title mb-3 text-dark">Ilmu Kelautan</h5>
-                                <p class="card-text mb-0 text-muted">Mempelajari potensi dan pengelolaan sumber daya laut
-                                    secara berkelanjutan.</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 mb-5">
-                    <a href="#!" class="text-decoration-none">
-                        <div class="card h-100 shadow border-0">
-                            <div class="card-body p-4">
-                                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3 mt-n1"><i
-                                        class="bi bi-fishing"></i></div>
-                                <h5 class="card-title mb-3 text-dark">Perikanan Tangkap</h5>
-                                <p class="card-text mb-0 text-muted">Menjadi ahli dalam teknologi dan manajemen penangkapan
-                                    ikan.</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 mb-5">
-                    <a href="#!" class="text-decoration-none">
-                        <div class="card h-100 shadow border-0">
-                            <div class="card-body p-4">
-                                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3 mt-n1"><i
-                                        class="bi bi-gear-wide-connected"></i></div>
-                                <h5 class="card-title mb-3 text-dark">Fishing Technology</h5>
-                                <p class="card-text mb-0 text-muted">Inovasi teknologi modern untuk industri perikanan yang
-                                    efisien.</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 mb-5">
-                    <a href="#!" class="text-decoration-none">
-                        <div class="card h-100 shadow border-0">
-                            <div class="card-body p-4">
-                                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3 mt-n1"><i
-                                        class="bi bi-brightness-high"></i></div>
-                                <h5 class="card-title mb-3 text-dark">Kehutanan</h5>
-                                <p class="card-text mb-0 text-muted">Menjadi garda terdepan dalam konservasi dan pengelolaan
-                                    hutan.</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
+                @empty
+                    {{-- Pesan ini akan muncul jika tidak ada data prodi di database --}}
+                    <div class="col-12">
+                        <p class="text-center text-muted">Saat ini belum ada program studi yang tersedia untuk ditampilkan.</p>
+                    </div>
+                @endforelse
             </div>
         </div>
     </section>
