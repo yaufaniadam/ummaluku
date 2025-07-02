@@ -16,18 +16,20 @@ class PendaftaranBerhasil extends Notification
 
     protected $user;
     protected $password;
+    protected $applicationId;
 
-     public function __construct(User $user, string $password)
-    {
-        $this->user = $user;
-        $this->password = $password; 
-    }
+  public function __construct(User $user, string $password, string $applicationId)
+{
+    $this->user = $user;
+    $this->password = $password;
+    $this->applicationId = $applicationId;
+}
 
 
     public function via(object $notifiable): array
     {
         // Untuk saat ini kita aktifkan email. WhatsApp bisa ditambahkan nanti.
-        return ['mail', WhatsAppChannel::class]; 
+        return ['mail', WhatsAppChannel::class, 'database']; 
         // return ['mail']; 
     }
 
@@ -55,6 +57,14 @@ class PendaftaranBerhasil extends Notification
                "Password: *{$this->password}*\n\n" .
                "Mohon segera login di sini " . url('login') . " dan mengganti password Anda demi keamanan.";
                "Terima kasih!";
-        // return "Assalamualaikum Wr. W";
+     
+    }
+    public function toArray(object $notifiable): array
+    {
+        return [
+            'message' => 'Pendaftar baru telah masuk: ' . $notifiable->name,
+            'icon'    => 'fas fa-user-plus text-info', // Ikon dari Font Awesome
+            'url'     => route('admin.pendaftaran.show', $this->applicationId),
+        ];
     }
 }

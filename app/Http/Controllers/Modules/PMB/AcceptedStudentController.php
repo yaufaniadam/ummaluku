@@ -7,8 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\AdmissionCategory;
 use App\Models\Batch;
 use App\Models\Program;
-use App\Models\Application;
-use App\Notifications\MahasiswaDiterima; 
 
 class AcceptedStudentController extends Controller
 {
@@ -29,29 +27,5 @@ class AcceptedStudentController extends Controller
 
         return $dataTable->render('admin.accepted.index', compact('categories', 'batches', 'programs', 'payment_statuses'));
     }
-
-    public function testWhatsApp(Application $application)
-    {
-        // Pastikan relasi yang dibutuhkan sudah dimuat
-        $application->load('prospective.user', 'programChoices.program');
-
-        // Picu notifikasi ke user terkait
-        $application->prospective->user->notify(new MahasiswaDiterima($application));
-
-        // Redirect kembali dengan pesan sukses
-        return back()->with('success', 'Percobaan pengiriman notifikasi WhatsApp untuk ' . $application->prospective->user->name . ' telah dijalankan di background.');
-    }
-
-    public function testEmail(Application $application)
-    {
-        // Pastikan relasi yang dibutuhkan sudah dimuat
-        $application->load('prospective.user', 'programChoices.program');
-
-        // Picu notifikasi ke user terkait.
-        // Class MahasiswaDiterima sudah tahu cara mengirim email.
-        $application->prospective->user->notify(new MahasiswaDiterima($application));
-
-        // Redirect kembali dengan pesan sukses
-        return back()->with('success', 'Percobaan pengiriman email untuk ' . $application->prospective->user->name . ' telah dijalankan.');
-    }
+    
 }

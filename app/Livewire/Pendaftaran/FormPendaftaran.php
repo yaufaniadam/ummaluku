@@ -204,7 +204,7 @@ class FormPendaftaran extends Component
                 ]);
             }
             
-            $newUser->notify(new PendaftaranBerhasil($newUser, $generatedPassword));    
+            $newUser->notify(new PendaftaranBerhasil($newUser, $generatedPassword, $application->id ));    
 
             return $newUser;
         });
