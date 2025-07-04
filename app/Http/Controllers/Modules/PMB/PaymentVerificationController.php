@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Modules\PMB;
 use App\DataTables\ReRegistrationInvoicesDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\ReRegistrationInvoice;
-use App\Models\ReRegistrationInstallment; // <-- Import model ini
+use App\Models\ReRegistrationInstallment;
 use Illuminate\Http\Request;
 
 class PaymentVerificationController extends Controller
@@ -47,8 +47,12 @@ class PaymentVerificationController extends Controller
         // Jika semua sudah lunas, update status invoice induk
         if ($allPaid) {
             $installment->invoice->update(['status' => 'paid']);
+             //notifikasi full pembayaran diterima
         } else {
             $installment->invoice->update(['status' => 'partially_paid']);
+
+            //notifikasi cicilan diterima
+            //$application->prospective->user->notify(new MahasiswaDiterima($application));
         }
 
         return back()->with('success', 'Cicilan berhasil diverifikasi.');
@@ -59,12 +63,13 @@ class PaymentVerificationController extends Controller
      */
     public function rejectInstallment(Request $request, ReRegistrationInstallment $installment)
     {
-        $request->validate(['notes' => 'required|string|max:255']);
+        // $request->validate(['notes' => 'required|string|max:255']);
 
         $installment->update([
             'status' => 'rejected',
-            'notes' => $request->input('notes'), // Simpan catatan penolakan
             'verified_by' => auth()->id(),
+            // 'notes' => $request->input('notes'), // Simpan catatan penolakan
+            'notes' => 'Catatan', // Simpan catatan penolakan
             'verified_at' => now(),
         ]);
 

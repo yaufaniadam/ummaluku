@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Pendaftar;
 
 use App\Http\Controllers\Controller;
 use App\Models\ReRegistrationInstallment;
-use App\Models\ReRegistrationInvoice; // <-- Import model ini
+use App\Models\ReRegistrationInvoice;
+use App\Models\User;
+use App\Notifications\VerifikasiPembayaranReg;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+
 
 class InstallmentPaymentController extends Controller
 {
@@ -26,7 +30,7 @@ class InstallmentPaymentController extends Controller
 
         // 3. Simpan file
         $filePath = $request->file('proof_of_payment')->store(
-            'payment_proofs/re-registration/' . $installment->invoice->application_id, 
+            'payment_proofs/re-registration/' . $installment->invoice->application_id,
             'public'
         );
 
@@ -36,9 +40,12 @@ class InstallmentPaymentController extends Controller
             'status' => 'pending_verification',
         ]);
 
-        // 5. <<< PANGGIL METHOD BARU DI SINI >>>
         // Perbarui status invoice induknya setelah cicilan diupdate
         $this->updateParentInvoiceStatus($installment->invoice);
+
+        // picu notifikasi VerifikasiPembayaranReg
+        $admins = User::role(['Staf Admisi'])->get();
+        Notification::send($admins, new VerifikasiPembayaranReg($installment->invoice->id));
 
         // 6. Redirect kembali
         return back()->with('success', 'Bukti pembayaran untuk Cicilan ke-' . $installment->installment_number . ' berhasil diunggah.');

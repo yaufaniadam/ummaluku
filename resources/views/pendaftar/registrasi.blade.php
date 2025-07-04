@@ -117,7 +117,7 @@
                                                     class="badge bg-warning">{{ Str::title(str_replace('_', ' ', $installment->status)) }}</span>
                                             </td>
                                             <td>
-                                                @if ($installment->status == 'unpaid')
+                                                @if ($installment->status == 'unpaid' || $installment->status == 'rejected')
                                                     {{-- Form upload bukti bayar untuk cicilan ini --}}
                                                     <form action="{{ route('pendaftar.installment.store', $installment) }}"
                                                         method="POST" enctype="multipart/form-data">

@@ -65,6 +65,7 @@ Route::prefix('admin')->middleware(['auth','permission:view pmb'])->name('admin.
     Route::get('/verifikasi-pembayaran/{invoice}', [PaymentVerificationController::class, 'show'])->name('payment.show');
     // Route::post('/verifikasi-pembayaran/{invoice}/approve', [PaymentVerificationController::class, 'approve'])->name('payment.approve');
 
+    //verifikasi pembayaran cicilan untuk registrasi ulang
     Route::post('/verifikasi-pembayaran/installment/{installment}/approve', [PaymentVerificationController::class, 'approveInstallment'])->name('payment.approve');
     Route::post('/verifikasi-pembayaran/installment/{installment}/reject', [PaymentVerificationController::class, 'rejectInstallment'])->name('payment.reject');
     // finalisasi pendaftaran

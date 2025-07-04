@@ -49,7 +49,10 @@
                                         @csrf
                                         <button type="submit" class="btn btn-xs btn-success" onclick="return confirm('Anda yakin?')">Setujui</button>
                                     </form>
-                                    {{-- Tombol Tolak bisa ditambahkan di sini dengan modal untuk catatan --}}
+                                    <form action="{{ route('admin.payment.reject', $installment) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="btn btn-xs btn-danger" onclick="return confirm('Anda yakin?')">Tolak</button>
+                                    </form>
                                 @elseif($installment->status == 'paid')
                                     <span class="text-success">Diverifikasi oleh {{ $installment->verifiedBy->name ?? 'Sistem' }}</span>
                                 @else
