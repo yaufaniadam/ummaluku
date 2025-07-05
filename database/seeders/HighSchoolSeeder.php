@@ -15,12 +15,7 @@ class HighSchoolSeeder extends Seeder
     public function run(): void
     {
         $data = [
-            ['SMAN 1 AMBON'], ['SMAN 2 AMBON'], ['SMAN 3 AMBON'], ['SMAN 4 AMBON'],
-            ['SMAN 5 AMBON'], ['SMAN 6 AMBON'], ['SMAN 7 AMBON'], ['SMAN 8 AMBON'],
-            ['SMAN 9 AMBON'], ['SMAN 10 AMBON'], ['SMAN 11 AMBON'], ['SMAN 12 AMBON'],
-            ['SMAN 13 AMBON'], ['SMKN 1 AMBON'], ['SMKN 2 AMBON'], ['SMKN 3 AMBON'],
-            ['SMKN 4 AMBON'], ['SMKN 5 AMBON'], ['SMKN 6 AMBON'], ['SMKN 7 AMBON'],
-            ['SMKN 8 AMBON'],
+            ['SMAN 1 AMBON'], 
         ];
 
         $now = Carbon::now();
@@ -29,10 +24,11 @@ class HighSchoolSeeder extends Seeder
         foreach ($data as $row) {
             $insert[] = [
                 'name' => $row[0],
-                'npsn' => null,
-                'address' => null,
-                // Logika untuk menentukan tipe sekolah secara otomatis
-                'type' => Str::startsWith($row[0], 'SMAN') ? 'SMA' : 'SMK',
+                'npsn' => '60102008',
+                'satuanPendidikanId' => '4c8c345a-8d71-4e48-b706-b9bab6fdb2aa',
+                'address' => 'JL.RAYA PATTIMURA NO. 28',
+                'village' => 'URITETU',
+                'type' => 'SMA SEDERAJAT',
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
