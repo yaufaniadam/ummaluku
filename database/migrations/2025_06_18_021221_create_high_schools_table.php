@@ -14,9 +14,13 @@ return new class extends Migration
         Schema::create('high_schools', function (Blueprint $table) {
             $table->id();
             $table->string('npsn')->unique()->nullable(); // Nomor Pokok Sekolah Nasional
+            $table->string('satuanPendidikanId')->unique()->nullable(); // id https://api.data.belajar.id/
             $table->string('name'); // Nama Sekolah
+            $table->string('type')->default('SMA SEDERAJAT'); // Jenis: SMA, SMK, MA
             $table->text('address')->nullable(); // Alamat Sekolah
-            $table->string('type')->default('SMA'); // Jenis: SMA, SMK, MA
+            $table->string('village')->nullable(); // nama desa
+            $table->string('city')->nullable(); // nama desa
+            $table->string('province')->nullable(); // nama desa
             $table->timestamps();
         });
     }

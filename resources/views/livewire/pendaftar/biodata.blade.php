@@ -26,24 +26,17 @@
     {{-- Mulai dari sini, tidak perlu @extends atau @section --}}
     <div class="container py-4">
 
-       <x-breadcrumb current="{{ $application->status }}" />        
+        <x-breadcrumb current="{{ $application->status }}" />
 
         <div class="card mb-4">
             <div class="card-header">
-               <h4 class="card-title mb-0">Lengkapi Biodata Anda</h4> 
+                <h4 class="card-title mb-0">Lengkapi Biodata Anda</h4>
             </div>
             <div class="card-body">
                 <form wire:submit.prevent="saveBiodata">
                     <div class="row">
-
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label required">NISN (Nomor Induk Siswa Nasional)</label>
-                            <input type="text" class="form-control @error('nisn') is-invalid @enderror"
-                                wire:model.live="nisn" placeholder="Masukkan NISN Anda...">
-                            @error('nisn')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        <h4> Data Diri</h4>
+                        <hr>
                         <div class="col-md-6 mb-3">
                             <label class="form-label required">NIK (Nomor Induk Kependudukan)</label>
                             <input type="text" class="form-control @error('id_number') is-invalid @enderror"
@@ -80,19 +73,39 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label required">Asal Sekolah</label>
-                            <select class="form-select @error('high_school_id') is-invalid @enderror"
-                                wire:model.live="high_school_id">
-                                <option value="">-- Pilih Asal Sekolah --</option>
-                                @foreach ($highSchools as $school)
-                                    <option value="{{ $school->id }}">{{ $school->name }}</option>
-                                @endforeach
+                         <div class="col-md-6 mb-3">
+                            <label class="form-label required">Penerima KPS (Kartu Perlindungan Sosial)?</label>
+                            <select class="form-select @error('is_kps_recipient') is-invalid @enderror"
+                                wire:model.live="is_kps_recipient">
+                                <option value="0">Tidak</option>
+                                <option value="1">Ya</option>
                             </select>
+                            @error('is_kps_recipient')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        {{-- Bagian Sekolah Asal --}}
+                        <div class="col-md-6 mb-3">
+                            <label for="nama_sekolah" class="form-label">Sekolah Asal</label>
+                            <div class="input-group">
+
+                                <input type="text" id="nama_sekolah"
+                                    class="form-control @error('high_school_id') is-invalid @enderror"
+                                    placeholder="Pilih sekolah..." readonly wire:model="nama_sekolah">
+
+
+                                <button type="button" class="btn btn-secondary" wire:click="$set('showModal', true)">
+                                    Lihat Daftar Sekolah
+                                </button>
+                            </div>
+
                             @error('high_school_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <input type="hidden" wire:model.live="high_school_id" />                       
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label required">Jurusan</label>
@@ -107,23 +120,11 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label required">Penerima KPS (Kartu Perlindungan Sosial)?</label>
-                            <select class="form-select @error('is_kps_recipient') is-invalid @enderror"
-                                wire:model.live="is_kps_recipient">
-                                <option value="0">Tidak</option>
-                                <option value="1">Ya</option>
-                            </select>
-                            @error('is_kps_recipient')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-
-
+                       
                     </div>
                     <div class="row">
+                        <h4> Alamat</h4>
+                        <hr>
                         <div class="col-md-8 mb-3">
                             <label class="form-label required">Alamat Lengkap (Sesuai KTP)</label>
                             <input type="text" class="form-control @error('address') is-invalid @enderror"
@@ -197,7 +198,7 @@
                     </div>
 
                     <div class="row">
-                        <h6> Orang Tua</h6>
+                        <h4> Orang Tua</h4>
                         <hr>
                         <div class="col-md-4 mb-3">
                             <label class="form-label required">Nama Ayah</label>
@@ -340,20 +341,27 @@
             </div>
         </div>
 
+        {{-- Modal Pencarian Sekolah --}}
+        @if ($showModal)
+            <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Cari dan Pilih Sekolah</h5>
+
+                            <button type="button" class="btn-close" wire:click="$set('showModal', false)"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <livewire:pendaftar.modal-cari-sekolah />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         @push('js')
             {{-- Listener untuk SweetAlert tetap kita perlukan --}}
-            {{-- <script>
-                // Mendengarkan event 'swal-success' yang dikirim dari komponen Livewire
-                document.addEventListener('swal-success', event => {
-                    Swal.fire({
-                        title: 'Berhasil!',
-                        text: 'Biodata Anda berhasil diperbarui!',
-                        icon: 'success',
-                        confirmButtonText: 'Oke'
-                    });
-                });
-            </script> --}}
-
             <script>
                 // Listener untuk menangkap event dari komponen Livewire
                 document.addEventListener('swal-success', event => {

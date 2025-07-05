@@ -19,7 +19,7 @@ class ProspectiveFactory extends Factory
             'phone' => fake()->phoneNumber(),
             'nisn' => fake()->unique()->numerify('##########'), // 10 digit angka
             'id_number' => fake()->unique()->numerify('################'), // 16 digit angka
-            'high_school_id' => fake()->numberBetween(1, 21),
+            'high_school_id' => fake()->numberBetween(1,1),
             'high_school_major_id' => fake()->numberBetween(1, 5),
             'father_name' => fake()->name('male'),
             'mother_name' => fake()->name('female'),

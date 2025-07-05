@@ -96,5 +96,8 @@ Route::get('/pendaftaran/sukses', function () {
 })->name('pendaftaran.sukses');
 Route::get('/jalur/{category:slug}', [PendaftaranController::class, 'showCategoryDetail'])->name('pendaftaran.category.detail');
 
+Route::get('/cari-sekolah', function() {
+    return view('halaman-pencarian'); // Ganti dengan nama view Anda
+});
 
 require __DIR__ . '/auth.php';

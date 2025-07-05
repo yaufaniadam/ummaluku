@@ -12,7 +12,7 @@ use Laravolt\Indonesia\Models\City;
 use Laravolt\Indonesia\Models\District;
 use Laravolt\Indonesia\Models\Province;
 use Laravolt\Indonesia\Models\Village;
-use PhpParser\Node\Expr\Cast\Array_;
+use Livewire\Attributes\On;
 
 class Biodata extends Component
 {
@@ -40,7 +40,11 @@ class Biodata extends Component
 
     public bool $isBiodataComplete = false;
 
-    public array $workflowSteps = [];
+    // public array $workflowSteps = [];
+
+    // public $sekolah_id;
+    public $nama_sekolah;
+    public bool $showModal = false;
 
     protected function rules(): array
     {
@@ -71,7 +75,7 @@ class Biodata extends Component
             'with_guardian' => 'nullable|boolean',
             'citizenship' => 'required|string|in:WNI,WNA',
             'high_school_major_id' => 'required',
-            
+
         ];
     }
     public function messages(): array
@@ -141,8 +145,17 @@ class Biodata extends Component
         // Isi properti form dengan data yang sudah ada di database
         $this->fill($this->application->prospective->toArray());
 
-        $this->requiredDocuments = $this->application->admissionCategory->documentRequirements;
+        if ($this->high_school_id) {
+            // Cari data sekolah di tabel high_schools berdasarkan ID
+            $sekolah = HighSchool::find($this->high_school_id);
 
+            // Jika sekolah ditemukan, isi properti nama_sekolah
+            if ($sekolah) {
+                $this->nama_sekolah = $sekolah->name;
+            }
+        }
+
+        $this->requiredDocuments = $this->application->admissionCategory->documentRequirements;
     }
 
     public function updatedProvinceCode($value)
@@ -163,7 +176,7 @@ class Biodata extends Component
         $this->reset('village_code');
     }
 
-    
+
     /**
      * Method BARU khusus untuk menyimpan biodata
      */
@@ -184,6 +197,16 @@ class Biodata extends Component
         $this->dispatch('swal-success', [
             'message' => 'Biodata Anda berhasil diperbarui!',
         ]);
+    }
+
+    #[On('sekolahDipilih')]
+    public function handleSekolahDipilih($id, $nama)
+    {
+        $this->high_school_id = $id;
+        $this->nama_sekolah = $nama;
+
+        // Tutup modal setelah sekolah dipilih
+        $this->showModal = false;
     }
 
     public function render()
