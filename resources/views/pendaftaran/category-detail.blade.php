@@ -26,7 +26,7 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    @forelse ($category->batches as $batch)
+                    @forelse ($category->batches->sortByDesc('start_date') as $batch)
                         <div class="card mb-3">
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div>
