@@ -7,7 +7,7 @@
 @section('content')
 
     <!-- Hero Section -->
-    <header class="bg-light py-5">
+    <header class="bg-ummaluku-image pt-5 pb-0 ">
         <div class="container px-5">
             <div class="row gx-5 align-items-center justify-content-center">
                 <div class="col-lg-8 col-xl-7 col-xxl-6">
@@ -24,8 +24,8 @@
                 </div>
                 <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center">
                     {{-- Ganti dengan gambar kampus Anda --}}
-                    <img class="img-fluid rounded-3 my-5"
-                        src="https://placehold.co/600x400/343a40/6c757d?text=Kampus+UM%20Maluku"
+                    <img class="img-fluid rounded-3 mt-5"
+                        src="{{ asset('assets/mhs.png')  }}"
                         alt="Kampus Universitas Muhammadiyah Maluku" />
                 </div>
             </div>
@@ -113,7 +113,7 @@
         </div>
     </section>
 
-    <section class="py-5 bg-light" id="pendaftaran">
+    <section class="py-5 bg-light" id="beasiswa">
         <div class="container px-5 my-5">
 
             <div class="text-center mb-5">
@@ -172,6 +172,30 @@
                         </div>
                     </a>
                 </div>
+            </div>
+
+        </div>
+    </section>
+    <section class="py-5 bg-light" id="kontak">
+        <div class="container px-5 my-5">
+
+            <div class="text-center mb-5">
+                <h2 class="fw-bolder">Kontak</h2>
+                <p class="lead fw-normal text-muted">hubungi Admisi Universitas Muhammadiyah Maluku.
+                </p>
+            </div>
+            <div class="row gx-4">
+                <div class="col-12 mb-4">
+                    <a href="#!" class="text-decoration-none">
+                        <div
+                            class="d-flex flex-column align-items-center text-center p-4 border rounded-3 h-100 shadow-sm">
+                            <div class="feature bg-success bg-gradient text-white rounded-3 mb-3"><i
+                                    class="bi bi-whatsapp"></i></div>
+                            <h5 class="fw-bolder text-dark">085612345678</h5>
+                        </div>
+                    </a>
+                </div>
+                
             </div>
 
         </div>

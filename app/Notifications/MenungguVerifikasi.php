@@ -2,16 +2,15 @@
 
 namespace App\Notifications;
 
-// use Illuminate\Bus\Queueable;
-// use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\User;
 
-class MenungguVerifikasi extends Notification
-// implements ShouldQueue // <-- Implementasi ShouldQueue
+class MenungguVerifikasi extends Notification implements ShouldQueue 
 {
-    // use Queueable; 
+    use Queueable; 
 
     protected $applicationId;
 
