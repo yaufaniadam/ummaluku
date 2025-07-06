@@ -30,18 +30,27 @@
 
         <div class="card mb-4">
             <div class="card-header">
-                <h4 class="card-title mb-0">Lengkapi Biodata Anda</h4>
+                <h6 class="card-title mb-0">Lengkapi Biodata Anda</h6>
             </div>
             <div class="card-body">
                 <form wire:submit.prevent="saveBiodata">
                     <div class="row">
-                        <h4> Data Diri</h4>
+                        <h6> Data Diri</h6>
                         <hr>
                         <div class="col-md-6 mb-3">
                             <label class="form-label required">NIK (Nomor Induk Kependudukan)</label>
                             <input type="text" class="form-control @error('id_number') is-invalid @enderror"
                                 wire:model.live="id_number" placeholder="Masukkan 16 digit NIK...">
                             @error('id_number')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                         <div class="col-md-6 mb-3">
+                            <label class="form-label required">NISN (Nomor Induk Siswa Nasional)</label>
+                            <input type="text" class="form-control @error('nisn') is-invalid @enderror"
+                                wire:model.live="nisn" placeholder="Masukkan NISN Anda...">
+                            @error('nisn')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -72,18 +81,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-
-                         <div class="col-md-6 mb-3">
-                            <label class="form-label required">Penerima KPS (Kartu Perlindungan Sosial)?</label>
-                            <select class="form-select @error('is_kps_recipient') is-invalid @enderror"
-                                wire:model.live="is_kps_recipient">
-                                <option value="0">Tidak</option>
-                                <option value="1">Ya</option>
-                            </select>
-                            @error('is_kps_recipient')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                      
 
                         {{-- Bagian Sekolah Asal --}}
                         <div class="col-md-6 mb-3">
@@ -120,10 +118,22 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
+                         <div class="col-md-6 mb-3">
+                            <label class="form-label required">Penerima KPS (Kartu Perlindungan Sosial)?</label>
+                            <select class="form-select @error('is_kps_recipient') is-invalid @enderror"
+                                wire:model.live="is_kps_recipient">
+                                <option value="0">Tidak</option>
+                                <option value="1">Ya</option>
+                            </select>
+                            @error('is_kps_recipient')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                        
                     </div>
                     <div class="row">
-                        <h4> Alamat</h4>
+                        <h6> Alamat</h6>
                         <hr>
                         <div class="col-md-8 mb-3">
                             <label class="form-label required">Alamat Lengkap (Sesuai KTP)</label>
@@ -198,7 +208,7 @@
                     </div>
 
                     <div class="row">
-                        <h4> Orang Tua</h4>
+                        <h6> Orang Tua</h6>
                         <hr>
                         <div class="col-md-4 mb-3">
                             <label class="form-label required">Nama Ayah</label>
