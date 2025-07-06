@@ -33,6 +33,7 @@ class FacultyAndProgramSeeder extends Seeder
             // Prodi di bawah FKIP (faculty_id = 1)
             [
                 'faculty_id' => 1,
+                'code' => '11',
                 'name_id' => 'Pendidikan Biologi',
                 'name_en' => 'Biology Education',
                 'degree' => 'S1',
@@ -41,6 +42,7 @@ class FacultyAndProgramSeeder extends Seeder
             ],
             [
                 'faculty_id' => 1,
+                'code' => '12',
                 'name_id' => 'Pendidikan Matematika',
                 'name_en' => 'Mathematics Education',
                 'degree' => 'S1',
@@ -50,6 +52,7 @@ class FacultyAndProgramSeeder extends Seeder
             // Prodi di bawah Perikanan & Kehutanan (faculty_id = 2)
             [
                 'faculty_id' => 2,
+                'code' => '21',
                 'name_id' => 'Ilmu Kelautan',
                 'name_en' => 'Marine Science',
                 'degree' => 'S1',
@@ -58,6 +61,7 @@ class FacultyAndProgramSeeder extends Seeder
             ],
             [
                 'faculty_id' => 2,
+                'code' => '22',
                 'name_id' => 'Perikanan Tangkap',
                 'name_en' => 'Fishing Technology',
                 'degree' => 'S1',
@@ -66,6 +70,7 @@ class FacultyAndProgramSeeder extends Seeder
             ],
             [
                 'faculty_id' => 2,
+                'code' => '23',
                 'name_id' => 'Kehutanan',
                 'name_en' => 'Forestry',
                 'degree' => 'S1',

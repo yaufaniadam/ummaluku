@@ -31,5 +31,8 @@ class PermissionSeeder extends Seeder
         // --- SETTINGS PERMISSIONS ---
         Permission::create(['name' => 'manage users']);
         Permission::create(['name' => 'manage settings']);
+
+        // --- MAHASISWA ---
+        Permission::create(['name' => 'mahasiswa']);
     }
 }

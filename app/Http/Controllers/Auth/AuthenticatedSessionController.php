@@ -39,7 +39,7 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended(route('pendaftar'));
         }
         if ($user->hasRole('Mahasiswa')) {
-            return redirect()->intended(route('mahasiswa'));
+            return redirect()->intended(route('akademik.dashboard'));
         }
         
         // Redirect default jika tidak punya peran di atas (misalnya ke homepage)

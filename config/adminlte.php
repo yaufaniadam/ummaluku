@@ -306,6 +306,13 @@ return [
             'icon' => 'fas fa-fw fa-tachometer-alt',
             'can'    => ['view pmb'],
         ],
+        // MENU UTAMA
+        [
+            'text' => 'Dashboard',
+            'route'  => 'akademik.dashboard', // Asumsi kita akan punya route bernama admin.dashboard
+            'icon' => 'fas fa-fw fa-tachometer-alt',
+            'can'    => ['mahasiswa']
+        ],
 
         // MODUL PENDAFTARAN MAHASISWA BARU
         [

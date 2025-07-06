@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
         $dosenRole = Role::create(['name' => 'Dosen']);
         $tendikRole = Role::create(['name' => 'Tendik']);
         
-        Role::create(['name' => 'Mahasiswa']);
+        $mahasiswaRole = Role::create(['name' => 'Mahasiswa']);
         Role::create(['name' => 'Camaru']);
 
         // === BERI PERMISSIONS KE ROLES ===
@@ -41,6 +41,7 @@ class UserSeeder extends Seeder
         $stafSdmRole->givePermissionTo(['view sdm']);
         
         $eksekutifRole->givePermissionTo(['view executive dashboard']);
+        $mahasiswaRole->givePermissionTo(['mahasiswa']);
 
 
         // === BUAT USERS DAN TUGASKAN ROLE ===

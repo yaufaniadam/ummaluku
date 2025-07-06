@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('name_id'); // Nama dalam Bahasa Indonesia
             $table->string('name_en')->nullable(); // Nama dalam Bahasa Inggris
             $table->string('degree'); // Jenjang, e.g., "S1", "S2", "D3"
+            $table->string('code', 4)->unique()->nullable();
             $table->timestamps();
         });
     }

@@ -21,15 +21,16 @@ use App\Http\Controllers\Modules\PMB\PaymentVerificationController;
 use App\Http\Controllers\Pendaftar\DocumentUploadController;
 use App\Http\Controllers\Pendaftar\InstallmentPaymentController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Akademik\Mahasiswa\DashboardController;
 use App\Http\Controllers\Modules\PMB\BatchController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // permission minimal manage pmb/role dir pmb
-Route::prefix('admin')->middleware(['auth','permission:manage pmb'])->name('admin.')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'permission:manage pmb'])->name('admin.')->group(function () {
     Route::resource('jalur-pendaftaran', AdmissionCategoryController::class);
-    Route::resource('gelombang', BatchController::class);     
+    Route::resource('gelombang', BatchController::class);
 });
 
 //akses untuk user login ke profil
@@ -39,13 +40,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::prefix('admin')->middleware(['auth','permission:view pmb'])->name('admin.')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'permission:view pmb'])->name('admin.')->group(function () {
 
 
     Route::get('/', function () {
         return view('dashboard');
     })->name('dashboard');
-    
+
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -60,7 +61,7 @@ Route::prefix('admin')->middleware(['auth','permission:view pmb'])->name('admin.
     Route::post('/seleksi/{application}/reject', [AdminSeleksiController::class, 'reject'])->name('seleksi.reject');
     Route::get('/diterima', [AcceptedStudentController::class, 'index'])->name('diterima.index');
 
- 
+
     Route::get('/verifikasi-pembayaran', [PaymentVerificationController::class, 'index'])->name('payment.index');
     Route::get('/verifikasi-pembayaran/{invoice}', [PaymentVerificationController::class, 'show'])->name('payment.show');
     // Route::post('/verifikasi-pembayaran/{invoice}/approve', [PaymentVerificationController::class, 'approve'])->name('payment.approve');
@@ -77,7 +78,7 @@ Route::prefix('admin')->middleware(['auth','permission:view pmb'])->name('admin.
 
 
 // Untuk Calon Mahasiswa
-Route::middleware('auth','role:Camaru')->group(function () {
+Route::middleware('auth', 'role:Camaru')->group(function () {
     Route::get('/camaru', [PendaftarDashboardController::class, 'showDashboard'])->name('pendaftar');
     Route::get('/camaru/biodata', [PendaftarBiodataController::class, 'showDashboard'])->name('pendaftar.biodata');
     Route::get('/camaru/upload-dokumen', [PendaftarBiodataController::class, 'showDocumentUploadForm'])->name('pendaftar.document.form');
@@ -87,6 +88,12 @@ Route::middleware('auth','role:Camaru')->group(function () {
     Route::post('/camaru/pembayaran-cicilan/{installment}', [InstallmentPaymentController::class, 'store'])->name('pendaftar.installment.store');
 });
 
+
+// untuk mahasiswa
+
+Route::prefix('akademik')->middleware(['auth', 'role:Mahasiswa'])->name('akademik.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
 // No Login
 
 
@@ -96,7 +103,7 @@ Route::get('/pendaftaran/sukses', function () {
 })->name('pendaftaran.sukses');
 Route::get('/jalur/{category:slug}', [PendaftaranController::class, 'showCategoryDetail'])->name('pendaftaran.category.detail');
 
-Route::get('/cari-sekolah', function() {
+Route::get('/cari-sekolah', function () {
     return view('halaman-pencarian'); // Ganti dengan nama view Anda
 });
 
