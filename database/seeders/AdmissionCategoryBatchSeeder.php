@@ -21,12 +21,15 @@ class AdmissionCategoryBatchSeeder extends Seeder
         $relations = [
             // Jalur Prestasi (slug: 'prestasi') dibuka di Gelombang 1 
             ['category_slug' => 'jalur-nilai-rapor', 'batch_name' => 'Gelombang 1'],
+            ['category_slug' => 'jalur-nilai-rapor', 'batch_name' => 'Gelombang 2'],
 
             // Jalur Tes (slug: 'tes') hanya dibuka di Gelombang 1
             ['category_slug' => 'jalur-prestasi', 'batch_name' => 'Gelombang 1'],
+            ['category_slug' => 'jalur-prestasi', 'batch_name' => 'Gelombang 2'],
             
             // Jalur Mandiri (slug: 'mandiri') hanya dibuka di Gelombang 1
             ['category_slug' => 'jalur-persyarikatan', 'batch_name' => 'Gelombang 1'],
+            ['category_slug' => 'jalur-persyarikatan', 'batch_name' => 'Gelombang 2'],
 
             // Jalur Beasiswa (slug: 'beasiswa') hanya dibuka di Gelombang 1
             ['category_slug' => 'jalur-cbt', 'batch_name' => 'Gelombang 1'],

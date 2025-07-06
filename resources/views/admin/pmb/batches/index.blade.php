@@ -29,7 +29,7 @@
                 <tbody>
                     @forelse($batches as $batch)
                     <tr>
-                        <td>{{ $batch->name }}</td>
+                        <td>{{ $batch->name }} <br><em class="text-muted">{{ $batch->description }}</em></td>
                         <td>{{ $batch->year }}</td>
                         <td>{{ \Carbon\Carbon::parse($batch->start_date)->format('d M Y') }} - {{ \Carbon\Carbon::parse($batch->end_date)->format('d M Y') }}</td>
                         <td>{!! $batch->is_active ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-danger">Tidak Aktif</span>' !!}</td>

@@ -26,7 +26,7 @@
                                     <input class="form-check-input" type="checkbox" value="{{ $batch->id }}" 
                                            wire:model="attachedBatchIds" id="batch-{{ $category->id }}-{{ $batch->id }}">
                                     <label class="form-check-label" for="batch-{{ $category->id }}-{{ $batch->id }}">
-                                        {{ $batch->name }} ({{ $batch->year }})
+                                        {{ $batch->name }} ({{ $batch->year }})<br><em class="text-muted">{{ $batch->description }}</em>
                                     </label>
                                 </div>
                             </div>

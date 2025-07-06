@@ -22,7 +22,13 @@ class ApplicationsDataTable extends DataTable
             ->addColumn('action', function ($row) {
                 // Membuat tombol aksi untuk setiap baris
                 $viewUrl = route('admin.pendaftaran.show', $row->id);
-                return '<a href="' . $viewUrl . '" class="btn btn-info btn-sm">Lihat Detail</a>';
+                $button = ''; // Initialize an empty string for the button
+
+                // Only show the "Lihat Detail" button if the status is 'menunggu_verifikasi'
+                if (($row->status === 'proses_verifikasi') || ($row->status === 'completed') || ($row->status === 'lolos_verifikasi')) {
+                    $button = '<a href="' . $viewUrl . '" class="btn btn-info btn-sm">Lihat Detail</a>';
+                }
+                return $button;
             })
             ->editColumn('prospective.user.name', function ($row) {
                 // Membuat nama pendaftar bisa diklik dan mengarah ke detail
