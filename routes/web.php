@@ -101,6 +101,7 @@ Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('penda
 Route::get('/pendaftaran/sukses', function () {
     return view('sukses');
 })->name('pendaftaran.sukses');
-Route::get('/jalur/{category:slug}', [PendaftaranController::class, 'showCategoryDetail'])->name('pendaftaran.category.detail');
+
+Route::get('/admisi/{category:slug}', [PendaftaranController::class, 'showCategoryDetail'])->name('pendaftaran.category.detail');
 
 require __DIR__ . '/auth.php';

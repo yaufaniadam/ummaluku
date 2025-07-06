@@ -45,7 +45,7 @@
                                 @else
                                     {{-- Jika masih berlangsung, tampilkan tombol daftar yang aktif --}}
                                     <a href="{{ route('pendaftaran.form', ['type' => $category->slug, 'batch' => $batch->id]) }}"
-                                        class="btn btn-primary">
+                                        class="btn btn-warning">
                                         Daftar di Gelombang Ini
                                     </a>
                                 @endif

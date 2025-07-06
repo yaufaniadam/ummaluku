@@ -18,7 +18,7 @@
                             unggul, islami, dan berwawasan global.</p>
                         <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
                             <a class="btn btn-warning btn-lg px-4 me-sm-3" href="#pendaftaran">Daftar Sekarang</a>
-                            <a class="btn btn-outline-warning btn-lg px-4" href="#prodi">Lihat Program Studi</a>
+                            {{-- <a class="btn btn-outline-warning btn-lg px-4" href="#prodi">Lihat Program Studi</a> --}}
                         </div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
         </div>
     </header>
 
-    <!-- Section Program Studi (DINAMIS) -->
+    {{-- <!-- Section Program Studi (DINAMIS) -->
     <section class="py-5" id="prodi">
         <div class="container px-5 my-5">
             <div class="row gx-5 justify-content-center">
@@ -45,33 +45,32 @@
                 </div>
             </div>
             <div class="row gx-5">
-                {{-- Melakukan perulangan untuk setiap prodi yang dikirim dari controller --}}
-                @forelse ($prodis as $prodi)
+             
                     <div class="col-lg-4 mb-5">
-                        {{-- Arahkan link ke halaman detail prodi menggunakan slug --}}
+                  
                         <a href="" class="text-decoration-none">
                             <div class="card h-100 shadow border-0">
                                 <div class="card-body p-4">
-                                    {{-- Tampilkan ikon dari database, jika tidak ada, gunakan ikon default --}}
+                                
                                     <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3 mt-n1"><i
                                             class="{{ $prodi->icon_class ?? 'bi bi-book-fill' }}"></i></div>
-                                    {{-- Tampilkan nama prodi --}}
+                            
                                     <h5 class="card-title mb-3 text-dark">{{ $prodi->name_id }} ({{ $prodi->degree }})</h5>
-                                    {{-- Tampilkan deskripsi singkat --}}
+                            
                                     <p class="card-text mb-0 text-muted">{{ $prodi->short_description }}</p>
                                 </div>
                             </div>
                         </a>
                     </div>
                 @empty
-                    {{-- Pesan ini akan muncul jika tidak ada data prodi di database --}}
+               
                     <div class="col-12">
                         <p class="text-center text-muted">Saat ini belum ada program studi yang tersedia untuk ditampilkan.</p>
                     </div>
                 @endforelse
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <!-- Section Jalur Pendaftaran & Beasiswa -->
     <section class="py-5 bg-light" id="pendaftaran">
@@ -79,7 +78,7 @@
 
             <div class="text-center mb-5">
                 <h2 class="fw-bolder">Jalur Pendaftaran</h2>
-                <p class="lead fw-normal text-muted">Pilih jalur pendaftaran yang paling sesuai untuk Anda.</p>
+                <p class="lead fw-normal text-muted">Pilih jalur pendaftaran yang paling sesuai untukmu.</p>
             </div>
             <div class="row gx-4">
                 {{-- Pastikan ada gelombang yang aktif secara umum sebelum menampilkan daftar --}}
@@ -91,7 +90,7 @@
                                 class="text-decoration-none">
                                 <div
                                     class="d-flex flex-column align-items-center text-center p-4 border rounded-3 h-100 shadow-sm card-link">
-                                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3">
+                                    <div class="feature bg-warning bg-gradient text-white rounded-3 mb-3">
                                         {{-- Anda bisa menambahkan logika untuk ikon yang berbeda di sini nanti berdasarkan slug atau nama kategori --}}
                                         <i class="bi bi-file-earmark-text-fill"></i>
                                     </div>
@@ -113,7 +112,7 @@
         </div>
     </section>
 
-    <section class="py-5 bg-light" id="beasiswa">
+    {{-- <section class="py-5 bg-light" id="beasiswa">
         <div class="container px-5 my-5">
 
             <div class="text-center mb-5">
@@ -175,7 +174,7 @@
             </div>
 
         </div>
-    </section>
+    </section> --}}
     <section class="py-5 bg-light" id="kontak">
         <div class="container px-5 my-5">
 

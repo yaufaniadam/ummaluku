@@ -181,7 +181,7 @@
 
         {{-- Tombol Submit --}}
         <div class="d-flex justify-content-end mt-4 pb-5">
-            <button type="submit" class="btn btn-primary btn-lg">
+            <button type="submit" class="btn btn-warning btn-lg">
                 <div wire:loading.remove wire:target="save">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-device-floppy"
                         width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"

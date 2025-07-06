@@ -327,7 +327,7 @@
 
 
                     <div class="d-flex mt-4">
-                        <button type="submit" class="btn btn-primary ms-auto">
+                        <button type="submit" class="btn btn-warning ms-auto">
                             <div wire:loading.remove wire:target="saveBiodata">
 
                                 Lanjutkan Pendaftaran
