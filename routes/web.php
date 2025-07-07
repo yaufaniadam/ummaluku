@@ -25,6 +25,10 @@ use App\Http\Controllers\Akademik\Mahasiswa\DashboardController;
 use App\Http\Controllers\Modules\PMB\BatchController;
 
 
+// Route::get('/', function () {
+//     return redirect()->route('login');
+// });
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // permission minimal manage pmb/role dir pmb
@@ -86,6 +90,9 @@ Route::middleware('auth', 'role:Camaru')->group(function () {
     Route::get('/camaru/registrasi', [ReRegistrationController::class, 'show'])->name('pendaftar.registrasi');
     Route::post('/camaru/registrasi/pilih-skema', [ReRegistrationController::class, 'choosePaymentScheme'])->name('pendaftar.registrasi.scheme');
     Route::post('/camaru/pembayaran-cicilan/{installment}', [InstallmentPaymentController::class, 'store'])->name('pendaftar.installment.store');
+    Route::get('/pendaftaran/sukses', function () {
+        return view('sukses');
+    })->name('pendaftaran.sukses');
 });
 
 
@@ -98,9 +105,6 @@ Route::prefix('akademik')->middleware(['auth', 'role:Mahasiswa'])->name('akademi
 
 
 Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.form');
-Route::get('/pendaftaran/sukses', function () {
-    return view('sukses');
-})->name('pendaftaran.sukses');
 
 Route::get('/admisi/{category:slug}', [PendaftaranController::class, 'showCategoryDetail'])->name('pendaftaran.category.detail');
 

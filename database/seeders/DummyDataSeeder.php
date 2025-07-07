@@ -9,6 +9,6 @@ class DummyDataSeeder extends Seeder
     public function run(): void
     {
         // Perintah untuk membuat 50 data pendaftaran lengkap secara acak
-        Application::factory(1)->create();
+        Application::factory(5)->create();
     }
 }

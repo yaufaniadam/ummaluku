@@ -7,31 +7,32 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\User;
+use App\Channels\WhatsAppChannel;
 
 class MenungguVerifikasi extends Notification implements ShouldQueue 
 {
     use Queueable; 
 
     protected $applicationId;
+    protected $admin_wa;
 
     public function __construct(string $applicationId)
     {
          $this->applicationId = $applicationId;
+         $this->admin_wa = config('whatsapp.admin_wa');
     }
 
     public function via(object $notifiable): array
     {
         // Untuk saat ini kita aktifkan email. WhatsApp bisa ditambahkan nanti.
-        return ['mail', 'database'];
-        // return ['mail']; 
+        return ['mail', 'database', WhatsAppChannel::class];
     }
 
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Dokumen Menunggu Verifikasi - PMB UM Maluku')
+            ->subject('Dokumen Menunggu Verifikasi - PMB UMMaluku')
             ->greeting('Assalamualaikum Wr. Wb. ' . $notifiable->name . ',')
-            ->line('Dokumen pendaftaran menunggu verifikasi Anda.')
             ->line('Dokumen pendaftaran menunggu verifikasi Anda.')
             ->action('Buka dashboard admin.', route('admin.pendaftaran.show', $this->applicationId))
             ->line('Terima kasih');
@@ -43,6 +44,14 @@ class MenungguVerifikasi extends Notification implements ShouldQueue
             'message' => 'Dokumen menunggu verifikasi',
             'icon'    => 'fas fa-user-plus text-info',
             'url'     => route('admin.pendaftaran.show', $this->applicationId),
+        ];
+    }
+
+    public function toWhatsApp(object $notifiable): array
+    {
+        return [
+            'phone' => $this->admin_wa, // Ambil nomor HP dari data prospective
+            'message' => "Assalamualaikum  " . $notifiable->name . ", ada dokumen pendaftaran menunggu diverifikasi. Segera buka dashboard admin.", route('admin.pendaftaran.show', $this->applicationId)
         ];
     }
 }

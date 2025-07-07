@@ -64,7 +64,7 @@ return [
     */
 
     'logo' => '',
-    'logo_img' => 'assets/logo-w.png',
+    'logo_img' => 'assets/logo-orange.png',
     'logo_img_class' => 'w-100',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -86,7 +86,7 @@ return [
     'auth_logo' => [
         'enabled' => true,
         'img' => [
-            'path' => '/assets/logo.png',
+            'path' => '/assets/logo-orange.png',
             'alt' => 'Auth Logo',
             'class' => '',
             'width' => 300,
@@ -257,7 +257,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => '/',
+    'dashboard_url' => '',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => '',

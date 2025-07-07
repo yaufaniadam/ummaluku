@@ -62,34 +62,7 @@ class AcceptedStudentsDataTable extends DataTable
                 return '<button class="btn btn-secondary btn-sm" disabled>Menunggu Pelunasan</button>';
             })
 
-
-            // ->addColumn('action', function ($row) {
-            //     $finalisasiUrl = '#';
-            //     $testWaUrl = route('admin.diterima.test-whatsapp', $row->id);
-            //     $testEmailUrl = route('admin.diterima.test-email', $row->id); // <-- URL untuk tombol baru
-
-            //     // Tombol Finalisasi
-            //     $finalisasiBtn = '<a href="' . $finalisasiUrl . '" class="btn btn-primary btn-sm">Finalisasi</a>';
-
-            //     // Form untuk tombol Tes WA
-            //     $testWaForm = '
-            //         <form action="' . $testWaUrl . '" method="POST" class="d-inline">
-            //             ' . csrf_field() . '
-            //             <button type="submit" class="btn btn-success btn-sm">Tes WA</button>
-            //         </form>
-            //     ';
-
-            //     // Form untuk tombol Tes Email
-            //     $testEmailForm = '
-            //         <form action="' . $testEmailUrl . '" method="POST" class="d-inline">
-            //             ' . csrf_field() . '
-            //             <button type="submit" class="btn btn-info btn-sm">Tes Email</button>
-            //         </form>
-            //     ';
-
-            //     // Gabungkan semua tombol dalam satu grup
-            //     return '<div class="btn-group">' . $finalisasiBtn . $testWaForm . $testEmailForm . '</div>';
-            // })
+           
             ->rawColumns(['action', 'status', 'payment_status']);
     }
 

@@ -179,7 +179,7 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-ummaluku-light-80">
             <div class="container px-5">
-                <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('assets/logo.png') }}"
+                <a class="navbar-brand" href=""><img src="{{ asset('assets/logo-orange.png') }}"
                         width="270" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -191,12 +191,7 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#pendaftaran">Pendaftaran</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#registrasi">Registrasi</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#beasiswa">Beasiswa</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
-
+                     
                         @auth
                             {{-- MENU INI HANYA MUNCUL JIKA USER SUDAH LOGIN --}}
                             <li class="nav-item"><a class="nav-link" href="{{ route('pendaftar') }}">Dashboard
