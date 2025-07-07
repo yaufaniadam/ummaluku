@@ -39,7 +39,7 @@ class FinalizeRegistrationController extends Controller
                 $application->prospective->user->syncRoles(['Mahasiswa']);
 
                 // 5. Update Status Aplikasi menjadi Selesai
-                $application->update(['status' => 'diterima']);
+                $application->update(['status' => 'sudah_registrasi']);
 
                 // Di sini nanti bisa ditambahkan logika untuk mendaftarkan "Paket Mata Kuliah" semester 1
                 // ke dalam tabel 'student_courses' jika diperlukan.

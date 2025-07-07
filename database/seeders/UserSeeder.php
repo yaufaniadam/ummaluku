@@ -64,6 +64,12 @@ class UserSeeder extends Seeder
         ])->assignRole($stafAdmisiRole);
 
         User::create([
+            'name' => 'Staf Admisi 2',
+            'email' => 'yaufaniadam@gmail.com',
+            'password' => Hash::make('password'),
+        ])->assignRole($stafAdmisiRole);
+
+        User::create([
             'name' => 'Direktur Akademik',
             'email' => 'dir.akademik@ummaluku.ac.id',
             'password' => Hash::make('password'),

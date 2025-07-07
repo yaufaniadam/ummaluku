@@ -14,6 +14,8 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\PendaftaranBerhasil;
+use App\Notifications\PendaftaranBaru;
+use Illuminate\Support\Facades\Notification;
 
 
 class FormPendaftaran extends Component
@@ -101,7 +103,7 @@ class FormPendaftaran extends Component
             'phone.between' => 'Nomor telepon minimal 10 digit dan maksimal 15 digit.',
             'parent_phone.required' => 'Nomor telepon Orang Tua / Wali wajib diisi.',
             'parent_phone.regex' => 'Nomor telepon harus berupa angka.',
-            'parent_phone.between' => 'Nomor telepon minimal 10 digit dan maksimal 15 digit.',            
+            'parent_phone.between' => 'Nomor telepon minimal 10 digit dan maksimal 15 digit.',
             'program_choice_1.required' => 'Anda harus memilih minimal satu Program Studi.',
             'program_choice_2.different' => 'Anda harus memilih program studi yang berbeda.',
         ];
@@ -205,21 +207,25 @@ class FormPendaftaran extends Component
                     'choice_order' => 2,
                 ]);
             }
-            
-            $newUser->notify(new PendaftaranBerhasil($newUser, $generatedPassword, $application ));    
+
+            $newUser->notify(new PendaftaranBerhasil($newUser, $generatedPassword, $application));
+
+            $admins = User::role(['Staf Admisi'])->get();
+
+            Notification::send($admins, new PendaftaranBaru($newUser, $application));
 
             return $newUser;
         });
 
-       
+
 
         // 5. Redirect ke halaman sukses dengan membawa data login
         return redirect()->route('pendaftaran.sukses')->with('registration_data', [
             'email' => $user->email,
             'password' => $generatedPassword, // Kirim password mentah (belum di-hash)
-            'category_name' => $this->selectedCategory->name, 
-            'batch_name' => $this->selectedBatch->name,     
-            'batch_year' => $this->selectedBatch->year,  
+            'category_name' => $this->selectedCategory->name,
+            'batch_name' => $this->selectedBatch->name,
+            'batch_year' => $this->selectedBatch->year,
         ]);
     }
 

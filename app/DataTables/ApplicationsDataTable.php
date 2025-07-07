@@ -25,7 +25,7 @@ class ApplicationsDataTable extends DataTable
                 $button = ''; // Initialize an empty string for the button
 
                 // Only show the "Lihat Detail" button if the status is 'menunggu_verifikasi'
-                if (($row->status === 'proses_verifikasi') || ($row->status === 'completed') || ($row->status === 'lolos_verifikasi')) {
+                if (($row->status === 'proses_verifikasi') || ($row->status === 'sudah_registrasi') || ($row->status === 'lolos_verifikasi')) {
                     $button = '<a href="' . $viewUrl . '" class="btn btn-info btn-sm">Lihat Detail</a>';
                 }
                 return $button;

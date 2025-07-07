@@ -29,7 +29,7 @@ class BatchSeeder extends Seeder
                 'year' => '2025',
                 'start_date' => '2025-06-01',
                 'end_date' => '2025-08-31',
-                'is_active' => false,
+                'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

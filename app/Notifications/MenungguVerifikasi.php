@@ -6,32 +6,32 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\User;
 use App\Channels\WhatsAppChannel;
+use App\Models\User;
 
-class MenungguVerifikasi extends Notification implements ShouldQueue 
+class MenungguVerifikasi extends Notification 
+// implements ShouldQueue 
 {
-    use Queueable; 
+    // use Queueable; 
 
     protected $applicationId;
-    protected $admin_wa;
 
     public function __construct(string $applicationId)
     {
          $this->applicationId = $applicationId;
-         $this->admin_wa = config('whatsapp.admin_wa');
     }
 
     public function via(object $notifiable): array
     {
         // Untuk saat ini kita aktifkan email. WhatsApp bisa ditambahkan nanti.
-        return ['mail', 'database', WhatsAppChannel::class];
+        return ['mail', 'database', WhatsAppChannel::class ];
+        // return ['mail']; 
     }
 
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Dokumen Menunggu Verifikasi - PMB UMMaluku')
+            ->subject('Dokumen Menunggu Verifikasi - PMB UM Maluku')
             ->greeting('Assalamualaikum Wr. Wb. ' . $notifiable->name . ',')
             ->line('Dokumen pendaftaran menunggu verifikasi Anda.')
             ->action('Buka dashboard admin.', route('admin.pendaftaran.show', $this->applicationId))
@@ -47,11 +47,16 @@ class MenungguVerifikasi extends Notification implements ShouldQueue
         ];
     }
 
-    public function toWhatsApp(object $notifiable): array
+      public function toWhatsApp(object $notifiable): array
     {
+
+        $message = "Assalamualaikum Wr. Wb. $notifiable->name \n\n" .
+            "Dokumen pendaftaran menunggu verifikasi Anda.\n" .
+                   "Terima kasih!";
+        
         return [
-            'phone' => $this->admin_wa, // Ambil nomor HP dari data prospective
-            'message' => "Assalamualaikum  " . $notifiable->name . ", ada dokumen pendaftaran menunggu diverifikasi. Segera buka dashboard admin.", route('admin.pendaftaran.show', $this->applicationId)
+            'phone' => config('whatsapp.admin_wa'), // Ambil nomor HP dari data prospective
+            'message' => $message
         ];
     }
 }
