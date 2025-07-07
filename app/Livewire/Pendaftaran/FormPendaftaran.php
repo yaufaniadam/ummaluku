@@ -143,7 +143,9 @@ class FormPendaftaran extends Component
         $validatedData = $this->validate();
 
         // 2. Hasilkan password acak yang aman
-        $generatedPassword = Str::random(10);
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        // Acak kumpulan karakter dan ambil 10 karakter pertama
+        $generatedPassword = substr(str_shuffle($characters), 0, 4);
 
         // 2. Mulai Database Transaction
         $user = DB::transaction(function () use ($validatedData, $generatedPassword) {
