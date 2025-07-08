@@ -2,18 +2,17 @@
 
 namespace App\Notifications;
 
-// use Illuminate\Bus\Queueable;
-// use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Channels\WhatsAppChannel;
 use App\Models\Application;
 use App\Models\User;
 
-class PendaftaranBaru extends Notification
-// implements ShouldQueue // <-- Implementasi ShouldQueue
+class PendaftaranBaru extends Notification implements ShouldQueue // <-- Implementasi ShouldQueue
 {
-    // use Queueable; 
+    use Queueable; 
 
     protected $user;
     public Application $application;

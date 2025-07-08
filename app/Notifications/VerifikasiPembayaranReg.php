@@ -2,16 +2,16 @@
 
 namespace App\Notifications;
 
-// use Illuminate\Bus\Queueable;
-// use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Channels\WhatsAppChannel;
 use App\Models\User;
 
-class VerifikasiPembayaranReg extends Notification
-// implements ShouldQueue // <-- Implementasi ShouldQueue
+class VerifikasiPembayaranReg extends Notification implements ShouldQueue // <-- Implementasi ShouldQueue
 {
-    // use Queueable; 
+    use Queueable; 
 
     protected $invoiceId;
 
@@ -23,7 +23,7 @@ class VerifikasiPembayaranReg extends Notification
     public function via(object $notifiable): array
     {
         // Untuk saat ini kita aktifkan email. WhatsApp bisa ditambahkan nanti.
-        return ['mail', 'database'];
+        return ['mail', 'database', WhatsAppChannel::class ];
         // return ['mail']; 
     }
 
@@ -43,6 +43,19 @@ class VerifikasiPembayaranReg extends Notification
             'message' => 'Dokumen menunggu verifikasi',
             'icon'    => 'fas fa-user-plus text-info',
             'url'     => route('admin.pendaftaran.show', $this->invoiceId),
+        ];
+    }
+
+    public function toWhatsApp(object $notifiable): array
+    {
+
+        $message = "Assalamualaikum Wr. Wb. $notifiable->name \n\n" .
+            "Pembayaran Registrasi menunggu verifikasi Anda.\n" .
+                   "Terima kasih!";
+        
+        return [
+            'phone' => config('whatsapp.admin_wa'), // Ambil nomor HP dari data prospective
+            'message' => $message
         ];
     }
 }

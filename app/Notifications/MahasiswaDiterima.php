@@ -49,9 +49,16 @@ class MahasiswaDiterima extends Notification implements ShouldQueue
      */
     public function toWhatsApp(object $notifiable): array
     {
+        $acceptedProgram = $this->application->programChoices->where('is_accepted', true)->first()->program;
+        $message = "Assalamualaikum Wr. Wb. $notifiable->name \n\n" .
+            "Selamat! Berdasarkan hasil seleksi, Anda dinyatakan *DITERIMA* sebagai calon mahasiswa baru di Universitas Muhammadiyah Maluku.\n" .
+            "Program Studi: *" . $acceptedProgram->name_id . "* \n\n" .           
+            "Silakan login ke dashboard pendaftar Anda untuk melihat informasi mengenai registrasi ulang dan pembayaran.\n\n" .
+            "Terima kasih!";
+
         return [
-            'phone' => $this->application->prospective->phone, // Ambil nomor HP dari data prospective
-            'message' => "Assalamualaikum  Selamat! Anda dinyatakan *DITERIMA* di Universitas Muhammadiyah Maluku. Silakan login ke dashboard pendaftar Anda untuk melihat informasi mengenai registrasi ulang dan pembayaran."
+            'phone' => $notifiable->prospective->phone, // Ambil nomor HP dari data prospective
+            'message' => $message
         ];
     }
 }

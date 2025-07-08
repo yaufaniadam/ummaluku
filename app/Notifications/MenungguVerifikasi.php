@@ -9,10 +9,9 @@ use Illuminate\Notifications\Notification;
 use App\Channels\WhatsAppChannel;
 use App\Models\User;
 
-class MenungguVerifikasi extends Notification 
-// implements ShouldQueue 
+class MenungguVerifikasi extends Notification implements ShouldQueue 
 {
-    // use Queueable; 
+    use Queueable; 
 
     protected $applicationId;
 
@@ -47,7 +46,7 @@ class MenungguVerifikasi extends Notification
         ];
     }
 
-      public function toWhatsApp(object $notifiable): array
+    public function toWhatsApp(object $notifiable): array
     {
 
         $message = "Assalamualaikum Wr. Wb. $notifiable->name \n\n" .
