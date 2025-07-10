@@ -58,13 +58,11 @@ Route::prefix('admin')->middleware(['auth', 'permission:view pmb'])->name('admin
     Route::get('/pendaftaran', [AdminPendaftaranController::class, 'index'])->name('pendaftaran.index');
     Route::get('/pendaftaran/{application}', PendaftaranShow::class)->name('pendaftaran.show');
 
-
     Route::get('/seleksi', [AdminSeleksiController::class, 'index'])->name('seleksi.index');
     Route::get('/seleksi/data', [AdminSeleksiController::class, 'data'])->name('seleksi.data');
     Route::post('/seleksi/{application}/accept', [AdminSeleksiController::class, 'accept'])->name('seleksi.accept');
     Route::post('/seleksi/{application}/reject', [AdminSeleksiController::class, 'reject'])->name('seleksi.reject');
     Route::get('/diterima', [AcceptedStudentController::class, 'index'])->name('diterima.index');
-
 
     Route::get('/verifikasi-pembayaran', [PaymentVerificationController::class, 'index'])->name('payment.index');
     Route::get('/verifikasi-pembayaran/{invoice}', [PaymentVerificationController::class, 'show'])->name('payment.show');

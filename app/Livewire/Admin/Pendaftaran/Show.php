@@ -68,38 +68,6 @@ class Show extends Component
         }
     }
 
-    /**
-     * Method untuk menyelesaikan verifikasi dan memajukan status aplikasi.
-     */
-    // public function advanceToSelection()
-    // {
-    //     // Opsional: Validasi untuk memastikan semua dokumen wajib sudah terverifikasi
-    //     $requiredDocs = $this->application->admissionCategory->documentRequirements;
-    //     $uploadedDocs = $this->application->documents->where('status', 'verified')->pluck('document_requirement_id');
-
-    //     foreach ($requiredDocs as $req) {
-    //         if (!$uploadedDocs->contains($req->id)) {
-    //             // Kirim notifikasi error jika ada dokumen wajib yang belum terverifikasi
-    //             $this->dispatch('show-alert', [
-    //                 'message' => 'Error: Tidak bisa melanjutkan. Masih ada dokumen wajib yang belum diverifikasi.',
-    //                 'type' => 'error' // Kita tambahkan tipe agar bisa ganti ikon
-    //             ]);
-    //             return;
-    //         }
-    //     }
-
-    //     // Jika semua valid, update status aplikasi utama
-    //     $this->application->update([
-    //         'status' => 'lolos_verifikasi' // Status baru: Siap untuk diseleksi
-    //     ]);
-
-    //     // Kirim notifikasi sukses
-    //     $this->dispatch('show-alert', [
-    //         'message' => 'Status pendaftar berhasil diperbarui dan siap untuk tahap seleksi.',
-    //         'type' => 'success'
-    //     ]);
-    // }
-
     public function finalizeVerification()
     {
 

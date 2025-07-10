@@ -46,10 +46,10 @@
                         <dt class="col-5">Alamat:</dt>
                         <dd class="col-7">
                             {{ $application->prospective->address ?? '-' }}<br>
-                            Desa {{ ucwords(strtolower($application->prospective->village->name)) }},
+                            {{-- Desa {{ ucwords(strtolower($application->prospective->village->name)) }},
                             Kecamatan {{ ucwords(strtolower($application->prospective->district->name)) }},
                             {{ ucwords(strtolower($application->prospective->city->name)) }},
-                            {{ ucwords(strtolower($application->prospective->province->name)) }}
+                            {{ ucwords(strtolower($application->prospective->province->name)) }} --}}
 
                         </dd>
                         <dt class="col-5">Asal Sekolah:</dt>
