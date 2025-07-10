@@ -107,6 +107,7 @@ class Biodata extends Component
             'guardian_income.numeric' => 'Penghasilan Wali harus berupa angka',
             'is_kps_recipient.required' => 'Opsi KPS harus dipilih',
             'citizenship.required' => 'Kewarganegaraan harus dipilih',
+            'high_school_major_id.required' => 'Jurusan harus dipilih',
         ];
     }
     public function updated($propertyName)
