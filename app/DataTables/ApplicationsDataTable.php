@@ -50,21 +50,19 @@ class ApplicationsDataTable extends DataTable
         // Kita mulai dengan query dasar
         $query = $model->newQuery()->with(['prospective.user', 'batch', 'admissionCategory']);
 
-        // Ambil nilai status dari request, jika tidak ada, gunakan default
-        $status = request('status', 'lengkapi_data');
+        // Terapkan filter status secara kondisional
+        // Blok ini hanya akan berjalan jika request('status') tidak kosong atau null.
+        $query->when(request('status'), function ($q, $status) {
+            return $q->where('status', $status);
+        });
 
-        // Terapkan filter secara kondisional
+        // Terapkan filter lain dengan cara yang sama
         $query->when(request('category'), function ($q, $categoryId) {
             return $q->where('admission_category_id', $categoryId);
         });
 
         $query->when(request('batch'), function ($q, $batchId) {
             return $q->where('batch_id', $batchId);
-        });
-
-        // Terapkan filter status, KECUALI jika nilainya adalah string kosong
-        $query->when($status, function ($q, $statusValue) {
-            return $q->where('status', $statusValue);
         });
 
         return $query;
