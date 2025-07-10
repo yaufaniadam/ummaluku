@@ -7,6 +7,10 @@
     <div class="text-muted mt-1">{{ $application->registration_number }}</div>
 @stop
 
+
+@php
+    dd($application);
+@endphp
 @if (session()->has('message'))
     <div class="alert alert-success">
         {{ session('message') }}
