@@ -33,7 +33,7 @@
                             {{ \Carbon\Carbon::parse($application->prospective->birth_date)->format('d F Y') }}
                         </dd>
                         <dt class="col-5">Agama:</dt>
-                        <dd class="col-7">{{ $application->prospective->religion->name ?? '-' }}</dd>
+                        <dd class="col-7">{{ $application->prospective->religion->id ?? '-' }}</dd>
                         <dt class="col-5">Kewarganegaraan:</dt>
                         <dd class="col-7">{{ $application->prospective->citizenship ?? '-' }}</dd>
                         <dt class="col-5">NIK:</dt>
@@ -46,14 +46,14 @@
                         <dt class="col-5">Alamat:</dt>
                         <dd class="col-7">
                             {{ $application->prospective->address ?? '-' }}<br>
-                            {{-- Desa {{ ucwords(strtolower($application->prospective->village->name)) }},
-                            Kecamatan {{ ucwords(strtolower($application->prospective->district->name)) }},
-                            {{ ucwords(strtolower($application->prospective->city->name)) }},
-                            {{ ucwords(strtolower($application->prospective->province->name)) }} --}}
+                            Desa {{ ucwords(strtolower($application->prospective->village->id)) }},
+                            Kecamatan {{ ucwords(strtolower($application->prospective->district->id)) }},
+                            {{ ucwords(strtolower($application->prospective->city->id)) }},
+                            {{ ucwords(strtolower($application->prospective->province->id)) }}
 
                         </dd>
                         <dt class="col-5">Asal Sekolah:</dt>
-                        <dd class="col-7">{{ $application->prospective->highSchool->name }}</dd>
+                        <dd class="col-7">{{ $application->prospective->highSchool->id }}</dd>
                         <dt class="col-5">NISN:</dt>
                         <dd class="col-7">{{ $application->prospective->nisn }}</dd>
                         <dt class="col-5">Penerima KPS:</dt>
