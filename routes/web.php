@@ -23,7 +23,7 @@ use App\Http\Controllers\Pendaftar\InstallmentPaymentController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Akademik\Mahasiswa\DashboardController;
 use App\Http\Controllers\Modules\PMB\BatchController;
-
+use App\Http\Controllers\NotificationsController;
 
 // Route::get('/', function () {
 //     return redirect()->route('login');
@@ -42,6 +42,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+     Route::get('notifications/get', [NotificationsController::class, 'getNotificationsData'])->name('notifications.get');
+    // TAMBAHKAN ROUTE-ROUTE INI
+    Route::get('notifications/show', [NotificationsController::class, 'showAll'])->name('notifications.show');
+    Route::post('notifications/{id}/mark-as-read', [NotificationsController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::post('notifications/mark-all-as-read', [NotificationsController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+
 });
 
 Route::prefix('admin')->middleware(['auth', 'permission:view pmb'])->name('admin.')->group(function () {
