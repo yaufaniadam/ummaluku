@@ -182,16 +182,34 @@ class FormPendaftaran extends Component
                 // 'high_school_id' => $validatedData['high_school_id'],
             ]);
 
-            // 5. Buat data Application (pendaftaran)
+            // // 5. Buat data Application (pendaftaran)
+            // $application = Application::create([
+            //     'prospective_id' => $prospective->id,
+            //     'batch_id' => $this->selectedBatch->id, // <-- Diperbaiki
+            //     'admission_category_id' => $this->selectedCategory->id,
+            //     'registration_number' => 'PMB' . date('Y') . '-' . str_pad(Application::count() + 1, 5, '0', STR_PAD_LEFT),
+            //     'status' => config('settings.payment_flow_enabled', false) // digunakan saat setting sudah dipakai
+            //         ? 'lakukan_pembayaran'
+            //         : 'lengkapi_data',
+            // ]);
+
+            // 3. Buat data Aplikasi dengan nomor registrasi KOSONG terlebih dahulu
             $application = Application::create([
                 'prospective_id' => $prospective->id,
-                'batch_id' => $this->selectedBatch->id, // <-- Diperbaiki
+                'batch_id' => $this->selectedBatch->id,
                 'admission_category_id' => $this->selectedCategory->id,
-                'registration_number' => 'PMB' . date('Y') . '-' . str_pad(Application::count() + 1, 5, '0', STR_PAD_LEFT),
+                'registration_number' => null, // <-- Biarkan kosong untuk sementara
                 'status' => config('settings.payment_flow_enabled', false) // digunakan saat setting sudah dipakai
                     ? 'lakukan_pembayaran'
                     : 'lengkapi_data',
             ]);
+
+            // 4. Setelah dibuat, kita mendapatkan ID-nya. Gunakan ID ini untuk membuat nomor registrasi
+            $registrationNumber = 'PMB' . date('Y') . '-' . str_pad($application->id, 5, '0', STR_PAD_LEFT);
+
+            // 5. Update kembali aplikasi dengan nomor registrasi yang sudah pasti unik
+            $application->registration_number = $registrationNumber;
+            $application->save();ß
 
             // 6. Simpan Pilihan Prodi
             ApplicationProgramChoice::create([
