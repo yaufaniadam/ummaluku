@@ -209,7 +209,7 @@ class FormPendaftaran extends Component
 
             // 5. Update kembali aplikasi dengan nomor registrasi yang sudah pasti unik
             $application->registration_number = $registrationNumber;
-            $application->save();ß
+            $application->save();
 
             // 6. Simpan Pilihan Prodi
             ApplicationProgramChoice::create([
