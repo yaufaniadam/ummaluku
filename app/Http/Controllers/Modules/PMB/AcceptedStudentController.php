@@ -24,7 +24,6 @@ class AcceptedStudentController extends Controller
             'paid' => 'Lunas',
         ];
 
-
         return $dataTable->render('admin.accepted.index', compact('categories', 'batches', 'programs', 'payment_statuses'));
     }
     

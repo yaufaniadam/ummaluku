@@ -30,26 +30,6 @@ class FormPendaftaran extends Component
     public ?int $program_choice_1 = null;
     public ?int $program_choice_2 = null;
     public string $birth_place = '';
-    // public string $address = '';
-    // public string $nisn = '';
-    // public string $id_number = ''; // NIK
-
-    // Properti untuk data orang tua
-    // public string $father_name = '';
-    // public string $mother_name = '';
-    // public string $father_occupation = '';
-    // public string $mother_occupation = '';
-
-    // Properti untuk data Wali
-    // public string $guardian_name = '';       
-    // public string $guardian_phone = '';      
-    // public string $guardian_occupation = ''; 
-
-    // Properti untuk relasi
-    // public ?int $religion_id = null;
-    // public ?int $high_school_id = null;
-
-    // Properti untuk Pilihan Prodi
 
     public $selectedCategory;
     public $selectedBatch;
@@ -65,26 +45,7 @@ class FormPendaftaran extends Component
             'parent_phone' => 'required|string|regex:/^[0-9]+$/|between:10,15',
             'program_choice_1' => 'required|exists:programs,id',
             'program_choice_2' => 'nullable|exists:programs,id|different:program_choice_1',
-            'birth_place' => 'required|string|max:255',
-            // 'address' => 'required|string',
-            // 'nisn' => 'required|string|max:20|unique:prospectives,nisn',
-            // 'id_number' => 'required|string|max:20|unique:prospectives,id_number',
-
-            // Aturan untuk data orang tua
-            // 'father_name' => 'required|string|max:255',
-            // 'mother_name' => 'required|string|max:255',
-            // 'father_occupation' => 'required|string|max:255',
-            // 'mother_occupation' => 'required|string|max:255',
-
-            // Aturan untuk data wali (semua opsional)
-            // 'guardian_name' => 'nullable|string|max:255',       
-            // 'guardian_phone' => 'nullable|string|max:15',      
-            // 'guardian_occupation' => 'nullable|string|max:255', 
-
-            // Aturan untuk relasi
-            // 'religion_id' => 'required|exists:religions,id',
-            // 'high_school_id' => 'required|exists:high_schools,id',
-
+            'birth_place' => 'required|string|max:255',           
 
         ];
     }
@@ -144,6 +105,11 @@ class FormPendaftaran extends Component
         // 1. Jalankan validasi
         $validatedData = $this->validate();
 
+         $generatedPassword = Str::random(10);
+    
+    // Variabel untuk menampung objek aplikasi
+    $applicationObject = null;
+
         // 2. Hasilkan password acak yang aman
         $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         // Acak kumpulan karakter dan ambil 10 karakter pertama
@@ -163,43 +129,20 @@ class FormPendaftaran extends Component
             // 4. Buat data Prospective (biodata)
             $prospective = Prospective::create([
                 'user_id' => $newUser->id,
-                // 'id_number' => $validatedData['id_number'],
-                // 'nisn' => $validatedData['nisn'],
                 'birth_place' => $validatedData['birth_place'],
                 'birth_date' => $validatedData['birth_date'],
                 'gender' => $validatedData['gender'],
                 'phone' => $validatedData['phone'],
-                // 'address' => $validatedData['address'],
-                // 'father_name' => $validatedData['father_name'],
-                // 'mother_name' => $validatedData['mother_name'],
-                // 'father_occupation' => $validatedData['father_occupation'],
-                // 'mother_occupation' => $validatedData['mother_occupation'],
                 'parent_phone' => $validatedData['parent_phone'],
-                // 'guardian_name' => $validatedData['guardian_name'],
-                // 'guardian_phone' => $validatedData['guardian_phone'],
-                // 'guardian_occupation' => $validatedData['guardian_occupation'],
-                // 'religion_id' => $validatedData['religion_id'],
-                // 'high_school_id' => $validatedData['high_school_id'],
-            ]);
-
-            // // 5. Buat data Application (pendaftaran)
-            // $application = Application::create([
-            //     'prospective_id' => $prospective->id,
-            //     'batch_id' => $this->selectedBatch->id, // <-- Diperbaiki
-            //     'admission_category_id' => $this->selectedCategory->id,
-            //     'registration_number' => 'PMB' . date('Y') . '-' . str_pad(Application::count() + 1, 5, '0', STR_PAD_LEFT),
-            //     'status' => config('settings.payment_flow_enabled', false) // digunakan saat setting sudah dipakai
-            //         ? 'lakukan_pembayaran'
-            //         : 'lengkapi_data',
-            // ]);
+            ]);           
 
             // 3. Buat data Aplikasi dengan nomor registrasi KOSONG terlebih dahulu
             $application = Application::create([
                 'prospective_id' => $prospective->id,
                 'batch_id' => $this->selectedBatch->id,
                 'admission_category_id' => $this->selectedCategory->id,
-                'registration_number' => null, // <-- Biarkan kosong untuk sementara
-                'status' => config('settings.payment_flow_enabled', false) // digunakan saat setting sudah dipakai
+                'registration_number' => 'TEMP-' . uniqid(), 
+                'status' => config('settings.payment_flow_enabled', false) 
                     ? 'lakukan_pembayaran'
                     : 'lengkapi_data',
             ]);

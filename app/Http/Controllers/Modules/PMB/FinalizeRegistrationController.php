@@ -43,6 +43,8 @@ class FinalizeRegistrationController extends Controller
 
                 // Di sini nanti bisa ditambahkan logika untuk mendaftarkan "Paket Mata Kuliah" semester 1
                 // ke dalam tabel 'student_courses' jika diperlukan.
+
+                
             });
         } catch (\Exception $e) {
             return back()->with('error', 'Terjadi kesalahan saat finalisasi: ' . $e->getMessage());

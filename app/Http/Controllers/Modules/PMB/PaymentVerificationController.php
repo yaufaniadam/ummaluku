@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ReRegistrationInvoice;
 use App\Models\ReRegistrationInstallment;
 use Illuminate\Http\Request;
+use App\Notifications\PembayaranCicilanDiterima;
+use App\Notifications\PembayaranLunas;
 
 class PaymentVerificationController extends Controller
 {
@@ -41,18 +43,20 @@ class PaymentVerificationController extends Controller
             'verified_at' => now(),
         ]);
 
+        $user = $installment->invoice->application->prospective->user;
+
         // Cek apakah semua cicilan lain sudah lunas
         $allPaid = $installment->invoice->installments()->where('status', '!=', 'paid')->count() === 0;
 
-        // Jika semua sudah lunas, update status invoice induk
+        
         if ($allPaid) {
             $installment->invoice->update(['status' => 'paid']);
-             //notifikasi full pembayaran diterima
+            // --- BARIS BARU: Kirim notifikasi pembayaran lunas ---
+            $user->notify(new PembayaranLunas($installment->invoice));
         } else {
             $installment->invoice->update(['status' => 'partially_paid']);
-
-            //notifikasi cicilan diterima
-            //$application->prospective->user->notify(new MahasiswaDiterima($application));
+            // --- BARIS BARU: Kirim notifikasi cicilan diterima ---
+            $user->notify(new PembayaranCicilanDiterima($installment));
         }
 
         return back()->with('success', 'Cicilan berhasil diverifikasi.');
