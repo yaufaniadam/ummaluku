@@ -61,7 +61,9 @@ class ModalCariSekolah extends Component
     {
         if (!empty($kode_kecamatan)) {
             // Gunakan API search sekolah yang sebelumnya
-            $response = Http::get("https://api.data.belajar.id/data-portal-backend/v1/master-data/ptk/search?kodeKecamatan=" . $kode_kecamatan . "&bentukPendidikan=dikmen&sortBy=bentuk_pendidikan&sortDir=asc&limit=100&offset=0");
+            // $response = Http::get("https://api.data.belajar.id/data-portal-backend/v1/master-data/ptk/search?kodeKecamatan=" . $kode_kecamatan . "&bentukPendidikan=dikmen&sortBy=bentuk_pendidikan&sortDir=asc&limit=1000&offset=0");
+
+            $response = Http::get("https://api.data.belajar.id/data-portal-backend/v2/master-data/peserta-didik/search?kodeKecamatan=" . $kode_kecamatan . "&bentukPendidikan=dikmen&sortBy=bentuk_pendidikan&sortDir=ASC&limit=20&offset=0");
             $this->sekolahs = $response->json('data') ?? [];
         }
     }
