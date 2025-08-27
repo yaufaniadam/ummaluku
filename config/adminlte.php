@@ -299,7 +299,7 @@ return [
     */
 
     'menu' => [
-         [
+        [
             'type' => 'navbar-notification',
             'id' => 'my-notification',
             'icon' => 'fas fa-bell',
@@ -372,7 +372,7 @@ return [
                     'route'  => 'admin.gelombang.index', //admin.settings.batch'
                     'icon' => 'fas fa-fw fa-calendar',
                     'can' => 'manage pmb',
-                ],               
+                ],
                 [
                     'text' => 'Jalur Pendaftaran',
                     'route'  => 'admin.jalur-pendaftaran.index', //admin.settings.category
@@ -394,17 +394,18 @@ return [
                     'icon' => 'fas fa-fw fa-user-graduate',
                     'can' => 'view akademik',
                 ],
+
                 [
-                    'text' => 'Master Mata Kuliah',
-                    'route'  => '',
-                    'icon' => 'fas fa-fw fa-book',
-                    'can' => 'view akademik',
+                    'text' => 'Import Mahasiswa Lama',
+                    'url'  => 'admin/students/import',
+                    'icon' => 'fas fa-fw fa-file-import',
                 ],
+
                 [
-                    'text' => 'Data Perkuliahan',
-                    'route'  => '',
-                    'icon' => 'fas fa-fw fa-chalkboard-teacher',
-                    'can' => 'view akademik',
+                    'text' => 'Dosen',
+                    'url'  => 'admin/lecturers',
+                    'icon' => 'fas fa-fw fa-user-tie',
+                    // 'can'  => 'view-lecturers',
                 ],
             ],
         ],
@@ -432,25 +433,36 @@ return [
         [
             'text'    => 'Pengaturan',
             'icon'    => 'fas fa-fw fa-cogs',
-            'can'  => 'manage settings', 
+            'can'  => 'manage settings',
             'submenu' => [
                 [
                     'text' => 'Manajemen User',
                     'route'  => '',
                     'icon' => 'fas fa-fw fa-users-cog',
-                    'can'  => 'manage settings', 
+                    'can'  => 'manage settings',
                 ],
                 [
                     'text' => 'Roles & Permissions',
                     'route'  => '',
                     'icon' => 'fas fa-fw fa-key',
-                    'can'  => 'manage settings', 
+                    'can'  => 'manage settings',
                 ],
                 [
                     'text' => 'Pengaturan Umum',
                     'route'  => '',
                     'icon' => 'fas fa-fw fa-sliders-h',
-                    'can'  => 'manage settings', 
+                    'can'  => 'manage settings',
+                ],
+
+                [
+                    'text' => 'Kurikulum',
+                    'url'  => 'admin/curriculums',
+                    'icon' => 'fas fa-fw fa-sitemap',
+                ],
+                [
+                    'text' => 'Tahun Ajaran',
+                    'url'  => 'admin/academic-years',
+                    'icon' => 'fas fa-fw fa-calendar-alt',
                 ],
             ],
         ],

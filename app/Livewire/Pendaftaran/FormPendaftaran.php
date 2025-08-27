@@ -129,6 +129,7 @@ class FormPendaftaran extends Component
             // 4. Buat data Prospective (biodata)
             $prospective = Prospective::create([
                 'user_id' => $newUser->id,
+                'registration_source' => 'pmb_online', // Set default sumber pendaftaran
                 'birth_place' => $validatedData['birth_place'],
                 'birth_date' => $validatedData['birth_date'],
                 'gender' => $validatedData['gender'],

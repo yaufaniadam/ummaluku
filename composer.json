@@ -12,6 +12,7 @@
         "laravel/tinker": "^2.10.1",
         "laravolt/indonesia": "^0.36.0",
         "livewire/livewire": "^3.6",
+        "maatwebsite/excel": "^3.1",
         "spatie/laravel-permission": "^6.19",
         "yajra/laravel-datatables-buttons": "^12.1",
         "yajra/laravel-datatables-oracle": "^12.4"
