@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 use App\Imports\OldStudentsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
+use App\DataTables\StudentDataTable;
+use App\Models\Student; 
 
 class StudentController extends Controller
 {
-    public function index(StudentsDataTable $dataTable)
+    public function index(StudentDataTable $dataTable)
     {
         // Untuk saat ini, kita hanya menampilkan tabel.
         // Nanti bisa ditambahkan filter prodi, tahun masuk, dll.
@@ -39,5 +41,10 @@ class StudentController extends Controller
         }
 
         return back()->with('success', 'Data mahasiswa lama berhasil diimpor!');
+    }
+    
+    public function edit(Student $student)
+    {
+        return view('admin.students.edit', compact('student'));
     }
 }

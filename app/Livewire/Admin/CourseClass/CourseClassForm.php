@@ -6,12 +6,15 @@ use App\Models\AcademicYear;
 use App\Models\Course;
 use App\Models\CourseClass;
 use App\Models\Lecturer;
+use App\Models\Program;
+
 use Livewire\Component;
 
 class CourseClassForm extends Component
 {
     public AcademicYear $academicYear;
     public ?CourseClass $courseClass = null;
+    public Program $program;
 
     // Properti untuk dropdown
     public $courses;
@@ -28,11 +31,17 @@ class CourseClassForm extends Component
     public $room;
 
 
-    public function mount(AcademicYear $academicYear, CourseClass $courseClass = null)
+    public function mount(AcademicYear $academicYear, Program $program, CourseClass $courseClass = null)
     {
         $this->academicYear = $academicYear;
+        $this->program = $program;
         $this->courses = Course::orderBy('name')->get();
         $this->lecturers = Lecturer::orderBy('full_name_with_degree')->get();
+
+        // Dropdown sekarang hanya menampilkan MK dari prodi yang relevan
+        $this->courses = Course::whereHas('curriculum', function ($query) {
+            $query->where('program_id', $this->program->id);
+        })->orderBy('name')->get();
 
         if ($courseClass->exists) {
             $this->courseClass = $courseClass;
@@ -89,7 +98,10 @@ class CourseClassForm extends Component
         // Kirim sinyal agar tabel me-refresh
         $this->dispatch('course-class-updated');
 
-        return $this->redirect(route('admin.academic-years.course-classes.index', $this->academicYear->id), navigate: true);
+        return $this->redirect(route('admin.academic-years.programs.course-classes.index', [
+            'academic_year' => $this->academicYear,
+            'program' => $this->program
+        ]), navigate: true);
     }
 
     public function render()

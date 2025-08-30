@@ -4,8 +4,11 @@
 
 @section('content_header')
     <h1 class="mb-1">Kelola Kelas Perkuliahan</h1>
+    {{-- PERBAIKAN: Tambahkan navigasi Program Studi di breadcrumb --}}
     <h5 class="font-weight-light">
-        <a href="{{ route('admin.academic-years.index') }}" wire:navigate>Tahun Ajaran</a> > {{ $academicYear->name }}
+        <a href="{{ route('admin.academic-years.index') }}" wire:navigate>Tahun Ajaran</a> > 
+        <a href="{{ route('admin.academic-years.show', $academicYear) }}" wire:navigate>{{ $academicYear->name }}</a> > 
+        {{ $program->name_id }}
     </h5>
 @stop
 
@@ -22,17 +25,19 @@
         </div>
     @endif
 
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Daftar Kelas</h3>
-            <div class="card-tools">
-                <a href="{{ route('admin.academic-years.course-classes.create', ['academic_year' => $academicYear]) }}"
-                    class="btn btn-primary btn-sm" wire:navigate>
-                    Tambah Kelas Baru
-                </a>
+    {{-- PERBAIKAN: Pindahkan div AlpineJS untuk membungkus seluruh card --}}
+    <div x-data @course-class-updated.window="window.LaravelDataTables['courseclass-table'].ajax.reload(null, false);">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Daftar Kelas</h3>
+                <div class="card-tools">
+                    {{-- PERBAIKAN: Gunakan route yang benar dan sertakan kedua parameter --}}
+                    <a href="{{ route('admin.academic-years.programs.course-classes.create', ['academic_year' => $academicYear, 'program' => $program]) }}"
+                        class="btn btn-primary btn-sm" wire:navigate>
+                        Tambah Kelas Baru
+                    </a>
+                </div>
             </div>
-        </div>
-        <div x-data @course-class-updated.window="window.LaravelDataTables['courseclass-table'].ajax.reload(null, false);">
             <div class="card-body">
                 {{ $dataTable->table() }}
             </div>

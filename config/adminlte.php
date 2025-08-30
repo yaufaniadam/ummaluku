@@ -316,16 +316,73 @@ return [
         // MENU UTAMA
         [
             'text' => 'Dashboard',
-            'route'  => 'admin.dashboard', // Asumsi kita akan punya route bernama admin.dashboard
+            'route'  => 'admin.dashboard',
             'icon' => 'fas fa-fw fa-tachometer-alt',
             'can'    => ['view pmb'],
         ],
-        // MENU UTAMA
+        // MAHASISWA
         [
             'text' => 'Dashboard',
-            'route'  => 'akademik.dashboard', // Asumsi kita akan punya route bernama admin.dashboard
+            'url'  => 'mahasiswa/dashboard',
             'icon' => 'fas fa-fw fa-tachometer-alt',
-            'can'    => ['mahasiswa']
+            'role'    => 'Mahasiswa'
+        ],
+        [
+            'text' => 'Pengisian KRS',
+            'url'  => 'mahasiswa/krs',
+            'icon' => 'fas fa-fw fa-edit',
+            'role' => 'Mahasiswa',
+        ],
+
+        [
+            'text' => 'Dashboard',
+            'url'  => 'dosen/dashboard',
+            'icon' => 'fas fa-fw fa-tachometer-alt',
+            'role' => 'Dosen',
+        ],
+
+        [
+            'header' => 'BIMBINGAN AKADEMIK',
+            'role'   => 'Dosen',
+        ],
+        [
+            'text' => 'Persetujuan KRS',
+            'route'  => 'dosen.krs-approval.index',
+            'icon' => 'fas fa-fw fa-check-square',
+            'role' => 'Dosen',
+        ],
+
+        [
+            'text' => 'Mahasiswa Bimbingan',
+            'route'  => 'dosen.advised-students.index',
+            'icon' => 'fas fa-fw fa-users',
+            'role' => 'Dosen',
+        ],
+
+        [
+            'header' => 'PENGAJARAN',
+            'role'   => 'Dosen',
+        ],
+        [
+            'text' => 'Input Nilai',
+            // 'route'  => 'dosengrades.input.index',
+            'icon' => 'fas fa-fw fa-keyboard',
+            'role' => 'Dosen',
+        ],
+
+        [
+            'header' => 'KEUANGAN',
+            // 'can'    => 'manage-keuangan', // Izin bisa diatur nanti
+        ],
+        [
+            'text' => 'Pengaturan Biaya Kuliah',
+            'url'  => 'admin/tuition-fees',
+            'icon' => 'fas fa-fw fa-money-bill-wave',
+        ],
+        [
+            'text' => 'Komponen Biaya', // <-- MENU BARU
+            'url'  => 'admin/fee-components',
+            'icon' => 'fas fa-fw fa-tags',
         ],
 
         // MODUL PENDAFTARAN MAHASISWA BARU
@@ -389,8 +446,8 @@ return [
             'can' => 'view akademik',
             'submenu' => [
                 [
-                    'text' => 'Data Mahasiswa',
-                    'route'  => 'admin.students.index',
+                    'text' => 'Mahasiswa',
+                    'url'  => 'admin/students',
                     'icon' => 'fas fa-fw fa-user-graduate',
                     'can' => 'view akademik',
                 ],
@@ -399,13 +456,14 @@ return [
                     'text' => 'Import Mahasiswa Lama',
                     'url'  => 'admin/students/import',
                     'icon' => 'fas fa-fw fa-file-import',
+                    'can'  => 'manage settings',
                 ],
 
                 [
                     'text' => 'Dosen',
                     'url'  => 'admin/lecturers',
                     'icon' => 'fas fa-fw fa-user-tie',
-                    // 'can'  => 'view-lecturers',
+                    'can'  => 'manage settings',
                 ],
             ],
         ],
@@ -458,11 +516,13 @@ return [
                     'text' => 'Kurikulum',
                     'url'  => 'admin/curriculums',
                     'icon' => 'fas fa-fw fa-sitemap',
+                    'can'  => 'manage settings',
                 ],
                 [
                     'text' => 'Tahun Ajaran',
                     'url'  => 'admin/academic-years',
                     'icon' => 'fas fa-fw fa-calendar-alt',
+                    'can'  => 'manage settings',
                 ],
             ],
         ],
@@ -482,6 +542,7 @@ return [
 
     'filters' => [
         JeroenNoten\LaravelAdminLte\Menu\Filters\GateFilter::class,
+        //   App\Filters\MenuFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\HrefFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\SearchFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\ActiveFilter::class,

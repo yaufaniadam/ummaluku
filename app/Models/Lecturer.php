@@ -42,4 +42,9 @@ class Lecturer extends Model
     {
         return $this->hasMany(CourseClass::class);
     }
+
+     public function advisedStudents(): HasMany
+    {
+        return $this->hasMany(Student::class, 'academic_advisor_id');
+    }
 }

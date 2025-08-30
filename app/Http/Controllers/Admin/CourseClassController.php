@@ -6,6 +6,7 @@ use App\DataTables\CourseClassDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\AcademicYear;
 use App\Models\CourseClass;
+use App\Models\Program;
 use Illuminate\Http\Request;
 
 class CourseClassController extends Controller
@@ -13,24 +14,19 @@ class CourseClassController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(CourseClassDataTable $dataTable, AcademicYear $academicYear)
+    public function index(CourseClassDataTable $dataTable, AcademicYear $academicYear, Program $program)
     {
-        // 1. Set properti publiknya secara langsung
         $dataTable->academic_year_id = $academicYear->id;
-
-        // 2. Render view
-        return $dataTable->render('admin.course-classes.index', [
-            'academicYear' => $academicYear
-        ]);
+        $dataTable->program_id = $program->id;
+        return $dataTable->render('admin.course-classes.index', compact('academicYear', 'program'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(AcademicYear $academicYear)
+    public function create(AcademicYear $academicYear, Program $program)
     {
-        // Kirim data Tahun Ajaran ke view create
-        return view('admin.course-classes.create', compact('academicYear'));
+        return view('admin.course-classes.create', compact('academicYear', 'program'));
     }
 
     /**
@@ -52,9 +48,12 @@ class CourseClassController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(AcademicYear $academicYear, CourseClass $courseClass)
+    public function edit(AcademicYear $academicYear, Program $program, $course_class_id)
     {
-        return view('admin.course-classes.edit', compact('academicYear', 'courseClass'));
+        // Cari manual model CourseClass berdasarkan ID yang didapat dari route
+        $courseClass = CourseClass::findOrFail($course_class_id);
+
+        return view('admin.course-classes.edit', compact('academicYear', 'program', 'courseClass'));
     }
 
 

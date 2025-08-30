@@ -13,12 +13,17 @@ use Yajra\DataTables\Services\DataTable;
 class CourseClassDataTable extends DataTable
 {
     public $academic_year_id;
+    public $program_id;
 
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function (CourseClass $row) {
-                $editUrl = route('admin.academic-years.course-classes.edit', ['academic_year' => $row->academic_year_id, 'course_class' => $row->id]);
+                $editUrl = route('admin.academic-years.programs.course-classes.edit', [
+                    'academic_year' => $row->academic_year_id,
+                    'program' => $this->program_id,
+                    'course_class' => $row->id
+                ]);
                 $deleteEvent = "Livewire.dispatch('confirm-delete-course-class', { courseClass: {$row->id} })";
 
                 $buttons = '<a href="' . $editUrl . '" class="btn btn-primary btn-sm" wire:navigate>Edit</a> ';
@@ -30,17 +35,25 @@ class CourseClassDataTable extends DataTable
 
     public function query(CourseClass $model): QueryBuilder
     {
+        // Query sekarang jauh lebih spesifik
         return $model->newQuery()
             ->where('academic_year_id', $this->academic_year_id)
+            ->whereHas('course.curriculum', function ($query) {
+                $query->where('program_id', $this->program_id);
+            })
             ->with(['course', 'lecturer']);
     }
 
     public function html(): HtmlBuilder
     {
+
         return $this->builder()
             ->setTableId('courseclass-table')
             ->columns($this->getColumns())
-            ->minifiedAjax(route('admin.academic-years.course-classes.data', $this->academic_year_id))
+            ->minifiedAjax(route('admin.academic-years.programs.course-classes.data', [
+                'academic_year' => $this->academic_year_id,
+                'program' => $this->program_id
+            ]))
             ->dom('Bfrtip')
             ->orderBy(1)
             ->buttons([Button::make('reload')]);

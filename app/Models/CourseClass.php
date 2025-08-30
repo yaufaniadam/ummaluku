@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes; 
 
 class CourseClass extends Model
@@ -40,5 +41,13 @@ class CourseClass extends Model
     public function academicYear(): BelongsTo
     {
         return $this->belongsTo(AcademicYear::class, 'academic_year_id');
+    }
+
+    /**
+     * Get all enrollments for the class.
+     */
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(ClassEnrollment::class);
     }
 }

@@ -33,9 +33,7 @@ class DatabaseSeeder extends Seeder
             DocumentRequirementSeeder::class, 
             AdmissionCategoryDocumentSeeder::class, 
             AdmissionCategoryBatchSeeder::class,            
-            PermissionSeeder::class,
-            UserSeeder::class,
-            DummyDataSeeder::class,
+            RolePermissionSeeder::class,
         ]);
     }
 }

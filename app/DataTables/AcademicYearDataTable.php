@@ -21,11 +21,10 @@ class AcademicYearDataTable extends DataTable
                     : '<span class="badge badge-secondary">Tidak Aktif</span>';
             })
             ->addColumn('action', function (AcademicYear $row) {
+                $manageUrl = route('admin.academic-years.show', $row->id); // <-- UBAH KE show
                 $editUrl = route('admin.academic-years.edit', $row->id);
-                // --- TAMBAHKAN INI ---
-                $manageClassesUrl = route('admin.academic-years.course-classes.index', $row->id);
-                $buttons = '<a href="' . $manageClassesUrl . '" class="btn btn-info btn-sm" wire:navigate>Kelola Kelas</a> ';
-                // ---------------------
+
+                $buttons = '<a href="' . $manageUrl . '" class="btn btn-info btn-sm" wire:navigate>Kelola Semester</a> ';
                 $buttons .= '<a href="' . $editUrl . '" class="btn btn-primary btn-sm" wire:navigate>Edit</a>';
                 return $buttons;
             })
@@ -41,12 +40,12 @@ class AcademicYearDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('academicyear-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax(route('admin.academic-years.data'))
-                    ->dom('Bfrtip')
-                    ->orderBy(0, 'desc') // Urutkan berdasarkan ID terbaru
-                    ->buttons([Button::make('reload')]);
+            ->setTableId('academicyear-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax(route('admin.academic-years.data'))
+            ->dom('Bfrtip')
+            ->orderBy(0, 'desc') // Urutkan berdasarkan ID terbaru
+            ->buttons([Button::make('reload')]);
     }
 
     public function getColumns(): array
