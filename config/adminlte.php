@@ -380,7 +380,7 @@ return [
             'icon' => 'fas fa-fw fa-money-bill-wave',
         ],
         [
-            'text' => 'Komponen Biaya', // <-- MENU BARU
+            'text' => 'Komponen Biaya', 
             'url'  => 'admin/fee-components',
             'icon' => 'fas fa-fw fa-tags',
         ],
@@ -389,18 +389,17 @@ return [
         [
             'text'    => 'PMB',
             'icon'    => 'fas fa-fw fa-user-plus',
-            'can' => 'view pmb', // Contoh jika nanti dibatasi oleh permission
+            'can' => 'view pmb', 
 
             'submenu' => [
                 [
                     'text' => 'Data Pendaftar',
-                    // Menggunakan array agar menu tetap aktif di halaman index dan show
                     'route'  => ['admin.pendaftaran.index', 'admin.seleksi.index'],
                     'icon' => 'fas fa-fw fa-users',
                     'can' => 'view pmb',
                 ],
                 [
-                    'text' => 'Proses Seleksi', // 
+                    'text' => 'Proses Seleksi', 
                     'route'  => 'admin.seleksi.index',
                     'icon' => 'fas fa-fw fa-search',
                     'can' => 'view pmb',
