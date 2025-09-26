@@ -19,58 +19,78 @@
                 @auth
 
                     {{-- ================================================= --}}
-                    {{-- MENU UNTUK PORTAL ADMIN (STAF, DIREKTUR, SUPER ADMIN) --}}
+                    {{-- MENU UNTUK PORTAL ADMISI (STAF, DIREKTUR, SUPER ADMIN) --}}
                     {{-- ================================================= --}}
                     @if (auth()->user()->hasRole(['Super Admin', 'Direktur Admisi', 'Staf Admisi']))
+                        <li class="nav-header">ADMISI</li>
                         @can('view pmb dashboard')
                             <li class="nav-item">
-                                <a href="{{ route('admin.dashboard') }}"
-                                    class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                                <a href="{{ route('admin.dashboard.admisi') }}"
+                                    class="nav-link {{ request()->routeIs('admin.dashboard.admisi') ? 'active' : '' }}">
                                     <i class="nav-icon fas fa-tachometer-alt"></i>
-                                    <p>Dashboard</p>
+                                    <p>Dashboard Admisi</p>
                                 </a>
                             </li>
                         @endcan
 
                         @can('view applications')
-                            <li class="nav-header">ADMISI</li>
-                            <li class="nav-item">
-                                <a href="{{ route('admin.pendaftaran.index') }}"
-                                    class="nav-link {{ request()->routeIs('admin.pendaftaran.index') ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-edit"></i>
-                                    <p>Data Pendaftar</p>
+                            @php
+                                $PMB = [
+                                    'admin.pendaftaran.index',
+                                    'admin.seleksi.index',
+                                    'admin.diterima.index',
+                                    'admin.payment.index',
+                                ];
+                            @endphp
+                            
+                            <li class="nav-item {{ request()->routeIs($PMB) ? 'menu-open' : '' }}">
+                                <a href="#" class="nav-link {{ request()->routeIs($PMB) ? 'active' : '' }}">
+                                    <i class="nav-icon fas fas fa-edit"></i>
+                                    <p>
+                                        PMB
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
                                 </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('admin.seleksi.index') }}"
-                                    class="nav-link {{ request()->routeIs('admin.seleksi.index') ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-search"></i>
-                                    <p>Proses Seleksi</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('admin.diterima.index') }}"
-                                    class="nav-link {{ request()->routeIs('admin.diterima.index') ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-check-circle"></i>
-                                    <p>Diterima</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('admin.payment.index') }}"
-                                    class="nav-link {{ request()->routeIs('admin.payment.index') ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-cash-register"></i>
-                                    <p>Pembayaran Registrasi</p>
-                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.pendaftaran.index') }}"
+                                            class="nav-link {{ request()->routeIs('admin.pendaftaran.index') ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Data Pendaftar</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.seleksi.index') }}"
+                                            class="nav-link {{ request()->routeIs('admin.seleksi.index') ? 'active' : '' }}">
+                                            <i class="nav-icon far fa-circle"></i>
+                                            <p>Proses Seleksi</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.diterima.index') }}"
+                                            class="nav-link {{ request()->routeIs('admin.diterima.index') ? 'active' : '' }}">
+                                            <i class="nav-icon far fa-circle"></i>
+                                            <p>Diterima</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.payment.index') }}"
+                                            class="nav-link {{ request()->routeIs('admin.payment.index') ? 'active' : '' }}">
+                                            <i class="nav-icon far fa-circle"></i>
+                                            <p>Pembayaran Registrasi</p>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         @endcan
 
                         @can('manage pmb settings')
-                        @php
-                            $pengaturanPMB = [
-                                'admin.gelombang.index', // Route untuk gelombang
-                                'admin.jalur-pendaftaran.index' // Contoh route lain yang namanya tidak berurutan
-                            ];
-                        @endphp
+                            @php
+                                $pengaturanPMB = [
+                                    'admin.gelombang.index', // Route untuk gelombang
+                                    'admin.jalur-pendaftaran.index', // Contoh route lain yang namanya tidak berurutan
+                                ];
+                            @endphp
                             <li class="nav-item {{ request()->routeIs($pengaturanPMB) ? 'menu-open' : '' }}">
                                 <a href="#" class="nav-link {{ request()->routeIs($pengaturanPMB) ? 'active' : '' }}">
                                     <i class="nav-icon fas fa-cogs"></i>
@@ -99,6 +119,132 @@
                                 </ul>
                             </li>
                         @endcan
+                    @endif
+
+                    {{-- ================================================= --}}
+                    {{-- MENU UNTUK PORTAL AKADEMIK (STAF, DIREKTUR, SUPER ADMIN) --}}
+                    {{-- ================================================= --}}
+
+                    @if (auth()->user()->hasRole(['Super Admin', 'Direktur Akademik', 'Staf Akademik']))
+                    <li class="nav-header">AKADEMIK</li>
+                        @can('dosen-list' )
+                            <li class="nav-item">
+                                <a href="{{ route('admin.dashboard.akademik') }}"
+                                    class="nav-link {{ request()->routeIs('admin.dashboard.akademik') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>Dashboard Akademik</p>
+                                </a>
+                            </li>
+                        @endcan
+
+                        @can('mahasiswa-list')
+                            @php
+                                $mahasiswa = [
+                                    'admin.students.index',
+                                    'admin.students.import',
+                                    'admin.students.import.form'
+                                ];
+                            @endphp
+                            
+                            <li class="nav-item {{ request()->routeIs($mahasiswa) ? 'menu-open' : '' }}">
+                                <a href="#" class="nav-link {{ request()->routeIs($mahasiswa) ? 'active' : '' }}">
+                                    <i class="nav-icon fas fas fa-users"></i>
+                                    <p>
+                                        Mahasiswa
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.students.index') }}"
+                                            class="nav-link {{ request()->routeIs('admin.students.index') ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Data Mahasiswa</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.students.import.form') }}"
+                                            class="nav-link {{ request()->routeIs('admin.students.import.form') ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Import Mahasiswa Lama</p>
+                                        </a>
+                                    </li>
+                                    
+                                </ul>
+                            </li>
+                        @endcan
+
+                        @can('dosen-list')
+                            @php
+                                $dosen = [
+                                    'admin.lecturers.index',
+                                    'admin.lecturers.import',
+                                ];
+                            @endphp
+                            
+                            <li class="nav-item {{ request()->routeIs($dosen) ? 'menu-open' : '' }}">
+                                <a href="#" class="nav-link {{ request()->routeIs($dosen) ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-graduation-cap"></i>
+                                    <p>
+                                        Dosen
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.lecturers.index') }}"
+                                            class="nav-link {{ request()->routeIs('admin.lecturers.index') ? 'active' : '' }}">
+                                            <i class="nav-icon far fa-circle"></i>
+                                            <p>Data Dosen</p>
+                                        </a>
+                                    </li>
+                                   
+                                    
+                                </ul>
+                            </li>
+                        @endcan
+
+                        @can('dosen-list')
+                            @php
+                                $akademik = [
+                                    'admin.curriculums.*',
+                                    'admin.curriculums.courses.*',
+                                    'admin.academic-years.index',
+                                    'admin.academic-years.show',
+                                    'admin.academic-years.programs.*',
+                                ];
+                            @endphp
+                            
+                            <li class="nav-item {{ request()->routeIs($akademik) ? 'menu-open' : '' }}">
+                                <a href="#" class="nav-link {{ request()->routeIs($akademik) ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-cog"></i>
+                                    <p>
+                                        Pengaturan Akademik
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.curriculums.index') }}"
+                                            class="nav-link {{ request()->routeIs('admin.curriculums.index') ? 'active' : '' }}">
+                                            <i class="nav-icon far fa-circle"></i>
+                                            <p>Kurikulum</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.academic-years.index') }}"
+                                            class="nav-link {{ request()->routeIs('admin.academic-years.index') ? 'active' : '' }}">
+                                            <i class="nav-icon far fa-circle"></i>
+                                            <p>Tahun Ajaran</p>
+                                        </a>
+                                    </li>
+                                   
+                                    
+                                </ul>
+                            </li>
+                        @endcan
+
+                     
                     @endif
 
 

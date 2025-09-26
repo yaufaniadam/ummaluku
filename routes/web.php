@@ -41,17 +41,26 @@ use App\Models\Program;
 
 use App\DataTables\StudentDataTable;
 
-use App\Http\Controllers\Admin\TuitionFeeController; // <-- Tambahkan ini
+use App\Http\Controllers\Admin\TuitionFeeController;
 use App\DataTables\TuitionFeeDataTable;
 
-use App\Http\Controllers\Admin\FeeComponentController; // <-- Tambahkan ini
+use App\Http\Controllers\Admin\FeeComponentController;
 use App\DataTables\FeeComponentDataTable;
+
+use App\Http\Controllers\Admin\AcademicEventController;
+use App\DataTables\AcademicEventDataTable;
+
+use App\Http\Controllers\Auth\AdminLoginController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+
+
+
+
 // permission minimal manage pmb/role dir pmb
-Route::prefix('admin')->middleware(['auth', 'permission:manage pmb'])->name('admin.')->group(function () {
+Route::prefix('admin')->middleware(['auth:admin', 'permission:manage pmb'])->name('admin.')->group(function () {
     Route::resource('jalur-pendaftaran', AdmissionCategoryController::class);
     Route::resource('gelombang', BatchController::class);
 
@@ -76,16 +85,24 @@ Route::middleware('auth')->group(function () {
     Route::post('notifications/mark-all-as-read', [NotificationsController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
 });
 
-Route::prefix('admin')->middleware(['auth', 'permission:view pmb'])->name('admin.')->group(function () {
+Route::prefix('admin')->middleware(['auth:admin', 'permission:view pmb'])->name('admin.')->group(function () {
 
 
     Route::get('/', function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard/admisi', function () {
+        return "dashboard admisi";
+    })->name('dashboard.admisi');
+
+    Route::get('/dashboard/akademik', function () {
+        return "dashboard akademik";
+    })->name('dashboard.akademik');
+
+    Route::get('/dashboard/kepegawaian', function () {
+        return "dashboard kepegawaian";
+    })->name('dashboard.kepegawaian');
 
     Route::get('/pendaftaran', [AdminPendaftaranController::class, 'index'])->name('pendaftaran.index');
     Route::get('/pendaftaran/{application}', PendaftaranShow::class)->name('pendaftaran.show');
@@ -152,7 +169,20 @@ Route::prefix('admin')->middleware(['auth', 'permission:view pmb'])->name('admin
     Route::get('fee-components-data', function (FeeComponentDataTable $dataTable) {
         return $dataTable->ajax();
     })->name('fee-components.data');
+
+    Route::resource('academic-events', AcademicEventController::class);
+    Route::get('academic-events-data', function (AcademicEventDataTable $dataTable) {
+        return $dataTable->ajax();
+    })->name('academic-events.data');
+
+    Route::get('login', [AdminLoginController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [AdminLoginController::class, 'login']);
+    Route::post('logout', [AdminLoginController::class, 'logout'])->name('logout');
+
 });
+
+
+    Route::get('/api/academic-events', [AcademicEventController::class, 'feed'])->name('api.academic-events.feed');
 
 
 // Untuk Calon Mahasiswa
@@ -187,7 +217,7 @@ use App\Http\Controllers\Dosen\KrsApprovalController;
 use App\Http\Controllers\Dosen\AdvisedStudentController;
 use App\Http\Controllers\Dosen\GradeInputController;
 
-Route::middleware(['auth', 'role:Dosen'])->prefix('dosen')->name('dosen.')->group(function () {
+Route::middleware(['auth:admin', 'role:Dosen'])->prefix('dosen')->name('dosen.')->group(function () {
     Route::get('krs-approval', [KrsApprovalController::class, 'index'])->name('krs-approval.index');
     Route::get('dashboard', [DosenDashboardController::class, 'index'])->name('dashboard');
     Route::get('krs-approval', [KrsApprovalController::class, 'index'])->name('krs-approval.index');

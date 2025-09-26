@@ -85,7 +85,7 @@ class AcademicYearForm extends Component
         });
 
         $this->dispatch('academic-year-updated');
-        return $this->redirect(route('admin.academic-years.index'), navigate: true);
+        return $this->redirect(route('admin.academic-years.index'));
     }
 
     public function render()

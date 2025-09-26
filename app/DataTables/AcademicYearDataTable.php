@@ -20,15 +20,24 @@ class AcademicYearDataTable extends DataTable
                     ? '<span class="badge badge-success">Aktif</span>'
                     : '<span class="badge badge-secondary">Tidak Aktif</span>';
             })
+            // ====================== TAMBAHKAN DUA BLOK INI ======================
+            ->editColumn('krs_start_date', function (AcademicYear $row) {
+                // Karena kita sudah pakai $casts di model, $row->krs_start_date adalah objek Carbon
+                return $row->krs_start_date->isoFormat('D MMMM YYYY');
+            })
+            ->editColumn('krs_end_date', function (AcademicYear $row) {
+                return $row->krs_end_date->isoFormat('D MMMM YYYY');
+            })
+            // ====================================================================
             ->addColumn('action', function (AcademicYear $row) {
-                $manageUrl = route('admin.academic-years.show', $row->id); // <-- UBAH KE show
                 $editUrl = route('admin.academic-years.edit', $row->id);
-
+                // Tombol "Kelola Semester" juga harusnya sudah ada dari langkah sebelumnya
+                $manageUrl = route('admin.academic-years.show', $row->id);
                 $buttons = '<a href="' . $manageUrl . '" class="btn btn-info btn-sm" wire:navigate>Kelola Semester</a> ';
                 $buttons .= '<a href="' . $editUrl . '" class="btn btn-primary btn-sm" wire:navigate>Edit</a>';
                 return $buttons;
             })
-            ->rawColumns(['is_active', 'action'])
+            ->rawColumns(['is_active', 'action']) // Pastikan rawColumns tetap ada
             ->setRowId('id');
     }
 

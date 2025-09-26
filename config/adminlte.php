@@ -380,7 +380,7 @@ return [
             'icon' => 'fas fa-fw fa-money-bill-wave',
         ],
         [
-            'text' => 'Komponen Biaya', 
+            'text' => 'Komponen Biaya',
             'url'  => 'admin/fee-components',
             'icon' => 'fas fa-fw fa-tags',
         ],
@@ -389,7 +389,7 @@ return [
         [
             'text'    => 'PMB',
             'icon'    => 'fas fa-fw fa-user-plus',
-            'can' => 'view pmb', 
+            'can' => 'view pmb',
 
             'submenu' => [
                 [
@@ -399,7 +399,7 @@ return [
                     'can' => 'view pmb',
                 ],
                 [
-                    'text' => 'Proses Seleksi', 
+                    'text' => 'Proses Seleksi',
                     'route'  => 'admin.seleksi.index',
                     'icon' => 'fas fa-fw fa-search',
                     'can' => 'view pmb',
@@ -523,18 +523,21 @@ return [
                     'icon' => 'fas fa-fw fa-calendar-alt',
                     'can'  => 'manage settings',
                 ],
+                [
+                    'text' => 'Tahun Ajaran',
+                    'url'  => 'admin/academic-years',
+                    'icon' => 'fas fa-fw fa-calendar-alt',
+                ],
+                [
+                    'text' => 'Kalender Akademik', 
+                    'url'  => 'admin/academic-events',
+                    'icon' => 'fas fa-fw fa-calendar-check',
+                ],
             ],
         ],
     ],
 
-    'menu2' => [
-         [
-            'text' => 'Dashboardd',
-            'route'  => 'admin.dashboard',
-            'icon' => 'fas fa-fw fa-tachometer-alt',
-            'can'    => ['view pmb'],
-        ],
-    ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -549,7 +552,7 @@ return [
     */
 
     'filters' => [
-        JeroenNoten\LaravelAdminLte\Menu\Filters\GateFilter::class,        
+        JeroenNoten\LaravelAdminLte\Menu\Filters\GateFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\HrefFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\SearchFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\ActiveFilter::class,
@@ -641,6 +644,16 @@ return [
                 ],
             ],
         ],
+        'FullCalendar' => [
+        'active' => true, // Cukup ubah baris ini menjadi true
+        'files' => [
+            [
+                'type' => 'js',
+                'asset' => true,
+                'location' => 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js',
+            ],
+        ],
+    ],
     ],
 
     /*
