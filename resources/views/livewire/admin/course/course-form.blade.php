@@ -84,7 +84,7 @@
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="{{ route('admin.curriculums.courses.index', $curriculum->id) }}" class="btn btn-secondary"
+                <a href="{{ route('admin.akademik.curriculums.courses.index', $curriculum->id) }}" class="btn btn-secondary"
                     wire:navigate>Batal</a>
             </div>
         </div>

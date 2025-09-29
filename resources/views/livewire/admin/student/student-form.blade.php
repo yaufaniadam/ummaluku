@@ -52,7 +52,7 @@
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                <a href="{{ route('admin.students.index') }}" class="btn btn-secondary" wire:navigate>Batal</a>
+                <a href="{{ route('admin.akademik.students.index') }}" class="btn btn-secondary" wire:navigate>Batal</a>
             </div>
         </div>
     </form>

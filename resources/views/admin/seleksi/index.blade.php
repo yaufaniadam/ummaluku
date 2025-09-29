@@ -39,7 +39,7 @@
         $('#selection-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('admin.seleksi.data') }}', // URL sumber data
+            ajax: '{{ route('admin.pmb.seleksi.data') }}', // URL sumber data
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                 { data: 'registration_number', name: 'registration_number' },

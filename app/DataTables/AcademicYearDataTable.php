@@ -30,9 +30,9 @@ class AcademicYearDataTable extends DataTable
             })
             // ====================================================================
             ->addColumn('action', function (AcademicYear $row) {
-                $editUrl = route('admin.academic-years.edit', $row->id);
+                $editUrl = route('admin.akademik.academic-years.edit', $row->id);
                 // Tombol "Kelola Semester" juga harusnya sudah ada dari langkah sebelumnya
-                $manageUrl = route('admin.academic-years.show', $row->id);
+                $manageUrl = route('admin.akademik.academic-years.show', $row->id);
                 $buttons = '<a href="' . $manageUrl . '" class="btn btn-info btn-sm" wire:navigate>Kelola Semester</a> ';
                 $buttons .= '<a href="' . $editUrl . '" class="btn btn-primary btn-sm" wire:navigate>Edit</a>';
                 return $buttons;
@@ -51,7 +51,7 @@ class AcademicYearDataTable extends DataTable
         return $this->builder()
             ->setTableId('academicyear-table')
             ->columns($this->getColumns())
-            ->minifiedAjax(route('admin.academic-years.data'))
+            ->minifiedAjax(route('admin.akademik.academic-years.data'))
             ->dom('Bfrtip')
             ->orderBy(0, 'desc') // Urutkan berdasarkan ID terbaru
             ->buttons([Button::make('reload')]);

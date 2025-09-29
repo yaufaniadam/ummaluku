@@ -98,7 +98,7 @@ class CourseClassForm extends Component
         // Kirim sinyal agar tabel me-refresh
         $this->dispatch('course-class-updated');
 
-        return $this->redirect(route('admin.academic-years.programs.course-classes.index', [
+        return $this->redirect(route('admin.akademik.academic-years.programs.course-classes.index', [
             'academic_year' => $this->academicYear,
             'program' => $this->program
         ]), navigate: true);

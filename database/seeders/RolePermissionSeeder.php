@@ -17,7 +17,7 @@ class RolePermissionSeeder extends Seeder
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         // === 1. BUAT PERMISSIONS YANG SPESIFIK/MIKRO ===
-        $adminPermissions = [
+        $permissions = [
             // Dashboard
             'view-executive-dashboard',
             // Settings
@@ -84,37 +84,51 @@ class RolePermissionSeeder extends Seeder
             'access applicant portal',
             'update own biodata',
             'upload own documents',
-        ];
 
-        foreach ($adminPermissions as $permission) {
-            Permission::create(['name' => $permission, 'guard_name' => 'admin']);
-        }
-
-        // Permissions untuk guard 'web' (Mahasiswa & Camaru)
-        $webPermissions = [
+            //Portal Mahasiswa
             'mahasiswa-krs-fill',
             'mahasiswa-khs-view',
-            'access applicant portal',
-            'update own biodata',
-            'upload own documents',
-        ];
-        
-        foreach ($webPermissions as $permission) {
-            Permission::create(['name' => $permission, 'guard_name' => 'web']);
-        }
 
+            // Keuangan
+            'biaya-list',
+            'biaya-create',
+            'biaya-edit',            
+            'tagihan-list',
+            'tagihan-create',
+            'tagihan-edit',            
+            'pembayaran-list',
+            'pembayaran-create',
+            'pembayaran-edit',
+            'pembayaran-delete',
+            'pembayaran-confirm',        
+            
+            // Dir Keuangan            
+            'biaya-delete',
+            'tagihan-delete',
+            'pengembalian-pembayaran',
+            'pengaturan-keuangan',
+            'laporan-keuangan',
+   
+        ];
+
+
+        foreach ($permissions as $permission) {
+            Permission::create(['name' => $permission]);
+        }    
 
         // === 2. BUAT ROLES ANDA ===
-        $superAdminRole = Role::create(['name' => 'Super Admin', 'guard_name' => 'admin']);
-        $eksekutifRole = Role::create(['name' => 'Eksekutif', 'guard_name' => 'admin']);
-        $dirAkademikRole = Role::create(['name' => 'Direktur Akademik', 'guard_name' => 'admin']);
-        $stafAkademikRole = Role::create(['name' => 'Staf Akademik', 'guard_name' => 'admin']);
-        $dirAdmisiRole = Role::create(['name' => 'Direktur Admisi', 'guard_name' => 'admin']);
-        $stafAdmisiRole = Role::create(['name' => 'Staf Admisi', 'guard_name' => 'admin']);
-        $dirSdmRole = Role::create(['name' => 'Direktur SDM', 'guard_name' => 'admin']);
-        $stafSdmRole = Role::create(['name' => 'Staf SDM', 'guard_name' => 'admin']);
-        $dosenRole = Role::create(['name' => 'Dosen', 'guard_name' => 'admin']);
-        $tendikRole = Role::create(['name' => 'Tendik', 'guard_name' => 'admin']);
+        $superAdminRole = Role::create(['name' => 'Super Admin']);
+        $eksekutifRole = Role::create(['name' => 'Eksekutif']);
+        $dirAkademikRole = Role::create(['name' => 'Direktur Akademik']);
+        $stafAkademikRole = Role::create(['name' => 'Staf Akademik']);
+        $dirAdmisiRole = Role::create(['name' => 'Direktur Admisi']);
+        $stafAdmisiRole = Role::create(['name' => 'Staf Admisi']);
+        $dirSdmRole = Role::create(['name' => 'Direktur SDM']);
+        $stafSdmRole = Role::create(['name' => 'Staf SDM']);
+        $dirKeuanganRole = Role::create(['name' => 'Direktur Keuangan']);
+        $stafKeuanganRole = Role::create(['name' => 'Staf Keuangan']);
+        $dosenRole = Role::create(['name' => 'Dosen']);
+        $tendikRole = Role::create(['name' => 'Tendik']);
         $mahasiswaRole = Role::create(['name' => 'Mahasiswa']);
         $camaruRole = Role::create(['name' => 'Camaru']);
 
@@ -123,12 +137,36 @@ class RolePermissionSeeder extends Seeder
         // === 3. BERI PERMISSION SPESIFIK KE ROLES ===
         $eksekutifRole->givePermissionTo(['view-executive-dashboard']);
 
-        $dirAkademikRole->givePermissionTo([
+        $dirSdmRole->givePermissionTo([
             'dosen-list',
             'dosen-create',
             'dosen-edit',
             'dosen-delete',
             'dosen-import',
+            'tendik-list',  
+            'tendik-create',
+            'tendik-edit',
+            'tendik-delete',
+            'tendik-import',
+            'kontrak-manage',
+            'laporan-sdm',
+            'jabatan-manage',
+        ]);
+
+        $stafSdmRole->givePermissionTo([
+            'dosen-list',
+            'dosen-create',
+            'dosen-edit',
+            'tendik-list',  
+            'tendik-create',
+            'tendik-edit',
+            'kontrak-manage',
+            'laporan-sdm',
+        ]);
+
+
+        $dirAkademikRole->givePermissionTo([
+           
             'mahasiswa-list',
             'mahasiswa-create',
             'mahasiswa-edit',
@@ -192,6 +230,39 @@ class RolePermissionSeeder extends Seeder
             'verify application documents',
             'update application status',
             'send notification to applicant',
+        ]);
+
+        $dirKeuanganRole->givePermissionTo([
+            'biaya-list',
+            'biaya-create',
+            'biaya-edit',            
+            'tagihan-list',
+            'tagihan-create',
+            'tagihan-edit',            
+            'pembayaran-list',
+            'pembayaran-create',
+            'pembayaran-edit',
+            'pembayaran-delete',
+            'pembayaran-confirm', 
+            'biaya-delete',
+            'tagihan-delete',
+            'pengembalian-pembayaran',
+            'pengaturan-keuangan',
+            'laporan-keuangan',
+        ]);
+
+        $stafKeuanganRole->givePermissionTo([
+            'biaya-list',
+            'biaya-create',
+            'biaya-edit',            
+            'tagihan-list',
+            'tagihan-create',
+            'tagihan-edit',            
+            'pembayaran-list',
+            'pembayaran-create',
+            'pembayaran-edit',
+            'pembayaran-delete',
+            'pembayaran-confirm', 
         ]);
 
         // Camaru: Hanya bisa mengelola datanya sendiri

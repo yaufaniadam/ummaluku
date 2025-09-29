@@ -9,7 +9,7 @@
         <div class="card-header">
             <h3 class="card-title">Daftar Gelombang</h3>
             <div class="card-tools">
-                <a href="{{ route('admin.gelombang.create') }}" class="btn btn-primary">Tambah Gelombang Baru</a>
+                <a href="{{ route('admin.pmb.gelombang.create') }}" class="btn btn-primary">Tambah Gelombang Baru</a>
             </div>
         </div>
         <div class="card-body">
@@ -34,8 +34,8 @@
                         <td>{{ \Carbon\Carbon::parse($batch->start_date)->format('d M Y') }} - {{ \Carbon\Carbon::parse($batch->end_date)->format('d M Y') }}</td>
                         <td>{!! $batch->is_active ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-danger">Tidak Aktif</span>' !!}</td>
                         <td>
-                            <a href="{{ route('admin.gelombang.edit', $batch) }}" class="btn btn-xs btn-warning">Edit</a>
-                            <form action="{{ route('admin.gelombang.destroy', $batch) }}" method="POST" class="d-inline" onsubmit="return confirm('Anda yakin?')">
+                            <a href="{{ route('admin.pmb.gelombang.edit', $batch) }}" class="btn btn-xs btn-warning">Edit</a>
+                            <form action="{{ route('admin.pmb.gelombang.destroy', $batch) }}" method="POST" class="d-inline" onsubmit="return confirm('Anda yakin?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-xs btn-danger">Hapus</button>

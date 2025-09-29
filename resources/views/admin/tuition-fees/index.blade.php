@@ -31,7 +31,7 @@
             <div class="card-header">
                 <h3 class="card-title">Daftar Biaya Kuliah per Prodi & Angkatan</h3>
                 <div class="card-tools">
-                    <a href="{{ route('admin.tuition-fees.create') }}" class="btn btn-primary btn-sm" wire:navigate>Tambah Biaya Baru</a>
+                    <a href="{{ route('admin.keuangan.tuition-fees.create') }}" class="btn btn-primary btn-sm" wire:navigate>Tambah Biaya Baru</a>
                 </div>
             </div>
             <div class="card-body">

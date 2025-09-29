@@ -17,7 +17,7 @@
                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#importModal">
     Import Dosen
 </button>
-                    <a href="{{ route('admin.lecturers.create') }}" class="btn btn-primary btn-sm" wire:navigate>Tambah Dosen
+                    <a href="{{ route('admin.sdm.lecturers.create') }}" class="btn btn-primary btn-sm" wire:navigate>Tambah Dosen
                         Baru</a>
                 </div>
             </div>
@@ -36,7 +36,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('admin.lecturers.import') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.sdm.lecturers.import') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">

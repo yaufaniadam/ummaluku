@@ -16,7 +16,7 @@ class StudentDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function (Student $student) {
-                $editUrl = route('admin.students.edit', $student->id);
+                $editUrl = route('admin.akademik.students.edit', $student->id);
                 return '<a href="' . $editUrl . '" class="btn btn-primary btn-sm" wire:navigate>Edit</a>';
             })
             ->editColumn('user.name', function (Student $student) {
@@ -44,7 +44,7 @@ class StudentDataTable extends DataTable
         return $this->builder()
             ->setTableId('student-table')
             ->columns($this->getColumns())
-            ->minifiedAjax(route('admin.students.data'))
+            ->minifiedAjax(route('admin.akademik.students.data'))
             ->dom('Bfrtip')
             ->orderBy(1)
             ->buttons([Button::make('reload')]);

@@ -8,7 +8,7 @@
     <div x-data @academic-year-updated.window="window.LaravelDataTables['academicyear-table'].ajax.reload(null, false);">
         <div class="card">
             <div class="card-header"><h3 class="card-title">Daftar Tahun Ajaran</h3>
-                <div class="card-tools"><a href="{{ route('admin.academic-years.create') }}" class="btn btn-primary btn-sm" wire:navigate>Tambah Baru</a></div>
+                <div class="card-tools"><a href="{{ route('admin.akademik.academic-years.create') }}" class="btn btn-primary btn-sm" wire:navigate>Tambah Baru</a></div>
             </div>
             <div class="card-body">{{ $dataTable->table() }}</div>
         </div>

@@ -23,7 +23,7 @@
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="{{ route('admin.fee-components.index') }}" class="btn btn-secondary" wire:navigate>Batal</a>
+                <a href="{{ route('admin.keuangan.fee-components.index') }}" class="btn btn-secondary" wire:navigate>Batal</a>
             </div>
         </div>
     </form>

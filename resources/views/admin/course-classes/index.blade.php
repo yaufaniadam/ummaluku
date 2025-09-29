@@ -6,8 +6,8 @@
     <h1 class="mb-1">Kelola Kelas Perkuliahan</h1>
     {{-- PERBAIKAN: Tambahkan navigasi Program Studi di breadcrumb --}}
     <h5 class="font-weight-light">
-        <a href="{{ route('admin.academic-years.index') }}" wire:navigate>Tahun Ajaran</a> > 
-        <a href="{{ route('admin.academic-years.show', $academicYear) }}" wire:navigate>{{ $academicYear->name }}</a> > 
+        <a href="{{ route('admin.akademik.academic-years.index') }}" wire:navigate>Tahun Ajaran</a> > 
+        <a href="{{ route('admin.akademik.academic-years.show', $academicYear) }}" wire:navigate>{{ $academicYear->name }}</a> > 
         {{ $program->name_id }}
     </h5>
 @stop
@@ -32,7 +32,7 @@
                 <h3 class="card-title">Daftar Kelas</h3>
                 <div class="card-tools">
                     {{-- PERBAIKAN: Gunakan route yang benar dan sertakan kedua parameter --}}
-                    <a href="{{ route('admin.academic-years.programs.course-classes.create', ['academic_year' => $academicYear, 'program' => $program]) }}"
+                    <a href="{{ route('admin.akademik.academic-years.programs.course-classes.create', ['academic_year' => $academicYear, 'program' => $program]) }}"
                         class="btn btn-primary btn-sm" wire:navigate>
                         Tambah Kelas Baru
                     </a>

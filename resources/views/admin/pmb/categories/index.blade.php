@@ -9,7 +9,7 @@
         <div class="card-header">
             <h3 class="card-title">Daftar Jalur</h3>
             <div class="card-tools">
-                <a href="{{ route('admin.jalur-pendaftaran.create') }}" class="btn btn-primary">
+                <a href="{{ route('admin.pmb.jalur-pendaftaran.create') }}" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Tambah Baru
                 </a>
             </div>
@@ -43,11 +43,11 @@
                         <td>
                             <div class="btn-group">
                                 {{-- Tombol Edit standar --}}
-                                <a href="{{ route('admin.jalur-pendaftaran.edit', $category) }}" class="btn btn-xs btn-default text-primary">Edit</a>
+                                <a href="{{ route('admin.pmb.jalur-pendaftaran.edit', $category) }}" class="btn btn-xs btn-default text-primary">Edit</a>
                                 
                                 @hasrole('Super Admin')
                                 {{-- Tombol Hapus standar --}}
-                                <form action="{{ route('admin.jalur-pendaftaran.destroy', $category) }}" method="POST" class="d-inline">
+                                <form action="{{ route('admin.pmb.jalur-pendaftaran.destroy', $category) }}" method="POST" class="d-inline">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="btn btn-xs btn-default text-danger" onclick="return confirm('Anda yakin?')">Hapus</button>
                                 </form>

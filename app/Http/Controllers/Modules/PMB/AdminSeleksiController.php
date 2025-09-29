@@ -49,7 +49,7 @@ class AdminSeleksiController extends Controller
                     $options .= '<option value="' . $choice->program_id . '">' . $choice->program->name_id . '</option>';
                 }
                 $acceptForm = '
-                    <form action="' . route('admin.seleksi.accept', $application) . '" method="POST" class="d-inline-block">
+                    <form action="' . route('admin.pmb.seleksi.accept', $application) . '" method="POST" class="d-inline-block">
                         ' . csrf_field() . '
                         <div class="input-group">
                             <select name="program_id" class="form-control form-control-sm" required>
@@ -62,7 +62,7 @@ class AdminSeleksiController extends Controller
 
                 // ---- Form untuk Aksi Tolak ----
                 $rejectForm = '
-                    <form action="' . route('admin.seleksi.reject', $application) . '" method="POST" class="d-inline-block ms-1">
+                    <form action="' . route('admin.pmb.seleksi.reject', $application) . '" method="POST" class="d-inline-block ms-1">
                         ' . csrf_field() . '
                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Anda yakin ingin MENOLAK pendaftar ini?\')">Tolak</button>
                     </form>

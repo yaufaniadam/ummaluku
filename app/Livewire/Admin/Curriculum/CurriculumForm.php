@@ -64,7 +64,8 @@ class CurriculumForm extends Component
             session()->flash('success', 'Kurikulum berhasil ditambahkan.');
         }
 
-        return redirect()->route('admin.curriculums.index');
+  
+        return redirect(route('admin.akademik.curriculums.index'));
     }
 
     public function render()

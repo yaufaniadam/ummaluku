@@ -106,7 +106,7 @@ class LecturerForm extends Component
                 }
             });
 
-            return redirect()->route('admin.lecturers.index');
+            return redirect()->route('admin.sdm.lecturers.index');
 
         } catch (\Exception $e) {
             session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());

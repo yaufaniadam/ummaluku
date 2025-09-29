@@ -47,7 +47,7 @@ class StudentForm extends Component
 
         session()->flash('success', 'Data mahasiswa berhasil diperbarui.');
 
-        return $this->redirect(route('admin.students.index'), navigate: true);
+        return redirect(route('admin.akademik.students.index'));
     }
 
     public function render()

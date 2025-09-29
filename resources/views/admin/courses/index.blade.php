@@ -6,7 +6,7 @@
     {{-- Judul dinamis menampilkan nama kurikulum --}}
     <h1 class="mb-1">Kelola Mata Kuliah</h1>
     <h5 class="font-weight-light">
-        <a href="{{ route('admin.curriculums.index') }}" wire:navigate>Kurikulum</a> > {{ $curriculum->name }}
+        <a href="{{ route('admin.akademik.curriculums.index') }}" wire:navigate>Kurikulum</a> > {{ $curriculum->name }}
     </h5>
 @stop
 
@@ -34,7 +34,7 @@
                         Import Mata Kuliah
                     </button>
                     {{-- Tombol ini akan mengarah ke form tambah MK --}}
-                    <a href="{{ route('admin.curriculums.courses.create', $curriculum->id) }}"
+                    <a href="{{ route('admin.akademik.curriculums.courses.create', $curriculum->id) }}"
                         class="btn btn-primary btn-sm" wire:navigate>
                         Tambah Mata Kuliah
                     </a>
@@ -56,7 +56,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('admin.curriculums.courses.import', $curriculum->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.akademik.curriculums.courses.import', $curriculum->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">

@@ -16,7 +16,7 @@ class AcademicEventDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function (AcademicEvent $row) {
-                $editUrl = route('admin.academic-events.edit', $row->id);
+                $editUrl = route('admin.akademik.academic-events.edit', $row->id);
                 return '<a href="' . $editUrl . '" class="btn btn-primary btn-sm" wire:navigate>Edit</a>';
             })
             ->editColumn('academicYear.name', function (AcademicEvent $row) {
@@ -41,7 +41,7 @@ class AcademicEventDataTable extends DataTable
         return $this->builder()
             ->setTableId('academicevent-table')
             ->columns($this->getColumns())
-            ->minifiedAjax(route('admin.academic-events.data'))
+            ->minifiedAjax(route('admin.akademik.academic-events.data'))
             ->dom('Bfrtip')
             ->orderBy(3, 'desc') // Urutkan berdasarkan tanggal mulai
             ->buttons([Button::make('reload')]);

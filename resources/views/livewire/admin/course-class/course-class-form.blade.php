@@ -78,7 +78,7 @@
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="{{ route('admin.academic-years.programs.course-classes.index', ['academic_year' => $academicYear, 'program' => $program]) }}" class="btn btn-secondary" wire:navigate>Batal</a>
+                <a href="{{ route('admin.akademik.academic-years.programs.course-classes.index', ['academic_year' => $academicYear, 'program' => $program]) }}" class="btn btn-secondary" wire:navigate>Batal</a>
             </div>
         </div>
     </form>

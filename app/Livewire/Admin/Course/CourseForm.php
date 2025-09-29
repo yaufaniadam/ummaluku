@@ -75,7 +75,7 @@ class CourseForm extends Component
         $this->dispatch('course-updated');
 
         // Redirect kembali ke halaman daftar mata kuliah untuk kurikulum ini
-        return $this->redirect(route('admin.curriculums.courses.index', $this->curriculum->id), navigate: true);
+        return redirect(route('admin.akademik.curriculums.courses.index', $this->curriculum->id));
     }
 
     public function render()

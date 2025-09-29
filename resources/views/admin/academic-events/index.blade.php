@@ -37,7 +37,7 @@
             <div class="card-header">
                 <h3 class="card-title">Daftar Kegiatan Akademik</h3>
                 <div class="card-tools">
-                    <a href="{{ route('admin.academic-events.create') }}" class="btn btn-primary btn-sm"
+                    <a href="{{ route('admin.akademik.academic-events.create') }}" class="btn btn-primary btn-sm"
                         wire:navigate>Tambah Event Baru</a>
                 </div>
             </div>
@@ -72,56 +72,3 @@
         </div>
     </div>
 @stop
-
-{{-- @push('js')
-    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
-@endpush --}}
-{{-- @push('js')
-<script>
-    let calendar;
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        
-        calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth', // Tampilan per bulan
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,listWeek'
-            },
-            events: '{{ route('api.academic-events.feed') }}', // Ambil data dari API kita
-
-            // (Opsional) Aksi saat event di-klik
-            eventClick: function(info) {
-                // Mencegah browser mengikuti link (jika ada)
-                info.jsEvent.preventDefault(); 
-                
-                // Ambil data dari event yang di-klik
-                let event = info.event;
-                
-                // Buat URL untuk tombol edit
-                // Kita perlu mengambil ID event. Kita akan modifikasi API kita sedikit.
-                let editUrl = `/admin/academic-events/${event.id}/edit`;
-
-                // Format tanggal untuk ditampilkan
-                let startDate = event.start.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-                let endDate = event.end ? new Date(event.end.valueOf() - 1).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : null;
-                let dateString = startDate;
-                if (endDate && startDate !== endDate) {
-                    dateString = `${startDate} - ${endDate}`;
-                }
-
-                // Isi konten modal dengan data event
-                document.getElementById('eventTitle').innerText = event.title;
-                document.getElementById('eventDate').innerText = dateString;
-                document.getElementById('eventDescription').innerText = event.extendedProps.description || 'Tidak ada deskripsi.';
-                document.getElementById('editEventButton').href = editUrl;
-
-                // Tampilkan modal
-                $('#eventDetailModal').modal('show');
-            }
-        });
-        calendar.render();
-    });
-</script>
-@endpush --}}

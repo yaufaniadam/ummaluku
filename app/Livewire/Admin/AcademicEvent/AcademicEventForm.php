@@ -67,7 +67,7 @@ class AcademicEventForm extends Component
         }
 
         $this->dispatch('academic-event-updated');
-        return $this->redirect(route('admin.academic-events.index'), navigate: true);
+        return $this->redirect(route('admin.akademik.academic-events.index'), navigate: true);
     }
 
     public function render()

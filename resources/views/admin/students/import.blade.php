@@ -29,7 +29,7 @@
     @endif
 
     <div class="card">
-        <form action="{{ route('admin.students.import.old') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.akademik.students.import.old') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="card-header"><h3 class="card-title">Formulir Upload</h3></div>
             <div class="card-body">

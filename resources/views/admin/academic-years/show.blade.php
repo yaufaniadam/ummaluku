@@ -3,7 +3,7 @@
 @section('content_header')
     <h1 class="mb-1">Kelola Semester</h1>
     <h5 class="font-weight-light">
-        <a href="{{ route('admin.academic-years.index') }}" wire:navigate>Tahun Ajaran</a> > {{ $academicYear->name }}
+        <a href="{{ route('admin.akademik.academic-years.index') }}" wire:navigate>Tahun Ajaran</a> > {{ $academicYear->name }}
     </h5>
 @stop
 @section('content')
@@ -25,7 +25,7 @@
                             <td>{{ $program->name_id }}</td>
                             <td>
                                 {{-- Link ini akan kita perbaiki di langkah berikutnya --}}
-                                <a href="{{ route('admin.academic-years.programs.course-classes.index', ['academic_year' => $academicYear, 'program' => $program]) }}"
+                                <a href="{{ route('admin.akademik.academic-years.programs.course-classes.index', ['academic_year' => $academicYear, 'program' => $program]) }}"
                                     class="btn btn-primary btn-sm" wire:navigate>
                                     Kelola Kelas
                                 </a>

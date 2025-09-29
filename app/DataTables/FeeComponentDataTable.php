@@ -16,7 +16,7 @@ class FeeComponentDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function (FeeComponent $row) {
-                $editUrl = route('admin.fee-components.edit', $row->id);
+                $editUrl = route('admin.keuangan.fee-components.edit', $row->id);
                 return '<a href="' . $editUrl . '" class="btn btn-primary btn-sm" wire:navigate>Edit</a>';
             })
             ->setRowId('id');
@@ -32,7 +32,7 @@ class FeeComponentDataTable extends DataTable
         return $this->builder()
             ->setTableId('feecomponent-table')
             ->columns($this->getColumns())
-            ->minifiedAjax(route('admin.fee-components.data'))
+            ->minifiedAjax(route('admin.keuangan.fee-components.data'))
             ->dom('Bfrtip')
             ->orderBy(1)
             ->buttons([Button::make('reload')]);

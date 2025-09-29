@@ -316,7 +316,7 @@ return [
         // MENU UTAMA
         [
             'text' => 'Dashboard',
-            'route'  => 'admin.dashboard',
+            'route'  => '',
             'icon' => 'fas fa-fw fa-tachometer-alt',
             'can'    => ['view pmb'],
         ],
@@ -394,25 +394,25 @@ return [
             'submenu' => [
                 [
                     'text' => 'Data Pendaftar',
-                    'route'  => ['admin.pendaftaran.index', 'admin.seleksi.index'],
+                    'route'  => ['', ''],
                     'icon' => 'fas fa-fw fa-users',
                     'can' => 'view pmb',
                 ],
                 [
                     'text' => 'Proses Seleksi',
-                    'route'  => 'admin.seleksi.index',
+                    'route'  => '',
                     'icon' => 'fas fa-fw fa-search',
                     'can' => 'view pmb',
                 ],
                 [
                     'text' => 'Diterima',
-                    'route'  => 'admin.diterima.index',
+                    'route'  => '',
                     'icon' => 'fas fa-fw fa-check',
                     'can' => 'view pmb',
                 ],
                 [
                     'text' => 'Pembayaran Registrasi',
-                    'route'  => 'admin.payment.index',
+                    'route'  => '',
                     'icon' => 'fas fa-fw fa-cash-register',
                     'can' => 'view pmb',
                 ],
@@ -425,13 +425,13 @@ return [
             'submenu' => [
                 [
                     'text' => 'Gelombang',
-                    'route'  => 'admin.gelombang.index', //admin.settings.batch'
+                    'route'  => '', //admin.settings.batch'
                     'icon' => 'fas fa-fw fa-calendar',
                     'can' => 'manage pmb',
                 ],
                 [
                     'text' => 'Jalur Pendaftaran',
-                    'route'  => 'admin.jalur-pendaftaran.index', //admin.settings.category
+                    'route'  => '', //admin.settings.category
                     'icon' => 'fas fa-fw fa-folder',
                     'can' => 'manage pmb',
                 ],

@@ -16,8 +16,8 @@ class TuitionFeeDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function (FeeStructure $row) {
-                $editUrl = route('admin.tuition-fees.edit', $row->id);
-                $deleteUrl = route('admin.tuition-fees.destroy', $row->id);
+                $editUrl = route('admin.keuangan.tuition-fees.edit', $row->id);
+                $deleteUrl = route('admin.keuangan.tuition-fees.destroy', $row->id);
                 $csrf = csrf_field();
                 $method = method_field('DELETE');
 
@@ -56,7 +56,7 @@ class TuitionFeeDataTable extends DataTable
         return $this->builder()
             ->setTableId('tuitionfee-table')
             ->columns($this->getColumns())
-            ->minifiedAjax(route('admin.tuition-fees.data'))
+            ->minifiedAjax(route('admin.keuangan.tuition-fees.data'))
             ->dom('Bfrtip')
             ->orderBy(1)
             ->buttons([Button::make('reload')]);

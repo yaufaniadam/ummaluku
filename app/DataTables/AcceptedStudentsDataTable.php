@@ -18,7 +18,7 @@ class AcceptedStudentsDataTable extends DataTable
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
                 // Membuat tombol aksi untuk setiap baris
-                $viewUrl = route('admin.pendaftaran.show', $row->id);
+                $viewUrl = route('admin.pmb.pendaftaran.show', $row->id);
                 return '<a href="' . $viewUrl . '" class="btn btn-info btn-sm">Lihat Detail</a>';
             })
             ->addColumn('accepted_program', function ($row) {
@@ -48,7 +48,7 @@ class AcceptedStudentsDataTable extends DataTable
                 $invoice = $row->reRegistrationInvoice;
                 // Tombol finalisasi sekarang menjadi form yang hanya aktif jika status lunas
                 if ($invoice && $invoice->status == 'paid') {
-                    $finalizeUrl = route('admin.accepted.finalize', $row->id);
+                    $finalizeUrl = route('admin.pmb.accepted.finalize', $row->id);
                     // $finalizeUrl = route('admin.accepted.finalize', $row->id);
                     return '
                     <form action="' . $finalizeUrl . '" method="POST">

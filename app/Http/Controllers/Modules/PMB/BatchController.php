@@ -33,7 +33,7 @@ class BatchController extends Controller
 
         Batch::create($validated);
 
-        return redirect()->route('admin.gelombang.index')->with('success', 'Gelombang berhasil ditambahkan.');
+        return redirect()->route('admin.pmb.gelombang.index')->with('success', 'Gelombang berhasil ditambahkan.');
     }
 
     public function edit(Batch $gelombang)
@@ -54,12 +54,12 @@ class BatchController extends Controller
 
         $gelombang->update($validated);
 
-        return redirect()->route('admin.gelombang.index')->with('success', 'Gelombang berhasil diperbarui.');
+        return redirect()->route('admin.pmb.gelombang.index')->with('success', 'Gelombang berhasil diperbarui.');
     }
 
     public function destroy(Batch $gelombang)
     {
         $gelombang->delete();
-        return redirect()->route('admin.gelombang.index')->with('success', 'Gelombang berhasil dihapus.');
+        return redirect()->route('admin.pmb.gelombang.index')->with('success', 'Gelombang berhasil dihapus.');
     }
 }

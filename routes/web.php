@@ -49,27 +49,40 @@ use App\DataTables\FeeComponentDataTable;
 
 use App\Http\Controllers\Admin\AcademicEventController;
 use App\DataTables\AcademicEventDataTable;
+use App\Http\Controllers\AcademicCalendarController;
 
-use App\Http\Controllers\Auth\AdminLoginController;
+use App\Http\Controllers\Akademik\AkademikDashboardController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\SDM\SDMDashboardController;
+use App\Http\Controllers\Modules\PMB\PMBDashboardController;
+use App\Http\Controllers\Keuangan\KeuanganDashboardController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::prefix('admin')->middleware(['auth', 'permission:manage pmb'])->name('admin.')->group(function () {
+     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+});
 
-
-
-
-// permission minimal manage pmb/role dir pmb
-Route::prefix('admin')->middleware(['auth:admin', 'permission:manage pmb'])->name('admin.')->group(function () {
-    Route::resource('jalur-pendaftaran', AdmissionCategoryController::class);
-    Route::resource('gelombang', BatchController::class);
-
+Route::prefix('admin/sdm')->middleware(['auth', 'permission:dosen-list'])->name('admin.sdm.')->group(function () {
+    Route::get('/dashboard', [SDMDashboardController::class, 'index'])->name('dashboard');
+    Route::post('lecturers/import', [LecturerController::class, 'import'])->name('lecturers.import');
     Route::resource('lecturers', LecturerController::class);
-
-    // Route khusus untuk menyediakan data ke Yajra DataTables
     Route::get('lecturers-data', function (LecturerDataTable $dataTable) {
         return $dataTable->ajax();
     })->name('lecturers.data');
+});
+
+Route::prefix('admin/keuangan')->middleware(['auth', 'permission:biaya-list'])->name('admin.keuangan.')->group(function () {
+    Route::get('/dashboard', [KeuanganDashboardController::class, 'index'])->name('dashboard');
+    Route::resource('tuition-fees', TuitionFeeController::class);
+    Route::get('tuition-fees-data', function (TuitionFeeDataTable $dataTable) {
+        return $dataTable->ajax();
+    })->name('tuition-fees.data');
+    Route::resource('fee-components', FeeComponentController::class);
+    Route::get('fee-components-data', function (FeeComponentDataTable $dataTable) {
+        return $dataTable->ajax();
+    })->name('fee-components.data');
 });
 
 //akses untuk user login ke profil
@@ -77,32 +90,59 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
     Route::get('notifications/get', [NotificationsController::class, 'getNotificationsData'])->name('notifications.get');
-    // TAMBAHKAN ROUTE-ROUTE INI
     Route::get('notifications/show', [NotificationsController::class, 'showAll'])->name('notifications.show');
     Route::post('notifications/{id}/mark-as-read', [NotificationsController::class, 'markAsRead'])->name('notifications.markAsRead');
-    Route::post('notifications/mark-all-as-read', [NotificationsController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+    Route::post('notifications/mark-all-as-read', [NotificationsController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');    
+    Route::get('/kalender-akademik', [AcademicCalendarController::class, 'index'])->name('calendar.index');
+    Route::get('/api/academic-events', [AcademicEventController::class, 'feed'])->name('api.academic-events.feed');
 });
 
-Route::prefix('admin')->middleware(['auth:admin', 'permission:view pmb'])->name('admin.')->group(function () {
 
+Route::prefix('admin/akademik')->middleware(['auth'])->name('admin.akademik.')->group(function () {
+    Route::get('/dashboard', [AkademikDashboardController::class, 'index'])->name('dashboard');  
+    Route::resource('curriculums', CurriculumController::class);
+    Route::get('curriculums-data', function (CurriculumDataTable $dataTable) {
+        return $dataTable->ajax();
+    })->name('curriculums.data');
+    Route::resource('curriculums.courses', CourseController::class)->except(['show']);
+    Route::get('curriculums/{curriculum}/courses-data', function (CourseDataTable $dataTable, $curriculum) {
+        return $dataTable->with('curriculum_id', $curriculum)->ajax();
+    })->name('curriculums.courses.data');
+    Route::resource('academic-years', AcademicYearController::class);
+    Route::get('academic-years-data', function (AcademicYearDataTable $dataTable) {
+        return $dataTable->ajax();
+    })->name('academic-years.data');
+    Route::resource('academic-years.programs.course-classes', CourseClassController::class)->except(['show']);
+    Route::get('academic-years/{academic_year}/programs/{program}/course-classes-data', function (CourseClassDataTable $dataTable, AcademicYear $academic_year, Program $program) {
+        $dataTable->academic_year_id = $academic_year->id;
+        $dataTable->program_id = $program->id;
+        return $dataTable->ajax();
+    })->name('academic-years.programs.course-classes.data');
+    Route::post('curriculums/{curriculum}/courses/import', [CourseController::class, 'import'])->name('curriculums.courses.import');
+    Route::resource('curriculums.courses', CourseController::class)->except(['show']);
+    Route::get('students/import', [StudentController::class, 'showImportForm'])->name('students.import.form');
+    Route::post('students/import', [StudentController::class, 'importOld'])->name('students.import.old');
+    Route::resource('students', StudentController::class);
+    Route::get('students-data', function (StudentDataTable $dataTable) {
+        return $dataTable->ajax();
+    })->name('students.data');   
+    Route::resource('academic-events', AcademicEventController::class);
+    Route::get('academic-events-data', function (AcademicEventDataTable $dataTable) {
+        return $dataTable->ajax();
+    })->name('academic-events.data');
 
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('dashboard');
+});
 
-    Route::get('/dashboard/admisi', function () {
-        return "dashboard admisi";
-    })->name('dashboard.admisi');
+// permission minimal manage pmb/role dir pmb
+Route::prefix('admin/pmb')->middleware(['auth', 'permission:manage pmb'])->name('admin.pmb.')->group(function () {
+    Route::resource('jalur-pendaftaran', AdmissionCategoryController::class);
+    Route::resource('gelombang', BatchController::class); 
+});
 
-    Route::get('/dashboard/akademik', function () {
-        return "dashboard akademik";
-    })->name('dashboard.akademik');
-
-    Route::get('/dashboard/kepegawaian', function () {
-        return "dashboard kepegawaian";
-    })->name('dashboard.kepegawaian');
+// akses untuk user dengan permission view pmb
+Route::prefix('admin/pmb')->middleware(['auth', 'permission:view pmb'])->name('admin.pmb.')->group(function () {
+    Route::get('/dashboard', [PMBDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/pendaftaran', [AdminPendaftaranController::class, 'index'])->name('pendaftaran.index');
     Route::get('/pendaftaran/{application}', PendaftaranShow::class)->name('pendaftaran.show');
@@ -123,67 +163,7 @@ Route::prefix('admin')->middleware(['auth:admin', 'permission:view pmb'])->name(
     // finalisasi pendaftaran
     Route::post('/diterima/{application}/finalize', [FinalizeRegistrationController::class, 'finalize'])->name('accepted.finalize');
 
-    //mahasiswa
-
-    Route::resource('curriculums', CurriculumController::class);
-    Route::get('curriculums-data', function (CurriculumDataTable $dataTable) {
-        return $dataTable->ajax();
-    })->name('curriculums.data');
-
-    Route::resource('curriculums.courses', CourseController::class)->except(['show']);
-    Route::get('curriculums/{curriculum}/courses-data', function (CourseDataTable $dataTable, $curriculum) {
-        return $dataTable->with('curriculum_id', $curriculum)->ajax();
-    })->name('curriculums.courses.data');
-
-    Route::resource('academic-years', AcademicYearController::class);
-    Route::get('academic-years-data', function (AcademicYearDataTable $dataTable) {
-        return $dataTable->ajax();
-    })->name('academic-years.data');
-
-    Route::resource('academic-years.programs.course-classes', CourseClassController::class)->except(['show']);
-    Route::get('academic-years/{academic_year}/programs/{program}/course-classes-data', function (CourseClassDataTable $dataTable, AcademicYear $academic_year, Program $program) {
-        $dataTable->academic_year_id = $academic_year->id;
-        $dataTable->program_id = $program->id;
-        return $dataTable->ajax();
-    })->name('academic-years.programs.course-classes.data');
-
-    //import dosen
-    Route::post('lecturers/import', [LecturerController::class, 'import'])->name('lecturers.import');
-
-    Route::post('curriculums/{curriculum}/courses/import', [CourseController::class, 'import'])->name('curriculums.courses.import');
-    Route::resource('curriculums.courses', CourseController::class)->except(['show']);
-
-    Route::get('students/import', [StudentController::class, 'showImportForm'])->name('students.import.form');
-    Route::post('students/import', [StudentController::class, 'importOld'])->name('students.import.old');
-    Route::resource('students', StudentController::class);
-    Route::get('students-data', function (StudentDataTable $dataTable) {
-        return $dataTable->ajax();
-    })->name('students.data');
-
-    Route::resource('tuition-fees', TuitionFeeController::class);
-    Route::get('tuition-fees-data', function (TuitionFeeDataTable $dataTable) {
-        return $dataTable->ajax();
-    })->name('tuition-fees.data');
-
-    Route::resource('fee-components', FeeComponentController::class);
-    Route::get('fee-components-data', function (FeeComponentDataTable $dataTable) {
-        return $dataTable->ajax();
-    })->name('fee-components.data');
-
-    Route::resource('academic-events', AcademicEventController::class);
-    Route::get('academic-events-data', function (AcademicEventDataTable $dataTable) {
-        return $dataTable->ajax();
-    })->name('academic-events.data');
-
-    Route::get('login', [AdminLoginController::class, 'showLoginForm'])->name('login');
-    Route::post('login', [AdminLoginController::class, 'login']);
-    Route::post('logout', [AdminLoginController::class, 'logout'])->name('logout');
-
-});
-
-
-    Route::get('/api/academic-events', [AcademicEventController::class, 'feed'])->name('api.academic-events.feed');
-
+  });
 
 // Untuk Calon Mahasiswa
 Route::middleware('auth', 'role:Camaru')->group(function () {
@@ -201,10 +181,10 @@ Route::middleware('auth', 'role:Camaru')->group(function () {
 use App\Http\Controllers\Mahasiswa\KrsController;
 use App\Http\Controllers\Mahasiswa\DashboardController;
 
-// Route::prefix('akademik')->middleware(['auth', 'role:Mahasiswa'])->name('akademik.')->group(function () {
-//     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-//     Route::get('krs', [KrsController::class, 'index'])->name('krs.index');
-// });
+Route::prefix('akademik')->middleware(['auth', 'role:Mahasiswa'])->name('akademik.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('krs', [KrsController::class, 'index'])->name('krs.index');
+});
 
 Route::middleware(['auth', 'role:Mahasiswa'])->prefix('mahasiswa')->name('mahasiswa.')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'); // <-- Route ini
@@ -217,7 +197,11 @@ use App\Http\Controllers\Dosen\KrsApprovalController;
 use App\Http\Controllers\Dosen\AdvisedStudentController;
 use App\Http\Controllers\Dosen\GradeInputController;
 
-Route::middleware(['auth:admin', 'role:Dosen'])->prefix('dosen')->name('dosen.')->group(function () {
+Route::middleware(['auth', 'role:Dosen'])->prefix('dosen')->name('dosen.')->group(function () {
+
+    Route::get('/dosen/dashboard', fn () => 'Dashboard Dosen')
+    ->name('dosen.dashboard');
+
     Route::get('krs-approval', [KrsApprovalController::class, 'index'])->name('krs-approval.index');
     Route::get('dashboard', [DosenDashboardController::class, 'index'])->name('dashboard');
     Route::get('krs-approval', [KrsApprovalController::class, 'index'])->name('krs-approval.index');

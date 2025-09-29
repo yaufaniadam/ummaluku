@@ -20,7 +20,7 @@
             <div class="card-header">
                 <h3 class="card-title">Daftar Semua Jenis Biaya</h3>
                <div class="card-tools">
-                    <a href="{{ route('admin.fee-components.create') }}" class="btn btn-primary btn-sm" wire:navigate>Tambah Komponen Baru</a>
+                    <a href="{{ route('admin.keuangan.fee-components.create') }}" class="btn btn-primary btn-sm" wire:navigate>Tambah Komponen Baru</a>
                 </div>
             </div>
             <div class="card-body">

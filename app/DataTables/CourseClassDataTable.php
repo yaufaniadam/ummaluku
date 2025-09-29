@@ -19,7 +19,7 @@ class CourseClassDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function (CourseClass $row) {
-                $editUrl = route('admin.academic-years.programs.course-classes.edit', [
+                $editUrl = route('admin.akademik.academic-years.programs.course-classes.edit', [
                     'academic_year' => $row->academic_year_id,
                     'program' => $this->program_id,
                     'course_class' => $row->id
@@ -50,7 +50,7 @@ class CourseClassDataTable extends DataTable
         return $this->builder()
             ->setTableId('courseclass-table')
             ->columns($this->getColumns())
-            ->minifiedAjax(route('admin.academic-years.programs.course-classes.data', [
+            ->minifiedAjax(route('admin.akademik.academic-years.programs.course-classes.data', [
                 'academic_year' => $this->academic_year_id,
                 'program' => $this->program_id
             ]))

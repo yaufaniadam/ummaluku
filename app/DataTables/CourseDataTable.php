@@ -21,13 +21,13 @@ class CourseDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function (Course $row) {
-                $editUrl = route('admin.curriculums.courses.edit', ['curriculum' => $row->curriculum_id, 'course' => $row->id]);
+                $editUrl = route('admin.akademik.curriculums.courses.edit', ['curriculum' => $row->curriculum_id, 'course' => $row->id]);
 
                 // Event untuk memicu modal hapus
                 $deleteEvent = "Livewire.dispatch('confirm-delete-course', { course: {$row->id} })";
 
                 $buttons = '<a href="' . $editUrl . '" class="btn btn-primary btn-sm" wire:navigate>Edit</a> ';
-                $buttons .= '<button onclick="' . $deleteEvent . '" class="btn btn-danger btn-sm">Hapus</button>';
+                // $buttons .= '<button onclick="' . $deleteEvent . '" class="btn btn-danger btn-sm">Hapus</button>';
 
                 return $buttons;
             })
@@ -61,7 +61,7 @@ class CourseDataTable extends DataTable
             ->setTableId('course-table')
             ->columns($this->getColumns())
             // Pastikan URL AJAX selalu benar saat halaman di-load
-            ->minifiedAjax(route('admin.curriculums.courses.data', ['curriculum' => $curriculumId]))
+            ->minifiedAjax(route('admin.akademik.curriculums.courses.data', ['curriculum' => $curriculumId]))
             ->dom('Bfrtip')
             ->orderBy(1)
             ->buttons([

@@ -21,7 +21,7 @@ class ApplicationsDataTable extends DataTable
             ->addIndexColumn() // Menambahkan kolom nomor urut
             ->addColumn('action', function ($row) {
                 // Membuat tombol aksi untuk setiap baris
-                $viewUrl = route('admin.pendaftaran.show', $row->id);
+                $viewUrl = route('admin.pmb.pendaftaran.show', $row->id);
                 $button = ''; // Initialize an empty string for the button
 
                 // Only show the "Lihat Detail" button if the status is 'menunggu_verifikasi'
@@ -32,7 +32,7 @@ class ApplicationsDataTable extends DataTable
             })
             ->editColumn('prospective.user.name', function ($row) {
                 // Membuat nama pendaftar bisa diklik dan mengarah ke detail
-                return '<a href="' . route('admin.pendaftaran.show', $row->id) . '">' . $row->prospective->user->name . '</a>';
+                return '<a href="' . route('admin.pmb.pendaftaran.show', $row->id) . '">' . $row->prospective->user->name . '</a>';
             })
             ->editColumn('status', function ($row) {
                 // Mengubah tampilan status menjadi badge

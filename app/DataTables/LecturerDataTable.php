@@ -16,7 +16,7 @@ class LecturerDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function(Lecturer $row){
-                $editUrl = route('admin.lecturers.edit', $row->id);
+                $editUrl = route('admin.sdm.lecturers.edit', $row->id);
                 $toggleStatusEvent = "Livewire.dispatch('confirm-toggle-status', { lecturer: {$row->id} })";
                 $deleteEvent = "Livewire.dispatch('confirm-delete', { lecturer: {$row->id} })";
 
@@ -64,7 +64,7 @@ class LecturerDataTable extends DataTable
         return $this->builder()
                     ->setTableId('lecturer-table')
                     ->columns($this->getColumns())
-                    ->minifiedAjax(route('admin.lecturers.data'))
+                    ->minifiedAjax(route('admin.sdm.lecturers.data'))
                     ->dom('Bfrtip')
                     ->orderBy(1)
                     ->buttons([

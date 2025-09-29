@@ -9,7 +9,7 @@
 @section('content')
     <div class="card">
         {{-- Arahkan form ke route store untuk menyimpan data baru --}}
-        <form action="{{ route('admin.gelombang.update', $batch) }}" method="POST">
+        <form action="{{ route('admin.pmb.gelombang.update', $batch) }}" method="POST">
             @csrf
             @method('PUT')  {{-- supaya bisa submit --}}
             <div class="card-body">
@@ -18,7 +18,7 @@
                 @include('admin.pmb.batches._form')
             </div>
             <div class="card-footer">
-                <a href="{{ route('admin.gelombang.index') }}" class="btn btn-secondary">Batal</a>
+                <a href="{{ route('admin.pmb.gelombang.index') }}" class="btn btn-secondary">Batal</a>
                 <button type="submit" class="btn btn-primary">Simpan</button>
             </div>
         </form>

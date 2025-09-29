@@ -20,7 +20,7 @@
                 <div class="modal-footer">
                     {{-- Tombol Hapus sekarang memanggil method Livewire --}}
                     <button type="button" class="btn btn-secondary" wire:click="closeModals">Tutup</button>
-                    <a href="{{ route('admin.academic-events.edit', $academicEvent->id) }}" class="btn btn-primary" wire:navigate>Edit Event</a>
+                    <a href="{{ route('admin.akademik.academic-events.edit', $academicEvent->id) }}" class="btn btn-primary" wire:navigate>Edit Event</a>
                     <button type="button" class="btn btn-danger" wire:click="confirmDelete">Hapus</button>
                 </div>
             </div>

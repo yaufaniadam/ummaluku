@@ -11,7 +11,7 @@
         <div class="card-header">
             <h3 class="card-title">Daftar Kurikulum</h3>
             <div class="card-tools">
-                <a href="{{ route('admin.curriculums.create') }}" class="btn btn-primary btn-sm" wire:navigate>Tambah Kurikulum Baru</a>
+                <a href="{{ route('admin.akademik.curriculums.create') }}" class="btn btn-primary btn-sm" wire:navigate>Tambah Kurikulum Baru</a>
             </div>
         </div>
         <div class="card-body">

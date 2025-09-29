@@ -97,7 +97,7 @@ class CourseController extends Controller
         }
 
         // Redirect kembali ke halaman daftar MK untuk kurikulum yang sama
-        return redirect()->route('admin.curriculums.courses.index', $curriculum->id)
+        return redirect()->route('admin.akademik.curriculums.courses.index', $curriculum->id)
                          ->with('success', 'Data mata kuliah berhasil diimpor!');
     }
 }

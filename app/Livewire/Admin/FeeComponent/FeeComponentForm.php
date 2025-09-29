@@ -44,7 +44,7 @@ class FeeComponentForm extends Component
         }
 
         $this->dispatch('fee-component-updated');
-        return $this->redirect(route('admin.fee-components.index'), navigate: true);
+        return redirect(route('admin.keuangan.fee-components.index'));
     }
 
     public function render()

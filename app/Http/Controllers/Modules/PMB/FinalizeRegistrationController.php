@@ -50,7 +50,7 @@ class FinalizeRegistrationController extends Controller
             return back()->with('error', 'Terjadi kesalahan saat finalisasi: ' . $e->getMessage());
         }
 
-        return redirect()->route('admin.diterima.index')->with('success', 'Mahasiswa berhasil difinalisasi dan NIM telah dibuat.');
+        return redirect()->route('admin.pmb.diterima.index')->with('success', 'Mahasiswa berhasil difinalisasi dan NIM telah dibuat.');
     }
 
     /**
