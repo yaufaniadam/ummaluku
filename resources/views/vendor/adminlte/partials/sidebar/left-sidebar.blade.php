@@ -247,6 +247,71 @@
                      
                     @endif
 
+                    {{-- ================================================= --}}
+                    {{-- MENU UNTUK PORTAL DOSEN --}}
+                    {{-- ================================================= --}}
+                    @if (auth()->user()->hasRole('Dosen'))
+                        <li class="nav-header">PORTAL DOSEN</li>
+
+                  
+                            <li class="nav-item">
+                                <a href="{{ route('dosen.dashboard') }}"
+                                    class="nav-link {{ request()->routeIs('dosen.dashboard') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>Dashboard</p>
+                                </a>
+                            </li>
+                             <li class="nav-item">
+                                <a href="{{ route('dosen.advised-students.index') }}"
+                                    class="nav-link {{ request()->routeIs('dosen.advised-students.index') ? 'active' : '' }}">
+                                    <i class="nav-icon fas  fa-users"></i>
+                                    <p>Mahasiswa Bimbingan</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('dosen.krs-approval.index') }}"
+                                    class="nav-link {{ request()->routeIs('dosen.krs-approval.index') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-check-square"></i>
+                                    <p>Persetujuan KRS</p>
+                                </a>
+                            </li>
+                            {{-- <li class="nav-item">
+                                <a href=""
+                                    class="nav-link">
+                                    <i class="nav-icon fas fa-calendar-alt"></i>
+                                    <p>Jadwal Perkuliahan</p>
+                                </a>
+                            </li> --}}
+                           
+                            <li class="nav-item">
+                                <a href="{{ route('dosen.grades.input.index') }}"
+                                    class="nav-link {{ request()->routeIs('dosen.grades.input.index') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-edit"></i>
+                                    <p>Input Nilai</p>
+                                </a>
+                            </li>
+
+                             <li class="nav-item">
+                                <a href="{{ route('calendar.index') }}"
+                                    class="nav-link {{ request()->routeIs('calendar.index') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-calendar-alt"></i>
+                                    <p>Kalender Akademik</p>
+                                </a>
+                            </li>
+                           
+                      
+
+                        {{-- Contoh untuk nanti jika sudah jadi mahasiswa --}}
+                        {{-- @can('fill krs')
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-edit"></i>
+                                <p>Isi KRS</p>
+                            </a>
+                        </li>
+                        @endcan --}}
+                    @endif
+
 
                     {{-- ================================================= --}}
                     {{-- MENU UNTUK PORTAL MAHASISWA --}}
@@ -281,15 +346,16 @@
             </ul>
         </nav>
 
+        @if (auth()->user()->hasRole('Camaru') )
         <nav class="pt-2">
             <ul class="nav nav-pills nav-sidebar flex-column {{ config('adminlte.classes_sidebar_nav', '') }}"
                 data-widget="treeview" role="menu"
                 @if (config('adminlte.sidebar_nav_animation_speed') != 300) data-animation-speed="{{ config('adminlte.sidebar_nav_animation_speed') }}" @endif
                 @if (!config('adminlte.sidebar_nav_accordion')) data-accordion="false" @endif>
-                {{-- Configured sidebar links --}}
                 @each('adminlte::partials.sidebar.menu-item', $adminlte->menu('sidebar'), 'item')
             </ul>
         </nav>
+         @endif
     </div>
 
 </aside>

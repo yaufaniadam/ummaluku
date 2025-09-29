@@ -17,7 +17,7 @@ class RolePermissionSeeder extends Seeder
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         // === 1. BUAT PERMISSIONS YANG SPESIFIK/MIKRO ===
-        $permissions = [
+        $adminPermissions = [
             // Dashboard
             'view-executive-dashboard',
             // Settings
@@ -60,10 +60,7 @@ class RolePermissionSeeder extends Seeder
             'krs-approve',
             // Input Nilai
             'nilai-input',
-            // Hak akses dasar Mahasiswa
-            'mahasiswa-krs-fill',
-            'mahasiswa-khs-view',
-
+            
             // MODUL PENDAFTARAN MAHASISWA BARU (PMB)
 
             // Dasbor & Laporan
@@ -89,21 +86,35 @@ class RolePermissionSeeder extends Seeder
             'upload own documents',
         ];
 
-        foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+        foreach ($adminPermissions as $permission) {
+            Permission::create(['name' => $permission, 'guard_name' => 'admin']);
         }
 
+        // Permissions untuk guard 'web' (Mahasiswa & Camaru)
+        $webPermissions = [
+            'mahasiswa-krs-fill',
+            'mahasiswa-khs-view',
+            'access applicant portal',
+            'update own biodata',
+            'upload own documents',
+        ];
+        
+        foreach ($webPermissions as $permission) {
+            Permission::create(['name' => $permission, 'guard_name' => 'web']);
+        }
+
+
         // === 2. BUAT ROLES ANDA ===
-        $superAdminRole = Role::create(['name' => 'Super Admin']); // Super Admin secara otomatis mendapat semua izin via Gate
-        $eksekutifRole = Role::create(['name' => 'Eksekutif']);
-        $dirAkademikRole = Role::create(['name' => 'Direktur Akademik']);
-        $stafAkademikRole = Role::create(['name' => 'Staf Akademik']);
-        $dirAdmisiRole = Role::create(['name' => 'Direktur Admisi']);
-        $stafAdmisiRole = Role::create(['name' => 'Staf Admisi']);
-        $dirSdmRole = Role::create(['name' => 'Direktur SDM']);
-        $stafSdmRole = Role::create(['name' => 'Staf SDM']);
-        $dosenRole = Role::create(['name' => 'Dosen']);
-        $tendikRole = Role::create(['name' => 'Tendik']);
+        $superAdminRole = Role::create(['name' => 'Super Admin', 'guard_name' => 'admin']);
+        $eksekutifRole = Role::create(['name' => 'Eksekutif', 'guard_name' => 'admin']);
+        $dirAkademikRole = Role::create(['name' => 'Direktur Akademik', 'guard_name' => 'admin']);
+        $stafAkademikRole = Role::create(['name' => 'Staf Akademik', 'guard_name' => 'admin']);
+        $dirAdmisiRole = Role::create(['name' => 'Direktur Admisi', 'guard_name' => 'admin']);
+        $stafAdmisiRole = Role::create(['name' => 'Staf Admisi', 'guard_name' => 'admin']);
+        $dirSdmRole = Role::create(['name' => 'Direktur SDM', 'guard_name' => 'admin']);
+        $stafSdmRole = Role::create(['name' => 'Staf SDM', 'guard_name' => 'admin']);
+        $dosenRole = Role::create(['name' => 'Dosen', 'guard_name' => 'admin']);
+        $tendikRole = Role::create(['name' => 'Tendik', 'guard_name' => 'admin']);
         $mahasiswaRole = Role::create(['name' => 'Mahasiswa']);
         $camaruRole = Role::create(['name' => 'Camaru']);
 
@@ -236,6 +247,18 @@ class RolePermissionSeeder extends Seeder
             'email' => 'staf.sdm@ummaluku.ac.id',
             'password' => Hash::make('password'),
         ])->assignRole($stafSdmRole);
+
+        User::create([
+            'name' => 'Direktur Admisi',
+            'email' => 'dir.admisi@ummaluku.ac.id',
+            'password' => Hash::make('password'),
+        ])->assignRole($dirAdmisiRole);
+
+        User::create([
+            'name' => 'Staf Admisi',
+            'email' => 'staf.admisi@ummaluku.ac.id',
+            'password' => Hash::make('password'),
+        ])->assignRole($stafAdmisiRole);
 
         // User::create([
         //     'name' => 'Dosen Contoh',
