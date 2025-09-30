@@ -39,7 +39,7 @@ class CourseClassForm extends Component
         $this->lecturers = Lecturer::orderBy('full_name_with_degree')->get();
 
         // Dropdown sekarang hanya menampilkan MK dari prodi yang relevan
-        $this->courses = Course::whereHas('curriculum', function ($query) {
+        $this->courses = Course::whereHas('curriculums', function ($query) {
             $query->where('program_id', $this->program->id);
         })->orderBy('name')->get();
 

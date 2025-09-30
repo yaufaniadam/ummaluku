@@ -15,8 +15,6 @@ class StudentController extends Controller
 {
     public function index(StudentDataTable $dataTable)
     {
-        // Untuk saat ini, kita hanya menampilkan tabel.
-        // Nanti bisa ditambahkan filter prodi, tahun masuk, dll.
         return $dataTable->render('admin.students.index');
     }
 

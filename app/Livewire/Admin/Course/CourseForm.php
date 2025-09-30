@@ -3,13 +3,13 @@
 namespace App\Livewire\Admin\Course;
 
 use App\Models\Course;
-use App\Models\Curriculum;
+
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class CourseForm extends Component
 {
-    public Curriculum $curriculum;
+
     public ?Course $course = null;
 
     // Properti untuk form fields
@@ -19,9 +19,9 @@ class CourseForm extends Component
     public $semester_recommendation;
     public $type;
 
-    public function mount(Curriculum $curriculum, Course $course = null)
+    public function mount( Course $course = null)
     {
-        $this->curriculum = $curriculum;
+ 
         if ($course->exists) {
             $this->course = $course;
             // Isi properti form dengan data yang ada
@@ -53,7 +53,7 @@ class CourseForm extends Component
         $this->validate();
 
         $data = [
-            'curriculum_id' => $this->curriculum->id,
+
             'code' => strtoupper($this->code),
             'name' => $this->name,
             'sks' => $this->sks,
@@ -75,7 +75,7 @@ class CourseForm extends Component
         $this->dispatch('course-updated');
 
         // Redirect kembali ke halaman daftar mata kuliah untuk kurikulum ini
-        return redirect(route('admin.akademik.curriculums.courses.index', $this->curriculum->id));
+        return redirect(route('admin.akademik.courses.index'));
     }
 
     public function render()

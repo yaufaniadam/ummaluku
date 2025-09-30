@@ -21,17 +21,28 @@ class CourseDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function (Course $row) {
-                $editUrl = route('admin.akademik.curriculums.courses.edit', ['curriculum' => $row->curriculum_id, 'course' => $row->id]);
-
-                // Event untuk memicu modal hapus
-                $deleteEvent = "Livewire.dispatch('confirm-delete-course', { course: {$row->id} })";
+                $editUrl = route(
+                    'admin.akademik.courses.edit',
+                    ['curriculum' => $row->curriculum_id, 'course' => $row->id]
+                );
 
                 $buttons = '<a href="' . $editUrl . '" class="btn btn-primary btn-sm" wire:navigate>Edit</a> ';
-                // $buttons .= '<button onclick="' . $deleteEvent . '" class="btn btn-danger btn-sm">Hapus</button>';
 
                 return $buttons;
             })
-            ->setRowId('id');
+            ->addColumn('program', function (Course $row) {
+                // Jika program_id ada, tampilkan nama prodi. Jika tidak, tampilkan 'Universitas'.
+                return $row->program->name_id ?? '<span class="badge badge-secondary">Universitas</span>';
+            })
+            ->rawColumns(['action', 'program'])
+            ->filterColumn('program', function ($query, $keyword) {
+                if ($keyword === 'universitas') {
+                    $query->whereNull('program_id')->orWhere('program_id', 0);
+                } elseif (!empty($keyword)) {
+                    $query->where('program_id', $keyword);
+                }
+            });
+        // ->setRowId('id');
     }
 
     /**
@@ -39,14 +50,19 @@ class CourseDataTable extends DataTable
      */
     public function query(Course $model): QueryBuilder
     {
-        // ====================== PERBAIKAN UTAMA DI SINI ======================
-        // Mengambil 'curriculum' dari parameter route yang aktif saat ini.
-        // Ini memastikan query SELALU menggunakan ID kurikulum yang benar,
-        // bahkan saat di-reload melalui AJAX.
-        $curriculumId = $this->request()->route('curriculum');
+        return $model->newQuery()->with('program')
+            ->when($this->request()->get('program_id'), function ($query, $programId) {
+                // Jika programId adalah string kosong, jangan lakukan apa-apa
+                if ($programId === '') {
+                    return;
+                }
 
-        return $model->newQuery()->where('curriculum_id', $curriculumId);
-        // ====================================================================
+                if ($programId === 'universitas') {
+                    return $query->whereNull('program_id');
+                }
+
+                return $query->where('program_id', $programId);
+            });
     }
 
     /**
@@ -61,9 +77,9 @@ class CourseDataTable extends DataTable
             ->setTableId('course-table')
             ->columns($this->getColumns())
             // Pastikan URL AJAX selalu benar saat halaman di-load
-            ->minifiedAjax(route('admin.akademik.curriculums.courses.data', ['curriculum' => $curriculumId]))
+            ->minifiedAjax(route('admin.akademik.courses.data'))
             ->dom('Bfrtip')
-            ->orderBy(1)
+            ->orderBy(4, 'asc')
             ->buttons([
                 Button::make('excel'),
                 Button::make('csv'),
@@ -77,11 +93,12 @@ class CourseDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id')->width(50),
+            //  Column::make('id')->width(50),
             Column::make('code')->title('Kode MK'),
             Column::make('name')->title('Nama Mata Kuliah'),
             Column::make('sks'),
             Column::make('semester_recommendation')->title('Semester'),
+            Column::computed('program')->title('Cakupan/Prodi'),
             Column::make('type')->title('Jenis'),
             Column::computed('action')
                 ->exportable(false)

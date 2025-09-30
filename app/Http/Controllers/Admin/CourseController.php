@@ -5,26 +5,22 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use Illuminate\Http\Request;
-use App\Models\Curriculum; 
+use App\Models\Curriculum;
 use App\DataTables\CourseDataTable;
 use App\Imports\CoursesImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
+use App\Models\Program;
 
 class CourseController extends Controller
 {
-    /**
+    /**     
      * Display a listing of the resource.
      */
-    public function index(CourseDataTable $dataTable, Curriculum $curriculum)
+    public function index(CourseDataTable $dataTable)
     {
-        // 1. Set properti publiknya secara langsung
-        $dataTable->curriculum_id = $curriculum->id;
-
-        // 2. Render view seperti biasa
-        return $dataTable->render('admin.courses.index', [
-            'curriculum' => $curriculum
-        ]);
+        $programs = Program::orderBy('name_id')->get();
+        return $dataTable->render('admin.courses.index', compact('programs'));
     }
 
 
@@ -78,26 +74,33 @@ class CourseController extends Controller
         //
     }
 
-    public function import(Request $request, Curriculum $curriculum)
+    public function import(Request $request)
     {
         $request->validate([
+            'program_id' => 'required|numeric',
             'import_file' => 'required|file|mimes:xlsx,xls,csv'
         ]);
 
         try {
-            // Kirim ID kurikulum ke dalam importer saat diinisiasi
-            Excel::import(new CoursesImport($curriculum->id), $request->file('import_file'));
+            Excel::import(new CoursesImport($request->program_id), $request->file('import_file'));
         } catch (ValidationException $e) {
             $failures = $e->failures();
             $errorMessages = [];
             foreach ($failures as $failure) {
-                 $errorMessages[] = 'Baris ' . $failure->row() . ': ' . implode(', ', $failure->errors());
+                $errorMessages[] = 'Baris ' . $failure->row() . ': ' . implode(', ', $failure->errors());
             }
             return back()->with('import_errors', $errorMessages);
         }
 
-        // Redirect kembali ke halaman daftar MK untuk kurikulum yang sama
-        return redirect()->route('admin.akademik.curriculums.courses.index', $curriculum->id)
-                         ->with('success', 'Data mata kuliah berhasil diimpor!');
+        return redirect()->route('admin.akademik.courses.index')
+            ->with('success', 'Data mata kuliah berhasil diimpor!');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->ids;
+        Course::whereIn('id', $ids)->delete();
+
+        return response()->json(['success' => true]);
     }
 }

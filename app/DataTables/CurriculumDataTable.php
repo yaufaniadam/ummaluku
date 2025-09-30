@@ -17,11 +17,11 @@ class CurriculumDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('action', function (Curriculum $row) {
                 // Tombol "Kelola Mata Kuliah" akan kita fungsikan nanti
-                $manageCoursesUrl = route('admin.akademik.curriculums.courses.index', $row->id);
-                $editUrl = route('admin.akademik.curriculums.edit', $row->id);
+                $manageCoursesUrl = route('admin.akademik.curriculums.manage-courses', $row->id);
+                //$editUrl = route('admin.akademik.curriculums.edit', $row->id);
 
                 $buttons = '<a href="' . $manageCoursesUrl . '" class="btn btn-info btn-sm">Kelola MK</a> ';
-                $buttons .= '<a href="' . $editUrl . '" class="btn btn-primary btn-sm" wire:navigate>Edit</a> ';
+                //$buttons .= '<a href="' . $editUrl . '" class="btn btn-primary btn-sm" wire:navigate>Edit</a> ';
                 // $buttons .= '<button class="btn btn-danger btn-sm">Hapus</button>'; // Akan kita fungsikan nanti
 
                 return $buttons;

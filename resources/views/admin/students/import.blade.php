@@ -38,7 +38,7 @@
                     <input type="file" name="import_file" class="form-control-file" id="import_file" required>
                 </div>
                 <p class="mt-3"><strong>Penting:</strong> Pastikan file Excel Anda memiliki kolom header sesuai template. 
-                    {{-- <a href="#">Download Template</a> --}}
+                    <a href="#">Download Template</a>
                 </p>
             </div>
             <div class="card-footer">

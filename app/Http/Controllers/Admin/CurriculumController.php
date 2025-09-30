@@ -12,7 +12,7 @@ class CurriculumController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(CurriculumDataTable $dataTable) // <-- Tambahkan parameter
+    public function index(CurriculumDataTable $dataTable) 
     {
         return $dataTable->render('admin.curriculums.index');
     }   

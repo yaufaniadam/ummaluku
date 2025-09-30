@@ -17,6 +17,22 @@ class DashboardController extends Controller
                           
         $activeSemester = AcademicYear::where('is_active', true)->first();
 
+        // ====================== LOGIKA BARU UNTUK CEK PROFIL ======================
+        $isProfileComplete = true;
+        $prospectiveData = $student->user->prospective;
+
+        // Tentukan kolom apa saja yang wajib diisi.
+        // Jika salah satu dari kolom ini kosong, profil dianggap belum lengkap.
+        if (
+            empty($prospectiveData->nik) ||
+            empty($prospectiveData->birth_place) ||
+            empty($prospectiveData->address) ||
+            empty($prospectiveData->father_name)
+        ) {
+            $isProfileComplete = false;
+        }
+        // =======================================================================
+
         // Menentukan Status KRS
         $krsStatus = 'Periode KRS Belum Dibuka';
         $krsStatusClass = 'secondary'; // Warna badge
@@ -57,7 +73,8 @@ class DashboardController extends Controller
             'krsStatusClass',
             'currentSemester',
             'totalSks',
-            'ipk'
+            'ipk',
+            'isProfileComplete' 
         ));
     }
 }

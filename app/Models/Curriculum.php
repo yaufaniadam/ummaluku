@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class Curriculum extends Model
 {
@@ -23,7 +25,7 @@ class Curriculum extends Model
      *
      * @var string
      */
-    protected $table = 'curriculums'; 
+    protected $table = 'curriculums';
 
     /**
      * Get the program that owns the curriculum.
@@ -36,8 +38,9 @@ class Curriculum extends Model
     /**
      * Get the courses for the curriculum.
      */
-    public function courses(): HasMany
+    public function courses(): BelongsToMany
     {
-        return $this->hasMany(Course::class);
+        return $this->belongsToMany(Course::class, 'curriculum_course')
+                ->withPivot('semester', 'type');
     }
 }

@@ -28,12 +28,7 @@ class RolePermissionSeeder extends Seeder
             'role-create',
             'role-edit',
             'role-delete',
-            // Dosen
-            'dosen-list',
-            'dosen-create',
-            'dosen-edit',
-            'dosen-delete',
-            'dosen-import',
+            
             // Mahasiswa (Admin)
             'mahasiswa-list',
             'mahasiswa-create',
@@ -108,6 +103,22 @@ class RolePermissionSeeder extends Seeder
             'pengembalian-pembayaran',
             'pengaturan-keuangan',
             'laporan-keuangan',
+
+            // Dir SDM
+
+            'dosen-list',
+            'dosen-create',
+            'dosen-edit',
+            'dosen-delete',
+            'dosen-import',
+            'tendik-list',  
+            'tendik-create',
+            'tendik-edit',
+            'tendik-delete',
+            'tendik-import',
+            'kontrak-manage',
+            'laporan-sdm',
+            'jabatan-manage',
    
         ];
 

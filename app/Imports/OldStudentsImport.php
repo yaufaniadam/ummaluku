@@ -31,9 +31,9 @@ class OldStudentsImport implements ToCollection, WithHeadingRow, WithValidation
                 Prospective::create([
                     'user_id' => $newUser->id,
                     'registration_source' => 'migrasi_lama',
-                    'full_name' => $row['nama_lengkap'],
-                    'email' => $row['email'],
-                    'nik' => $row['nik'] ?? null,
+                    // 'full_name' => $row['nama_lengkap'],
+                    // 'email' => $row['email'],
+                    'id_number' => $row['nik'] ?? null,
                     'birth_place' => $row['tempat_lahir'] ?? null,
                     'birth_date' => $row['tanggal_lahir'] ?? null,
                     'gender' => $row['jenis_kelamin'] ?? null,

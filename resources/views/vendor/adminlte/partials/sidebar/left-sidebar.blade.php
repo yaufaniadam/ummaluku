@@ -17,7 +17,7 @@
 
                 {{-- AWAL DARI LOGIKA MENU MANUAL KITA --}}
                 @auth
-                    
+
 
                     @if (auth()->user()->hasRole(['Super Admin', 'Direktur Admisi', 'Staf Admisi']))
                         <li class="nav-header">ADMIN</li>
@@ -185,31 +185,33 @@
                                 </ul>
                             </li>
                         @endcan
-                        
-                        
-                        
-                        
-                        @can('mahasiswa-list')
 
+
+
+
+                        @can('mahasiswa-list')
                             @php
-                                $kurikulum = [
-                                    'admin.akademik.curriculums.*',
-                                    'admin.akademik.curriculums.courses.*',
-                                ];
+                                $kurikulum = ['admin.akademik.curriculums.*', 'admin.akademik.curriculums.courses.*'];
                             @endphp
-                         <li class="nav-item">
-                                        <a href="{{ route('admin.akademik.curriculums.index') }}"
-                                            class="nav-link {{ request()->routeIs($kurikulum) ? 'active' : '' }}">
-                                            <i class="nav-icon fas fa-book"></i>
-                                            <p>Kurikulum</p>
-                                        </a>
-                                    </li>
-                        
+                            <li class="nav-item">
+                                <a href="{{ route('admin.akademik.curriculums.index') }}"
+                                    class="nav-link {{ request()->routeIs($kurikulum) ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-folder"></i>
+                                    <p>Kurikulum</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.akademik.courses.index') }}"
+                                    class="nav-link {{ request()->routeIs('admin.akademik.courses.index') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-book"></i>
+                                    <p>Master Mata Kuliah</p>
+                                </a>
+                            </li>
                         @endcan
 
                         @can('mahasiswa-list')
                             @php
-                                $akademik = [                                   
+                                $akademik = [
                                     'admin.akademik.academic-years.index',
                                     'admin.akademik.academic-years.show',
                                     'admin.akademik.academic-years.programs.*',
@@ -226,7 +228,7 @@
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
-                                    
+
                                     <li class="nav-item">
                                         <a href="{{ route('admin.akademik.academic-years.index') }}"
                                             class="nav-link {{ request()->routeIs('admin.akademik.academic-years.index') ? 'active' : '' }}">
@@ -417,9 +419,17 @@
                     @if (auth()->user()->hasRole('Camaru') || auth()->user()->hasRole('Mahasiswa'))
                         <li class="nav-header">PORTAL MAHASISWA</li>
 
-                        @can('access applicant portal')
+                        @can('mahasiswa-krs-fill')
                             <li class="nav-item">
-                                <a href="#" class="nav-link"> {{-- TODO: Ganti href --}}
+                                <a href="{{ route('mahasiswa.dashboard') }}"
+                                    class="nav-link {{ request()->routeIs('mahasiswa.dashboard') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-home"></i>
+                                    <p>Beranda</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('mahasiswa.profil.index') }}"
+                                    class="nav-link {{ request()->routeIs('mahasiswa.profil.index') ? 'active' : '' }}">
                                     <i class="nav-icon fas fa-id-card"></i>
                                     <p>Lengkapi Biodata</p>
                                 </a>
@@ -437,8 +447,8 @@
                         @endcan --}}
                     @endif
 
-                     <li class="nav-header">LAIN-LAIN</li>
-                     <li class="nav-item">
+                    <li class="nav-header">LAIN-LAIN</li>
+                    <li class="nav-item">
                         <a href="{{ route('calendar.index') }}"
                             class="nav-link {{ request()->routeIs('calendar.index') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-calendar-alt"></i>
