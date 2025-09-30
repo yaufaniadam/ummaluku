@@ -36,7 +36,7 @@ class PengisianKrs extends Component
             $firstEnrollment = ClassEnrollment::where('student_id', $this->student->id)
                 ->where('academic_year_id', $this->activeSemester->id)
                 ->first();
-            
+
             if ($firstEnrollment) {
                 $this->krsStatus = $firstEnrollment->status;
             }
@@ -64,12 +64,12 @@ class PengisianKrs extends Component
 
             // Ambil kelas yang tersedia
             $this->availableClasses = CourseClass::where('academic_year_id', $this->activeSemester->id)
-                ->whereHas('course.curriculum', function ($query) {
+                ->whereHas('course.curriculums', function ($query) { // <-- UBAH DI SINI
                     $query->where('program_id', $this->student->program_id);
                 })
                 ->with(['course', 'lecturer'])
                 ->get();
-            
+
             // Ambil data KRS yang sudah pernah dipilih sebelumnya
             $existingEnrollments = ClassEnrollment::where('student_id', $this->student->id)
                 ->where('academic_year_id', $this->activeSemester->id)
@@ -79,7 +79,7 @@ class PengisianKrs extends Component
             foreach ($existingEnrollments as $enrollment) {
                 $this->selectedClasses[$enrollment->course_class_id] = $enrollment->courseClass;
             }
-            
+
             $this->calculateTotalSks();
             $this->calculateTotalFee();
         }

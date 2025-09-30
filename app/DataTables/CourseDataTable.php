@@ -99,6 +99,7 @@ class CourseDataTable extends DataTable
             Column::make('sks'),
             Column::make('semester_recommendation')->title('Semester'),
             Column::computed('program')->title('Cakupan/Prodi'),
+            Column::computed('activity_type')->title('Tipe'),
             Column::make('type')->title('Jenis'),
             Column::computed('action')
                 ->exportable(false)

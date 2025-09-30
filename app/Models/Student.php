@@ -11,7 +11,7 @@ class Student extends Model
 {
     use HasFactory;
 
-     /**
+    /**
      * The attributes that aren't mass assignable.
      *
      * @var array
@@ -54,7 +54,7 @@ class Student extends Model
      */
     public function academicAdvisor(): BelongsTo
     {
-    return $this->belongsTo(Lecturer::class, 'academic_advisor_id');
+        return $this->belongsTo(Lecturer::class, 'academic_advisor_id');
     }
 
     /**
@@ -69,12 +69,12 @@ class Student extends Model
     {
         // Cari dulu semester yang sedang aktif di sistem
         $activeAcademicYear = AcademicYear::where('is_active', true)->first();
-        
+
         // Jika tidak ada semester aktif, kembalikan 0
         if (!$activeAcademicYear) {
             return 0;
         }
-        
+
         // Ambil tahun dari kode tahun ajaran (misal: '20251' -> 2025)
         $currentYear = substr($activeAcademicYear->year_code, 0, 4);
 
@@ -83,7 +83,7 @@ class Student extends Model
 
         // Hitung semester
         $semester = ($yearDifference * 2) + ($activeAcademicYear->semester_type === 'Ganjil' ? 1 : 2);
-        
+
         return $semester > 0 ? $semester : 1;
     }
 
@@ -112,7 +112,7 @@ class Student extends Model
         if ($enrollmentsWithGrades->isEmpty()) {
             return 0.00;
         }
-        
+
         $totalWeight = $enrollmentsWithGrades->sum(function ($enrollment) {
             return $enrollment->grade_index * $enrollment->courseClass->course->sks;
         });
@@ -124,5 +124,10 @@ class Student extends Model
         }
 
         return round($totalWeight / $totalSks, 2);
+    }
+
+    public function academicInvoices(): HasMany
+    {
+        return $this->hasMany(AcademicInvoice::class);
     }
 }

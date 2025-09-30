@@ -7,6 +7,7 @@ use App\Models\ClassEnrollment;
 use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use App\Events\KrsApproved; 
 
 class ApprovalDetail extends Component
 {
@@ -45,6 +46,8 @@ class ApprovalDetail extends Component
                 'approved_by' => $lecturerId,
             ]);
         }
+
+        KrsApproved::dispatch($this->student, $this->activeSemester);
 
         session()->flash('success', 'KRS untuk mahasiswa ' . $this->student->user->name . ' berhasil disetujui.');
         return $this->redirect(route('dosen.krs-approval.index'), navigate: true);

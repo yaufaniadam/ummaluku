@@ -22,4 +22,8 @@ class Program extends Model
     {
         return $this->hasMany(FeeStructure::class);
     }
+    public function curriculums(): HasMany
+    {
+        return $this->hasMany(Curriculum::class);
+    }
 }

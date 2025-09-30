@@ -83,6 +83,8 @@ Route::prefix('admin/keuangan')->middleware(['auth', 'permission:biaya-list'])->
     Route::get('fee-components-data', function (FeeComponentDataTable $dataTable) {
         return $dataTable->ajax();
     })->name('fee-components.data');
+
+    Route::post('tuition-fees/duplicate', [TuitionFeeController::class, 'duplicate'])->name('tuition-fees.duplicate');
 });
 
 //akses untuk user login ke profil
@@ -98,7 +100,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/academic-events', [AcademicEventController::class, 'feed'])->name('api.academic-events.feed');
 });
 
-use App\Http\Controllers\Admin\CurriculumCourseController; 
+use App\Http\Controllers\Admin\CurriculumCourseController;
 
 Route::prefix('admin/akademik')->middleware(['auth'])->name('admin.akademik.')->group(function () {
     Route::get('/dashboard', [AkademikDashboardController::class, 'index'])->name('dashboard');
@@ -118,8 +120,8 @@ Route::prefix('admin/akademik')->middleware(['auth'])->name('admin.akademik.')->
     Route::delete('curriculums/{curriculum}/courses/bulk-delete', [CurriculumCourseController::class, 'bulkDestroy'])->name('curriculums.courses.bulkDestroy');
 
     Route::post('/courses/bulk-delete', [CourseController::class, 'bulkDelete'])
-    ->name('courses.bulkDelete');
-    
+        ->name('courses.bulkDelete');
+
     Route::resource('courses', CourseController::class);
     Route::get('courses-data', function (CourseDataTable $dataTable) {
         return $dataTable->ajax();
@@ -139,8 +141,12 @@ Route::prefix('admin/akademik')->middleware(['auth'])->name('admin.akademik.')->
         return $dataTable->ajax();
     })->name('academic-years.programs.course-classes.data');
 
+    // routes/admin.php
+    Route::post(
+        'academic-years/{academic_year}/programs/{program}/course-classes/{course}/quick-create',
+        [CourseClassController::class, 'quickCreate']
+    )->name('academic-years.programs.course-classes.quickCreate');
 
-    
     Route::get('students/import', [StudentController::class, 'showImportForm'])->name('students.import.form');
     Route::post('students/import', [StudentController::class, 'importOld'])->name('students.import.old');
     Route::resource('students', StudentController::class);
@@ -199,11 +205,17 @@ Route::middleware('auth', 'role:Camaru')->group(function () {
 use App\Http\Controllers\Mahasiswa\KrsController;
 use App\Http\Controllers\Mahasiswa\DashboardController;
 use App\Http\Controllers\Mahasiswa\ProfileController as MhsProfileController;
+use App\Http\Controllers\Mahasiswa\KeuanganController;
+use App\Http\Controllers\Mahasiswa\PaymentConfirmationController;
 
 Route::prefix('mahasiswa')->middleware(['auth', 'role:Mahasiswa'])->prefix('mahasiswa')->name('mahasiswa.')->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'); // <-- Route ini
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('krs', [KrsController::class, 'index'])->name('krs.index');
     Route::get('profil', [MhsProfileController::class, 'index'])->name('profil.index');
+    Route::get('keuangan', [KeuanganController::class, 'index'])->name('keuangan.index');
+    Route::get('keuangan/{invoice}', [KeuanganController::class, 'show'])->name('keuangan.show');
+    Route::get('keuangan/{invoice}/confirm', [PaymentConfirmationController::class, 'create'])->name('keuangan.confirm.create');
+    Route::post('keuangan/{invoice}/confirm', [PaymentConfirmationController::class, 'store'])->name('keuangan.confirm');
 });
 
 //untuk dosen

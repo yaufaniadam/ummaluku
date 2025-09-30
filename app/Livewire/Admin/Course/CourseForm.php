@@ -18,6 +18,7 @@ class CourseForm extends Component
     public $sks;
     public $semester_recommendation;
     public $type;
+    public $activity_type;
 
     public function mount( Course $course = null)
     {
@@ -30,9 +31,11 @@ class CourseForm extends Component
             $this->sks = $course->sks;
             $this->semester_recommendation = $course->semester_recommendation;
             $this->type = $course->type;
+            $this->activity_type = $course->activity_type; 
         } else {
             // Set default value untuk form create
             $this->type = 'Wajib';
+            $this->activity_type = 'kuliah';
         }
     }
 
@@ -45,36 +48,23 @@ class CourseForm extends Component
             'sks' => 'required|integer|min:1|max:10',
             'semester_recommendation' => 'required|integer|min:1|max:8',
             'type' => 'required|in:Wajib,Pilihan,Wajib Peminatan',
+            'activity_type' => 'required|in:kuliah,praktikum,mandiri',
         ];
     }
 
     public function save()
     {
-        $this->validate();
-
-        $data = [
-
-            'code' => strtoupper($this->code),
-            'name' => $this->name,
-            'sks' => $this->sks,
-            'semester_recommendation' => $this->semester_recommendation,
-            'type' => $this->type,
-        ];
+        $validatedData = $this->validate();
 
         if ($this->course) {
-            // --- LOGIKA UPDATE ---
-            $this->course->update($data);
+            $this->course->update($validatedData);
             session()->flash('success', 'Mata kuliah berhasil diperbarui.');
         } else {
-            // --- LOGIKA CREATE ---
-            Course::create($data);
+            Course::create($validatedData);
             session()->flash('success', 'Mata kuliah berhasil ditambahkan.');
         }
 
-        // Kirim event agar tabel di halaman index me-refresh
         $this->dispatch('course-updated');
-
-        // Redirect kembali ke halaman daftar mata kuliah untuk kurikulum ini
         return redirect(route('admin.akademik.courses.index'));
     }
 

@@ -428,10 +428,24 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a href="{{ route('mahasiswa.krs.index') }}"
+                                    class="nav-link {{ request()->routeIs('mahasiswa.krs.index') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-book"></i>
+                                    <p>KRS</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ route('mahasiswa.profil.index') }}"
                                     class="nav-link {{ request()->routeIs('mahasiswa.profil.index') ? 'active' : '' }}">
                                     <i class="nav-icon fas fa-id-card"></i>
                                     <p>Lengkapi Biodata</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('mahasiswa.keuangan.index') }}"
+                                    class="nav-link {{ request()->routeIs('mahasiswa.keuangan.index') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-receipt"></i>
+                                    <p>Info Tagihan</p>
                                 </a>
                             </li>
                         @endcan

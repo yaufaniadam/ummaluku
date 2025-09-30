@@ -64,7 +64,7 @@ class TuitionFeeForm extends Component
         }
 
         $this->dispatch('tuition-fee-updated');
-        return $this->redirect(route('admin.akademik.tuition-fees.index'), navigate: true);
+        return redirect(route('admin.keuangan.tuition-fees.index'));
     }
 
     public function render()

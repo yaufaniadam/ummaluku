@@ -45,12 +45,15 @@ class AuthenticatedSessionController extends Controller
         if ($user->hasRole(['Direktur Keuangan', 'Staf Keuangan'])) {
             return redirect()->intended(route('admin.keuangan.dashboard'));
         }
+        if ($user->hasRole(['Dosen', 'Staf Keuangan'])) {
+            return redirect()->intended(route('dosen.dashboard'));
+        }
 
         if ($user->hasRole('Camaru')) {
             return redirect()->intended(route('pendaftar'));
         }
         if ($user->hasRole('Mahasiswa')) {
-            return redirect()->intended(route('akademik.dashboard'));
+            return redirect()->intended(route('mahasiswa.dashboard'));
         }
         
         // Redirect default jika tidak punya peran di atas (misalnya ke homepage)

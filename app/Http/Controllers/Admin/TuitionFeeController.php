@@ -27,21 +27,6 @@ class TuitionFeeController extends Controller
         return view('admin.tuition-fees.create');
     }    
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -77,5 +62,41 @@ class TuitionFeeController extends Controller
         // Jika tidak ada mahasiswa, lanjutkan dengan soft delete
         $tuitionFee->delete();
         return back()->with('success', 'Struktur biaya berhasil dihapus.');
+    }
+
+    public function duplicate(Request $request)
+    {
+        $request->validate([
+            'source_year' => 'required|digits:4',
+            'target_year' => 'required|digits:4|different:source_year',
+        ]);
+
+        $sourceYear = $request->source_year;
+        $targetYear = $request->target_year;
+
+        // Ambil semua struktur biaya dari tahun sumber
+        $sourceFees = FeeStructure::where('entry_year', $sourceYear)->get();
+
+        if ($sourceFees->isEmpty()) {
+            return back()->with('error', 'Tidak ada data biaya yang ditemukan untuk angkatan ' . $sourceYear);
+        }
+
+        // Hapus dulu data lama di tahun tujuan untuk menghindari duplikat error
+        FeeStructure::where('entry_year', $targetYear)->delete();
+
+        $newFeesCount = 0;
+        foreach ($sourceFees as $fee) {
+            // Buat record baru dengan tahun angkatan yang baru
+            FeeStructure::create([
+                'program_id' => $fee->program_id,
+                'fee_component_id' => $fee->fee_component_id,
+                'entry_year' => $targetYear,
+                'amount' => $fee->amount,
+            ]);
+            $newFeesCount++;
+        }
+
+        return redirect()->route('admin.keuangan.tuition-fees.index')
+                         ->with('success', $newFeesCount . ' struktur biaya dari angkatan ' . $sourceYear . ' berhasil disalin ke angkatan ' . $targetYear . '.');
     }
 }

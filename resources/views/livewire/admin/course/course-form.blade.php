@@ -13,7 +13,7 @@
             <div class="card-body">
 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="code">Kode Mata Kuliah</label>
                             <input type="text" wire:model="code"
@@ -24,13 +24,27 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="name">Nama Mata Kuliah</label>
                             <input type="text" wire:model="name"
                                 class="form-control @error('name') is-invalid @enderror" id="name"
                                 placeholder="Contoh: Dasar Pemrograman">
                             @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="activity_type">Tipe Kegiatan</label>
+                            <select wire:model="activity_type" id="activity_type"
+                                class="form-control @error('activity_type') is-invalid @enderror">
+                                <option value="kuliah">Kuliah / Teori (Butuh Kelas Terjadwal)</option>
+                                <option value="praktikum">Praktikum (Butuh Kelas Terjadwal)</option>
+                                <option value="mandiri">Mandiri (Skripsi, KKN, Magang, dll)</option>
+                            </select>
+                            @error('activity_type')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
@@ -79,13 +93,13 @@
                             @enderror
                         </div>
                     </div>
+
                 </div>
 
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="{{ route('admin.akademik.courses.index')}}" class="btn btn-secondary"
-                    wire:navigate>Batal</a>
+                <a href="{{ route('admin.akademik.courses.index') }}" class="btn btn-secondary" wire:navigate>Batal</a>
             </div>
         </div>
     </form>

@@ -23,4 +23,3 @@ return new class extends Migration
         });
     }
 };
-pada http://ummaluku.test/admin/akademik/academic-years/1/programs/1/course-classes tambah kelas baru yang akan ditawarkan ke mahsaiswa, supaya tidak menambahkan 1 by 1 kita akan membuatnya dengan 1x klik tombol per mata kuliah.
