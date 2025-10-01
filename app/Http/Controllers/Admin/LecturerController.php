@@ -86,6 +86,6 @@ class LecturerController extends Controller
             return back()->with('import_errors', $errorMessages);
         }
 
-        return redirect()->route('admin.lecturers.index')->with('success', 'Data dosen berhasil diimpor!');
+        return redirect()->route('admin.sdm.lecturers.index')->with('success', 'Data dosen berhasil diimpor!');
     }
 }

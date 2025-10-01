@@ -34,6 +34,16 @@ class DatabaseSeeder extends Seeder
             AdmissionCategoryDocumentSeeder::class, 
             AdmissionCategoryBatchSeeder::class,            
             RolePermissionSeeder::class,
+            FeeComponentSeeder::class,    
+            FeeStructureSeeder::class,
+            AcademicYearSeeder::class,    
+            CurriculumSeeder::class,    
         ]);
+
+        // Panggil seeder pengimpor data dari file Excel/CSV utuk dosen, mahasiswa lama, dan mata kuliah
+        $this->call(DataImportSeeder::class);
+
+        // Panggil seeder pengisi kurikulum di PALING AKHIR
+        $this->call(CurriculumContentSeeder::class);
     }
 }

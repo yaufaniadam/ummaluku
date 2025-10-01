@@ -20,12 +20,12 @@
 
 
                     @if (auth()->user()->hasRole(['Super Admin', 'Direktur Admisi', 'Staf Admisi']))
-                        <li class="nav-header">ADMIN</li>
+                      
                         <li class="nav-item">
                             <a href="{{ route('admin.dashboard') }}"
                                 class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>Dashboard</p>
+                                <i class="nav-icon fas fa-user-lock"></i>
+                                <p>Super Admin</p>
                             </a>
                         </li>
                     @endif
@@ -274,7 +274,7 @@
 
                             <li class="nav-item {{ request()->routeIs($dosen) ? 'menu-open' : '' }}">
                                 <a href="#" class="nav-link {{ request()->routeIs($dosen) ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-graduation-cap"></i>
+                                    <i class="nav-icon fas fa-user-graduate"></i>
                                     <p>
                                         Dosen
                                         <i class="right fas fa-angle-left"></i>
@@ -301,7 +301,7 @@
                             </li>
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
-                                    <i class="nav-icon fas fa-users"></i>
+                                    <i class="nav-icon fas fa-user-tie"></i>
                                     <p>
                                         Tenaga Kependidikan
                                         <i class="right fas fa-angle-left"></i>

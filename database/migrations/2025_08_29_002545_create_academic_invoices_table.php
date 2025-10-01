@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('invoice_number')->unique();
             $table->unsignedBigInteger('total_amount');
             $table->date('due_date');
-            $table->enum('status', ['unpaid', 'paid', 'overdue'])->default('unpaid');
+            $table->enum('status', ['unpaid', 'paid', 'overdue','verify'])->default('unpaid');
             $table->timestamps();
         });
     }

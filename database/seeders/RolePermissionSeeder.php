@@ -342,12 +342,17 @@ class RolePermissionSeeder extends Seeder
             'password' => Hash::make('password'),
         ])->assignRole($stafAdmisiRole);
 
-        // User::create([
-        //     'name' => 'Dosen Contoh',
-        //     'email' => 'dosen@ummaluku.ac.id',
-        //     'password' => Hash::make('password'),
-        // ])->assignRole($dosenRole);
+        User::create([
+            'name' => 'Direktur Keuangan',
+            'email' => 'dir.keuangan@ummaluku.ac.id',
+            'password' => Hash::make('password'),
+        ])->assignRole($dirKeuanganRole);
 
-        // Buat user contoh untuk mahasiswa jika perlu
+        User::create([
+            'name' => 'Staf Keuangan',
+            'email' => 'staf.keuangan@ummaluku.ac.id',
+            'password' => Hash::make('password'),
+        ])->assignRole($stafKeuanganRole);
+
     }
 }

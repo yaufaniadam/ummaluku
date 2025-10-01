@@ -36,7 +36,17 @@ class StudentDataTable extends DataTable
     public function query(Student $model): QueryBuilder
     {
         // Eager load relasi untuk performa
-        return $model->newQuery()->with(['user', 'program', 'academicAdvisor']);
+        return $model->newQuery()->with(['user', 'program', 'academicAdvisor'])
+        // --- TAMBAHKAN BLOK FILTER INI ---
+        ->when($this->request()->get('program_id'), function ($query, $programId) {
+            return $query->where('program_id', $programId);
+        })
+        ->when($this->request()->get('entry_year'), function ($query, $entryYear) {
+            return $query->where('entry_year', $entryYear);
+        })
+        ->when($this->request()->get('status'), function ($query, $status) {
+            return $query->where('status', $status);
+        });
     }
 
     public function html(): HtmlBuilder

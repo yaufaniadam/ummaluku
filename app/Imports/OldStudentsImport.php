@@ -12,9 +12,17 @@ use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 
-class OldStudentsImport implements ToCollection, WithHeadingRow, WithValidation
+class OldStudentsImport implements ToCollection, WithHeadingRow, WithValidation, WithCustomCsvSettings
 {
+    public function getCsvSettings(): array
+    {
+        return [
+            'delimiter' => ';' // Ganti menjadi titik koma jika file Anda menggunakan itu
+        ];
+    }
+
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
