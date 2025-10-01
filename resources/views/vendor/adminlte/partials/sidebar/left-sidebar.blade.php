@@ -349,6 +349,13 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a href="{{ route('admin.keuangan.payment-verification.index') }}"
+                                    class="nav-link {{ request()->routeIs('admin.keuangan.payment-verification.index') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-wallet"></i>
+                                    <p>Verifikasi Pembayaran</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ route('admin.keuangan.fee-components.index') }}"
                                     class="nav-link {{ request()->routeIs('admin.keuangan.fee-components.index') ? 'active' : '' }}">
                                     <i class="nav-icon fas fa-cog"></i>
@@ -432,6 +439,13 @@
                                     class="nav-link {{ request()->routeIs('mahasiswa.krs.index') ? 'active' : '' }}">
                                     <i class="nav-icon fas fa-book"></i>
                                     <p>KRS</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('mahasiswa.hasil-studi.index') }}"
+                                    class="nav-link {{ request()->routeIs('mahasiswa.krasil-studi.index') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-book"></i>
+                                    <p>Kartu Hasil Studi</p>
                                 </a>
                             </li>
                             <li class="nav-item">

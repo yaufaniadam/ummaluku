@@ -42,19 +42,33 @@ class CourseClassController extends Controller
             $availableCourses = $activeCurriculum->courses()
                 ->whereIn('curriculum_course.semester', $semesterTypes) // <-- INI PERBAIKANNYA
                 ->whereNotIn('courses.id', $existingCourseIds)
-                ->orderBy('curriculum_course.semester', 'asc') 
+                ->orderBy('curriculum_course.semester', 'asc')
                 ->get();
         }
 
         // --- AKHIR PEROMBAKAN LOGIKA ---
 
-        // Query untuk kelas yang sudah dibuat (logika ini tetap sama)
-        $createdClasses = CourseClass::where('academic_year_id', $academicYear->id)
+        // // Query untuk kelas yang sudah dibuat (logika ini tetap sama)
+        // $createdClasses = CourseClass::where('academic_year_id', $academicYear->id)
+        //     ->whereHas('course', function ($q) use ($program) {
+        //         $q->where('program_id', $program->id);
+        //     })
+        //     ->with(['course', 'lecturer'])
+        //     ->get();
+
+        $createdClassesQuery = CourseClass::where('academic_year_id', $academicYear->id)
             ->whereHas('course', function ($q) use ($program) {
                 $q->where('program_id', $program->id);
             })
-            ->with(['course', 'lecturer'])
+            ->with(['course.curriculums', 'lecturer']) // Eager load relasi yang diperlukan
             ->get();
+
+        // Kelompokkan kelas yang sudah dibuat berdasarkan semester penempatannya di kurikulum
+        $createdClassesBySemester = $createdClassesQuery->groupBy(function ($class) {
+            // Cari data pivot dari kurikulum yang aktif
+            $curriculum = $class->course->curriculums->where('program_id', $class->course->program_id)->where('is_active', true)->first();
+            return $curriculum->pivot->semester ?? 0; // Kelompokkan berdasarkan semester, 0 jika belum diatur
+        })->sortKeys();
 
         // Ambil daftar dosen dari prodi ini (logika ini tetap sama)
         $lecturers = Lecturer::where('program_id', 'like', "%{$program->id}%")->orderBy('full_name_with_degree')->get();
@@ -63,7 +77,7 @@ class CourseClassController extends Controller
             'academicYear',
             'program',
             'availableCourses',
-            'createdClasses',
+            'createdClassesBySemester',
             'lecturers',
             'activeCurriculum' // Kirim data kurikulum aktif ke view untuk info
         ));

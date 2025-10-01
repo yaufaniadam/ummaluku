@@ -57,8 +57,15 @@ use App\Http\Controllers\SDM\SDMDashboardController;
 use App\Http\Controllers\Modules\PMB\PMBDashboardController;
 use App\Http\Controllers\Keuangan\KeuanganDashboardController;
 
+use App\Http\Controllers\Admin\AcademicPaymentController; 
+use App\DataTables\AcademicInvoiceDataTable; 
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Route::middleware(['auth'])->group(function () {
+    // Route::get('students/{student}', [StudentController::class, 'show'])->name('students.show');
+// });
 
 Route::prefix('admin')->middleware(['auth', 'permission:manage pmb'])->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
@@ -85,6 +92,16 @@ Route::prefix('admin/keuangan')->middleware(['auth', 'permission:biaya-list'])->
     })->name('fee-components.data');
 
     Route::post('tuition-fees/duplicate', [TuitionFeeController::class, 'duplicate'])->name('tuition-fees.duplicate');
+
+    Route::post('payment-verification/{payment}/approve', [AcademicPaymentController::class, 'approve'])->name('payment-verification.approve');
+    Route::post('payment-verification/{payment}/reject', [AcademicPaymentController::class, 'reject'])->name('payment-verification.reject');
+
+
+    Route::resource('payment-verification', AcademicPaymentController::class)->only(['index']);
+    Route::get('payment-verification-data', function(AcademicInvoiceDataTable $dataTable) {
+        return $dataTable->ajax();
+    })->name('payment-verification.data');
+    
 });
 
 //akses untuk user login ke profil
@@ -159,6 +176,8 @@ Route::prefix('admin/akademik')->middleware(['auth'])->name('admin.akademik.')->
     })->name('academic-events.data');
 });
 
+
+
 // permission minimal manage pmb/role dir pmb
 Route::prefix('admin/pmb')->middleware(['auth', 'permission:manage pmb'])->name('admin.pmb.')->group(function () {
     Route::resource('jalur-pendaftaran', AdmissionCategoryController::class);
@@ -207,15 +226,19 @@ use App\Http\Controllers\Mahasiswa\DashboardController;
 use App\Http\Controllers\Mahasiswa\ProfileController as MhsProfileController;
 use App\Http\Controllers\Mahasiswa\KeuanganController;
 use App\Http\Controllers\Mahasiswa\PaymentConfirmationController;
+use App\Http\Controllers\Mahasiswa\HasilStudiController; 
 
 Route::prefix('mahasiswa')->middleware(['auth', 'role:Mahasiswa'])->prefix('mahasiswa')->name('mahasiswa.')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('krs', [KrsController::class, 'index'])->name('krs.index');
+    Route::get('krs/proses', [KrsController::class, 'prosesKrs'])->name('krs.proses');
     Route::get('profil', [MhsProfileController::class, 'index'])->name('profil.index');
     Route::get('keuangan', [KeuanganController::class, 'index'])->name('keuangan.index');
     Route::get('keuangan/{invoice}', [KeuanganController::class, 'show'])->name('keuangan.show');
     Route::get('keuangan/{invoice}/confirm', [PaymentConfirmationController::class, 'create'])->name('keuangan.confirm.create');
     Route::post('keuangan/{invoice}/confirm', [PaymentConfirmationController::class, 'store'])->name('keuangan.confirm');
+    Route::get('hasil-studi', [HasilStudiController::class, 'index'])->name('hasil-studi.index');
+    Route::get('krs-aktif/cetak', [KrsController::class, 'printPdf'])->name('krs.aktif.print');
 });
 
 //untuk dosen
@@ -223,6 +246,7 @@ use App\Http\Controllers\Dosen\DashboardController as DosenDashboardController;
 use App\Http\Controllers\Dosen\KrsApprovalController;
 use App\Http\Controllers\Dosen\AdvisedStudentController;
 use App\Http\Controllers\Dosen\GradeInputController;
+
 
 Route::middleware(['auth', 'role:Dosen'])->prefix('dosen')->name('dosen.')->group(function () {
 
@@ -235,6 +259,9 @@ Route::middleware(['auth', 'role:Dosen'])->prefix('dosen')->name('dosen.')->grou
     Route::get('krs-approval/{student}', [KrsApprovalController::class, 'show'])->name('krs-approval.show');
     Route::get('mahasiswa-bimbingan', [AdvisedStudentController::class, 'index'])->name('advised-students.index');
     Route::get('input-nilai', [GradeInputController::class, 'index'])->name('grades.input.index');
+
+    Route::get('input-nilai/{course_class}', [GradeInputController::class, 'show'])->name('grades.input.show');
+
 });
 
 // No Login

@@ -85,27 +85,42 @@
                 <thead>
                     <tr>
                         <th>Mata Kuliah</th>
-                        <th>Kelas</th>
+                        {{-- <th>Kelas</th> --}}
                         <th>Dosen Pengampu</th>
-                        <th>Kapasitas</th>
-                        <th>Jadwal</th>
+                        {{-- <th>Kapasitas</th> --}}
+                        {{-- <th>Jadwal</th> --}}
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($createdClasses as $class)
-                        <tr>
-                            <td>{{ $class->course->name }}</td>
-                            <td>{{ $class->name }}</td>
-                            <td>{{ $class->lecturer->full_name_with_degree }}</td>
-                            <td>{{ $class->capacity }}</td>
-                            <td>{{ $class->day ?? '-' }},
-                                {{ $class->start_time ? date('H:i', strtotime($class->start_time)) : '' }}</td>
-                            <td>
-                                <a href="{{ route('admin.akademik.academic-years.programs.course-classes.edit', ['academic_year' => $academicYear, 'program' => $program, 'course_class' => $class]) }}"
-                                    class="btn btn-primary btn-xs" wire:navigate>Edit Detail</a>
+                    {{-- Lakukan perulangan untuk setiap grup semester --}}
+                    @forelse ($createdClassesBySemester as $semester => $classes)
+                        {{-- Tampilkan baris sub-judul semester --}}
+                        <tr class="bg-light">
+                            <td colspan="6" class="font-weight-bold">
+                                @if ($semester > 0)
+                                    SEMESTER {{ $semester }}
+                                @else
+                                    SEMESTER BELUM DIATUR
+                                @endif
                             </td>
                         </tr>
+
+                        {{-- Lakukan perulangan untuk setiap kelas di dalam grup semester --}}
+                        @foreach ($classes as $class)
+                            <tr>
+                                <td>{{ $class->course->name }}</td>
+                                {{-- <td>{{ $class->name }}</td> --}}
+                                <td>{{ $class->lecturer->full_name_with_degree }}</td>
+                                {{-- <td>{{ $class->capacity }}</td> --}}
+                                {{-- <td>{{ $class->day ?? '-' }},
+                                {{ $class->start_time ? date('H:i', strtotime($class->start_time)) : '' }}</td> --}}
+                                <td>
+                                    <a href="{{ route('admin.akademik.academic-years.programs.course-classes.edit', ['academic_year' => $academicYear, 'program' => $program, 'course_class' => $class]) }}"
+                                        class="btn btn-primary btn-xs" wire:navigate>Edit Detail</a>
+                                </td>
+                            </tr>
+                        @endforeach
                     @empty
                         <tr>
                             <td colspan="6" class="text-center">Belum ada kelas yang dibuat untuk semester ini.</td>

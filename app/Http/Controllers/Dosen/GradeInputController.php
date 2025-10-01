@@ -30,4 +30,14 @@ class GradeInputController extends Controller
 
         return view('dosen.grades.index', compact('classes', 'activeSemester'));
     }
+
+    public function show(CourseClass $course_class)
+    {
+        // Keamanan: Pastikan dosen yang login adalah pengampu kelas ini
+        if ($course_class->lecturer_id !== auth()->user()->lecturer->id) {
+            abort(403, 'Anda tidak berhak mengakses halaman ini.');
+        }
+
+        return view('dosen.grades.show', ['courseClass' => $course_class]);
+    }
 }

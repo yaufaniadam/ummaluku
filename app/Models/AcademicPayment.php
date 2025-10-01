@@ -26,8 +26,5 @@ class AcademicPayment extends Model
         return $this->belongsTo(AcademicInvoice::class);
     }
 
-    public function payments(): HasMany
-    {
-        return $this->hasMany(AcademicPayment::class);
-    }
+
 }

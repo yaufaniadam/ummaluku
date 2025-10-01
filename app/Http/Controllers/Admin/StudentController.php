@@ -31,6 +31,16 @@ class StudentController extends Controller
         return view('admin.students.import');
     }
 
+    public function show(Student $student)
+    {
+        // Eager load semua relasi yang dibutuhkan untuk ditampilkan
+        $student->load(['user.prospective', 'program', 'academicAdvisor.user', 'enrollments.courseClass.course']);
+        
+        // Di sini kita bisa menambahkan logika untuk menghitung IPK, dll. jika perlu
+        
+        return view('admin.students.show', compact('student'));
+    }
+
     public function importOld(Request $request)
     {
         $request->validate(['import_file' => 'required|mimes:csv']);

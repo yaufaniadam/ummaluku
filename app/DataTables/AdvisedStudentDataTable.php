@@ -15,16 +15,18 @@ class AdvisedStudentDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', function(Student $student) {
-                // Tombol ini bisa kita kembangkan nanti untuk melihat detail/transkrip mahasiswa
-                return '<a href="#" class="btn btn-primary btn-sm">Lihat Detail</a>';
+            ->addColumn('action', function (Student $student) {
+                // Arahkan ke route 'students.show' yang baru
+                $detailUrl = route('admin.akademik.students.show', $student->id);
+                return '<a href="' . $detailUrl . '" class="btn btn-primary btn-sm" wire:navigate>Lihat Detail '. $student->user->student_id .'</a>';
             })
             ->editColumn('user.name', function (Student $student) {
                 return $student->user->name;
             })
-            ->editColumn('program.name_id', function(Student $student) {
+            ->editColumn('program.name_id', function (Student $student) {
                 return $student->program->name_id ?? '-';
             })
+            ->rawColumns(['action'])
             ->setRowId('id');
     }
 
@@ -35,24 +37,25 @@ class AdvisedStudentDataTable extends DataTable
 
         // Query semua mahasiswa yang dibimbing oleh dosen yang sedang login
         return $model->newQuery()
-            ->with(['user', 'program'])
+            ->with(['user'])
             ->where('academic_advisor_id', $lecturerId);
     }
 
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('advisedstudent-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons([Button::make('reload'), Button::make('excel'), Button::make('print')]);
+            ->setTableId('advisedstudent-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->orderBy(1)
+            ->buttons([Button::make('reload'), Button::make('excel'), Button::make('print')]);
     }
 
     public function getColumns(): array
     {
         return [
+            Column::make('id')->title('Student ID')->visible(false),
             Column::make('nim')->title('NIM'),
             Column::make('user.name')->title('Nama Mahasiswa'),
             Column::make('program.name_id')->title('Program Studi')->orderable(false),

@@ -8,7 +8,6 @@
 
 @section('content')
 
-    {{-- ====================== TAMBAHKAN PANEL PERINGATAN INI ====================== --}}
     @if (!$isProfileComplete)
         <div class="alert alert-warning alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -17,8 +16,6 @@
             <a href="{{ route('mahasiswa.profil.index') }}" class="btn btn-sm btn-primary ml-3" wire:navigate>Lengkapi Profil Sekarang</a>
         </div>
     @endif
-    {{-- ========================================================================== --}}
-
     
     {{-- Baris Profil & Status KRS --}}
     <div class="row">
@@ -42,7 +39,7 @@
                     <h5>{{ $activeSemester->name ?? 'Tidak Ada Semester Aktif' }}</h5>
                     <span class="badge badge-{{ $krsStatusClass }}">{{ $krsStatus }}</span>
                     <hr>
-                    <a href="{{ route('mahasiswa.krs.index') }}" class="btn btn-primary btn-block" wire:navigate>
+                    <a href="{{ route('mahasiswa.krs.proses') }}" class="btn btn-primary btn-block" wire:navigate>
                         <i class="fas fa-edit"></i> Buka Halaman KRS
                     </a>
                 </div>

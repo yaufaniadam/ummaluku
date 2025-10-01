@@ -149,7 +149,7 @@ class PengisianKrs extends Component
         });
 
         session()->flash('success-page', 'KRS Anda berhasil diajukan dan menunggu persetujuan Dosen PA.');
-        return $this->redirect(route('mahasiswa.krs.index'), navigate: true);
+        return $this->redirect(route('mahasiswa.krs.proses'), navigate: true);
     }
 
     private function calculateTotalSks()

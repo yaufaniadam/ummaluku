@@ -68,8 +68,8 @@
                         @forelse ($classesTaught as $class)
                             <li class="list-group-item">
                                 <strong>{{ $class->course->name }}</strong> - Kelas {{ $class->name }}
-                                <br>
-                                <small class="text-muted">{{ $class->day ?? '' }}, {{ $class->start_time ? date('H:i', strtotime($class->start_time)) : '' }} - {{ $class->end_time ? date('H:i', strtotime($class->end_time)) : '' }}</small>
+                                {{-- <br> --}}
+                                {{-- <small class="text-muted">{{ $class->day ?? '' }}, {{ $class->start_time ? date('H:i', strtotime($class->start_time)) : '' }} - {{ $class->end_time ? date('H:i', strtotime($class->end_time)) : '' }}</small> --}}
                             </li>
                         @empty
                             <li class="list-group-item text-center">Anda tidak mengampu kelas apapun semester ini.</li>

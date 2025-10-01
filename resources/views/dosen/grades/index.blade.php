@@ -22,7 +22,7 @@
                         <tr>
                             <th style="width: 10px">#</th>
                             <th>Mata Kuliah</th>
-                            <th>Kelas</th>
+                            {{-- <th>Kelas</th> --}}
                             <th>Jumlah Mahasiswa (KRS Disetujui)</th>
                             <th style="width: 120px">Aksi</th>
                         </tr>
@@ -32,18 +32,22 @@
                             <tr>
                                 <td>{{ $key + 1 }}.</td>
                                 <td>{{ $class->course->code }} - {{ $class->course->name }}</td>
-                                <td>{{ $class->name }}</td>
+                                {{-- <td>{{ $class->name }}</td> --}}
                                 <td>
                                     <span class="badge badge-info">{{ $class->enrollments_count }} Mahasiswa</span>
                                 </td>
                                 <td>
                                     {{-- Tombol ini akan kita fungsikan di langkah berikutnya --}}
-                                    <a href="#" class="btn btn-primary btn-sm">Input Nilai</a>
+                                    <a href="{{ route('dosen.grades.input.show', $class->id) }}"
+                                        class="btn btn-primary btn-sm" wire:navigate>
+                                        Input Nilai
+                                    </a>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center">Anda tidak mengampu kelas apapun pada semester ini.</td>
+                                <td colspan="5" class="text-center">Anda tidak mengampu kelas apapun pada semester ini.
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>

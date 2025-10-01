@@ -17,7 +17,10 @@ class StudentDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('action', function (Student $student) {
                 $editUrl = route('admin.akademik.students.edit', $student->id);
-                return '<a href="' . $editUrl . '" class="btn btn-primary btn-sm" wire:navigate>Edit</a>';
+                // Tambahkan tombol detail di sini juga
+                $detailUrl = route('admin.akademik.students.show', $student->id);
+                return '<a href="' . $detailUrl . '" class="btn btn-info btn-sm" wire:navigate>Detail</a> ' .
+                    '<a href="' . $editUrl . '" class="btn btn-primary btn-sm" wire:navigate>Edit</a>';
             })
             ->editColumn('user.name', function (Student $student) {
                 return $student->user->name ?? '-';
@@ -37,16 +40,16 @@ class StudentDataTable extends DataTable
     {
         // Eager load relasi untuk performa
         return $model->newQuery()->with(['user', 'program', 'academicAdvisor'])
-        // --- TAMBAHKAN BLOK FILTER INI ---
-        ->when($this->request()->get('program_id'), function ($query, $programId) {
-            return $query->where('program_id', $programId);
-        })
-        ->when($this->request()->get('entry_year'), function ($query, $entryYear) {
-            return $query->where('entry_year', $entryYear);
-        })
-        ->when($this->request()->get('status'), function ($query, $status) {
-            return $query->where('status', $status);
-        });
+            // --- TAMBAHKAN BLOK FILTER INI ---
+            ->when($this->request()->get('program_id'), function ($query, $programId) {
+                return $query->where('program_id', $programId);
+            })
+            ->when($this->request()->get('entry_year'), function ($query, $entryYear) {
+                return $query->where('entry_year', $entryYear);
+            })
+            ->when($this->request()->get('status'), function ($query, $status) {
+                return $query->where('status', $status);
+            });
     }
 
     public function html(): HtmlBuilder

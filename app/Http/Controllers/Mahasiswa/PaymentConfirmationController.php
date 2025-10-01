@@ -47,7 +47,7 @@ class PaymentConfirmationController extends Controller
         ]);
 
         // Update status invoice menjadi 'menunggu_verifikasi'
-        $invoice->update(['status' => 'menunggu_verifikasi']);
+        $invoice->update(['status' => 'verify']);
 
         return redirect()->route('mahasiswa.keuangan.show', $invoice->id)
                          ->with('success', 'Konfirmasi pembayaran berhasil diunggah dan sedang menunggu verifikasi.');
