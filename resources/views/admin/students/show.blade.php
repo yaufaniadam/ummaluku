@@ -14,7 +14,8 @@
             <div class="card card-primary card-outline">
                 <div class="card-body box-profile">
                     <div class="text-center">
-                        <img class="profile-user-img img-fluid img-circle" src="https://picsum.photos/id/1/128"
+                        <img class="profile-user-img img-fluid img-rounded-circle"
+                            src="{{ $student->user->prospective->photo_path ? Storage::url($student->user->prospective->photo_path) : asset('assets/user.png') }}"
                             alt="User profile picture">
                     </div>
                     <h3 class="profile-username text-center">{{ $student->user->name }}</h3>
@@ -31,7 +32,7 @@
                                     class="badge badge-success">{{ Str::title($student->status) }}</span></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Dosen PA</b> <a
+                            <b>Dosen Wali Akademik</b> <a
                                 class="float-right">{{ $student->academicAdvisor->full_name_with_degree ?? 'Belum Diatur' }}</a>
                         </li>
                     </ul>
@@ -51,8 +52,8 @@
                         <li class="nav-item"><a class="nav-link active" href="#biodata" data-toggle="tab">Biodata</a></li>
                         <li class="nav-item"><a class="nav-link" href="#riwayat_krs" data-toggle="tab">Riwayat Studi
                                 (KRS)</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#transkrip" data-toggle="tab">Transkrip (Coming
-                                Soon)</a></li>
+                        {{-- <li class="nav-item"><a class="nav-link" href="#transkrip" data-toggle="tab">Transkrip (Coming
+                                Soon)</a></li> --}}
                     </ul>
                 </div>
                 <div class="card-body">
@@ -64,7 +65,8 @@
                                 Tempat, Tanggal Lahir: {{ $student->user->prospective->birth_place ?? '-' }},
                                 {{ $student->user->prospective->birth_date ? \Carbon\Carbon::parse($student->user->prospective->birth_date)->isoFormat('D MMMM YYYY') : '-' }}
                                 <br>
-                                Jenis Kelamin: {{ $student->user->prospective->gender ?? '-' }}
+                                Jenis Kelamin: {{ $student->user->prospective->gender ?? '-' }}<br>
+                                Email: {{ $student->user->email ?? '-' }}
                             </p>
                             <hr>
                             <strong><i class="fas fa-map-marker-alt mr-1"></i> Alamat</strong>
@@ -77,14 +79,80 @@
                             </p>
                         </div>
 
+                        {{-- ... di dalam file admin/students/show.blade.php --}}
+
                         <div class="tab-pane" id="riwayat_krs">
-                            {{-- Kita akan buat tabel riwayat KHS per semester di sini nanti --}}
-                            <p>Fitur Riwayat Studi (KHS) akan segera hadir.</p>
+                            @if ($enrollmentsBySemester->isEmpty())
+                                <div class="text-center text-muted">Belum ada riwayat studi yang bisa ditampilkan.</div>
+                            @else
+                                {{-- Loop untuk setiap semester --}}
+                                @foreach ($enrollmentsBySemester as $semesterName => $enrollments)
+                                    <div class="card card-outline card-info mb-4">
+                                        <div class="card-header">
+                                            <h3 class="card-title font-weight-bold">{{ $semesterName }}</h3>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <table class="table table-sm table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Kode MK</th>
+                                                        <th>Nama Mata Kuliah</th>
+                                                        <th>SKS</th>
+                                                        <th class="text-center">Nilai Huruf</th>
+                                                        <th class="text-center">Nilai Indeks</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($enrollments as $enrollment)
+                                                        <tr>
+                                                            <td>{{ $enrollment->courseClass->course->code }}</td>
+                                                            <td>{{ $enrollment->courseClass->course->name }}</td>
+                                                            <td>{{ $enrollment->courseClass->course->sks }}</td>
+                                                            <td class="text-center font-weight-bold">
+                                                                {{ $enrollment->grade_letter ?? '-' }}</td>
+                                                            <td class="text-center">
+                                                                {{ $enrollment->grade_index ? number_format($enrollment->grade_index, 2) : '-' }}
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                                <tfoot>
+                                                    @php
+                                                        $totalSksSemester = $enrollments->sum('courseClass.course.sks');
+                                                        $totalBobotSemester = $enrollments->sum(function ($e) {
+                                                            return ($e->grade_index ?? 0) *
+                                                                $e->courseClass->course->sks;
+                                                        });
+                                                        $ips =
+                                                            $totalSksSemester > 0
+                                                                ? $totalBobotSemester / $totalSksSemester
+                                                                : 0;
+                                                    @endphp
+                                                    <tr class="bg-light">
+                                                        <td colspan="2" class="text-right font-weight-bold">Indeks
+                                                            Prestasi Semester (IPS)</td>
+                                                        <td class="font-weight-bold">{{ $totalSksSemester }}</td>
+                                                        <td colspan="2" class="text-center font-weight-bold">
+                                                            {{ number_format($ips, 2) }}</td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                                {{-- Ringkasan IPK di bagian bawah --}}
+                                <div class="mt-4">
+                                    <h4>Total IP Kumulatif (IPK): <span
+                                            class="text-primary font-weight-bold">{{ number_format($ipk, 2) }}</span></h4>
+                                </div>
+
+                            @endif
                         </div>
 
-                        <div class="tab-pane" id="transkrip">
+                        {{-- <div class="tab-pane" id="transkrip">
                             <p>Fitur Transkrip Nilai akan segera hadir.</p>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

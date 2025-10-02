@@ -33,7 +33,7 @@ class CurriculumContentSeeder extends Seeder
             $programCourses = Course::where('program_id', $curriculum->program_id)->get();
 
             // Gabungkan mata kuliah prodi dengan mata kuliah universitas
-            $allApplicableCourses = $programCourses->merge($universityCourses);
+            $allApplicableCourses = $programCourses;//->merge($universityCourses);
             
             if ($allApplicableCourses->isEmpty()) {
                 $this->command->line('   - Tidak ada mata kuliah yang cocok untuk ditambahkan.');

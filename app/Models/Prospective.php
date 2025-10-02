@@ -51,7 +51,8 @@ class Prospective extends Model
         'mother_income',
         'guardian_income',
         'high_school_major_id',
-        'registration_source'
+        'registration_source',
+        'photo_path',
     ];
 
     public function user(): BelongsTo

@@ -72,7 +72,7 @@ class StudentDataTable extends DataTable
             Column::make('program.name_id')->title('Program Studi')->orderable(false),
             Column::make('entry_year')->title('Angkatan'),
             Column::make('status')->title('Status'),
-            Column::computed('academic_advisor')->title('Dosen PA')->orderable(false)->searchable(false),
+            Column::computed('academic_advisor')->title('Dosen Wali Akademik')->orderable(false)->searchable(false),
             Column::computed('action')->addClass('text-center'),
         ];
     }

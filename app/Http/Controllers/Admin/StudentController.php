@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Validators\ValidationException;
 use App\DataTables\StudentDataTable;
 use App\Models\Student; 
 use App\Models\Program; 
+use App\Models\ClassEnrollment;
 
 class StudentController extends Controller
 {
@@ -36,9 +37,23 @@ class StudentController extends Controller
         // Eager load semua relasi yang dibutuhkan untuk ditampilkan
         $student->load(['user.prospective', 'program', 'academicAdvisor.user', 'enrollments.courseClass.course']);
         
-        // Di sini kita bisa menambahkan logika untuk menghitung IPK, dll. jika perlu
+        // Ambil semua riwayat pendaftaran kelas yang sudah ada nilainya
+        $allEnrollments = ClassEnrollment::where('student_id', $student->id)
+            ->where('status', 'approved') // Hanya yang disetujui
+            ->with(['academicYear', 'courseClass.course'])
+            ->orderBy('academic_year_id', 'asc')
+            ->get();
         
-        return view('admin.students.show', compact('student'));
+            // Kelompokkan riwayat tersebut berdasarkan semester (Tahun Ajaran)
+        $enrollmentsBySemester = $allEnrollments->groupBy('academicYear.name');
+
+        // Hitung IPK
+       $ipk = $student->getCumulativeGpa();
+
+        // --- AKHIR LOGIKA BARU ---
+        
+        return view('admin.students.show', compact('student', 'enrollmentsBySemester', 'ipk'));
+   
     }
 
     public function importOld(Request $request)

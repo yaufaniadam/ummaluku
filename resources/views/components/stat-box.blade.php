@@ -10,7 +10,7 @@
         <a href="{{ $url }}" class="small-box-footer">
             Lihat Detail <i class="fas fa-arrow-circle-right"></i>
         </a>
-    @else
-        <a href="#" class="small-box-footer">&nbsp;</a>
+    {{-- @else
+        <a href="#" class="small-box-footer">&nbsp;</a> --}}
     @endif
 </div>

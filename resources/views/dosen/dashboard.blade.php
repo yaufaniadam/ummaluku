@@ -10,14 +10,18 @@
     {{-- Baris untuk Statistik Cepat --}}
     <div class="row">
         <div class="col-lg-4 col-6">
-            <x-adminlte-small-box title="{{ $pendingKrsCount }}" text="Persetujuan KRS Tertunda" icon="fas fa-user-clock text-warning"
-                url="{{ route('dosen.krs-approval.index') }}" url-text="Lihat Detail"/>
+            <x-stat-box title="Persetujuan KRS Tertunda" value="{{ $pendingKrsCount }}" icon="fas fa-edit"
+                color="orange" url="{{ route('dosen.krs-approval.index') }}" />
+
         </div>
         <div class="col-lg-4 col-6">
-            <x-adminlte-small-box title="{{ $totalClassesTaught }}" text="Kelas Diampu Semester Ini" icon="fas fa-chalkboard-teacher text-info"/>
+            <x-stat-box title="Kelas Diampu Semester Ini" value="{{ $totalClassesTaught }}" icon="fas fa-chalkboard-teacher"
+                color="success" url="{{ route('dosen.grades.input.index') }}" />
         </div>
         <div class="col-lg-4 col-6">
-            <x-adminlte-small-box title="{{ $totalAdvisedStudents }}" text="Total Mahasiswa Bimbingan" icon="fas fa-users text-success"/>
+            <x-stat-box title="Total Mahasiswa Bimbingan" value="{{ $totalAdvisedStudents }}" icon="fas fa-user-graduate"
+                color="purple" url="{{ route('dosen.advised-students.index') }}" />
+
         </div>
     </div>
 
@@ -41,12 +45,13 @@
                                     <td>{{ $student->user->name }}</td>
                                     <td class="text-right">
                                         {{-- Tombol ini akan kita arahkan ke halaman detail nanti --}}
-                                        <a href="#" class="btn btn-xs btn-primary">Proses</a>
+                                        <a href="{{ route('dosen.krs-approval.show', $student->id) }}" class="btn btn-xs btn-primary">Proses</a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="text-center">Tidak ada permintaan persetujuan KRS saat ini.</td>
+                                    <td colspan="3" class="text-center">Tidak ada permintaan persetujuan KRS saat ini.
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -67,7 +72,8 @@
                     <ul class="list-group list-group-flush">
                         @forelse ($classesTaught as $class)
                             <li class="list-group-item">
-                                <strong>{{ $class->course->name }}</strong> - Kelas {{ $class->name }}
+                                <strong>{{ $class->course->name }}</strong> 
+                                {{-- - Kelas {{ $class->name }} --}}
                                 {{-- <br> --}}
                                 {{-- <small class="text-muted">{{ $class->day ?? '' }}, {{ $class->start_time ? date('H:i', strtotime($class->start_time)) : '' }} - {{ $class->end_time ? date('H:i', strtotime($class->end_time)) : '' }}</small> --}}
                             </li>

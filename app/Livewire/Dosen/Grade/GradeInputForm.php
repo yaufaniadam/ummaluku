@@ -16,17 +16,34 @@ class GradeInputForm extends Component
 
     // Daftar nilai yang valid
     public $gradeOptions = [
-        'A' => 4.00, 'A-' => 3.75, 'B+' => 3.50, 'B' => 3.00,
-        'B-' => 2.75, 'C+' => 2.50, 'C' => 2.00, 'D' => 1.00, 'E' => 0.00
+        'A' => 4.00,
+        'A-' => 3.75,
+        'B+' => 3.50,
+        'B' => 3.00,
+        'B-' => 2.75,
+        'C+' => 2.50,
+        'C' => 2.00,
+        'D' => 1.00,
+        'E' => 0.00
     ];
 
     public function mount(CourseClass $courseClass)
     {
         $this->courseClass = $courseClass;
+        $activeSemesterId = $this->courseClass->academic_year_id;
 
-        // Ambil semua mahasiswa yang KRS-nya disetujui untuk kelas ini
+        // Logika BARU: Mengecek status KRS DAN status pembayaran
         $this->enrollments = ClassEnrollment::where('course_class_id', $this->courseClass->id)
             ->where('status', 'approved')
+            // Tambahkan filter 'whereHas' untuk mengecek ke tabel lain
+            ->whereHas('student', function ($query) use ($activeSemesterId) {
+                // Mahasiswa tersebut harus memiliki relasi academicInvoices...
+                $query->whereHas('academicInvoices', function ($q) use ($activeSemesterId) {
+                    // ...di mana academic_year_id-nya cocok DAN statusnya 'paid' (lunas)
+                    $q->where('academic_year_id', $activeSemesterId)
+                        ->where('status', 'paid');
+                });
+            })
             ->with('student.user')
             ->get();
 
