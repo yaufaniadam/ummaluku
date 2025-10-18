@@ -28,7 +28,7 @@ class RolePermissionSeeder extends Seeder
             'role-create',
             'role-edit',
             'role-delete',
-            
+
             // Mahasiswa (Admin)
             'mahasiswa-list',
             'mahasiswa-create',
@@ -55,7 +55,7 @@ class RolePermissionSeeder extends Seeder
             'krs-approve',
             // Input Nilai
             'nilai-input',
-            
+
             // MODUL PENDAFTARAN MAHASISWA BARU (PMB)
 
             // Dasbor & Laporan
@@ -87,16 +87,16 @@ class RolePermissionSeeder extends Seeder
             // Keuangan
             'biaya-list',
             'biaya-create',
-            'biaya-edit',            
+            'biaya-edit',
             'tagihan-list',
             'tagihan-create',
-            'tagihan-edit',            
+            'tagihan-edit',
             'pembayaran-list',
             'pembayaran-create',
             'pembayaran-edit',
             'pembayaran-delete',
-            'pembayaran-confirm',        
-            
+            'pembayaran-confirm',
+
             // Dir Keuangan            
             'biaya-delete',
             'tagihan-delete',
@@ -111,7 +111,7 @@ class RolePermissionSeeder extends Seeder
             'dosen-edit',
             'dosen-delete',
             'dosen-import',
-            'tendik-list',  
+            'tendik-list',
             'tendik-create',
             'tendik-edit',
             'tendik-delete',
@@ -119,13 +119,13 @@ class RolePermissionSeeder extends Seeder
             'kontrak-manage',
             'laporan-sdm',
             'jabatan-manage',
-   
+
         ];
 
 
         foreach ($permissions as $permission) {
             Permission::create(['name' => $permission]);
-        }    
+        }
 
         // === 2. BUAT ROLES ANDA ===
         $superAdminRole = Role::create(['name' => 'Super Admin']);
@@ -138,6 +138,8 @@ class RolePermissionSeeder extends Seeder
         $stafSdmRole = Role::create(['name' => 'Staf SDM']);
         $dirKeuanganRole = Role::create(['name' => 'Direktur Keuangan']);
         $stafKeuanganRole = Role::create(['name' => 'Staf Keuangan']);
+        $kaprodiRole = Role::firstOrCreate(['name' => 'Kaprodi']);
+        $stafProdiRole = Role::firstOrCreate(['name' => 'Staf Prodi']);
         $dosenRole = Role::create(['name' => 'Dosen']);
         $tendikRole = Role::create(['name' => 'Tendik']);
         $mahasiswaRole = Role::create(['name' => 'Mahasiswa']);
@@ -154,7 +156,7 @@ class RolePermissionSeeder extends Seeder
             'dosen-edit',
             'dosen-delete',
             'dosen-import',
-            'tendik-list',  
+            'tendik-list',
             'tendik-create',
             'tendik-edit',
             'tendik-delete',
@@ -168,7 +170,7 @@ class RolePermissionSeeder extends Seeder
             'dosen-list',
             'dosen-create',
             'dosen-edit',
-            'tendik-list',  
+            'tendik-list',
             'tendik-create',
             'tendik-edit',
             'kontrak-manage',
@@ -177,7 +179,7 @@ class RolePermissionSeeder extends Seeder
 
 
         $dirAkademikRole->givePermissionTo([
-           
+
             'mahasiswa-list',
             'mahasiswa-create',
             'mahasiswa-edit',
@@ -246,15 +248,15 @@ class RolePermissionSeeder extends Seeder
         $dirKeuanganRole->givePermissionTo([
             'biaya-list',
             'biaya-create',
-            'biaya-edit',            
+            'biaya-edit',
             'tagihan-list',
             'tagihan-create',
-            'tagihan-edit',            
+            'tagihan-edit',
             'pembayaran-list',
             'pembayaran-create',
             'pembayaran-edit',
             'pembayaran-delete',
-            'pembayaran-confirm', 
+            'pembayaran-confirm',
             'biaya-delete',
             'tagihan-delete',
             'pengembalian-pembayaran',
@@ -265,15 +267,31 @@ class RolePermissionSeeder extends Seeder
         $stafKeuanganRole->givePermissionTo([
             'biaya-list',
             'biaya-create',
-            'biaya-edit',            
+            'biaya-edit',
             'tagihan-list',
             'tagihan-create',
-            'tagihan-edit',            
+            'tagihan-edit',
             'pembayaran-list',
             'pembayaran-create',
             'pembayaran-edit',
             'pembayaran-delete',
-            'pembayaran-confirm', 
+            'pembayaran-confirm',
+        ]);
+
+        $stafProdiRole->givePermissionTo([
+            'kurikulum-list',
+            'kurikulum-create',
+            'kurikulum-edit',
+            'kelas-list',
+            'kelas-create',
+            'kelas-edit',
+            'mahasiswa-list',
+        ]);
+
+        $kaprodiRole->syncPermissions($stafProdiRole->permissions); // Beri semua izin staf
+        $kaprodiRole->givePermissionTo([ // Tambahkan izin khusus Kaprodi
+            'krs-approve',
+            'nilai-input',
         ]);
 
         // Camaru: Hanya bisa mengelola datanya sendiri
@@ -353,6 +371,5 @@ class RolePermissionSeeder extends Seeder
             'email' => 'staf.keuangan@ummaluku.ac.id',
             'password' => Hash::make('password'),
         ])->assignRole($stafKeuanganRole);
-
     }
 }

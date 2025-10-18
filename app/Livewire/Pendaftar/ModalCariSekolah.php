@@ -95,6 +95,6 @@ class ModalCariSekolah extends Component
 
     public function render()
     {
-        return view('livewire.pendaftar.modal-cari-sekolah');
+        return view('livewire.pendaftar.modal-cari-sekolah2');
     }
 }
