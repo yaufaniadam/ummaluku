@@ -59,6 +59,7 @@ use App\Http\Controllers\Keuangan\KeuanganDashboardController;
 
 use App\Http\Controllers\Admin\AcademicPaymentController; 
 use App\DataTables\AcademicInvoiceDataTable; 
+use App\Http\Controllers\Admin\ExecutiveDashboardController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -69,6 +70,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::prefix('admin')->middleware(['auth', 'permission:manage pmb'])->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+});
+
+Route::prefix('admin/executive')->middleware(['auth', 'permission:view-executive-dashboard'])->name('admin.executive.')->group(function () {
+    Route::get('/dashboard', [ExecutiveDashboardController::class, 'index'])->name('dashboard');
 });
 
 Route::prefix('admin/sdm')->middleware(['auth', 'permission:dosen-list'])->name('admin.sdm.')->group(function () {
