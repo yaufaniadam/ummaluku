@@ -20,6 +20,13 @@
             'icon' => 'fas fa-fw fa-tachometer-alt',
             'can'    => ['view pmb'],
         ],
+        // EXECUTIVE DASHBOARD
+        [
+            'text' => 'Executive Dashboard',
+            'route'  => 'admin.executive.dashboard',
+            'icon' => 'fas fa-fw fa-chart-line',
+            'can'    => ['view-executive-dashboard'],
+        ],
         // MAHASISWA
         [
             'text' => 'Dashboard',
