@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\User;
+use App\Models\Staff;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -15,10 +15,8 @@ class StaffDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', function(User $row){
+            ->addColumn('action', function(Staff $row){
                 $editUrl = route('admin.sdm.staff.edit', $row->id);
-                // We will implement delete via form submission for simplicity,
-                // or livewire/js if preferred. Sticking to standard form for now.
                 $csrf = csrf_field();
                 $method = method_field('DELETE');
                 $actionUrl = route('admin.sdm.staff.destroy', $row->id);
@@ -32,17 +30,31 @@ class StaffDataTable extends DataTable
 
                 return $buttons;
             })
-            ->editColumn('created_at', function(User $row) {
+            ->editColumn('created_at', function(Staff $row) {
                 return $row->created_at->format('d M Y');
+            })
+            ->addColumn('name', function(Staff $row) {
+                return $row->user->name ?? '-';
+            })
+            ->addColumn('email', function(Staff $row) {
+                return $row->user->email ?? '-';
+            })
+            ->addColumn('unit', function(Staff $row) {
+                if ($row->workUnit) {
+                    return $row->workUnit->name;
+                } elseif ($row->program) {
+                    return $row->program->name_id . ' (Prodi)';
+                }
+                return '-';
             })
             ->rawColumns(['action'])
             ->setRowId('id');
     }
 
-    public function query(User $model): QueryBuilder
+    public function query(Staff $model): QueryBuilder
     {
-        // Filter users who have the 'Tendik' role
-        return $model->newQuery()->role('Tendik');
+        // Eager load relationships
+        return $model->newQuery()->with(['user', 'workUnit', 'program']);
     }
 
     public function html(): HtmlBuilder
@@ -65,9 +77,10 @@ class StaffDataTable extends DataTable
     {
         return [
             Column::make('id'),
+            Column::make('nip')->title('NIP'),
             Column::make('name')->title('Nama'),
-            Column::make('email')->title('Email'),
-            Column::make('created_at')->title('Tanggal Bergabung'),
+            Column::make('unit')->title('Unit Kerja'),
+            Column::make('phone')->title('No. HP'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

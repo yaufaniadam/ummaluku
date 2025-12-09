@@ -27,6 +27,7 @@ use App\DataTables\LecturerDataTable;
 
 use App\Http\Controllers\Admin\StaffController;
 use App\DataTables\StaffDataTable;
+use App\Livewire\Master\WorkUnit\Index as WorkUnitIndex;
 
 use App\Http\Controllers\Admin\CurriculumController;
 use App\DataTables\CurriculumDataTable;
@@ -73,6 +74,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::prefix('admin')->middleware(['auth', 'permission:manage pmb'])->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+});
+
+Route::prefix('master')->middleware(['auth', 'role:Super Admin|Admin'])->name('master.')->group(function () {
+    Route::get('/work-units', WorkUnitIndex::class)->name('work-units.index');
 });
 
 Route::prefix('admin/executive')->middleware(['auth', 'permission:view-executive-dashboard'])->name('admin.executive.')->group(function () {
