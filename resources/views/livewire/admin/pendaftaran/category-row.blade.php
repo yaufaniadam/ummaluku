@@ -4,24 +4,22 @@
     <td>{!! $category->is_active ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-danger">Tidak Aktif</span>' !!}</td>
     <td>
         {{-- Tampilkan nama gelombang yang terhubung --}}
-        @forelse($category->batches as $batch)
-            <span class="badge badge-info">{{ $batch->name }}</span>
-        @empty
-            <span class="badge badge-light">Belum diatur</span>
-        @endforelse
+        <div class="d-flex flex-wrap" style="gap: 5px;">
+            @forelse($category->batches->sortByDesc('year') as $batch)
+                <span class="badge {{ $batch->is_active ? 'badge-success' : 'badge-secondary' }}"
+                    title="{{ $batch->start_date ? $batch->start_date->format('d M') : '' }} - {{ $batch->end_date ? $batch->end_date->format('d M Y') : '' }}">
+                    {{ $batch->name }} {{ $batch->year }}
+                    @if($batch->is_active) <i class="fas fa-check-circle ml-1" style="font-size: 0.8em;"></i> @endif
+                </span>
+            @empty
+                <span class="badge badge-light">Belum diatur</span>
+            @endforelse
+        </div>
     </td>
     <td>
         <div class="btn-group">
             {{-- Tombol Edit standar --}}
             <a href="{{ route('admin.pmb.jalur-pendaftaran.edit', $category) }}" class="btn btn-xs btn-default text-primary">Edit</a>
-
-            @hasrole('Super Admin')
-            {{-- Tombol Hapus standar --}}
-            <form action="{{ route('admin.pmb.jalur-pendaftaran.destroy', $category) }}" method="POST" class="d-inline">
-                @csrf @method('DELETE')
-                <button type="submit" class="btn btn-xs btn-default text-danger" onclick="return confirm('Anda yakin?')">Hapus</button>
-            </form>
-            @endhasrole
 
             {{-- Tombol Atur Gelombang --}}
             <button wire:click="openModal" class="btn btn-xs btn-default text-warning">
