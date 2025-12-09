@@ -8,44 +8,141 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card">
                 <form action="{{ route('admin.sdm.staff.update', $staff->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="card-body">
-                        <div class="form-group">
-                            <label for="name">Nama Lengkap</label>
-                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
-                                id="name" value="{{ old('name', $staff->name) }}" placeholder="Masukkan nama lengkap">
-                            @error('name')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
+                        <div class="row">
+                            {{-- AKUN PENGGUNA --}}
+                            <div class="col-md-6">
+                                <h5><i class="fas fa-user-lock"></i> Akun Pengguna</h5>
+                                <hr>
+                                <div class="form-group">
+                                    <label for="name">Nama Lengkap</label>
+                                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                                        id="name" value="{{ old('name', $staff->user->name) }}" placeholder="Masukkan nama lengkap">
+                                    @error('name')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
 
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                                id="email" value="{{ old('email', $staff->email) }}" placeholder="Masukkan email">
-                            @error('email')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                                        id="email" value="{{ old('email', $staff->user->email) }}" placeholder="Masukkan email">
+                                    @error('email')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
 
-                        <div class="form-group">
-                            <label for="password">Password (Biarkan kosong jika tidak ingin mengganti)</label>
-                            <input type="password" name="password"
-                                class="form-control @error('password') is-invalid @enderror" id="password"
-                                placeholder="Masukkan password baru">
-                            @error('password')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
+                                <div class="form-group">
+                                    <label for="password">Password (Biarkan kosong jika tidak ganti)</label>
+                                    <input type="password" name="password"
+                                        class="form-control @error('password') is-invalid @enderror" id="password"
+                                        placeholder="Masukkan password baru">
+                                    @error('password')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
 
-                        <div class="form-group">
-                            <label for="password_confirmation">Konfirmasi Password</label>
-                            <input type="password" name="password_confirmation" class="form-control"
-                                id="password_confirmation" placeholder="Ulangi password baru">
+                                <div class="form-group">
+                                    <label for="password_confirmation">Konfirmasi Password</label>
+                                    <input type="password" name="password_confirmation" class="form-control"
+                                        id="password_confirmation" placeholder="Ulangi password baru">
+                                </div>
+                            </div>
+
+                            {{-- DATA KEPEGAWAIAN --}}
+                            <div class="col-md-6">
+                                <h5><i class="fas fa-id-card"></i> Data Kepegawaian</h5>
+                                <hr>
+                                <div class="form-group">
+                                    <label for="nip">NIP (Nomor Induk Pegawai)</label>
+                                    <input type="text" name="nip" class="form-control @error('nip') is-invalid @enderror"
+                                        id="nip" value="{{ old('nip', $staff->nip) }}" placeholder="Contoh: 19900101...">
+                                    @error('nip')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Jenis Kelamin</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="gender" value="L" {{ old('gender', $staff->gender) == 'L' ? 'checked' : '' }}>
+                                        <label class="form-check-label">Laki-laki</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="gender" value="P" {{ old('gender', $staff->gender) == 'P' ? 'checked' : '' }}>
+                                        <label class="form-check-label">Perempuan</label>
+                                    </div>
+                                    @error('gender')
+                                        <span class="text-danger small">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone">No. HP</label>
+                                    <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror"
+                                        id="phone" value="{{ old('phone', $staff->phone) }}" placeholder="Contoh: 0812...">
+                                    @error('phone')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="address">Alamat</label>
+                                    <textarea name="address" class="form-control @error('address') is-invalid @enderror" rows="2">{{ old('address', $staff->address) }}</textarea>
+                                    @error('address')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                {{-- PENEMPATAN --}}
+                                <h5><i class="fas fa-building"></i> Penempatan</h5>
+                                <hr>
+                                @php
+                                    $currentType = $staff->program_id ? 'prodi' : ($staff->work_unit_id ? 'bureau' : '');
+                                @endphp
+                                <div class="form-group">
+                                    <label>Unit Penempatan</label>
+                                    <select id="unit_type" name="unit_type" class="form-control @error('unit_type') is-invalid @enderror" onchange="toggleUnitSelect()">
+                                        <option value="">-- Pilih Tipe Unit --</option>
+                                        <option value="prodi" {{ old('unit_type', $currentType) == 'prodi' ? 'selected' : '' }}>Program Studi</option>
+                                        <option value="bureau" {{ old('unit_type', $currentType) == 'bureau' ? 'selected' : '' }}>Biro / Unit Kerja</option>
+                                    </select>
+                                    @error('unit_type')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group" id="prodi_select" style="display: none;">
+                                    <label>Pilih Program Studi</label>
+                                    <select name="program_id" class="form-control @error('program_id') is-invalid @enderror">
+                                        <option value="">-- Pilih Prodi --</option>
+                                        @foreach($programs as $prog)
+                                            <option value="{{ $prog->id }}" {{ old('program_id', $staff->program_id) == $prog->id ? 'selected' : '' }}>{{ $prog->name_id }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('program_id')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group" id="bureau_select" style="display: none;">
+                                    <label>Pilih Biro / Unit Kerja</label>
+                                    <select name="work_unit_id" class="form-control @error('work_unit_id') is-invalid @enderror">
+                                        <option value="">-- Pilih Biro --</option>
+                                        @foreach($workUnits as $unit)
+                                            <option value="{{ $unit->id }}" {{ old('work_unit_id', $staff->work_unit_id) == $unit->id ? 'selected' : '' }}>{{ $unit->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('work_unit_id')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -57,4 +154,19 @@
             </div>
         </div>
     </div>
+@stop
+
+@section('js')
+<script>
+    function toggleUnitSelect() {
+        const type = document.getElementById('unit_type').value;
+        document.getElementById('prodi_select').style.display = (type === 'prodi') ? 'block' : 'none';
+        document.getElementById('bureau_select').style.display = (type === 'bureau') ? 'block' : 'none';
+    }
+
+    // Run on load to handle old input or existing data
+    window.addEventListener('DOMContentLoaded', (event) => {
+        toggleUnitSelect();
+    });
+</script>
 @stop

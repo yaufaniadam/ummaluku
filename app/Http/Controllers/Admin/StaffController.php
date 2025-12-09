@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Staff;
+use App\Models\Program;
+use App\Models\WorkUnit;
 use Illuminate\Http\Request;
 use App\DataTables\StaffDataTable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class StaffController extends Controller
@@ -24,7 +28,9 @@ class StaffController extends Controller
      */
     public function create()
     {
-        return view('admin.sdm.staff.create');
+        $programs = Program::all();
+        $workUnits = WorkUnit::all();
+        return view('admin.sdm.staff.create', compact('programs', 'workUnits'));
     }
 
     /**
@@ -33,18 +39,42 @@ class StaffController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            // User validation
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+
+            // Staff validation
+            'nip' => ['required', 'string', 'unique:staffs'],
+            'gender' => ['required', 'in:L,P'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'address' => ['nullable', 'string'],
+            'unit_type' => ['required', 'in:prodi,bureau'], // To decide which foreign key to use
+            'program_id' => ['nullable', 'required_if:unit_type,prodi', 'exists:programs,id'],
+            'work_unit_id' => ['nullable', 'required_if:unit_type,bureau', 'exists:work_units,id'],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        DB::transaction(function () use ($request) {
+            // 1. Create User
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-        $user->assignRole('Tendik');
+            $user->assignRole('Tendik');
+
+            // 2. Create Staff Linked to User
+            Staff::create([
+                'user_id' => $user->id,
+                'nip' => $request->nip,
+                'gender' => $request->gender,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'program_id' => $request->unit_type === 'prodi' ? $request->program_id : null,
+                'work_unit_id' => $request->unit_type === 'bureau' ? $request->work_unit_id : null,
+            ]);
+        });
 
         return redirect()->route('admin.sdm.staff.index')
             ->with('success', 'Data staf berhasil ditambahkan.');
@@ -53,38 +83,54 @@ class StaffController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $staff)
+    public function edit(Staff $staff) // Using Route Model Binding for Staff
     {
-        // Ensure the user is actually a staff member
-        if (!$staff->hasRole('Tendik')) {
-            abort(404);
-        }
-        return view('admin.sdm.staff.edit', compact('staff'));
+        $programs = Program::all();
+        $workUnits = WorkUnit::all();
+        return view('admin.sdm.staff.edit', compact('staff', 'programs', 'workUnits'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $staff)
+    public function update(Request $request, Staff $staff)
     {
-        if (!$staff->hasRole('Tendik')) {
-            abort(404);
-        }
-
         $request->validate([
+            // User validation
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($staff->id)],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($staff->user_id)],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+
+            // Staff validation
+            'nip' => ['required', 'string', Rule::unique('staffs')->ignore($staff->id)],
+            'gender' => ['required', 'in:L,P'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'address' => ['nullable', 'string'],
+            'unit_type' => ['required', 'in:prodi,bureau'],
+            'program_id' => ['nullable', 'required_if:unit_type,prodi', 'exists:programs,id'],
+            'work_unit_id' => ['nullable', 'required_if:unit_type,bureau', 'exists:work_units,id'],
         ]);
 
-        $staff->name = $request->name;
-        $staff->email = $request->email;
+        DB::transaction(function () use ($request, $staff) {
+            // 1. Update User
+            $user = $staff->user;
+            $user->name = $request->name;
+            $user->email = $request->email;
+            if ($request->filled('password')) {
+                $user->password = Hash::make($request->password);
+            }
+            $user->save();
 
-        if ($request->filled('password')) {
-            $staff->password = Hash::make($request->password);
-        }
-
-        $staff->save();
+            // 2. Update Staff
+            $staff->update([
+                'nip' => $request->nip,
+                'gender' => $request->gender,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'program_id' => $request->unit_type === 'prodi' ? $request->program_id : null,
+                'work_unit_id' => $request->unit_type === 'bureau' ? $request->work_unit_id : null,
+            ]);
+        });
 
         return redirect()->route('admin.sdm.staff.index')
             ->with('success', 'Data staf berhasil diperbarui.');
@@ -93,13 +139,13 @@ class StaffController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $staff)
+    public function destroy(Staff $staff)
     {
-        if (!$staff->hasRole('Tendik')) {
-            abort(404);
-        }
-
-        $staff->delete();
+        DB::transaction(function () use ($staff) {
+            $user = $staff->user;
+            $staff->delete();
+            $user->delete(); // Soft delete if trait exists, or force delete
+        });
 
         return redirect()->route('admin.sdm.staff.index')
             ->with('success', 'Data staf berhasil dihapus.');
