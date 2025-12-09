@@ -10,7 +10,7 @@ class WorkUnit extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['code', 'name'];
+    protected $fillable = ['code', 'name', 'type'];
 
     public function staffs(): HasMany
     {

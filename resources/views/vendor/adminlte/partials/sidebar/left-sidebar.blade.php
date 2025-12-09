@@ -148,6 +148,20 @@
                     @endif
 
                     {{-- ================================================= --}}
+                    {{-- MENU MASTER DATA (SUPER ADMIN/ADMIN) --}}
+                    {{-- ================================================= --}}
+                    @if (auth()->user()->hasRole(['Super Admin', 'Admin']))
+                        <li class="nav-header">MASTER DATA</li>
+                        <li class="nav-item">
+                            <a href="{{ route('master.work-units.index') }}"
+                                class="nav-link {{ request()->routeIs('master.work-units.index') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-building"></i>
+                                <p>Unit Kerja</p>
+                            </a>
+                        </li>
+                    @endif
+
+                    {{-- ================================================= --}}
                     {{-- MENU UNTUK PORTAL AKADEMIK (STAF, DIREKTUR, SUPER ADMIN) --}}
                     {{-- ================================================= --}}
 
