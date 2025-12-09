@@ -323,13 +323,15 @@
                                 </a>
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
-                                        <a href="" class="nav-link ">
+                                        <a href="{{ route('admin.sdm.staff.index') }}"
+                                            class="nav-link {{ request()->routeIs('admin.sdm.staff.index') ? 'active' : '' }}">
                                             <i class="nav-icon far fa-circle"></i>
-                                            <p>Tendik</p>
+                                            <p>Data Tendik</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="" class="nav-link ">
+                                        <a href="{{ route('admin.sdm.staff.create') }}"
+                                            class="nav-link {{ request()->routeIs('admin.sdm.staff.create') ? 'active' : '' }}">
                                             <i class="nav-icon far fa-circle"></i>
                                             <p>Tambah Tendik</p>
                                         </a>
