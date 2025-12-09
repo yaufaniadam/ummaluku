@@ -28,36 +28,7 @@
                 </thead>
                 <tbody>
                     @forelse($categories as $category)
-                    <tr>
-                        <td>{{ $category->name }}</td>
-                        <td><span class="badge badge-secondary">{{ $category->display_group }}</span></td>
-                        <td>{!! $category->is_active ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-danger">Tidak Aktif</span>' !!}</td>
-                        <td>
-                            {{-- Tampilkan nama gelombang yang terhubung --}}
-                            @forelse($category->batches as $batch)
-                                <span class="badge badge-info">{{ $batch->name }}</span>
-                            @empty
-                                <span class="badge badge-light">Belum diatur</span>
-                            @endforelse
-                        </td>
-                        <td>
-                            <div class="btn-group">
-                                {{-- Tombol Edit standar --}}
-                                <a href="{{ route('admin.pmb.jalur-pendaftaran.edit', $category) }}" class="btn btn-xs btn-default text-primary">Edit</a>
-                                
-                                @hasrole('Super Admin')
-                                {{-- Tombol Hapus standar --}}
-                                <form action="{{ route('admin.pmb.jalur-pendaftaran.destroy', $category) }}" method="POST" class="d-inline">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="btn btn-xs btn-default text-danger" onclick="return confirm('Anda yakin?')">Hapus</button>
-                                </form>
-                                @endhasrole
-
-                                {{-- Panggil komponen Livewire untuk mengatur gelombang --}}
-                                @livewire('admin.pendaftaran.assign-batches-to-category', ['category' => $category], key($category->id))
-                            </div>
-                        </td>
-                    </tr>
+                        @livewire('admin.pendaftaran.category-row', ['category' => $category], key($category->id))
                     @empty
                     <tr><td colspan="5" class="text-center">Tidak ada data.</td></tr>
                     @endforelse
