@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             AdmissionCategoryDocumentSeeder::class, 
             AdmissionCategoryBatchSeeder::class,            
             RolePermissionSeeder::class,
+            WorkUnitSeeder::class,
             FeeComponentSeeder::class,    
             FeeStructureSeeder::class,
             AcademicYearSeeder::class,    
