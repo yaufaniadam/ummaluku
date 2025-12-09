@@ -5,14 +5,22 @@
     <td>
         {{-- Tampilkan nama gelombang yang terhubung --}}
         <div class="d-flex flex-wrap" style="gap: 5px;">
-            @forelse($category->batches->sortByDesc('year') as $batch)
-                <span class="badge {{ $batch->is_active ? 'badge-success' : 'badge-secondary' }}"
+            @php
+                $activeBatches = $category->batches->where('is_active', true)->sortByDesc('year');
+            @endphp
+
+            @forelse($activeBatches as $batch)
+                <span class="badge badge-success"
                     title="{{ $batch->start_date ? $batch->start_date->format('d M') : '' }} - {{ $batch->end_date ? $batch->end_date->format('d M Y') : '' }}">
                     {{ $batch->name }} {{ $batch->year }}
-                    @if($batch->is_active) <i class="fas fa-check-circle ml-1" style="font-size: 0.8em;"></i> @endif
+                    <i class="fas fa-check-circle ml-1" style="font-size: 0.8em;"></i>
                 </span>
             @empty
-                <span class="badge badge-light">Belum diatur</span>
+                @if($category->batches->count() > 0)
+                    <span class="text-muted text-xs"><i>Tidak ada gelombang aktif</i></span>
+                @else
+                    <span class="badge badge-light">Belum diatur</span>
+                @endif
             @endforelse
         </div>
     </td>
