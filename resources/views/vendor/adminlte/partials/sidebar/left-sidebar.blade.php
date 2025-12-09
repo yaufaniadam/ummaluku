@@ -31,6 +31,20 @@
                     @endif
 
                     {{-- ================================================= --}}
+                    {{-- MENU UNTUK EKSEKUTIF (RECTOR, VICE RECTOR, ETC)   --}}
+                    {{-- ================================================= --}}
+                    @can('view-executive-dashboard')
+                        <li class="nav-header">EKSEKUTIF</li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.executive.dashboard') }}"
+                                class="nav-link {{ request()->routeIs('admin.executive.dashboard') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-chart-line"></i>
+                                <p>Executive Dashboard</p>
+                            </a>
+                        </li>
+                    @endcan
+
+                    {{-- ================================================= --}}
                     {{-- MENU UNTUK PORTAL ADMISI (STAF, DIREKTUR, SUPER ADMIN) --}}
                     {{-- ================================================= --}}
                     @if (auth()->user()->hasRole(['Super Admin', 'Direktur Admisi', 'Staf Admisi']))
