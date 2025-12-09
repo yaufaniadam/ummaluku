@@ -24,7 +24,7 @@ class BatchController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'string|max:255',
+            'description' => 'nullable|string|max:255',
             'year' => 'required|digits:4|integer|min:2020',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
@@ -45,7 +45,7 @@ class BatchController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'string|max:255',
+            'description' => 'nullable|string|max:255',
             'year' => 'required|digits:4|integer|min:2020',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
