@@ -25,6 +25,9 @@ use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\Admin\LecturerController;
 use App\DataTables\LecturerDataTable;
 
+use App\Http\Controllers\Admin\StaffController;
+use App\DataTables\StaffDataTable;
+
 use App\Http\Controllers\Admin\CurriculumController;
 use App\DataTables\CurriculumDataTable;
 
@@ -83,6 +86,11 @@ Route::prefix('admin/sdm')->middleware(['auth', 'permission:dosen-list'])->name(
     Route::get('lecturers-data', function (LecturerDataTable $dataTable) {
         return $dataTable->ajax();
     })->name('lecturers.data');
+
+    Route::resource('staff', StaffController::class);
+    Route::get('staff-data', function (StaffDataTable $dataTable) {
+        return $dataTable->ajax();
+    })->name('staff.data');
 });
 
 Route::prefix('admin/keuangan')->middleware(['auth', 'permission:biaya-list'])->name('admin.keuangan.')->group(function () {
