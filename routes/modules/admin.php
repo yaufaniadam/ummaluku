@@ -47,6 +47,12 @@ Route::prefix('admin')->middleware(['auth', 'role:Super Admin|Direktur Admisi|St
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 });
 
+Route::prefix('admin/system')->middleware(['auth', 'role:Super Admin'])->name('admin.system.')->group(function () {
+    Route::get('/roles', App\Livewire\System\Role\Index::class)->name('roles.index');
+    Route::get('/roles/create', App\Livewire\System\Role\Form::class)->name('roles.create');
+    Route::get('/roles/{role}/edit', App\Livewire\System\Role\Form::class)->name('roles.edit');
+});
+
 Route::prefix('master')->middleware(['auth', 'role:Super Admin|Admin'])->name('master.')->group(function () {
     Route::get('/work-units', WorkUnitIndex::class)->name('work-units.index');
 });
