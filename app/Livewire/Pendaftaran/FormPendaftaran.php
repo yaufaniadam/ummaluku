@@ -39,7 +39,7 @@ class FormPendaftaran extends Component
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'phone' => 'required|numeric|digits_between:10,15|different:parent_phone',
+            'phone' => 'required|numeric|between:10,15|different:parent_phone',
             'birth_date' => 'required|date',
             'gender' => 'required|in:Laki-laki,Perempuan',
             'parent_phone' => 'required|string|regex:/^[0-9]+$/|between:10,15|different:phone',
