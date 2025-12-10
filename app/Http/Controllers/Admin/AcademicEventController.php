@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\DataTables\AcademicEventDataTable; 
+use App\DataTables\AcademicEventDataTable; // <-- Tambahkan ini
 use App\Http\Controllers\Controller;
 use App\Models\AcademicEvent;
 use Illuminate\Http\Request;
@@ -36,12 +36,10 @@ class AcademicEventController extends Controller
                 // Tambahkan 1 hari ke end_date karena FullCalendar menganggap end date eksklusif
                 'end' => $event->end_date ? (new \DateTime($event->end_date))->modify('+1 day')->format('Y-m-d') : null,
                 'color' => $event->color,
-                'description' => $event->description, 
+                'description' => $event->description, // Data tambahan
             ];
         });
 
         return response()->json($formattedEvents);
     }
 }
-
-// edited by Adam
