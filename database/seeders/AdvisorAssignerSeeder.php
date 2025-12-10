@@ -17,7 +17,7 @@ class AdvisorAssignerSeeder extends Seeder
         $filePath = database_path('seeders/data/mappingdpa.xlsx');
 
         if (!file_exists($filePath)) {
-            $this->command->error('File mappingdpa.xlsx tidak ditemukan di database/data/.');
+            $this->command->error('File mappingdpa.xlsx tidak ditemukan di database/seeders/data/.');
             return;
         }
 
