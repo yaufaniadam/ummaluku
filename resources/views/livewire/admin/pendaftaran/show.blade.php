@@ -164,7 +164,7 @@
                 </div>
                 <div class="card-body p-0">
                     <div class="btn-group w-100" role="group">
-                        <a href="{{ route('admin.pendaftaran.index') }}" class="btn btn-outline-primary rounded-0">Kembali</a>
+                        <a href="{{ route('admin.pmb.pendaftaran.index') }}" class="btn btn-outline-primary rounded-0">Kembali</a>
                         @if ($application->status == 'proses_verifikasi')
                             <button class="btn btn-outline-success rounded-0" wire:click="finalizeVerification"
                                 wire:confirm="Anda yakin semua dokumen sudah diperiksa dan pendaftar ini lolos ke tahap seleksi?">
