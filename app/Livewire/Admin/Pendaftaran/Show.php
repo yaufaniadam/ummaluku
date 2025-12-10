@@ -12,6 +12,19 @@ class Show extends Component
     // berkat Route Model Binding
     public Application $application;
 
+    protected $listeners = ['document-status-updated' => 'refreshApplication'];
+
+    public function refreshApplication()
+    {
+        $this->application->refresh();
+        $this->application->load('documents');
+    }
+
+    public function getHasPendingDocumentsProperty()
+    {
+        return $this->application->documents()->where('status', 'pending')->exists();
+    }
+
     public function mount(Application $application)
     {
         // Kita tambahkan relasi baru untuk dimuat di sini
