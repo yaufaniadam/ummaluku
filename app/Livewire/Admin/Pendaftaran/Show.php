@@ -70,6 +70,15 @@ class Show extends Component
 
     public function finalizeVerification()
     {
+        // 1. Cek apakah ada dokumen yang masih berstatus 'pending' (belum diperiksa)
+        // Kita tidak boleh meloloskan verifikasi jika petugas belum memeriksa semua dokumen yang diupload
+        if ($this->application->documents()->where('status', 'pending')->exists()) {
+            $this->dispatch('show-alert', [
+                'type' => 'error',
+                'message' => 'Gagal! Masih ada dokumen yang belum diperiksa (status pending). Silakan verifikasi atau tolak dokumen tersebut.'
+            ]);
+            return;
+        }
 
         $requiredDocuments = $this->application->admissionCategory->documentRequirements;
         $verifiedDocuments = $this->application->documents()->where('status', 'verified')->pluck('document_requirement_id');
@@ -89,12 +98,7 @@ class Show extends Component
         $this->application->update(['status' => 'lolos_verifikasi_data']);
 
         // Ganti dengan perintah redirect
-        return redirect()->route('admin.seleksi.index')->with('success', 'Verifikasi Selesai! Pendaftar berhasil diloloskan ke tahap seleksi.');
-
-        // $this->dispatch('show-alert', [
-        //     'type' => 'success', 
-        //     'message' => 'Verifikasi Selesai! Pendaftar berhasil diloloskan ke tahap seleksi.'
-        // ]);
+        return redirect()->route('admin.pmb.seleksi.index')->with('success', 'Verifikasi Selesai! Pendaftar berhasil diloloskan ke tahap seleksi.');
     }
 
     public function rejectApplication($reason)
