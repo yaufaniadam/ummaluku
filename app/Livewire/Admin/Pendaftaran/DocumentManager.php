@@ -24,6 +24,7 @@ class DocumentManager extends Component
         if ($document) {
             $document->update(['status' => 'verified', 'verified_by' => auth()->id()]);
             $this->dispatch('show-alert', ['type' => 'success', 'message' => 'Dokumen berhasil diverifikasi.']);
+            $this->dispatch('document-status-updated');
         }
     }
 
@@ -48,6 +49,7 @@ class DocumentManager extends Component
                 'verified_by' => auth()->id(),
             ]);
             $this->dispatch('show-alert', ['type' => 'warning', 'message' => 'Catatan revisi telah disimpan.']);
+            $this->dispatch('document-status-updated');
         }
     }
 

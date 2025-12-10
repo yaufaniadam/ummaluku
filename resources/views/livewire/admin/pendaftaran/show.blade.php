@@ -1,19 +1,16 @@
-@extends('adminlte::page')
+<div>
+    @section('title', 'Detail Pendaftar')
 
-@section('title', 'Detail Pendaftar')
+    @section('content_header')
+        <h1>Detail Pendaftar</h1>
+        <div class="text-muted mt-1">{{ $application->registration_number }}</div>
+    @endsection
 
-@section('content_header')
-    <h1>Detail Pendaftar</h1>
-    <div class="text-muted mt-1">{{ $application->registration_number }}</div>
-@stop
-
-@if (session()->has('message'))
-    <div class="alert alert-success">
-        {{ session('message') }}
-    </div>
-@endif
-
-@section('content')
+    @if (session()->has('message'))
+        <div class="alert alert-success">
+            {{ session('message') }}
+        </div>
+    @endif
 
     @if (session()->has('message'))
         <div class="alert alert-success">
@@ -164,14 +161,18 @@
                 </div>
                 <div class="card-body p-0">
                     <div class="btn-group w-100" role="group">
-                        <a href="{{ route('admin.pendaftaran.index') }}" class="btn btn-outline-primary rounded-0">Kembali</a>
+                        <a href="{{ route('admin.pmb.pendaftaran.index') }}" class="btn btn-outline-primary rounded-0">Kembali</a>
                         @if ($application->status == 'proses_verifikasi')
-                            <button class="btn btn-outline-success rounded-0" wire:click="finalizeVerification"
-                                wire:confirm="Anda yakin semua dokumen sudah diperiksa dan pendaftar ini lolos ke tahap seleksi?">
-                                Loloskan Verifikasi</button>
+                            {{-- Hanya tampilkan tombol jika tidak ada dokumen pending --}}
+                            @if (!$this->hasPendingDocuments)
+                                <button class="btn btn-outline-success rounded-0" wire:click="finalizeVerification"
+                                    wire:confirm="Anda yakin semua dokumen sudah diperiksa dan pendaftar ini lolos ke tahap seleksi?">
+                                    Loloskan Verifikasi</button>
+                           
                             <button class="btn btn-outline-danger rounded-0" onclick="promptForApplicationRejection()">
                                 Tolak Pendaftaran
                             </button>
+                         @endif
                         @endif
                     </div>
                 </div>
@@ -207,33 +208,33 @@
             </div>
         </div>
     </div>
-@stop
 
-@push('js')
-<script>
-    // ... fungsi promptForRevision dan listener show-alert sudah ada ...
+    @push('js')
+    <script>
+        // ... fungsi promptForRevision dan listener show-alert sudah ada ...
 
-    // Fungsi baru untuk memunculkan prompt penolakan aplikasi
-    function promptForApplicationRejection() {
-        Swal.fire({
-            title: 'Tolak Pendaftaran Ini?',
-            input: 'textarea',
-            inputPlaceholder: 'Tuliskan alasan penolakan di sini (wajib diisi)...',
-            inputValidator: (value) => {
-                if (!value) {
-                    return 'Anda harus mengisi alasan penolakan!'
+        // Fungsi baru untuk memunculkan prompt penolakan aplikasi
+        function promptForApplicationRejection() {
+            Swal.fire({
+                title: 'Tolak Pendaftaran Ini?',
+                input: 'textarea',
+                inputPlaceholder: 'Tuliskan alasan penolakan di sini (wajib diisi)...',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Anda harus mengisi alasan penolakan!'
+                    }
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Tolak Pendaftaran',
+                confirmButtonColor: '#dc3545',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    // Panggil method Livewire dengan alasan dari SweetAlert
+                    @this.call('rejectApplication', result.value);
                 }
-            },
-            showCancelButton: true,
-            confirmButtonText: 'Ya, Tolak Pendaftaran',
-            confirmButtonColor: '#dc3545',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed && result.value) {
-                // Panggil method Livewire dengan alasan dari SweetAlert
-                @this.call('rejectApplication', result.value);
-            }
-        });
-    }
-</script>
-@endpush
+            });
+        }
+    </script>
+    @endpush
+</div>
