@@ -72,7 +72,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
     // Route::get('students/{student}', [StudentController::class, 'show'])->name('students.show');
 // });
 
-Route::prefix('admin')->middleware(['auth', 'permission:manage pmb'])->name('admin.')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:Super Admin|Direktur Admisi|Staf Admisi'])->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 });
 
