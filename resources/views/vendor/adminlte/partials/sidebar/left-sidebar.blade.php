@@ -39,6 +39,13 @@
                                 <p>Manajemen Role</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.system.users.index') }}"
+                                class="nav-link {{ request()->routeIs('admin.system.users.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-users-cog"></i>
+                                <p>Manajemen User</p>
+                            </a>
+                        </li>
                     @endif
 
                     {{-- ================================================= --}}

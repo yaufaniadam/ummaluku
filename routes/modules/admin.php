@@ -51,6 +51,10 @@ Route::prefix('admin/system')->middleware(['auth', 'role:Super Admin'])->name('a
     Route::get('/roles', App\Livewire\System\Role\Index::class)->name('roles.index');
     Route::get('/roles/create', App\Livewire\System\Role\Form::class)->name('roles.create');
     Route::get('/roles/{role}/edit', App\Livewire\System\Role\Form::class)->name('roles.edit');
+
+    Route::get('/users', App\Livewire\System\User\Index::class)->name('users.index');
+    Route::get('/users/create', App\Livewire\System\User\Form::class)->name('users.create');
+    Route::get('/users/{user}/edit', App\Livewire\System\User\Form::class)->name('users.edit');
 });
 
 Route::prefix('master')->middleware(['auth', 'role:Super Admin|Admin'])->name('master.')->group(function () {
