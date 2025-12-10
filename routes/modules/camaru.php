@@ -16,4 +16,8 @@ Route::middleware(['auth', 'role:Camaru'])->group(function () {
     Route::get('/camaru/registrasi', [ReRegistrationController::class, 'show'])->name('pendaftar.registrasi');
     Route::post('/camaru/registrasi/pilih-skema', [ReRegistrationController::class, 'choosePaymentScheme'])->name('pendaftar.registrasi.scheme');
     Route::post('/camaru/pembayaran-cicilan/{installment}', [InstallmentPaymentController::class, 'store'])->name('pendaftar.installment.store');
+
+    // Route untuk mendaftar kembali (re-apply)
+    Route::get('/camaru/reapply', [PendaftarDashboardController::class, 'showReApplyForm'])->name('pendaftar.reapply.form');
+    Route::post('/camaru/reapply', [PendaftarDashboardController::class, 'storeReApply'])->name('pendaftar.reapply.store');
 });

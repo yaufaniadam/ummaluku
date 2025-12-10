@@ -55,7 +55,7 @@ class FormPendaftaran extends Component
         return [
             'name.required' => 'Mohon isi nama lengkap Anda sesuai ijazah.',
             'email.required' => 'Alamat email wajib diisi.',
-            'email.unique' => 'Alamat email ini sudah pernah digunakan untuk mendaftar.',
+            'email.unique' => 'Email ini sudah terdaftar. Jika Anda sebelumnya tidak diterima dan ingin mendaftar kembali, silakan Login.',
             'birth_date.required' => 'Tanggal lahir wajib diisi.',
             'birth_place.required' => 'Tempat lahir wajib diisi.',
             'gender.required' => 'Jenis kelamin wajib diisi.',
