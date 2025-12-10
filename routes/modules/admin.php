@@ -43,7 +43,7 @@ use App\Http\Controllers\Modules\PMB\PaymentVerificationController;
 use App\Http\Controllers\Modules\PMB\FinalizeRegistrationController;
 
 
-Route::prefix('admin')->middleware(['auth', 'role:Super Admin|Direktur Admisi|Staf Admisi'])->name('admin.')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:Super Admin'])->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 });
 
@@ -160,13 +160,13 @@ Route::prefix('admin/akademik')->middleware(['auth'])->name('admin.akademik.')->
 });
 
 // permission minimal manage pmb/role dir pmb
-Route::prefix('admin/pmb')->middleware(['auth', 'permission:manage pmb'])->name('admin.pmb.')->group(function () {
+Route::prefix('admin/pmb')->middleware(['auth', 'permission:manage pmb settings'])->name('admin.pmb.')->group(function () {
     Route::resource('jalur-pendaftaran', AdmissionCategoryController::class);
     Route::resource('gelombang', BatchController::class);
 });
 
 // akses untuk user dengan permission view pmb
-Route::prefix('admin/pmb')->middleware(['auth', 'permission:view pmb'])->name('admin.pmb.')->group(function () {
+Route::prefix('admin/pmb')->middleware(['auth', 'permission:view applications'])->name('admin.pmb.')->group(function () {
     Route::get('/dashboard', [PMBDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/pendaftaran', [AdminPendaftaranController::class, 'index'])->name('pendaftaran.index');
