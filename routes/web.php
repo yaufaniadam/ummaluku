@@ -1,128 +1,27 @@
 <?php
 
-use App\Http\Controllers\Modules\PMB\AcceptedStudentController;
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Modules\PMB\PendaftaranController;
-use App\Livewire\Admin\Pendaftaran\Show as PendaftaranShow;
-use App\Http\Controllers\Modules\PMB\PendaftarDashboardController;
-use App\Http\Controllers\Modules\PMB\PendaftarBiodataController;
-
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Modules\PMB\AdminSeleksiController;
-use App\Http\Controllers\Modules\PMB\AdminPendaftaranController;
-use App\Http\Controllers\Modules\PMB\AdmissionCategoryController;
-use App\Http\Controllers\Modules\PMB\FinalizeRegistrationController;
-use App\Http\Controllers\Pendaftar\ReRegistrationController;
-use App\Http\Controllers\Modules\PMB\PaymentVerificationController;
-use App\Http\Controllers\Pendaftar\DocumentUploadController;
-use App\Http\Controllers\Pendaftar\InstallmentPaymentController;
-use App\Http\Controllers\Admin\StudentController;
-// use App\Http\Controllers\Akademik\Mahasiswa\DashboardController;
-use App\Http\Controllers\Modules\PMB\BatchController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationsController;
-
-use App\Http\Controllers\Admin\LecturerController;
-use App\DataTables\LecturerDataTable;
-
-use App\Http\Controllers\Admin\StaffController;
-use App\DataTables\StaffDataTable;
-use App\Livewire\Master\WorkUnit\Index as WorkUnitIndex;
-
-use App\Http\Controllers\Admin\CurriculumController;
-use App\DataTables\CurriculumDataTable;
-
-use App\Http\Controllers\Admin\CourseController;
-use App\DataTables\CourseDataTable;
-
-use App\Http\Controllers\Admin\AcademicYearController;
-use App\DataTables\AcademicYearDataTable;
-
-use App\Http\Controllers\Admin\CourseClassController;
-use App\DataTables\CourseClassDataTable;
-use App\Models\AcademicYear;
-use App\Models\Program;
-
-use App\DataTables\StudentDataTable;
-
-use App\Http\Controllers\Admin\TuitionFeeController;
-use App\DataTables\TuitionFeeDataTable;
-
-use App\Http\Controllers\Admin\FeeComponentController;
-use App\DataTables\FeeComponentDataTable;
-
-use App\Http\Controllers\Admin\AcademicEventController;
-use App\DataTables\AcademicEventDataTable;
 use App\Http\Controllers\AcademicCalendarController;
+use App\Http\Controllers\Admin\AcademicEventController;
+use App\Http\Controllers\Modules\PMB\PendaftaranController;
 
-use App\Http\Controllers\Akademik\AkademikDashboardController;
-use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\SDM\SDMDashboardController;
-use App\Http\Controllers\Modules\PMB\PMBDashboardController;
-use App\Http\Controllers\Keuangan\KeuanganDashboardController;
-
-use App\Http\Controllers\Admin\AcademicPaymentController; 
-use App\DataTables\AcademicInvoiceDataTable; 
-use App\Http\Controllers\Admin\ExecutiveDashboardController;
-
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Route::middleware(['auth'])->group(function () {
-    // Route::get('students/{student}', [StudentController::class, 'show'])->name('students.show');
-// });
-
-Route::prefix('admin')->middleware(['auth', 'role:Super Admin|Direktur Admisi|Staf Admisi'])->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-});
-
-Route::prefix('master')->middleware(['auth', 'role:Super Admin|Admin'])->name('master.')->group(function () {
-    Route::get('/work-units', WorkUnitIndex::class)->name('work-units.index');
-});
-
-Route::prefix('admin/executive')->middleware(['auth', 'permission:view-executive-dashboard'])->name('admin.executive.')->group(function () {
-    Route::get('/dashboard', [ExecutiveDashboardController::class, 'index'])->name('dashboard');
-});
-
-Route::prefix('admin/sdm')->middleware(['auth', 'permission:dosen-list'])->name('admin.sdm.')->group(function () {
-    Route::get('/dashboard', [SDMDashboardController::class, 'index'])->name('dashboard');
-    Route::post('lecturers/import', [LecturerController::class, 'import'])->name('lecturers.import');
-    Route::resource('lecturers', LecturerController::class);
-    Route::get('lecturers-data', function (LecturerDataTable $dataTable) {
-        return $dataTable->ajax();
-    })->name('lecturers.data');
-
-    Route::resource('staff', StaffController::class);
-    Route::get('staff-data', function (StaffDataTable $dataTable) {
-        return $dataTable->ajax();
-    })->name('staff.data');
-});
-
-Route::prefix('admin/keuangan')->middleware(['auth', 'permission:biaya-list'])->name('admin.keuangan.')->group(function () {
-    Route::get('/dashboard', [KeuanganDashboardController::class, 'index'])->name('dashboard');
-    Route::resource('tuition-fees', TuitionFeeController::class);
-    Route::get('tuition-fees-data', function (TuitionFeeDataTable $dataTable) {
-        return $dataTable->ajax();
-    })->name('tuition-fees.data');
-    Route::resource('fee-components', FeeComponentController::class);
-    Route::get('fee-components-data', function (FeeComponentDataTable $dataTable) {
-        return $dataTable->ajax();
-    })->name('fee-components.data');
-
-    Route::post('tuition-fees/duplicate', [TuitionFeeController::class, 'duplicate'])->name('tuition-fees.duplicate');
-
-    Route::post('payment-verification/{payment}/approve', [AcademicPaymentController::class, 'approve'])->name('payment-verification.approve');
-    Route::post('payment-verification/{payment}/reject', [AcademicPaymentController::class, 'reject'])->name('payment-verification.reject');
-
-
-    Route::resource('payment-verification', AcademicPaymentController::class)->only(['index']);
-    Route::get('payment-verification-data', function(AcademicInvoiceDataTable $dataTable) {
-        return $dataTable->ajax();
-    })->name('payment-verification.data');
-    
-});
-
-//akses untuk user login ke profil
+// Common Auth Routes (Profile, Notifications)
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -135,154 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/academic-events', [AcademicEventController::class, 'feed'])->name('api.academic-events.feed');
 });
 
-use App\Http\Controllers\Admin\CurriculumCourseController;
-
-Route::prefix('admin/akademik')->middleware(['auth'])->name('admin.akademik.')->group(function () {
-    Route::get('/dashboard', [AkademikDashboardController::class, 'index'])->name('dashboard');
-
-    Route::resource('curriculums', CurriculumController::class);
-    Route::get('curriculums-data', function (CurriculumDataTable $dataTable) {
-        return $dataTable->ajax();
-    })->name('curriculums.data');
-
-    Route::get('curriculums/{curriculum}/manage-courses', [CurriculumCourseController::class, 'index'])->name('curriculums.manage-courses');
-    Route::get('curriculums/{curriculum}/courses', [CurriculumCourseController::class, 'index'])->name('curriculums.courses.index');
-    Route::get('curriculums/{curriculum}/courses/add', [CurriculumCourseController::class, 'add'])->name('curriculums.courses.add');
-
-    Route::post('curriculums/{curriculum}/courses', [CurriculumCourseController::class, 'store'])->name('curriculums.courses.store');
-    Route::delete('curriculums/{curriculum}/courses/{course}', [CurriculumCourseController::class, 'destroy'])->name('curriculums.courses.destroy');
-
-    Route::delete('curriculums/{curriculum}/courses/bulk-delete', [CurriculumCourseController::class, 'bulkDestroy'])->name('curriculums.courses.bulkDestroy');
-
-    Route::post('/courses/bulk-delete', [CourseController::class, 'bulkDelete'])
-        ->name('courses.bulkDelete');
-
-    Route::resource('courses', CourseController::class);
-    Route::get('courses-data', function (CourseDataTable $dataTable) {
-        return $dataTable->ajax();
-    })->name('courses.data');
-
-    Route::post('courses/import', [CourseController::class, 'import'])->name('courses.import');
-
-
-    Route::resource('academic-years', AcademicYearController::class);
-    Route::get('academic-years-data', function (AcademicYearDataTable $dataTable) {
-        return $dataTable->ajax();
-    })->name('academic-years.data');
-    Route::resource('academic-years.programs.course-classes', CourseClassController::class)->except(['show']);
-    Route::get('academic-years/{academic_year}/programs/{program}/course-classes-data', function (CourseClassDataTable $dataTable, AcademicYear $academic_year, Program $program) {
-        $dataTable->academic_year_id = $academic_year->id;
-        $dataTable->program_id = $program->id;
-        return $dataTable->ajax();
-    })->name('academic-years.programs.course-classes.data');
-
-    // routes/admin.php
-    Route::post(
-        'academic-years/{academic_year}/programs/{program}/course-classes/{course}/quick-create',
-        [CourseClassController::class, 'quickCreate']
-    )->name('academic-years.programs.course-classes.quickCreate');
-
-    Route::get('students/import', [StudentController::class, 'showImportForm'])->name('students.import.form');
-    Route::post('students/import', [StudentController::class, 'importOld'])->name('students.import.old');
-    Route::resource('students', StudentController::class);
-    Route::get('students-data', function (StudentDataTable $dataTable) {
-        return $dataTable->ajax();
-    })->name('students.data');
-    Route::resource('academic-events', AcademicEventController::class);
-    Route::get('academic-events-data', function (AcademicEventDataTable $dataTable) {
-        return $dataTable->ajax();
-    })->name('academic-events.data');
-});
-
-
-
-// permission minimal manage pmb/role dir pmb
-Route::prefix('admin/pmb')->middleware(['auth', 'permission:manage pmb'])->name('admin.pmb.')->group(function () {
-    Route::resource('jalur-pendaftaran', AdmissionCategoryController::class);
-    Route::resource('gelombang', BatchController::class);
-});
-
-// akses untuk user dengan permission view pmb
-Route::prefix('admin/pmb')->middleware(['auth', 'permission:view pmb'])->name('admin.pmb.')->group(function () {
-    Route::get('/dashboard', [PMBDashboardController::class, 'index'])->name('dashboard');
-
-    Route::get('/pendaftaran', [AdminPendaftaranController::class, 'index'])->name('pendaftaran.index');
-    Route::get('/pendaftaran/{application}', PendaftaranShow::class)->name('pendaftaran.show');
-
-    Route::get('/seleksi', [AdminSeleksiController::class, 'index'])->name('seleksi.index');
-    Route::get('/seleksi/data', [AdminSeleksiController::class, 'data'])->name('seleksi.data');
-    Route::post('/seleksi/{application}/accept', [AdminSeleksiController::class, 'accept'])->name('seleksi.accept');
-    Route::post('/seleksi/{application}/reject', [AdminSeleksiController::class, 'reject'])->name('seleksi.reject');
-    Route::get('/diterima', [AcceptedStudentController::class, 'index'])->name('diterima.index');
-
-    Route::get('/verifikasi-pembayaran', [PaymentVerificationController::class, 'index'])->name('payment.index');
-    Route::get('/verifikasi-pembayaran/{invoice}', [PaymentVerificationController::class, 'show'])->name('payment.show');
-    // Route::post('/verifikasi-pembayaran/{invoice}/approve', [PaymentVerificationController::class, 'approve'])->name('payment.approve');
-
-    //verifikasi pembayaran cicilan untuk registrasi ulang
-    Route::post('/verifikasi-pembayaran/installment/{installment}/approve', [PaymentVerificationController::class, 'approveInstallment'])->name('payment.approve');
-    Route::post('/verifikasi-pembayaran/installment/{installment}/reject', [PaymentVerificationController::class, 'rejectInstallment'])->name('payment.reject');
-    // finalisasi pendaftaran
-    Route::post('/diterima/{application}/finalize', [FinalizeRegistrationController::class, 'finalize'])->name('accepted.finalize');
-});
-
-// Untuk Calon Mahasiswa
-Route::middleware('auth', 'role:Camaru')->group(function () {
-    Route::get('/camaru', [PendaftarDashboardController::class, 'showDashboard'])->name('pendaftar');
-    Route::get('/camaru/biodata', [PendaftarBiodataController::class, 'showDashboard'])->name('pendaftar.biodata');
-    Route::get('/camaru/upload-dokumen', [PendaftarBiodataController::class, 'showDocumentUploadForm'])->name('pendaftar.document.form');
-    Route::post('/camaru/dashboard/upload-document/{application}', [DocumentUploadController::class, 'store'])->name('pendaftar.document.store');
-    Route::get('/camaru/registrasi', [ReRegistrationController::class, 'show'])->name('pendaftar.registrasi');
-    Route::post('/camaru/registrasi/pilih-skema', [ReRegistrationController::class, 'choosePaymentScheme'])->name('pendaftar.registrasi.scheme');
-    Route::post('/camaru/pembayaran-cicilan/{installment}', [InstallmentPaymentController::class, 'store'])->name('pendaftar.installment.store');
-});
-
-
-// untuk mahasiswa
-use App\Http\Controllers\Mahasiswa\KrsController;
-use App\Http\Controllers\Mahasiswa\DashboardController;
-use App\Http\Controllers\Mahasiswa\ProfileController as MhsProfileController;
-use App\Http\Controllers\Mahasiswa\KeuanganController;
-use App\Http\Controllers\Mahasiswa\PaymentConfirmationController;
-use App\Http\Controllers\Mahasiswa\HasilStudiController; 
-
-Route::prefix('mahasiswa')->middleware(['auth', 'role:Mahasiswa'])->prefix('mahasiswa')->name('mahasiswa.')->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('krs', [KrsController::class, 'index'])->name('krs.index');
-    Route::get('krs/proses', [KrsController::class, 'prosesKrs'])->name('krs.proses');
-    Route::get('profil', [MhsProfileController::class, 'index'])->name('profil.index');
-    Route::get('keuangan', [KeuanganController::class, 'index'])->name('keuangan.index');
-    Route::get('keuangan/{invoice}', [KeuanganController::class, 'show'])->name('keuangan.show');
-    Route::get('keuangan/{invoice}/confirm', [PaymentConfirmationController::class, 'create'])->name('keuangan.confirm.create');
-    Route::post('keuangan/{invoice}/confirm', [PaymentConfirmationController::class, 'store'])->name('keuangan.confirm');
-    Route::get('hasil-studi', [HasilStudiController::class, 'index'])->name('hasil-studi.index');
-    Route::get('krs-aktif/cetak', [KrsController::class, 'printPdf'])->name('krs.aktif.print');
-});
-
-//untuk dosen
-use App\Http\Controllers\Dosen\DashboardController as DosenDashboardController;
-use App\Http\Controllers\Dosen\KrsApprovalController;
-use App\Http\Controllers\Dosen\AdvisedStudentController;
-use App\Http\Controllers\Dosen\GradeInputController;
-
-
-Route::middleware(['auth', 'role:Dosen'])->prefix('dosen')->name('dosen.')->group(function () {
-
-    Route::get('/dosen/dashboard', fn() => 'Dashboard Dosen')
-        ->name('dosen.dashboard');
-
-    Route::get('krs-approval', [KrsApprovalController::class, 'index'])->name('krs-approval.index');
-    Route::get('dashboard', [DosenDashboardController::class, 'index'])->name('dashboard');
-    Route::get('krs-approval', [KrsApprovalController::class, 'index'])->name('krs-approval.index');
-    Route::get('krs-approval/{student}', [KrsApprovalController::class, 'show'])->name('krs-approval.show');
-    Route::get('mahasiswa-bimbingan', [AdvisedStudentController::class, 'index'])->name('advised-students.index');
-    Route::get('input-nilai', [GradeInputController::class, 'index'])->name('grades.input.index');
-
-    Route::get('input-nilai/{course_class}', [GradeInputController::class, 'show'])->name('grades.input.show');
-
-});
-
-// No Login
+// Public Pages (PMB)
 Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.form');
 
 Route::get('/pendaftaran/sukses', function () {
@@ -290,5 +42,12 @@ Route::get('/pendaftaran/sukses', function () {
 })->name('pendaftaran.sukses');
 
 Route::get('/admisi/{category:slug}', [PendaftaranController::class, 'showCategoryDetail'])->name('pendaftaran.category.detail');
+
+
+// Load Module Routes
+require __DIR__ . '/modules/admin.php';
+require __DIR__ . '/modules/student.php';
+require __DIR__ . '/modules/lecturer.php';
+require __DIR__ . '/modules/camaru.php';
 
 require __DIR__ . '/auth.php';
