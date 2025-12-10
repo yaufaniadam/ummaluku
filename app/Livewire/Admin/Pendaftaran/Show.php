@@ -143,6 +143,8 @@ class Show extends Component
 
     public function render()
     {
-        return view('livewire.admin.pendaftaran.show');
+        return view('livewire.admin.pendaftaran.show')
+            ->extends('adminlte::page')
+            ->section('content');
     }
 }

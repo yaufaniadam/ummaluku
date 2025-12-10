@@ -1,19 +1,16 @@
-@extends('adminlte::page')
+<div>
+    @section('title', 'Detail Pendaftar')
 
-@section('title', 'Detail Pendaftar')
+    @section('content_header')
+        <h1>Detail Pendaftar</h1>
+        <div class="text-muted mt-1">{{ $application->registration_number }}</div>
+    @endsection
 
-@section('content_header')
-    <h1>Detail Pendaftar</h1>
-    <div class="text-muted mt-1">{{ $application->registration_number }}</div>
-@stop
-
-@if (session()->has('message'))
-    <div class="alert alert-success">
-        {{ session('message') }}
-    </div>
-@endif
-
-@section('content')
+    @if (session()->has('message'))
+        <div class="alert alert-success">
+            {{ session('message') }}
+        </div>
+    @endif
 
     @if (session()->has('message'))
         <div class="alert alert-success">
@@ -210,33 +207,33 @@
             </div>
         </div>
     </div>
-@stop
 
-@push('js')
-<script>
-    // ... fungsi promptForRevision dan listener show-alert sudah ada ...
+    @push('js')
+    <script>
+        // ... fungsi promptForRevision dan listener show-alert sudah ada ...
 
-    // Fungsi baru untuk memunculkan prompt penolakan aplikasi
-    function promptForApplicationRejection() {
-        Swal.fire({
-            title: 'Tolak Pendaftaran Ini?',
-            input: 'textarea',
-            inputPlaceholder: 'Tuliskan alasan penolakan di sini (wajib diisi)...',
-            inputValidator: (value) => {
-                if (!value) {
-                    return 'Anda harus mengisi alasan penolakan!'
+        // Fungsi baru untuk memunculkan prompt penolakan aplikasi
+        function promptForApplicationRejection() {
+            Swal.fire({
+                title: 'Tolak Pendaftaran Ini?',
+                input: 'textarea',
+                inputPlaceholder: 'Tuliskan alasan penolakan di sini (wajib diisi)...',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Anda harus mengisi alasan penolakan!'
+                    }
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Tolak Pendaftaran',
+                confirmButtonColor: '#dc3545',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    // Panggil method Livewire dengan alasan dari SweetAlert
+                    @this.call('rejectApplication', result.value);
                 }
-            },
-            showCancelButton: true,
-            confirmButtonText: 'Ya, Tolak Pendaftaran',
-            confirmButtonColor: '#dc3545',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed && result.value) {
-                // Panggil method Livewire dengan alasan dari SweetAlert
-                @this.call('rejectApplication', result.value);
-            }
-        });
-    }
-</script>
-@endpush
+            });
+        }
+    </script>
+    @endpush
+</div>
