@@ -1,10 +1,10 @@
-@section('title', 'Manajemen Role')
+<div>
+    @section('title', 'Manajemen Role')
 
-@section('content_header')
-    <h1>Manajemen Role</h1>
-@stop
+    @section('content_header')
+        <h1>Manajemen Role</h1>
+    @stop
 
-@section('content')
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -85,10 +85,4 @@
             </div>
         </div>
     </div>
-@stop
-
-@section('css')
-@stop
-
-@section('js')
-@stop
+</div>

@@ -45,6 +45,6 @@ class Index extends Component
 
         return view('livewire.system.role.index', [
             'roles' => $roles
-        ])->layout('adminlte::page');
+        ])->extends('adminlte::page')->section('content');
     }
 }

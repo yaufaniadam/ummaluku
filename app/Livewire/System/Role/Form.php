@@ -73,6 +73,6 @@ class Form extends Component
 
         return view('livewire.system.role.form', [
             'permissions' => $permissions
-        ])->layout('adminlte::page');
+        ])->extends('adminlte::page')->section('content');
     }
 }

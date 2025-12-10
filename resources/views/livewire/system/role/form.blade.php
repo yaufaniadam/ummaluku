@@ -1,10 +1,10 @@
-@section('title', $roleId ? 'Edit Role' : 'Tambah Role')
+<div>
+    @section('title', $roleId ? 'Edit Role' : 'Tambah Role')
 
-@section('content_header')
-    <h1>{{ $roleId ? 'Edit Role' : 'Tambah Role' }}</h1>
-@stop
+    @section('content_header')
+        <h1>{{ $roleId ? 'Edit Role' : 'Tambah Role' }}</h1>
+    @stop
 
-@section('content')
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -56,10 +56,4 @@
             </div>
         </div>
     </div>
-@stop
-
-@section('css')
-@stop
-
-@section('js')
-@stop
+</div>
