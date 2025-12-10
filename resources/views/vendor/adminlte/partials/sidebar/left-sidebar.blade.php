@@ -30,6 +30,24 @@
                         </li>
                     @endif
 
+                    @if (auth()->user()->hasRole('Super Admin'))
+                        <li class="nav-header">SYSTEM</li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.system.roles.index') }}"
+                                class="nav-link {{ request()->routeIs('admin.system.roles.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-user-shield"></i>
+                                <p>Manajemen Role</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.system.users.index') }}"
+                                class="nav-link {{ request()->routeIs('admin.system.users.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-users-cog"></i>
+                                <p>Manajemen User</p>
+                            </a>
+                        </li>
+                    @endif
+
                     {{-- ================================================= --}}
                     {{-- MENU UNTUK EKSEKUTIF (RECTOR, VICE RECTOR, ETC)   --}}
                     {{-- ================================================= --}}
