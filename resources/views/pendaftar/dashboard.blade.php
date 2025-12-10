@@ -70,6 +70,21 @@
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
 
+        {{-- Jika ditolak, tampilkan alert dan tombol daftar lagi --}}
+        @if ($application->status == 'ditolak')
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-title">Maaf, Pendaftaran Anda Belum Diterima.</h4>
+                <div class="text-muted">
+                    Jangan patah semangat! Anda masih bisa mencoba mendaftar kembali di gelombang berikutnya atau memilih program studi lain.
+                </div>
+                <div class="mt-3">
+                    <a href="{{ route('pendaftar.reapply.form') }}" class="btn btn-danger">
+                        Daftar Kembali (Buat Lamaran Baru)
+                    </a>
+                </div>
+            </div>
+        @endif
+
         <h5 class="card-title mb-2">Selamat Datang, {{ $application->prospective->user->name }}!</h5>
         <p>Status Pendaftaran Anda saat ini: <strong
                 class="badge bg-warning">{{ Str::title(str_replace('_', ' ', $application->status)) }}</strong>

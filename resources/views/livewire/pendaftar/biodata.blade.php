@@ -93,8 +93,14 @@
                                     placeholder="Pilih sekolah..." readonly wire:model="nama_sekolah">
 
 
-                                <button type="button" class="btn btn-secondary" wire:click="$set('showModal', true)">
-                                    Lihat Daftar Sekolah
+                                <button type="button" class="btn btn-secondary" wire:click="$set('showModal', true)" wire:loading.attr="disabled">
+                                    <span wire:loading.remove wire:target="$set('showModal', true)">
+                                        Lihat Daftar Sekolah
+                                    </span>
+                                    <span wire:loading wire:target="$set('showModal', true)">
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        Memuat...
+                                    </span>
                                 </button>
                             </div>
 
