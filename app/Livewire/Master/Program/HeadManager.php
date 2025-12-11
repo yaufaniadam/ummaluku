@@ -87,7 +87,7 @@ class HeadManager extends Component
     public function render()
     {
         return view('livewire.master.program.head-manager', [
-            'lecturers' => Lecturer::orderBy('name')->get()
+            'lecturers' => Lecturer::orderBy('full_name_with_degree')->get()
         ])->extends('adminlte::page')->section('content');
     }
 }
