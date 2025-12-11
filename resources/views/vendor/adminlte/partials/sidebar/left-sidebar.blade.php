@@ -222,6 +222,13 @@
                                 <p>Unit Kerja</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('master.programs.index') }}"
+                                class="nav-link {{ request()->routeIs('master.programs.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-university"></i>
+                                <p>Program Studi</p>
+                            </a>
+                        </li>
                     @endif
 
                     {{-- ================================================= --}}
