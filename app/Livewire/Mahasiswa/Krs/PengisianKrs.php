@@ -16,6 +16,7 @@ class PengisianKrs extends Component
     public Student $student;
     public ?AcademicYear $activeSemester;
     public $availableClasses;
+    public $groupedAvailableClasses = []; // Added for grouping
     public $selectedClasses = [];
     public $sksLimit = 24; // Batas SKS default
     public $totalSks = 0;
@@ -64,16 +65,29 @@ class PengisianKrs extends Component
 
             // Ambil kelas yang tersedia
             $this->availableClasses = CourseClass::where('academic_year_id', $this->activeSemester->id)
-                ->whereHas('course.curriculums', function ($query) { // <-- UBAH DI SINI
-                    $query->where('program_id', $this->student->program_id);
+                ->whereHas('course.curriculums', function ($query) {
+                    $query->where('program_id', $this->student->program_id)
+                          ->where('is_active', true);
                 })
-                ->with(['course', 'lecturer'])
+                ->with(['course.curriculums' => function($q) {
+                     $q->where('program_id', $this->student->program_id)
+                       ->where('is_active', true);
+                }, 'lecturer'])
                 ->get();
+
+            // Group classes by semester
+            $this->groupedAvailableClasses = $this->availableClasses->groupBy(function ($class) {
+                $curriculum = $class->course->curriculums->first();
+                return $curriculum ? $curriculum->pivot->semester : 999;
+            })->sortKeys();
 
             // Ambil data KRS yang sudah pernah dipilih sebelumnya
             $existingEnrollments = ClassEnrollment::where('student_id', $this->student->id)
                 ->where('academic_year_id', $this->activeSemester->id)
-                ->with('courseClass.course')
+                ->with(['courseClass.course.curriculums' => function($q) {
+                     $q->where('program_id', $this->student->program_id)
+                       ->where('is_active', true);
+                }])
                 ->get();
 
             foreach ($existingEnrollments as $enrollment) {
@@ -120,7 +134,7 @@ class PengisianKrs extends Component
     {
         unset($this->selectedClasses[$classId]);
         $this->calculateTotalSks();
-        $this->calculateTotalFee(); // <-- TAMBAHKAN BARIS INI
+        $this->calculateTotalFee();
         $this->dispatch('success', message: 'Kelas berhasil dihapus.');
     }
 
