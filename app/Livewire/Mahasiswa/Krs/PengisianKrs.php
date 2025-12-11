@@ -15,7 +15,6 @@ class PengisianKrs extends Component
 {
     public Student $student;
     public ?AcademicYear $activeSemester;
-    public $availableClasses;
     public $selectedClasses = [];
     public $sksLimit = 24; // Batas SKS default
     public $totalSks = 0;
@@ -62,18 +61,13 @@ class PengisianKrs extends Component
                     break;
             }
 
-            // Ambil kelas yang tersedia
-            $this->availableClasses = CourseClass::where('academic_year_id', $this->activeSemester->id)
-                ->whereHas('course.curriculums', function ($query) { // <-- UBAH DI SINI
-                    $query->where('program_id', $this->student->program_id);
-                })
-                ->with(['course', 'lecturer'])
-                ->get();
-
             // Ambil data KRS yang sudah pernah dipilih sebelumnya
             $existingEnrollments = ClassEnrollment::where('student_id', $this->student->id)
                 ->where('academic_year_id', $this->activeSemester->id)
-                ->with('courseClass.course')
+                ->with(['courseClass.course.curriculums' => function($q) {
+                     $q->where('program_id', $this->student->program_id)
+                       ->where('is_active', true);
+                }])
                 ->get();
 
             foreach ($existingEnrollments as $enrollment) {
@@ -87,7 +81,17 @@ class PengisianKrs extends Component
 
     public function selectClass($classId)
     {
-        $class = $this->availableClasses->find($classId);
+        // Fetch the class directly from DB since we don't store availableClasses in state anymore
+        $class = CourseClass::with(['course.curriculums' => function($q) {
+                $q->where('program_id', $this->student->program_id)
+                  ->where('is_active', true);
+            }, 'lecturer'])
+            ->find($classId);
+
+        if (!$class) {
+             $this->dispatch('error', message: 'Kelas tidak ditemukan.');
+             return;
+        }
 
         // Validasi 1: Cek SKS Limit
         if (($this->totalSks + $class->course->sks) > $this->sksLimit) {
@@ -120,7 +124,7 @@ class PengisianKrs extends Component
     {
         unset($this->selectedClasses[$classId]);
         $this->calculateTotalSks();
-        $this->calculateTotalFee(); // <-- TAMBAHKAN BARIS INI
+        $this->calculateTotalFee();
         $this->dispatch('success', message: 'Kelas berhasil dihapus.');
     }
 
@@ -207,6 +211,28 @@ class PengisianKrs extends Component
 
     public function render()
     {
-        return view('livewire.mahasiswa.krs.pengisian-krs');
+        $groupedAvailableClasses = [];
+
+        if ($this->activeSemester && $this->student) {
+             // Ambil kelas yang tersedia
+             $availableClasses = CourseClass::where('academic_year_id', $this->activeSemester->id)
+             ->whereHas('course.curriculums', function ($query) {
+                 $query->where('program_id', $this->student->program_id)
+                       ->where('is_active', true);
+             })
+             ->with(['course.curriculums' => function($q) {
+                  $q->where('program_id', $this->student->program_id)
+                    ->where('is_active', true);
+             }, 'lecturer'])
+             ->get();
+
+             // Group classes by semester
+             $groupedAvailableClasses = $availableClasses->groupBy(function ($class) {
+                 $curriculum = $class->course->curriculums->first();
+                 return $curriculum ? $curriculum->pivot->semester : 999;
+             })->sortKeys();
+        }
+
+        return view('livewire.mahasiswa.krs.pengisian-krs', compact('groupedAvailableClasses'));
     }
 }
