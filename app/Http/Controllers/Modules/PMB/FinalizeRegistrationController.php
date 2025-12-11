@@ -25,8 +25,10 @@ class FinalizeRegistrationController extends Controller
             return back()->with('error', 'Pendaftar ini belum memenuhi syarat untuk difinalisasi.');
         }
 
+        $warningMessage = '';
+
         try {
-            DB::transaction(function () use ($application) {
+            DB::transaction(function () use ($application, &$warningMessage) {
                 // 2. Ambil data program studi tempat mahasiswa diterima
                 $acceptedProgramId = $application->programChoices->where('is_accepted', true)->first()->program_id;
 
@@ -46,13 +48,19 @@ class FinalizeRegistrationController extends Controller
                 $application->update(['status' => 'sudah_registrasi']);
 
                 // 6. Otomatis Enroll Mata Kuliah Semester 1
-                $this->autoEnrollSemesterOne($student, $application->batch->year);
+                try {
+                    $this->autoEnrollSemesterOne($student, $application->batch->year);
+                } catch (\Exception $e) {
+                    // Jika auto enroll gagal, jangan batalkan transaksi utama, tapi catat errornya
+                    // Log::error('Auto enroll failed: ' . $e->getMessage());
+                    $warningMessage = ' Namun, gagal mendaftarkan mata kuliah otomatis: ' . $e->getMessage();
+                }
             });
         } catch (\Exception $e) {
             return back()->with('error', 'Terjadi kesalahan saat finalisasi: ' . $e->getMessage());
         }
 
-        return redirect()->route('admin.pmb.diterima.index')->with('success', 'Mahasiswa berhasil difinalisasi dan NIM telah dibuat.');
+        return redirect()->route('admin.pmb.diterima.index')->with('success', 'Mahasiswa berhasil difinalisasi dan NIM telah dibuat.' . $warningMessage);
     }
 
     /**

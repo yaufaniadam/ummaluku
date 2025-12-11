@@ -62,7 +62,7 @@ class AcceptedStudentsDataTable extends DataTable
                     return '
                     <form action="' . $finalizeUrl . '" method="POST">
                         ' . csrf_field() . '
-                        <button type="submit" class="btn btn-primary btn-sm btn-finalize-registration">
+                        <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm(\'Anda yakin ingin memfinalisasi mahasiswa ini dan membuat NIM?\')">
                             Finalisasi Registrasi
                         </button>
                     </form>
