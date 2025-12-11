@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Livewire\Dosen\Krs;
+namespace App\Livewire\Prodi\Krs;
 
+use App\Events\KrsApproved;
 use App\Models\AcademicYear;
 use App\Models\ClassEnrollment;
 use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use App\Events\KrsApproved; 
 
 class ApprovalDetail extends Component
 {
@@ -21,10 +21,16 @@ class ApprovalDetail extends Component
         $this->student = $student;
         $this->activeSemester = AcademicYear::where('is_active', true)->first();
 
+        // Check if student belongs to Kaprodi's program
+        $user = auth()->user();
+        if ($student->program_id !== $user->staff->program_id) {
+            abort(403, 'Anda tidak memiliki akses ke mahasiswa ini.');
+        }
+
         if ($this->activeSemester) {
             $this->enrollments = ClassEnrollment::where('student_id', $this->student->id)
                 ->where('academic_year_id', $this->activeSemester->id)
-                ->where('status', 'pending')
+                ->where('status', 'approved_advisor') // Only show those approved by advisor
                 ->with(['courseClass.course', 'courseClass.lecturer'])
                 ->get();
 
@@ -38,21 +44,23 @@ class ApprovalDetail extends Component
             return;
         }
 
-        $lecturerId = Auth::user()->lecturer->id;
+        // Kaprodi might not have a lecturer_id if they are purely staff (though unlikely).
+        // We'll use lecturer_id if available, else null, or maybe we should use user_id if DB supported it.
+        // DB `approved_by` references `lecturers`.
+        $lecturerId = Auth::user()->lecturer?->id;
 
         foreach ($this->enrollments as $enrollment) {
             $enrollment->update([
-                'status' => 'approved_advisor',
-                'approved_by' => null, // approved_by tracks final approval (Kaprodi), advisor status implies advisor approval
-                // Ideally we would have 'advisor_approved_by' but we agreed to keep schema simple.
-                // We can assume if status is approved_advisor, the advisor (PA) did it.
+                'status' => 'approved',
+                'approved_by' => $lecturerId,
             ]);
         }
 
-        // KrsApproved::dispatch($this->student, $this->activeSemester); // Don't dispatch final approval event yet
+        // Dispatch final approval event
+        KrsApproved::dispatch($this->student, $this->activeSemester);
 
-        session()->flash('success', 'KRS untuk mahasiswa ' . $this->student->user->name . ' telah disetujui dan diteruskan ke Kaprodi.');
-        return $this->redirect(route('dosen.krs-approval.index'), navigate: true);
+        session()->flash('success', 'KRS untuk mahasiswa ' . $this->student->user->name . ' berhasil disetujui Kaprodi.');
+        return $this->redirect(route('prodi.krs-approval.index'), navigate: true);
     }
 
     public function rejectKrs()
@@ -66,11 +74,11 @@ class ApprovalDetail extends Component
         }
 
         session()->flash('success', 'KRS untuk mahasiswa ' . $this->student->user->name . ' telah ditolak.');
-        return $this->redirect(route('dosen.krs-approval.index'), navigate: true);
+        return $this->redirect(route('prodi.krs-approval.index'), navigate: true);
     }
 
     public function render()
     {
-        return view('livewire.dosen.krs.approval-detail');
+        return view('livewire.prodi.krs.approval-detail')->extends('adminlte::page')->section('content');
     }
 }

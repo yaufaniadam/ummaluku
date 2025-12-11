@@ -30,6 +30,51 @@
                         </li>
                     @endif
 
+                    {{-- ================================================= --}}
+                    {{-- MENU UNTUK PORTAL PRODI (KAPRODI, STAF PRODI) --}}
+                    {{-- ================================================= --}}
+                    @if (auth()->user()->hasRole(['Kaprodi', 'Staf Prodi']))
+                        <li class="nav-header">PORTAL PRODI</li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('prodi.dashboard') }}"
+                                class="nav-link {{ request()->routeIs('prodi.dashboard') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+
+                        @can('kurikulum-list')
+                        <li class="nav-item">
+                            <a href="{{ route('prodi.course.index') }}"
+                                class="nav-link {{ request()->routeIs('prodi.course.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-book"></i>
+                                <p>Manajemen Matakuliah</p>
+                            </a>
+                        </li>
+                        @endcan
+
+                        @can('kelas-list')
+                        <li class="nav-item">
+                            <a href="{{ route('prodi.course-class.index') }}"
+                                class="nav-link {{ request()->routeIs('prodi.course-class.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                                <p>Manajemen Kelas</p>
+                            </a>
+                        </li>
+                        @endcan
+
+                        @role('Kaprodi')
+                        <li class="nav-item">
+                            <a href="{{ route('prodi.krs-approval.index') }}"
+                                class="nav-link {{ request()->routeIs('prodi.krs-approval.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-check-double"></i>
+                                <p>Persetujuan KRS</p>
+                            </a>
+                        </li>
+                        @endrole
+                    @endif
+
                     @if (auth()->user()->hasRole('Super Admin'))
                         <li class="nav-header">SYSTEM</li>
                         <li class="nav-item">
