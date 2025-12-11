@@ -32,28 +32,28 @@ class AuthenticatedSessionController extends Controller
 
         // Cek peran pengguna dan arahkan ke dashboard yang sesuai
         if ($user->hasRole(['Super Admin'])) {
-            return redirect()->intended(route('admin.dashboard'));
+            return redirect()->route('admin.dashboard');
         }
         if ($user->hasRole(['Direktur Admisi', 'Staf Admisi'])) {
-            return redirect()->intended(route('admin.pmb.dashboard'));
+            return redirect()->route('admin.pmb.dashboard');
         }
 
         if ($user->hasRole(['Direktur SDM', 'Staf SDM'])) {
-            return redirect()->intended(route('admin.sdm.dashboard'));
+            return redirect()->route('admin.sdm.dashboard');
         }
 
         if ($user->hasRole(['Direktur Keuangan', 'Staf Keuangan'])) {
-            return redirect()->intended(route('admin.keuangan.dashboard'));
+            return redirect()->route('admin.keuangan.dashboard');
         }
-        if ($user->hasRole(['Dosen', 'Staf Keuangan'])) {
-            return redirect()->intended(route('dosen.dashboard'));
+        if ($user->hasRole(['Dosen'])) {
+            return redirect()->route('dosen.dashboard');
         }
 
         if ($user->hasRole('Camaru')) {
-            return redirect()->intended(route('pendaftar'));
+            return redirect()->route('pendaftar');
         }
         if ($user->hasRole('Mahasiswa')) {
-            return redirect()->intended(route('mahasiswa.dashboard'));
+            return redirect()->route('mahasiswa.dashboard');
         }
         
         // Redirect default jika tidak punya peran di atas (misalnya ke homepage)
