@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Program extends Model
 {
@@ -17,6 +18,16 @@ class Program extends Model
     public function faculty(): BelongsTo
     {
         return $this->belongsTo(Faculty::class);
+    }
+
+    public function heads(): HasMany
+    {
+        return $this->hasMany(ProgramHead::class);
+    }
+
+    public function currentHead(): HasOne
+    {
+        return $this->hasOne(ProgramHead::class)->where('is_active', true)->latest('start_date');
     }
     public function feeStructures(): HasMany
     {
