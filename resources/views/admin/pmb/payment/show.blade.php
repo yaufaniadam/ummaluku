@@ -45,11 +45,11 @@
                             <td>
                                 @if($installment->status == 'pending_verification')
                                     <a href="{{ Storage::url($installment->proof_of_payment) }}" target="_blank" class="btn btn-xs btn-info">Lihat Bukti</a>
-                                    <form action="{{ route('admin.payment.approve', $installment) }}" method="POST" class="d-inline">
+                                    <form action="{{ route('admin.pmb.payment.approve', $installment) }}" method="POST" class="d-inline">
                                         @csrf
                                         <button type="submit" class="btn btn-xs btn-success" onclick="return confirm('Anda yakin?')">Setujui</button>
                                     </form>
-                                    <form action="{{ route('admin.payment.reject', $installment) }}" method="POST" class="d-inline">
+                                    <form action="{{ route('admin.pmb.payment.reject', $installment) }}" method="POST" class="d-inline">
                                         @csrf
                                         <button type="submit" class="btn btn-xs btn-danger" onclick="return confirm('Anda yakin?')">Tolak</button>
                                     </form>
