@@ -8,18 +8,38 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Daftar User</h3>
-                    <div class="card-tools">
-                        <a href="{{ route('admin.system.users.create') }}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-plus"></i> Tambah User
-                        </a>
-                    </div>
+                <div class="card-header p-0 pt-1 border-bottom-0">
+                    <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link {{ $activeTab === 'mahasiswa' ? 'active' : '' }}"
+                               wire:click.prevent="setTab('mahasiswa')" href="#">Mahasiswa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ $activeTab === 'dosen' ? 'active' : '' }}"
+                               wire:click.prevent="setTab('dosen')" href="#">Dosen</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ $activeTab === 'staf' ? 'active' : '' }}"
+                               wire:click.prevent="setTab('staf')" href="#">Staf</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ $activeTab === 'camaru' ? 'active' : '' }}"
+                               wire:click.prevent="setTab('camaru')" href="#">Camaru</a>
+                        </li>
+                    </ul>
                 </div>
                 <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-md-4">
+                    <div class="d-flex justify-content-between mb-3">
+                        <div class="input-group" style="width: 250px;">
                             <input type="text" class="form-control" placeholder="Cari User..." wire:model.live.debounce.300ms="search">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            </div>
+                        </div>
+                        <div>
+                             <a href="{{ route('admin.system.users.create') }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus"></i> Tambah User
+                            </a>
                         </div>
                     </div>
 
@@ -46,10 +66,31 @@
                             <thead>
                                 <tr>
                                     <th style="width: 50px;">#</th>
-                                    <th>Nama</th>
-                                    <th>Email</th>
+                                    <th wire:click="sortBy('name')" style="cursor: pointer;">
+                                        Nama
+                                        @if ($sortColumn === 'name')
+                                            <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
+                                        @else
+                                            <i class="fas fa-sort text-muted"></i>
+                                        @endif
+                                    </th>
+                                    <th wire:click="sortBy('email')" style="cursor: pointer;">
+                                        Email
+                                        @if ($sortColumn === 'email')
+                                            <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
+                                        @else
+                                            <i class="fas fa-sort text-muted"></i>
+                                        @endif
+                                    </th>
                                     <th>Role</th>
-                                    <th>Dibuat Pada</th>
+                                    <th wire:click="sortBy('created_at')" style="cursor: pointer;">
+                                        Dibuat Pada
+                                        @if ($sortColumn === 'created_at')
+                                            <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
+                                        @else
+                                            <i class="fas fa-sort text-muted"></i>
+                                        @endif
+                                    </th>
                                     <th style="width: 150px;">Aksi</th>
                                 </tr>
                             </thead>
