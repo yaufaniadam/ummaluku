@@ -10,11 +10,11 @@ class Index extends Component
 {
     use WithPagination;
 
-    public  = '';
+    public $search = '';
 
     public function render()
     {
-         = Program::with(['faculty', 'currentHead.lecturer'])
+        $programs = Program::with(['faculty', 'currentHead.lecturer'])
             ->where('name_id', 'like', '%' . $this->search . '%')
             ->orWhere('code', 'like', '%' . $this->search . '%')
             ->paginate(10);
