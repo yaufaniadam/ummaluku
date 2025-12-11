@@ -19,7 +19,7 @@
                 @auth
 
 
-                    @if (auth()->user()->hasRole(['Super Admin', 'Direktur Admisi', 'Staf Admisi']))
+                    @if (auth()->user()->hasRole(['Super Admin']))
                       
                         <li class="nav-item">
                             <a href="{{ route('admin.dashboard') }}"
