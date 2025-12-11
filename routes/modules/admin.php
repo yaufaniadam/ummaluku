@@ -147,6 +147,16 @@ Route::prefix('admin/akademik')->middleware(['auth'])->name('admin.akademik.')->
         [CourseClassController::class, 'quickCreate']
     )->name('academic-years.programs.course-classes.quickCreate');
 
+    Route::post(
+        'academic-years/{academic_year}/programs/{program}/course-classes/auto-generate',
+        [CourseClassController::class, 'autoGenerate']
+    )->name('academic-years.programs.course-classes.autoGenerate');
+
+    Route::post(
+        'academic-years/{academic_year}/programs/{program}/course-classes/copy-previous',
+        [CourseClassController::class, 'copyFromPrevious']
+    )->name('academic-years.programs.course-classes.copyFromPrevious');
+
     Route::get('students/import', [StudentController::class, 'showImportForm'])->name('students.import.form');
     Route::post('students/import', [StudentController::class, 'importOld'])->name('students.import.old');
     Route::resource('students', StudentController::class);
