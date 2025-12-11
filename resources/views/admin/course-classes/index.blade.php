@@ -3,13 +3,44 @@
 @section('title', 'Kelola Kelas Perkuliahan')
 
 @section('content_header')
-    <h1 class="mb-1">Kelola Kelas Perkuliahan</h1>
-    <h5 class="font-weight-light">
-        <a href="{{ route('admin.akademik.academic-years.index') }}" wire:navigate>Tahun Ajaran</a> >
-        <a href="{{ route('admin.akademik.academic-years.show', $academicYear) }}"
-            wire:navigate>{{ $academicYear->name }}</a> >
-        {{ $program->name_id }}
-    </h5>
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="mb-1">Kelola Kelas Perkuliahan</h1>
+            <h5 class="font-weight-light">
+                <a href="{{ route('admin.akademik.academic-years.index') }}" wire:navigate>Tahun Ajaran</a> >
+                <a href="{{ route('admin.akademik.academic-years.show', $academicYear) }}"
+                    wire:navigate>{{ $academicYear->name }}</a> >
+                {{ $program->name_id }}
+            </h5>
+        </div>
+        <div>
+            {{-- TOMBOL TOOLS --}}
+            <div class="btn-group">
+                <button type="button" class="btn btn-tool btn-primary dropdown-toggle" data-toggle="dropdown">
+                    <i class="fas fa-magic"></i> Fitur Bantu Admin
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    {{-- TOMBOL AUTO GENERATE --}}
+                    <form
+                        action="{{ route('admin.akademik.academic-years.programs.course-classes.autoGenerate', ['academic_year' => $academicYear, 'program' => $program]) }}"
+                        method="POST"
+                        onsubmit="return confirm('Apakah Anda yakin ingin membuat kelas secara otomatis untuk semua mata kuliah yang belum memiliki kelas di semester ini?');">
+                        @csrf
+                        <button type="submit" class="dropdown-item">
+                            <i class="fas fa-robot mr-2"></i> Auto-Generate Kelas
+                        </button>
+                    </form>
+
+                    <div class="dropdown-divider"></div>
+
+                    {{-- TOMBOL COPY CLASS --}}
+                    <button type="button" class="dropdown-item" data-toggle="modal" data-target="#copyClassModal">
+                        <i class="fas fa-copy mr-2"></i> Salin dari Tahun Lalu
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('content')
@@ -20,12 +51,24 @@
                     aria-hidden="true">&times;</span></button>
         </div>
     @endif
+    @if (session('warning'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ session('warning') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+        </div>
+    @endif
 
     {{-- CARD UNTUK MEMBUAT KELAS --}}
     <div class="card card-outline card-primary">
         <div class="card-header">
             <h3 class="card-title">Mata Kuliah dari Kurikulum: {{ $activeCurriculum->name ?? 'Tidak Ada Kurikulum Aktif' }}
             </h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
         </div>
         <div class="card-body table-responsive p-0">
             <table class="table table-hover">
@@ -128,6 +171,50 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    {{-- MODAL COPY CLASS --}}
+    <div class="modal fade" id="copyClassModal" tabindex="-1" role="dialog" aria-labelledby="copyClassModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form
+                    action="{{ route('admin.akademik.academic-years.programs.course-classes.copyFromPrevious', ['academic_year' => $academicYear, 'program' => $program]) }}"
+                    method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="copyClassModalLabel">Salin Kelas dari Tahun Lalu</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="source_academic_year_id">Pilih Tahun Ajaran Sumber</label>
+                            <select name="source_academic_year_id" id="source_academic_year_id" class="form-control"
+                                required>
+                                <option value="">-- Pilih Tahun Ajaran --</option>
+                                @foreach ($previousAcademicYears as $year)
+                                    <option value="{{ $year->id }}">{{ $year->name }} ({{ $year->semester_type }})
+                                    </option>
+                                @endforeach
+                            </select>
+                            <small class="form-text text-muted">
+                                Sistem akan menyalin semua kelas dari tahun ajaran yang dipilih ke tahun ajaran ini
+                                ({{ $academicYear->name }}).
+                                <br>
+                                <strong>Catatan:</strong> Kelas yang sudah ada (duplikat) tidak akan disalin ulang.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-primary"
+                            onclick="if(confirm('Apakah Anda yakin?')){ this.form.submit(); }">Salin Sekarang</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 @stop
