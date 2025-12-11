@@ -104,7 +104,7 @@ class FinalizeRegistrationController extends Controller
 
         if (!$academicYear) {
             // Jika tahun akademik belum dibuat, lewati proses ini (tidak error, hanya skip)
-            return;
+            throw new \Exception("Tahun Akademik $targetYearCode belum dibuat. Harap hubungi Admin Akademik.");
         }
 
         // 2. Cari Kurikulum Aktif untuk Program Studi ini
@@ -113,7 +113,7 @@ class FinalizeRegistrationController extends Controller
             ->first();
 
         if (!$curriculum) {
-            return;
+            throw new \Exception("Belum ada Kurikulum Aktif untuk Program Studi ini.");
         }
 
         // 3. Ambil Mata Kuliah Semester 1 dari Kurikulum tersebut
@@ -121,6 +121,10 @@ class FinalizeRegistrationController extends Controller
         $semesterOneCourses = $curriculum->courses()
             ->wherePivot('semester', 1)
             ->get();
+
+        if ($semesterOneCourses->isEmpty()) {
+            throw new \Exception("Tidak ada mata kuliah Semester 1 di kurikulum aktif.");
+        }
 
         foreach ($semesterOneCourses as $course) {
             // 4. Cek apakah sudah ada kelas untuk mata kuliah ini di tahun akademik tersebut
