@@ -76,6 +76,27 @@
             $('#program-filter, #category-filter, #batch-filter, #payment-status-filter').on('change', function() {
                 table.draw();
             });
+
+            // Handle Finalization Confirmation
+            $(document).on('click', '.btn-finalize-registration', function(e) {
+                e.preventDefault();
+                let form = $(this).closest('form');
+
+                Swal.fire({
+                    title: 'Konfirmasi Finalisasi',
+                    text: "Anda yakin ingin memfinalisasi mahasiswa ini dan membuat NIM?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Finalisasi!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
         });
     </script>
 @endpush
