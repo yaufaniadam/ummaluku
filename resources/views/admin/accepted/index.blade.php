@@ -93,7 +93,7 @@
                     cancelButtonText: 'Batal'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        form.submit();
+                        form[0].submit();
                     }
                 });
             });
