@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Modules\PMB;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademicYear;
 use App\Models\Application;
+use App\Models\ClassEnrollment;
+use App\Models\CourseClass;
+use App\Models\Curriculum;
 use App\Models\Program;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -41,10 +45,8 @@ class FinalizeRegistrationController extends Controller
                 // 5. Update Status Aplikasi menjadi Selesai
                 $application->update(['status' => 'sudah_registrasi']);
 
-                // Di sini nanti bisa ditambahkan logika untuk mendaftarkan "Paket Mata Kuliah" semester 1
-                // ke dalam tabel 'student_courses' jika diperlukan.
-
-                
+                // 6. Otomatis Enroll Mata Kuliah Semester 1
+                $this->autoEnrollSemesterOne($student, $application->batch->year);
             });
         } catch (\Exception $e) {
             return back()->with('error', 'Terjadi kesalahan saat finalisasi: ' . $e->getMessage());
@@ -79,5 +81,70 @@ class FinalizeRegistrationController extends Controller
 
         // 4. Gabungkan semuanya sesuai format baru
         return $year . $programCode . $sequentialNumber;
+    }
+
+    /**
+     * Otomatis mendaftarkan mahasiswa ke mata kuliah semester 1.
+     * Jika kelas belum ada, buatkan kelas default tanpa dosen.
+     */
+    private function autoEnrollSemesterOne(Student $student, int $entryYear)
+    {
+        // 1. Tentukan Tahun Akademik Semester 1 (Ganjil) untuk angkatan ini
+        // Format kode: YYYY1 (Contoh: 20251)
+        $targetYearCode = $entryYear . '1';
+        $academicYear = AcademicYear::where('year_code', $targetYearCode)->first();
+
+        if (!$academicYear) {
+            // Jika tahun akademik belum dibuat, lewati proses ini (tidak error, hanya skip)
+            return;
+        }
+
+        // 2. Cari Kurikulum Aktif untuk Program Studi ini
+        $curriculum = Curriculum::where('program_id', $student->program_id)
+            ->where('is_active', true)
+            ->first();
+
+        if (!$curriculum) {
+            return;
+        }
+
+        // 3. Ambil Mata Kuliah Semester 1 dari Kurikulum tersebut
+        // Menggunakan relasi BelongsToMany 'courses' dengan pivot 'semester'
+        $semesterOneCourses = $curriculum->courses()
+            ->wherePivot('semester', 1)
+            ->get();
+
+        foreach ($semesterOneCourses as $course) {
+            // 4. Cek apakah sudah ada kelas untuk mata kuliah ini di tahun akademik tersebut
+            // Ambil kelas pertama yang ditemukan (asumsi default class)
+            $courseClass = CourseClass::where('course_id', $course->id)
+                ->where('academic_year_id', $academicYear->id)
+                ->first();
+
+            // 5. Jika kelas belum ada, buat kelas baru (Auto-Create)
+            if (!$courseClass) {
+                $courseClass = CourseClass::create([
+                    'course_id' => $course->id,
+                    'academic_year_id' => $academicYear->id,
+                    'lecturer_id' => null, // Boleh null (TBA) sesuai kesepakatan
+                    'name' => 'Kelas A (Auto)', // Penanda kelas otomatis
+                    'capacity' => 50, // Default capacity
+                ]);
+            }
+
+            // 6. Enroll Mahasiswa ke Kelas tersebut
+            // Cek dulu biar gak duplikat (safety check)
+            $existingEnrollment = ClassEnrollment::where('student_id', $student->id)
+                ->where('course_class_id', $courseClass->id)
+                ->exists();
+
+            if (!$existingEnrollment) {
+                ClassEnrollment::create([
+                    'student_id' => $student->id,
+                    'course_class_id' => $courseClass->id,
+                    // Field lain seperti status_pembayaran dll bisa default
+                ]);
+            }
+        }
     }
 }
