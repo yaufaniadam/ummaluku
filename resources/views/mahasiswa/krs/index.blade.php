@@ -53,7 +53,7 @@
                                 <td>{{ $enrollment->courseClass->course->name }}</td>
                                 <td>{{ $enrollment->courseClass->course->sks }}</td>
                                 {{-- <td>{{ $enrollment->courseClass->name }}</td> --}}
-                                <td>{{ $enrollment->courseClass->lecturer->full_name_with_degree }}</td>
+                                <td>{{ $enrollment->courseClass->lecturer?->full_name_with_degree ?? 'TBA' }}</td>
                                 {{-- <td>{{ $enrollment->courseClass->day ?? '-' }}, {{ $enrollment->courseClass->start_time ? date('H:i', strtotime($enrollment->courseClass->start_time)) : '-' }}</td> --}}
                             </tr>
                         @endforeach

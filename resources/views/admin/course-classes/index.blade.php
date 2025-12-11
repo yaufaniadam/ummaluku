@@ -111,7 +111,7 @@
                             <tr>
                                 <td>{{ $class->course->name }}</td>
                                 {{-- <td>{{ $class->name }}</td> --}}
-                                <td>{{ $class->lecturer->full_name_with_degree ?? 'Belum ditentukan' }}</td>
+                                <td>{{ $class->lecturer?->full_name_with_degree ?? 'Belum ditentukan' }}</td>
                                 {{-- <td>{{ $class->capacity }}</td> --}}
                                 {{-- <td>{{ $class->day ?? '-' }},
                                 {{ $class->start_time ? date('H:i', strtotime($class->start_time)) : '' }}</td> --}}

@@ -61,7 +61,7 @@
                                         </td>
                                         <td>{{ $class->course->name }} ({{$class->name}})</td>
                                         <td>{{ $class->course->sks }}</td>
-                                        <td>{{ $class->lecturer->full_name_with_degree }}</td>
+                                        <td>{{ $class->lecturer?->full_name_with_degree ?? 'TBA' }}</td>
                                         <td>{{ $class->day ?? '-' }}, {{ $class->start_time ? date('H:i', strtotime($class->start_time)) : '-' }} - {{ $class->end_time ? date('H:i', strtotime($class->end_time)) : '-' }}</td>
                                     </tr>
                                 @empty
