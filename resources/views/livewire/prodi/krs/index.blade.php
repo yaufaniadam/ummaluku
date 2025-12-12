@@ -27,7 +27,7 @@
                         <tr>
                             <td>{{ $student->nim }}</td>
                             <td>{{ $student->user->name }}</td>
-                            <td>{{ $student->program->name_id }}</td>
+                            <td>{{ $student->program->name }}</td>
                             <td>
                                 <span class="badge badge-info">Menunggu Kaprodi</span>
                             </td>
