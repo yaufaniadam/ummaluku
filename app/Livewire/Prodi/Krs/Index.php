@@ -32,7 +32,7 @@ class Index extends Component
                 $query->where('name', 'like', '%' . $this->search . '%')
                       ->orWhere('email', 'like', '%' . $this->search . '%');
             })
-            ->whereHas('classEnrollments', function ($query) use ($activeSemester) {
+            ->whereHas('enrollments', function ($query) use ($activeSemester) {
                 $query->where('status', 'approved_advisor')
                       ->where('academic_year_id', $activeSemester?->id);
             })
