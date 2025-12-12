@@ -102,12 +102,12 @@ class Index extends Component
             ->paginate(10);
 
         $previousAcademicYears = AcademicYear::where('id', '!=', $this->activeYearId)
-            ->orderBy('start_year', 'desc')
+            ->orderBy('start_date', 'desc')
             ->get();
 
         return view('livewire.prodi.course-class.index', [
             'classes' => $classes,
-            'academicYears' => AcademicYear::orderBy('start_year', 'desc')->get(),
+            'academicYears' => AcademicYear::orderBy('start_date', 'desc')->get(),
             'previousAcademicYears' => $previousAcademicYears
         ])->extends('adminlte::page')->section('content');
     }
