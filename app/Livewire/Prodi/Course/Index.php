@@ -21,14 +21,14 @@ class Index extends Component
 
         $programId = $user->staff->program_id;
 
-        $courses = Course::whereHas('curriculum', function ($query) use ($programId) {
+        $courses = Course::whereHas('curriculums', function ($query) use ($programId) {
             $query->where('program_id', $programId);
         })
         ->where(function($q) {
              $q->where('name', 'like', '%' . $this->search . '%')
                ->orWhere('code', 'like', '%' . $this->search . '%');
         })
-        ->with(['curriculum'])
+        ->with(['curriculums'])
         ->paginate(10);
 
         return view('livewire.prodi.course.index', [
