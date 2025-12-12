@@ -8,9 +8,6 @@
         <div class="card-header">
             <h3 class="card-title">Daftar Matakuliah</h3>
             <div class="card-tools d-flex align-items-center">
-                <a href="{{ route('prodi.course.create') }}" class="btn btn-primary btn-sm mr-2">
-                    <i class="fas fa-plus"></i> Tambah
-                </a>
                 <input type="text" wire:model.live="search" class="form-control form-control-sm" placeholder="Cari Kode/Nama...">
             </div>
         </div>
@@ -24,7 +21,6 @@
                         <th>Semester</th>
                         <th>Jenis</th>
                         <th>Kurikulum</th>
-                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,11 +31,10 @@
                             <td>{{ $course->sks }}</td>
                             <td>{{ $course->semester_recommendation }}</td>
                             <td>{{ $course->type }}</td>
-                            <td>{{ $course->curriculum->name }}</td>
                             <td>
-                                <a href="{{ route('prodi.course.edit', $course->id) }}" class="btn btn-warning btn-xs">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                                @foreach($course->curriculums as $curriculum)
+                                    <span class="badge badge-info">{{ $curriculum->name }}</span>
+                                @endforeach
                             </td>
                         </tr>
                     @empty

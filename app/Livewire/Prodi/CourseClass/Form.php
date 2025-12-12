@@ -49,16 +49,34 @@ class Form extends Component
         $programId = $user->staff->program_id;
 
         // Load reference data scoped to program
-        $this->courses = Course::whereHas('curriculum', function ($q) use ($programId) {
-            $q->where('program_id', $programId);
-        })->orderBy('name')->get();
+        // Use program_id directly on Course if available, or fallback to curriculums check
+        // Assuming courses have program_id column now per migration discussion
+        $this->courses = Course::where('program_id', $programId)
+            ->orWhereHas('curriculums', function ($q) use ($programId) {
+                $q->where('program_id', $programId);
+            })->orderBy('name')->get();
 
         $this->academicYears = AcademicYear::orderBy('start_year', 'desc')->take(5)->get();
-        $this->lecturers = Lecturer::orderBy('name')->get(); // Lecturers might be shared, so get all. Or scope to program? Usually shared.
+
+        // Load lecturers for the program (using soft constraint or all)
+        $this->lecturers = Lecturer::where('program_id', 'like', "%{$programId}%")
+            ->orderBy('name')
+            ->get();
+        // If no lecturers found for program, maybe fetch all?
+        // Admin controller does: Lecturer::where('program_id', 'like', "%{$program->id}%")->orderBy('full_name_with_degree')->get();
+        if ($this->lecturers->isEmpty()) {
+             $this->lecturers = Lecturer::orderBy('name')->get();
+        }
+
 
         if ($courseClass && $courseClass->exists) {
             // Verify ownership
-            if ($courseClass->course->curriculum->program_id !== $programId) {
+            // Check if course belongs to program directly or via curriculum
+            $course = $courseClass->course;
+            $isValid = $course->program_id == $programId ||
+                       $course->curriculums()->where('program_id', $programId)->exists();
+
+            if (!$isValid) {
                 abort(403, 'Anda tidak berhak mengedit kelas ini.');
             }
 
@@ -83,10 +101,15 @@ class Form extends Component
     {
         $this->validate();
 
-        // Verify course belongs to program
+        // Verify course belongs to program (double check)
         $course = Course::find($this->course_id);
         $user = auth()->user();
-        if ($course->curriculum->program_id !== $user->staff->program_id) {
+        $programId = $user->staff->program_id;
+
+        $isValid = $course->program_id == $programId ||
+                   $course->curriculums()->where('program_id', $programId)->exists();
+
+        if (!$isValid) {
             $this->addError('course_id', 'Matakuliah tidak valid.');
             return;
         }
