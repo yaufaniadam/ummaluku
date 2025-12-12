@@ -12,7 +12,7 @@
                     <p class="text-muted text-center">{{ $student->nim }}</p>
                     <ul class="list-group list-group-unbordered mb-3">
                         <li class="list-group-item">
-                            <b>Prodi</b> <a class="float-right">{{ $student->program->name_id }}</a>
+                            <b>Prodi</b> <a class="float-right">{{ $student->program->name }}</a>
                         </li>
                         <li class="list-group-item">
                             <b>Semester</b> <a class="float-right">{{ $student->semester }}</a>

@@ -25,13 +25,13 @@ class Dashboard extends Component
 
         if ($user->staff && $user->staff->program_id) {
             $programId = $user->staff->program_id;
-            $this->programName = $user->staff->program->name_id ?? '';
+            $this->programName = $user->staff->program->name ?? '';
 
             $activeSemester = AcademicYear::where('is_active', true)->first();
 
             // Count distinct students waiting for approval
             $this->pendingKrsCount = Student::where('program_id', $programId)
-                ->whereHas('enrollments', function ($query) use ($activeSemester) {
+                ->whereHas('classEnrollments', function ($query) use ($activeSemester) {
                     $query->where('status', 'approved_advisor')
                           ->where('academic_year_id', $activeSemester?->id);
                 })
