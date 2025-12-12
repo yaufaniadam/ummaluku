@@ -25,7 +25,7 @@ class Dashboard extends Component
 
         if ($user->staff && $user->staff->program_id) {
             $programId = $user->staff->program_id;
-            $this->programName = $user->staff->program->name ?? '';
+            $this->programName = $user->staff->program->name_id ?? '';
 
             $activeSemester = AcademicYear::where('is_active', true)->first();
 
