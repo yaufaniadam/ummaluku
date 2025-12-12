@@ -2,3 +2,4 @@ CATATAN
 
 Migrasi Data :
 - php artisan db:seed --class=AdvisorAssignerSeeder //mapping dosen pembimbing dan mahasiswa, berdasarkan file excel mappingdpa.xlsx
+- php artisan pmb:simulate-registration  // generate camaru untuk simulasi
