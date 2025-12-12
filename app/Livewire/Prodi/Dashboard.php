@@ -31,7 +31,7 @@ class Dashboard extends Component
 
             // Count distinct students waiting for approval
             $this->pendingKrsCount = Student::where('program_id', $programId)
-                ->whereHas('classEnrollments', function ($query) use ($activeSemester) {
+                ->whereHas('enrollments', function ($query) use ($activeSemester) {
                     $query->where('status', 'approved_advisor')
                           ->where('academic_year_id', $activeSemester?->id);
                 })
