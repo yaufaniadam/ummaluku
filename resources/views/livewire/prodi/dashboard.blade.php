@@ -1,7 +1,7 @@
 @section('title', 'Dashboard Prodi')
 
 @section('content_header')
-    <h1>Dashboard Program Studi</h1>
+    <h1>Dashboard Program Studi {{ $programName }}</h1>
 @endsection
 
 <div>

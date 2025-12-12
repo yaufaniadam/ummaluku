@@ -14,12 +14,19 @@ class Dashboard extends Component
     public $totalActiveStudents = 0;
     public $activeClassesCount = 0;
     public $totalCoursesCount = 0;
+    public $programName = '';
 
     public function mount()
     {
         $user = auth()->user();
+
+        // Eager load staff relationship to ensure it's available
+        $user->load('staff.program');
+
         if ($user->staff && $user->staff->program_id) {
             $programId = $user->staff->program_id;
+            $this->programName = $user->staff->program->name ?? '';
+
             $activeSemester = AcademicYear::where('is_active', true)->first();
 
             // Count distinct students waiting for approval
