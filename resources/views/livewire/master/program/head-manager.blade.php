@@ -32,6 +32,21 @@
                             <input type="text" wire:model="sk_number" class="form-control @error('sk_number') is-invalid @enderror">
                             @error('sk_number') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
+
+                        @if($showGenderInput)
+                            <div class="alert alert-warning">
+                                <i class="icon fas fa-exclamation-triangle"></i> Dosen ini belum memiliki data staf. Mohon lengkapi data berikut.
+                            </div>
+                            <div class="form-group">
+                                <label>Jenis Kelamin</label>
+                                <select wire:model="gender" class="form-control @error('gender') is-invalid @enderror">
+                                    <option value="">-- Pilih Jenis Kelamin --</option>
+                                    <option value="L">Laki-laki</option>
+                                    <option value="P">Perempuan</option>
+                                </select>
+                                @error('gender') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                            </div>
+                        @endif
                     </div>
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary">Simpan & Tetapkan</button>
