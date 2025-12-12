@@ -124,7 +124,7 @@ class RolePermissionSeeder extends Seeder
 
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission]);
         }
 
         // === 2. BUAT ROLES ANDA ===
@@ -140,10 +140,10 @@ class RolePermissionSeeder extends Seeder
         $stafKeuanganRole = Role::create(['name' => 'Staf Keuangan']);
         $kaprodiRole = Role::firstOrCreate(['name' => 'Kaprodi']);
         $stafProdiRole = Role::firstOrCreate(['name' => 'Staf Prodi']);
-        $dosenRole = Role::create(['name' => 'Dosen']);
-        $tendikRole = Role::create(['name' => 'Tendik']);
-        $mahasiswaRole = Role::create(['name' => 'Mahasiswa']);
-        $camaruRole = Role::create(['name' => 'Camaru']);
+        $dosenRole = Role::firstOrCreate(['name' => 'Dosen']);
+        $tendikRole = Role::firstOrCreate(['name' => 'Tendik']);
+        $mahasiswaRole = Role::firstOrCreate(['name' => 'Mahasiswa']);
+        $camaruRole = Role::firstOrCreate(['name' => 'Camaru']);
 
 
 
