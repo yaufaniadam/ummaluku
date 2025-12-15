@@ -25,6 +25,9 @@ class PMBDashboardService
         $chartLabels = [];
         $chartValues = [];
 
+        $batchChartLabels = [];
+        $batchChartValues = [];
+
         $todoList = collect();
 
         if ($activeBatch) {
@@ -61,7 +64,7 @@ class PMBDashboardService
                 ->where('status', 'lolos_verifikasi_data')
                 ->count();
 
-            // 3. Chart Data: Penerimaan mahasiswa baru per tahun angkatan, berdasarkan prodi
+            // 3. Chart Data 1: Penerimaan mahasiswa baru per tahun angkatan, berdasarkan prodi
             // Kita ambil yang statusnya 'diterima' atau 'sudah_registrasi' di gelombang aktif
             $programStats = ApplicationProgramChoice::query()
                 ->whereHas('application', function($q) use ($activeBatch) {
@@ -78,6 +81,14 @@ class PMBDashboardService
 
             $chartLabels = $programStats->keys()->toArray();
             $chartValues = $programStats->values()->toArray();
+
+            // Chart Data 2: Pendaftar per Gelombang (Tiap Gelombang di Tahun Akademik yang sama)
+            $batchesInSameYear = Batch::where('year', $activeBatch->year)->orderBy('start_date')->get();
+
+            foreach ($batchesInSameYear as $batch) {
+                $batchChartLabels[] = $batch->name;
+                $batchChartValues[] = Application::where('batch_id', $batch->id)->count();
+            }
 
             // 4. To-Do List Table
             // A. Menunggu Verifikasi Dokumen
@@ -128,6 +139,8 @@ class PMBDashboardService
             'readyForSelection' => $readyForSelection,
             'chartLabels' => $chartLabels,
             'chartValues' => $chartValues,
+            'batchChartLabels' => $batchChartLabels,
+            'batchChartValues' => $batchChartValues,
             'todoList' => $todoList,
         ];
     }
