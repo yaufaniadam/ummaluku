@@ -9,8 +9,10 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Models\Prospective; 
 use App\Models\Student; 
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, Notifiable, HasRoles; // <-- Gunakan Trait
 
@@ -63,5 +65,14 @@ class User extends Authenticatable
     public function staff(): HasOne
     {
         return $this->hasOne(Staff::class);
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        if ($panel->getId() === 'executive') {
+            return $this->hasRole('Super Admin') || $this->can('view-executive-dashboard');
+        }
+
+        return false;
     }
 }
