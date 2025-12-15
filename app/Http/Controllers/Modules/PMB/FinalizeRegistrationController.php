@@ -154,7 +154,8 @@ class FinalizeRegistrationController extends Controller
                 ClassEnrollment::create([
                     'student_id' => $student->id,
                     'course_class_id' => $courseClass->id,
-                    // Field lain seperti status_pembayaran dll bisa default
+                    'academic_year_id' => $academicYear->id, // Wajib diisi untuk pelaporan
+                    'status' => 'approved', // Langsung setujui karena ini paket semester 1
                 ]);
             }
         }
