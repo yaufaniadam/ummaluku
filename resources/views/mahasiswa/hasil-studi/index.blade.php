@@ -14,12 +14,8 @@
     </div>
     {{-- Card untuk Ringkasan Prestasi Akademik Keseluruhan --}}
     <div class="card">
-        {{-- <div class="card-header">
-            <h3 class="card-title">Ringkasan Prestasi Akademik</h3>
-        </div> --}}
         <div class="card-body">
             <div class="row">
-
                 <div class="col-md-6">
                     <ul class="list-unstyled">
                         <li><strong>Nama:</strong> {{ $student->user->name }}</li>
@@ -57,6 +53,24 @@
     @else
         {{-- Tampilkan KHS per Semester --}}
         @foreach ($enrollmentsBySemester as $semesterName => $enrollments)
+            @php
+                // Filter mata kuliah yang sudah ada nilainya untuk perhitungan IPS
+                $gradedEnrollments = $enrollments->whereNotNull('grade_index');
+
+                // Hitung total SKS hanya dari mata kuliah yang sudah dinilai
+                $totalSksSemesterCalculated = $gradedEnrollments->sum('courseClass.course.sks');
+
+                // Hitung total bobot
+                $totalBobotSemester = $gradedEnrollments->sum(function($enrollment) {
+                    return $enrollment->courseClass->course->sks * $enrollment->grade_index;
+                });
+
+                // Hitung IPS
+                $ips = $totalSksSemesterCalculated > 0 ? $totalBobotSemester / $totalSksSemesterCalculated : null;
+
+                // Total SKS untuk tampilan (termasuk yang belum dinilai)
+                $totalSksSemesterDisplay = $enrollments->sum('courseClass.course.sks');
+            @endphp
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <h3 class="card-title font-weight-bold">{{ $semesterName }}</h3>
@@ -68,22 +82,34 @@
                                 <th>Kode MK</th>
                                 <th>Nama Mata Kuliah</th>
                                 <th>SKS</th>
-                                <th style="width: 100px;">Nilai</th>
+                                <th class="text-center">Nilai Huruf</th>
+                                <th class="text-center">Nilai Indeks</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- Loop berdasarkan mata kuliah yang BENAR-BENAR DIAMBIL pada semester itu --}}
                             @foreach ($enrollments as $enrollment)
                                 <tr>
                                     <td>{{ $enrollment->courseClass->course->code }}</td>
                                     <td>{{ $enrollment->courseClass->course->name }}</td>
                                     <td>{{ $enrollment->courseClass->course->sks }}</td>
                                     <td class="text-center font-weight-bold">
-                                        {{ $enrollment->grade_letter }}
+                                        {{ $enrollment->grade_letter ?? '-' }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $enrollment->grade_index !== null ? number_format($enrollment->grade_index, 2) : '-' }}
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
+                        <tfoot>
+                            <tr class="bg-light font-weight-bold">
+                                <td colspan="2" class="text-right">Indeks Prestasi Semester (IPS)</td>
+                                <td>{{ $totalSksSemesterDisplay }}</td>
+                                <td colspan="2" class="text-right">
+                                    {{ $ips !== null ? number_format($ips, 2) : '-' }}
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

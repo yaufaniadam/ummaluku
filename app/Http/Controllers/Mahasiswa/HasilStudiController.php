@@ -13,42 +13,27 @@ class HasilStudiController extends Controller
     {
         $student = Auth::user()->student;
 
-        // 1. Cari kurikulum aktif yang berlaku untuk mahasiswa
-        $activeCurriculum = $student->program->curriculums()->where('is_active', true)->first();
-
-        // Jika tidak ada kurikulum, kirim data kosong untuk mencegah error
-        if (!$activeCurriculum) {
-            return view('mahasiswa.hasil-studi.index', [
-                'enrollmentsBySemester' => collect(),
-                'ipk' => 0,
-                'totalSksTaken' => 0,
-                'totalCoursesTaken' => 0,
-            ]);
-        }
-
-        // 2. Ambil daftar ID mata kuliah yang ada di dalam kurikulum aktif tersebut
-        $curriculumCourseIds = $activeCurriculum->courses()->pluck('courses.id')->toArray();
-
-        // 3. Ambil SEMUA riwayat nilai mahasiswa...
+        // Ambil SEMUA riwayat studi mahasiswa yang sudah disetujui
+        // Tidak lagi difilter berdasarkan kurikulum aktif atau nilai yang sudah ada
         $allEnrollments = ClassEnrollment::where('student_id', $student->id)
-            ->whereNotNull('grade_letter')
-            // ...TAPI HANYA untuk mata kuliah yang ada di dalam kurikulum aktif
-            ->whereHas('courseClass.course', function ($query) use ($curriculumCourseIds) {
-                $query->whereIn('id', $curriculumCourseIds);
-            })
+            ->where('status', 'approved') // Hanya yang statusnya approved
             ->with(['academicYear', 'courseClass.course'])
-            ->orderBy('academic_year_id', 'asc')
+            ->orderBy('academic_year_id', 'desc') // Urutkan semester terbaru di atas (sesuai UX umum)
             ->get();
 
-        // 4. Kelompokkan riwayat tersebut berdasarkan semester (Tahun Ajaran)
-        $enrollmentsBySemester = $allEnrollments->groupBy('academicYear.name');
+        // Kelompokkan riwayat tersebut berdasarkan nama Tahun Ajaran (Semester)
+        // Gunakan nama akademik tahun sebagai key
+        $enrollmentsBySemester = $allEnrollments->groupBy(function ($enrollment) {
+            return $enrollment->academicYear->name;
+        });
+
+        // Hitung IPK dan ringkasan lainnya
+        // Method getCumulativeGpa di model Student sudah menangani null values (hanya menghitung yang ada nilainya)
+        $ipk = $student->getCumulativeGpa();
         
-        // 5. Hitung IPK dan ringkasan lainnya
-        $ipk = $student->getCumulativeGpa(); // Method ini sudah ada di model Student
         $totalSksTaken = $allEnrollments->sum('courseClass.course.sks');
         $totalCoursesTaken = $allEnrollments->count();
 
-        // Kirim semua data yang sudah difilter ke view
         return view('mahasiswa.hasil-studi.index', compact('student','enrollmentsBySemester', 'ipk', 'totalSksTaken', 'totalCoursesTaken'));
     }
 }

@@ -77,11 +77,16 @@ class FinalizeRegistrationTest extends TestCase
             'phone' => '08123456789',
         ]);
 
+        $admissionCategory = AdmissionCategory::create([
+            'name' => 'Reguler',
+            'description' => 'Jalur Reguler',
+        ]);
+
         $application = Application::create([
             'prospective_id' => $prospective->id,
             'batch_id' => $batch->id,
             'status' => 'diterima',
-            'admission_category_id' => 1, // Dummy
+            'admission_category_id' => $admissionCategory->id,
         ]);
 
         // Create accepted program choice
