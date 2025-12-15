@@ -12,6 +12,27 @@
         <p> Transkrip Nilai berisi informasi nilai hasil studi mahasiswa mulai dari semester awal sampai dengan
             semester terakhir mahasiswa.</p>
     </div>
+
+    {{-- Filter Form --}}
+    <div class="card mb-3">
+        <div class="card-body py-2">
+            <form action="{{ route('mahasiswa.hasil-studi.index') }}" method="GET" class="form-inline mb-0">
+                <label for="semester_id" class="mr-2 font-weight-bold">Filter Semester:</label>
+                <select name="semester_id" id="semester_id" class="form-control mr-2" onchange="this.form.submit()">
+                    <option value="">-- Semua Semester --</option>
+                    @foreach ($semesters as $semester)
+                        <option value="{{ $semester->id }}" {{ $selectedSemesterId == $semester->id ? 'selected' : '' }}>
+                            {{ $semester->name }}
+                        </option>
+                    @endforeach
+                </select>
+                <noscript>
+                    <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+                </noscript>
+            </form>
+        </div>
+    </div>
+
     {{-- Card untuk Ringkasan Prestasi Akademik Keseluruhan --}}
     <div class="card">
         <div class="card-body">
@@ -48,7 +69,11 @@
 
     @if ($enrollmentsBySemester->isEmpty())
         <div class="alert alert-warning">
-            Belum ada riwayat studi yang bisa ditampilkan.
+            @if($selectedSemesterId)
+                Tidak ada data studi untuk semester yang dipilih.
+            @else
+                Belum ada riwayat studi yang bisa ditampilkan.
+            @endif
         </div>
     @else
         {{-- Tampilkan KHS per Semester --}}
