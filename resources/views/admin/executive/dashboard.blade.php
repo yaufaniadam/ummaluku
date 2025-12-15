@@ -7,105 +7,109 @@
 @stop
 
 @section('content')
-    <!-- Baris 1: Statistik Utama -->
+    <!-- Baris 1: 4 Pilar Utama (Summary) -->
     <div class="row">
-        <!-- Mahasiswa -->
+        <!-- 1. KEUANGAN (Prioritas Utama) -->
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <h3>Rp {{ number_format($totalRevenue / 1000000, 1) }} M</h3>
+                    <p>Total Pendapatan (PMB+SPP)</p>
+                    <small>Tunggakan: Rp {{ number_format($totalArrears / 1000000, 1) }} M</small>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <a href="{{ route('admin.executive.finance.index') }}" class="small-box-footer">Detail Keuangan <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+
+        <!-- 2. PMB (Growth) -->
         <div class="col-lg-3 col-6">
             <div class="small-box bg-info">
                 <div class="inner">
+                    <h3>{{ $totalApplicants }} / {{ $yieldRate }}%</h3>
+                    <p>Pendaftar / Yield Rate</p>
+                    <small>Diterima: {{ \App\Models\Application::where('status', 'diterima')->orWhere('status', 'sudah_registrasi')->count() }}</small>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <a href="{{ route('admin.executive.pmb.index') }}" class="small-box-footer">Detail PMB <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+
+        <!-- 3. MAHASISWA (Population) -->
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-warning">
+                <div class="inner">
                     <h3>{{ $totalStudents }}</h3>
                     <p>Total Mahasiswa</p>
+                    <small>Aktif: {{ $activeStudents }}</small>
                 </div>
                 <div class="icon">
                     <i class="fas fa-user-graduate"></i>
                 </div>
-                <a href="{{ route('admin.akademik.students.index') }}" class="small-box-footer">Lihat Detail <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ route('admin.executive.student.index') }}" class="small-box-footer">Detail Mahasiswa <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
 
-        <!-- Dosen -->
+        <!-- 4. SDM (Resources) -->
         <div class="col-lg-3 col-6">
-            <div class="small-box bg-success">
+            <div class="small-box bg-danger">
                 <div class="inner">
                     <h3>{{ $totalLecturers }}</h3>
                     <p>Total Dosen</p>
+                    <small>Tendik: {{ $totalTendik }}</small>
                 </div>
                 <div class="icon">
                     <i class="fas fa-chalkboard-teacher"></i>
                 </div>
-                <a href="{{ route('admin.sdm.lecturers.index') }}" class="small-box-footer">Lihat Detail <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-        </div>
-
-        <!-- Tendik -->
-        <div class="col-lg-3 col-6">
-            <div class="small-box bg-warning">
-                <div class="inner">
-                    <h3>{{ $totalTendik }}</h3>
-                    <p>Tenaga Kependidikan</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-user-tie"></i>
-                </div>
-                <a href="#" class="small-box-footer">Lihat Detail <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-        </div>
-
-        <!-- Prodi -->
-        <div class="col-lg-3 col-6">
-            <div class="small-box bg-danger">
-                <div class="inner">
-                    <h3>{{ $totalPrograms }}</h3>
-                    <p>Program Studi</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-university"></i>
-                </div>
-                <a href="#" class="small-box-footer">Lihat Detail <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ route('admin.executive.sdm.index') }}" class="small-box-footer">Detail SDM <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
     </div>
 
-    <!-- Baris 2: Statistik PMB & Grafik -->
+    <!-- Baris 2: Charts -->
     <div class="row">
-        <div class="col-md-6">
-            <div class="card card-primary">
+        <!-- Chart Mahasiswa per Prodi -->
+        <div class="col-md-8">
+            <div class="card card-primary card-outline">
                 <div class="card-header">
-                    <h3 class="card-title">Statistik Mahasiswa per Prodi</h3>
+                    <h3 class="card-title">Sebaran Mahasiswa per Prodi</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
                     </div>
                 </div>
                 <div class="card-body">
-                    <canvas id="studentProgramChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    <canvas id="studentProgramChart" style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6">
-            <!-- Info Box PMB -->
-            <div class="info-box mb-3 bg-info">
-                <span class="info-box-icon"><i class="fas fa-users"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-text">Total Pendaftar (PMB)</span>
-                    <span class="info-box-number">{{ $totalApplicants }}</span>
-                </div>
-            </div>
-
-            <div class="info-box mb-3 bg-success">
-                <span class="info-box-icon"><i class="fas fa-check-circle"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-text">Mahasiswa Baru Diterima</span>
-                    <span class="info-box-number">{{ $acceptedApplicants }}</span>
-                </div>
-            </div>
-
+        <!-- Summary & Quick Stats -->
+        <div class="col-md-4">
              <div class="card card-secondary">
                 <div class="card-header">
                     <h3 class="card-title">Status Mahasiswa</h3>
                 </div>
                 <div class="card-body">
-                     <canvas id="studentStatusChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                     <!-- Kita akan ambil data real via AJAX atau embed JSON nanti, sementara placeholder -->
+                     <canvas id="studentStatusChart" style="min-height: 200px; height: 200px; max-height: 200px; max-width: 100%;"></canvas>
+                </div>
+                <div class="card-footer p-0">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                Aktif <span class="float-right badge bg-success">{{ $activeStudents }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                Non-Aktif <span class="float-right badge bg-danger">{{ $totalStudents - $activeStudents }}</span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -121,7 +125,7 @@
 
     var ctxProgram = document.getElementById('studentProgramChart').getContext('2d');
     var programChart = new Chart(ctxProgram, {
-        type: 'bar', // atau 'pie'
+        type: 'bar',
         data: {
             labels: programLabels,
             datasets: [{
@@ -137,30 +141,21 @@
             responsive: true,
             scales: {
                 y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1
-                    }
+                    beginAtZero: true
                 }
             }
         }
     });
 
-    // Data Status Mahasiswa (Pie Chart)
-    var statusLabels = {!! json_encode($studentStatusStats->keys()) !!};
-    var statusData = {!! json_encode($studentStatusStats->values()) !!};
-
-    // Generate warna random/tetap
-    var colors = ['#28a745', '#dc3545', '#ffc107', '#17a2b8', '#6c757d'];
-
+    // Chart Status Mahasiswa (Simple Doughnut)
     var ctxStatus = document.getElementById('studentStatusChart').getContext('2d');
     var statusChart = new Chart(ctxStatus, {
         type: 'doughnut',
         data: {
-            labels: statusLabels,
+            labels: ['Aktif', 'Non-Aktif'],
             datasets: [{
-                data: statusData,
-                backgroundColor: colors,
+                data: [{{ $activeStudents }}, {{ $totalStudents - $activeStudents }}],
+                backgroundColor: ['#28a745', '#dc3545'],
             }]
         },
         options: {
