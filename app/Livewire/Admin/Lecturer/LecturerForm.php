@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Lecturer;
 
 use App\Models\Lecturer;
 use App\Models\Program;
+use App\Models\EmploymentStatus;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -26,11 +27,15 @@ class LecturerForm extends Component
 
     // Properti untuk menampung data master program studi
     public $programs;
+    public $employmentStatuses;
+    public $employment_status_id;
 
     // Method yang dijalankan saat komponen pertama kali di-load
     public function mount(Lecturer $lecturer)
     {
         $this->programs = Program::orderBy('name_id')->get();
+        $this->employmentStatuses = EmploymentStatus::orderBy('name')->get();
+
         if ($lecturer->exists) {
             $this->lecturer = $lecturer;
             $this->user = $lecturer->user;
@@ -40,6 +45,7 @@ class LecturerForm extends Component
             $this->fullName = $lecturer->full_name_with_degree;
             $this->email = $lecturer->user->email;
             $this->program_id = $lecturer->program_id;
+            $this->employment_status_id = $lecturer->employment_status_id;
         }
     }
 
@@ -54,6 +60,7 @@ class LecturerForm extends Component
             'fullName' => 'required|string|max:255',
             'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($userId)],
             'program_id' => 'required|exists:programs,id',
+            'employment_status_id' => 'nullable|exists:employment_statuses,id',
             // Password bersifat opsional saat edit
             'password' => 'nullable|string|min:8|confirmed',
         ];
@@ -84,6 +91,7 @@ class LecturerForm extends Component
                         'program_id' => $this->program_id,
                         'nidn' => $this->nidn,
                         'full_name_with_degree' => $this->fullName,
+                        'employment_status_id' => $this->employment_status_id,
                     ]);
                     session()->flash('success', 'Data dosen berhasil diperbarui.');
 
@@ -100,6 +108,7 @@ class LecturerForm extends Component
                         'program_id' => $this->program_id,
                         'nidn' => $this->nidn,
                         'full_name_with_degree' => $this->fullName,
+                        'employment_status_id' => $this->employment_status_id,
                     ]);
                     
                     session()->flash('success', 'Data dosen berhasil ditambahkan.');

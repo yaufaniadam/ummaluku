@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Traits\HasEmployeeHistory;
 
 class Staff extends Model
 {
-    use HasFactory;
+    use HasFactory, HasEmployeeHistory;
 
     protected $table = 'staffs';
 
@@ -20,6 +21,7 @@ class Staff extends Model
         'address',
         'program_id',
         'work_unit_id',
+        'employment_status_id',
     ];
 
     public function user(): BelongsTo

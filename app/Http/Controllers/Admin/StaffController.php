@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Staff;
 use App\Models\Program;
 use App\Models\WorkUnit;
+use App\Models\EmploymentStatus;
 use Illuminate\Http\Request;
 use App\DataTables\StaffDataTable;
 use Illuminate\Support\Facades\Hash;
@@ -24,13 +25,22 @@ class StaffController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(Staff $staff)
+    {
+        return view('admin.sdm.staff.show', compact('staff'));
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
         $programs = Program::all();
         $workUnits = WorkUnit::all();
-        return view('admin.sdm.staff.create', compact('programs', 'workUnits'));
+        $employmentStatuses = EmploymentStatus::all();
+        return view('admin.sdm.staff.create', compact('programs', 'workUnits', 'employmentStatuses'));
     }
 
     /**
@@ -52,6 +62,7 @@ class StaffController extends Controller
             'unit_type' => ['required', 'in:prodi,bureau'], // To decide which foreign key to use
             'program_id' => ['nullable', 'required_if:unit_type,prodi', 'exists:programs,id'],
             'work_unit_id' => ['nullable', 'required_if:unit_type,bureau', 'exists:work_units,id'],
+            'employment_status_id' => ['nullable', 'exists:employment_statuses,id'],
         ]);
 
         DB::transaction(function () use ($request) {
@@ -73,6 +84,7 @@ class StaffController extends Controller
                 'address' => $request->address,
                 'program_id' => $request->unit_type === 'prodi' ? $request->program_id : null,
                 'work_unit_id' => $request->unit_type === 'bureau' ? $request->work_unit_id : null,
+                'employment_status_id' => $request->employment_status_id,
             ]);
         });
 
@@ -87,7 +99,8 @@ class StaffController extends Controller
     {
         $programs = Program::all();
         $workUnits = WorkUnit::all();
-        return view('admin.sdm.staff.edit', compact('staff', 'programs', 'workUnits'));
+        $employmentStatuses = EmploymentStatus::all();
+        return view('admin.sdm.staff.edit', compact('staff', 'programs', 'workUnits', 'employmentStatuses'));
     }
 
     /**
@@ -109,6 +122,7 @@ class StaffController extends Controller
             'unit_type' => ['required', 'in:prodi,bureau'],
             'program_id' => ['nullable', 'required_if:unit_type,prodi', 'exists:programs,id'],
             'work_unit_id' => ['nullable', 'required_if:unit_type,bureau', 'exists:work_units,id'],
+            'employment_status_id' => ['nullable', 'exists:employment_statuses,id'],
         ]);
 
         DB::transaction(function () use ($request, $staff) {
@@ -129,6 +143,7 @@ class StaffController extends Controller
                 'address' => $request->address,
                 'program_id' => $request->unit_type === 'prodi' ? $request->program_id : null,
                 'work_unit_id' => $request->unit_type === 'bureau' ? $request->work_unit_id : null,
+                'employment_status_id' => $request->employment_status_id,
             ]);
         });
 

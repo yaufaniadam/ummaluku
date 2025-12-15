@@ -99,6 +99,19 @@
                                     @enderror
                                 </div>
 
+                                <div class="form-group">
+                                    <label>Status Kepegawaian</label>
+                                    <select name="employment_status_id" class="form-control @error('employment_status_id') is-invalid @enderror">
+                                        <option value="">-- Pilih Status --</option>
+                                        @foreach($employmentStatuses as $status)
+                                            <option value="{{ $status->id }}" {{ old('employment_status_id', $staff->employment_status_id) == $status->id ? 'selected' : '' }}>{{ $status->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('employment_status_id')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
                                 {{-- PENEMPATAN --}}
                                 <h5><i class="fas fa-building"></i> Penempatan</h5>
                                 <hr>

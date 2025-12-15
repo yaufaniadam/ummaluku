@@ -68,6 +68,24 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="employment_status_id">Status Kepegawaian</label>
+                            <select wire:model="employment_status_id"
+                                class="form-control @error('employment_status_id') is-invalid @enderror" id="employment_status_id">
+                                <option value="">-- Pilih Status --</option>
+                                @foreach ($employmentStatuses as $status)
+                                    <option value="{{ $status->id }}">{{ $status->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('employment_status_id')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Baris Password --}}
                 <div class="row">
                     <div class="col-md-6">

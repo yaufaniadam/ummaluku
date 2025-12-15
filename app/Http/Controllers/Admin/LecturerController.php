@@ -39,9 +39,9 @@ class LecturerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Lecturer $lecturer)
     {
-        //
+        return view('admin.lecturers.show', compact('lecturer'));
     }
 
     /**
