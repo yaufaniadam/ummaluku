@@ -31,3 +31,33 @@
         <option value="0" {{ old('is_active', $category->is_active ?? 1) == 0 ? 'selected' : '' }}>Tidak Aktif</option>
     </select>
 </div>
+
+<div class="form-group">
+    <label>Dokumen Persyaratan</label>
+    <div class="card card-outline card-secondary">
+        <div class="card-body">
+            <div class="row">
+                @foreach($documents as $doc)
+                    <div class="col-md-6 mb-2">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="doc_{{ $doc->id }}" name="documents[]" value="{{ $doc->id }}"
+                            @if(is_array(old('documents')))
+                                {{ in_array($doc->id, old('documents')) ? 'checked' : '' }}
+                            @elseif(isset($category) && $category->documentRequirements->contains($doc->id))
+                                checked
+                            @endif
+                            >
+                            <label class="custom-control-label font-weight-normal" for="doc_{{ $doc->id }}">
+                                {{ $doc->name }}
+                            </label>
+                            <div class="text-muted small ml-1">{{ $doc->description }}</div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            @if($documents->isEmpty())
+                <p class="text-muted">Belum ada data dokumen persyaratan. Silakan tambahkan di database.</p>
+            @endif
+        </div>
+    </div>
+</div>
