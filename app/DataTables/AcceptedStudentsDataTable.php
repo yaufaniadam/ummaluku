@@ -56,9 +56,8 @@ class AcceptedStudentsDataTable extends DataTable
 
                 $invoice = $row->reRegistrationInvoice;
                 // Tombol finalisasi sekarang menjadi form yang hanya aktif jika status lunas
-                if ($invoice && $invoice->status == 'paid') {
+                if ($invoice && ($invoice->status == 'paid' || $invoice->status == 'partially_paid')) {
                     $finalizeUrl = route('admin.pmb.accepted.finalize', $row->id);
-                    // $finalizeUrl = route('admin.accepted.finalize', $row->id);
                     return '
                     <form action="' . $finalizeUrl . '" method="POST">
                         ' . csrf_field() . '
@@ -68,7 +67,7 @@ class AcceptedStudentsDataTable extends DataTable
                     </form>
                 ';
                 }
-                return '<button class="btn btn-secondary btn-sm" disabled>Menunggu Pelunasan</button>';
+                return '<button class="btn btn-secondary btn-sm" disabled>Pending</button>';
             })
 
            

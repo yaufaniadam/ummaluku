@@ -4,8 +4,9 @@
 
 @section('content_header')
     <h1>Dashboard Penerimaan Mahasiswa Baru (PMB)</h1>
-    @if($activeBatch)
-        <h5 class="font-weight-light">Gelombang Aktif: {{ $activeBatch->name }} ({{ $activeBatch->academicYear->name ?? '' }})</h5>
+    @if ($activeBatch)
+        <h5 class="font-weight-light">Gelombang Aktif: {{ $activeBatch->name }}
+            ({{ $activeBatch->academicYear->name ?? '' }})</h5>
     @else
         <h5 class="font-weight-light text-danger">Tidak ada gelombang pendaftaran yang aktif.</h5>
     @endif
@@ -15,65 +16,31 @@
     {{-- Baris 1: Widget Lama (Existing) --}}
     <div class="row">
         <div class="col-lg-4 col-6">
-            <x-stat-box title="Total Pendaftar" value="{{ $totalPendaftar }}" icon="fas fa-users" color="info" url="{{ route('admin.pmb.pendaftaran.index') }}"/>
+            <x-stat-box title="Total Pendaftar" value="{{ $totalPendaftar }}" icon="fas fa-users" color="info"
+                url="{{ route('admin.pmb.pendaftaran.index') }}" />
         </div>
         <div class="col-lg-4 col-6">
-            <x-stat-box title="Menunggu Pembayaran (Daftar)" value="{{ $pembayaranPending }}" icon="fas fa-money-bill-wave" color="warning" url="{{ route('admin.pmb.pendaftaran.index') }}"/>
+            <x-stat-box title="Diterima" value="{{ $totalDiterima }}" icon="fas fa-file-signature" color="success"
+                url="{{ route('admin.pmb.diterima.index') }}" />
         </div>
         <div class="col-lg-4 col-6">
-            <x-stat-box title="Menunggu Kelengkapan Berkas" value="{{ $berkasPending }}" icon="fas fa-file-upload" color="primary" url="{{ route('admin.pmb.pendaftaran.index') }}"/>
+            <x-stat-box title="Sudah Registrasi" value="{{ $totalRegistrasi }}" icon="fas fa-user-check" color="warning"
+                url="{{ route('admin.pmb.diterima.index') }}" />
         </div>
+
     </div>
 
     {{-- Baris 2: Widget Baru --}}
     <div class="row">
         {{-- Diterima tapi belum bayar --}}
         <div class="col-lg-4 col-6">
-            <div class="small-box bg-danger">
-                <div class="inner">
-                    <h3>{{ $acceptedButUnpaid }}</h3>
-                    <p>Diterima, Belum Bayar</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                </div>
-                <a href="{{ route('admin.pmb.diterima.index') }}" class="small-box-footer">
-                    More info <i class="fas fa-arrow-circle-right"></i>
-                </a>
-            </div>
+            <x-info-box title="Menunggu Verifikasi Pembayaran" value="{{ $awaitingVerificationPayment }}" icon="fas fa-receipt" color="warning"
+                url="{{ route('admin.pmb.pendaftaran.index') }}" />
         </div>
-
-        {{-- Menunggu Verifikasi (Dokumen) --}}
         <div class="col-lg-4 col-6">
-            <div class="small-box bg-orange">
-                <div class="inner">
-                    <h3>{{ $waitingForVerification }}</h3>
-                    <p>Menunggu Verifikasi Data</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-user-check"></i>
-                </div>
-                <a href="{{ route('admin.pmb.pendaftaran.index') }}" class="small-box-footer">
-                    More info <i class="fas fa-arrow-circle-right"></i>
-                </a>
-            </div>
-        </div>
-
-        {{-- Masuk Proses Seleksi --}}
-        <div class="col-lg-4 col-6">
-            <div class="small-box bg-success">
-                <div class="inner">
-                    <h3>{{ $readyForSelection }}</h3>
-                    <p>Siap Seleksi</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-check-double"></i>
-                </div>
-                <a href="{{ route('admin.pmb.seleksi.index') }}" class="small-box-footer">
-                    More info <i class="fas fa-arrow-circle-right"></i>
-                </a>
-            </div>
-        </div>
+            <x-info-box title="Menunggu Verifikasi Dokumen" value="{{ $waitingForVerification }}" icon="fas fa-file" color="danger"
+                url="{{ route('admin.pmb.pendaftaran.index') }}" />
+        </div>        
     </div>
 
     <div class="row">
@@ -89,7 +56,8 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <canvas id="acceptedChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    <canvas id="acceptedChart"
+                        style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                 </div>
             </div>
         </div>
@@ -106,7 +74,8 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <canvas id="batchChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    <canvas id="batchChart"
+                        style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                 </div>
             </div>
         </div>
@@ -138,16 +107,19 @@
                                 @forelse($todoList as $item)
                                     <tr>
                                         <td>
-                                            @if($item['type'] == 'Verifikasi Dokumen')
-                                                <span class="badge badge-info"><i class="fas fa-file-alt"></i> Dokumen</span>
+                                            @if ($item['type'] == 'Verifikasi Dokumen')
+                                                <span class="badge badge-info"><i class="fas fa-file-alt"></i>
+                                                    Dokumen</span>
                                             @else
-                                                <span class="badge badge-success"><i class="fas fa-money-bill"></i> Pembayaran</span>
+                                                <span class="badge badge-success"><i class="fas fa-money-bill"></i>
+                                                    Pembayaran</span>
                                             @endif
                                         </td>
                                         <td>{{ $item['name'] }}</td>
                                         <td>{{ $item['date'] ? $item['date']->format('d M Y H:i') : '-' }}</td>
                                         <td>
-                                            <span class="badge badge-{{ $item['badge'] }}">{{ $item['status_label'] }}</span>
+                                            <span
+                                                class="badge badge-{{ $item['badge'] }}">{{ $item['status_label'] }}</span>
                                         </td>
                                         <td>
                                             <a href="{{ $item['url'] }}" class="btn btn-sm btn-outline-primary">
@@ -178,99 +150,99 @@
 @section('plugins.Chartjs', true)
 
 @section('js')
-<script>
-    $(function () {
-        // --- CHART 1: Diterima per Prodi ---
-        var labels = @json($chartLabels);
-        var dataValues = @json($chartValues);
+    <script>
+        $(function() {
+            // --- CHART 1: Diterima per Prodi ---
+            var labels = @json($chartLabels);
+            var dataValues = @json($chartValues);
 
-        var ctx = document.getElementById('acceptedChart').getContext('2d');
-        var acceptedChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Mahasiswa Diterima',
-                    backgroundColor: 'rgba(60,141,188,0.9)',
-                    borderColor: 'rgba(60,141,188,0.8)',
-                    pointRadius: false,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(60,141,188,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(60,141,188,1)',
-                    data: dataValues
-                }]
-            },
-            options: {
-                maintainAspectRatio: false,
-                responsive: true,
-                legend: {
-                    display: false
-                },
-                scales: {
-                    xAxes: [{
-                        gridLines: {
-                            display: false,
-                        }
-                    }],
-                    yAxes: [{
-                        gridLines: {
-                            display: true,
-                        },
-                        ticks: {
-                            beginAtZero: true,
-                            stepSize: 1
-                        }
+            var ctx = document.getElementById('acceptedChart').getContext('2d');
+            var acceptedChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Mahasiswa Diterima',
+                        backgroundColor: 'rgba(60,141,188,0.9)',
+                        borderColor: 'rgba(60,141,188,0.8)',
+                        pointRadius: false,
+                        pointColor: '#3b8bba',
+                        pointStrokeColor: 'rgba(60,141,188,1)',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(60,141,188,1)',
+                        data: dataValues
                     }]
-                }
-            }
-        });
-
-        // --- CHART 2: Pendaftar per Gelombang ---
-        var batchLabels = @json($batchChartLabels);
-        var batchValues = @json($batchChartValues);
-
-        var ctx2 = document.getElementById('batchChart').getContext('2d');
-        var batchChart = new Chart(ctx2, {
-            type: 'bar',
-            data: {
-                labels: batchLabels,
-                datasets: [{
-                    label: 'Jumlah Pendaftar',
-                    backgroundColor: 'rgba(23, 162, 184, 0.9)', // Info Color
-                    borderColor: 'rgba(23, 162, 184, 0.8)',
-                    pointRadius: false,
-                    pointColor: '#17a2b8',
-                    pointStrokeColor: 'rgba(23, 162, 184, 1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(23, 162, 184, 1)',
-                    data: batchValues
-                }]
-            },
-            options: {
-                maintainAspectRatio: false,
-                responsive: true,
-                legend: {
-                    display: false
                 },
-                scales: {
-                    xAxes: [{
-                        gridLines: {
-                            display: false,
-                        }
-                    }],
-                    yAxes: [{
-                        gridLines: {
-                            display: true,
-                        },
-                        ticks: {
-                            beginAtZero: true,
-                            stepSize: 1
-                        }
-                    }]
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    legend: {
+                        display: false
+                    },
+                    scales: {
+                        xAxes: [{
+                            gridLines: {
+                                display: false,
+                            }
+                        }],
+                        yAxes: [{
+                            gridLines: {
+                                display: true,
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                stepSize: 1
+                            }
+                        }]
+                    }
                 }
-            }
+            });
+
+            // --- CHART 2: Pendaftar per Gelombang ---
+            var batchLabels = @json($batchChartLabels);
+            var batchValues = @json($batchChartValues);
+
+            var ctx2 = document.getElementById('batchChart').getContext('2d');
+            var batchChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: batchLabels,
+                    datasets: [{
+                        label: 'Jumlah Pendaftar',
+                        backgroundColor: 'rgba(23, 162, 184, 0.9)', // Info Color
+                        borderColor: 'rgba(23, 162, 184, 0.8)',
+                        pointRadius: false,
+                        pointColor: '#17a2b8',
+                        pointStrokeColor: 'rgba(23, 162, 184, 1)',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(23, 162, 184, 1)',
+                        data: batchValues
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    legend: {
+                        display: false
+                    },
+                    scales: {
+                        xAxes: [{
+                            gridLines: {
+                                display: false,
+                            }
+                        }],
+                        yAxes: [{
+                            gridLines: {
+                                display: true,
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                stepSize: 1
+                            }
+                        }]
+                    }
+                }
+            });
         });
-    });
-</script>
+    </script>
 @stop

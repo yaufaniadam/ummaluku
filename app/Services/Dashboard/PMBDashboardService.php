@@ -33,15 +33,22 @@ class PMBDashboardService
         if ($activeBatch) {
             // 1. Existing Widgets
             $totalPendaftar = Application::where('batch_id', $activeBatch->id)->count();
+            $totalDiterima = Application::where('batch_id', $activeBatch->id)
+                                        ->where('status', 'diterima')
+                                        ->orWhere('status', 'sudah_registrasi')
+                                        ->count();
+            $totalRegistrasi = Application::where('batch_id', $activeBatch->id)
+                                        ->where('status', 'sudah_registrasi')
+                                        ->count();
 
             // Pendaftar yang statusnya masih 'lakukan_pembayaran'
             $pembayaranPending = Application::where('batch_id', $activeBatch->id)
-                                            ->where('status', 'lakukan_pembayaran')
+                                            
                                             ->count();
 
             // Pendaftar yang statusnya 'lengkapi_data' (menunggu upload berkas)
             $berkasPending = Application::where('batch_id', $activeBatch->id)
-                                        ->where('status', 'lengkapi_data')
+                                        ->where('status', 'proses_verifikasi')
                                         ->count();
 
             // 2. New Widgets
@@ -50,6 +57,12 @@ class PMBDashboardService
                 ->where('status', 'diterima')
                 ->whereHas('reRegistrationInvoice', function ($q) {
                     $q->where('status', 'unpaid');
+                })
+                ->count();
+
+             $awaitingVerificationPayment = Application::where('batch_id', $activeBatch->id)
+                ->whereHas('reRegistrationInvoice', function ($q) {
+                    $q->where('status', 'pending_verification');
                 })
                 ->count();
 
@@ -118,7 +131,7 @@ class PMBDashboardService
                         'type' => 'Verifikasi Pembayaran',
                         'name' => $user ? $user->name : 'Unknown',
                         'date' => $installment->updated_at,
-                        'url' => route('admin.pmb.payment.show', $installment->invoice_id),
+                        'url' => route('admin.pmb.payment.show',  $installment->re_registration_invoice_id),
                         'status_label' => 'Menunggu Verifikasi Pembayaran',
                         'badge' => 'primary',
                     ];
@@ -132,10 +145,13 @@ class PMBDashboardService
         return [
             'activeBatch' => $activeBatch,
             'totalPendaftar' => $totalPendaftar,
+            'totalDiterima' => $totalDiterima,
+            'totalRegistrasi' => $totalRegistrasi,
             'pembayaranPending' => $pembayaranPending,
             'berkasPending' => $berkasPending,
             'acceptedButUnpaid' => $acceptedButUnpaid,
             'waitingForVerification' => $waitingForVerification,
+            'awaitingVerificationPayment' => $awaitingVerificationPayment,
             'readyForSelection' => $readyForSelection,
             'chartLabels' => $chartLabels,
             'chartValues' => $chartValues,
