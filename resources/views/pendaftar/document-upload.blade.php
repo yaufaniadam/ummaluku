@@ -90,21 +90,37 @@
                         {{-- Kolom Kanan: Form Upload atau Tombol Lihat File --}}
                         <div class="col-md-6">
                             <div class="pt-2">
-                                @if (!$uploadedDocument || $uploadedDocument->status == 'revision_needed')
-                                    <form action="{{ route('pendaftar.document.store', $application->id) }}" method="POST"
-                                        enctype="multipart/form-data">
-                                        @csrf
-                                        <input type="hidden" name="document_id" value="{{ $requirement->id }}">
-                                        <div class="input-group">
-                                            <input type="file" name="file_upload" class="form-control" required>
-                                            <button type="submit" class="btn btn-outline-primary">Upload</button>
-                                        </div>
-                                    </form>
+                                @php
+                                    $isReadOnly = in_array($application->status, ['diterima', 'sudah_registrasi']);
+                                @endphp
+
+                                @if ($isReadOnly)
+                                    @if ($uploadedDocument)
+                                        <a href="{{ Storage::url($uploadedDocument->file_path) }}" target="_blank"
+                                            class="btn btn-sm btn-secondary">
+                                            <i class="bi bi-eye"></i> Lihat File
+                                        </a>
+                                        <span class="ms-2 text-muted fst-italic"><small>Dokumen terkunci</small></span>
+                                    @else
+                                        <span class="text-muted"><small>Tidak ada dokumen yang diunggah.</small></span>
+                                    @endif
                                 @else
-                                    <a href="{{ Storage::url($uploadedDocument->file_path) }}" target="_blank"
-                                        class="btn btn-sm btn-secondary">
-                                        <i class="bi bi-eye"></i> Lihat File
-                                    </a>
+                                    @if (!$uploadedDocument || $uploadedDocument->status == 'revision_needed')
+                                        <form action="{{ route('pendaftar.document.store', $application->id) }}" method="POST"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            <input type="hidden" name="document_id" value="{{ $requirement->id }}">
+                                            <div class="input-group">
+                                                <input type="file" name="file_upload" class="form-control" required>
+                                                <button type="submit" class="btn btn-outline-primary">Upload</button>
+                                            </div>
+                                        </form>
+                                    @else
+                                        <a href="{{ Storage::url($uploadedDocument->file_path) }}" target="_blank"
+                                            class="btn btn-sm btn-secondary">
+                                            <i class="bi bi-eye"></i> Lihat File
+                                        </a>
+                                    @endif
                                 @endif
                             </div>
                         </div>

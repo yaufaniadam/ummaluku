@@ -25,7 +25,8 @@ class PendaftarBiodataController extends Controller
 
 
          // 3. Penjaga Gerbang: Jika tidak ada tagihan, atau statusnya bukan 'accepted'
-        if ($application->status !== 'upload_dokumen') {
+        $allowedStatuses = ['upload_dokumen', 'proses_verifikasi', 'diterima', 'sudah_registrasi'];
+        if (!in_array($application->status, $allowedStatuses)) {
             // Arahkan ke dashboard dengan pesan error
             return redirect()->route('pendaftar')->with('error', 'Anda belum bisa mengakses halaman upload dokumen.');
         }

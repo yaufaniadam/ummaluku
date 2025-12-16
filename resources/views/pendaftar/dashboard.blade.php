@@ -60,8 +60,13 @@
                 <div class="text-muted">
                     Anda telah diterima sebagai calon mahasiswa baru di Program Studi
                     <strong>{{ $acceptedProgram->name_id }}</strong>.
-                    Silakan <a href="{{ route('pendaftar.registrasi') }}">klik di sini</a> untuk informasi selanjutnya
+                    Silakan klik tombol di bawah untuk informasi selanjutnya
                     mengenai pembayaran dan registrasi ulang.
+                </div>
+                <div class="mt-3">
+                    <a href="{{ route('pendaftar.registrasi') }}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-arrow-right-circle me-2"></i> Lakukan Registrasi Ulang
+                    </a>
                 </div>
             </div>
         @endif

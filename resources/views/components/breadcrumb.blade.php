@@ -33,9 +33,6 @@
             <a class="nav-link {{ request()->routeIs('pendaftar.registrasi') ? 'active' : '' }}"
                 href="{{ route('pendaftar.registrasi') }}">
                 <i class="fa-solid fa-house me-2"></i>
-                @if ($current === 'diterima')
-                    <i class="bi bi-exclamation-triangle text-danger"></i>
-                @endif
                 Registrasi
             </a>
         </li>
