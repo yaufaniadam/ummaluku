@@ -50,5 +50,6 @@ require __DIR__ . '/modules/student.php';
 require __DIR__ . '/modules/lecturer.php';
 require __DIR__ . '/modules/camaru.php';
 require __DIR__ . '/modules/prodi.php';
+require __DIR__ . '/modules/staff.php';
 
 require __DIR__ . '/auth.php';

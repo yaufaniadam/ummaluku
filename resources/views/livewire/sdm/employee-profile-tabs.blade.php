@@ -36,9 +36,11 @@
                 </div>
             @endif
 
-            <button wire:click="create" class="btn btn-primary btn-sm mb-3">
-                <i class="fas fa-plus"></i> Tambah Data
-            </button>
+            @if(!$isSelfService || ($isSelfService && $activeTab === 'documents'))
+                <button wire:click="create" class="btn btn-primary btn-sm mb-3">
+                    <i class="fas fa-plus"></i> Tambah Data
+                </button>
+            @endif
 
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
@@ -125,12 +127,14 @@
                                 @endif
 
                                 <td>
-                                    <button wire:click="edit({{ $item->id }})" class="btn btn-xs btn-warning">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button wire:click="confirmDelete({{ $item->id }})" class="btn btn-xs btn-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                    @if(!$isSelfService || ($isSelfService && $activeTab === 'documents'))
+                                        <button wire:click="edit({{ $item->id }})" class="btn btn-xs btn-warning">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button wire:click="confirmDelete({{ $item->id }})" class="btn btn-xs btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

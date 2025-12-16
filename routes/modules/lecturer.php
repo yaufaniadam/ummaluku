@@ -19,4 +19,7 @@ Route::middleware(['auth', 'role:Dosen'])->prefix('dosen')->name('dosen.')->grou
 
     Route::get('input-nilai/{course_class}', [GradeInputController::class, 'show'])->name('grades.input.show');
 
+    // Profile Routes
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
 });

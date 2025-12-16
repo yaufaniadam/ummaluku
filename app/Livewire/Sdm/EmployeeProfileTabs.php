@@ -16,6 +16,7 @@ class EmployeeProfileTabs extends Component
     use WithFileUploads;
 
     public $employee; // Can be Lecturer or Staff (Polymorphic)
+    public $isSelfService = false; // Flag to indicate if user is editing their own profile
     public $activeTab = 'structural'; // structural, functional, rank, documents
 
     // Modal State
@@ -30,9 +31,10 @@ class EmployeeProfileTabs extends Component
 
     protected $listeners = ['refreshComponent' => '$refresh'];
 
-    public function mount($employee)
+    public function mount($employee, $isSelfService = false)
     {
         $this->employee = $employee;
+        $this->isSelfService = $isSelfService;
         $this->resetForm();
     }
 

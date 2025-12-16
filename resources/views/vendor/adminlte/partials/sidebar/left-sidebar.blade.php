@@ -7,6 +7,20 @@
         @include('adminlte::partials.common.brand-logo-xs')
     @endif
 
+    {{-- User Profile Block --}}
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+            @if(auth()->user() && auth()->user()->profile_photo_path)
+                <img src="{{ asset('storage/' . auth()->user()->profile_photo_path) }}" class="img-circle elevation-2" alt="User Image" style="width: 33px; height: 33px; object-fit: cover;">
+            @else
+                <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'Guest') }}" class="img-circle elevation-2" alt="User Image">
+            @endif
+        </div>
+        <div class="info">
+            <a href="#" class="d-block">{{ auth()->user()->name ?? 'Guest' }}</a>
+        </div>
+    </div>
+
     {{-- Sidebar menu --}}
     <div class="sidebar">
         <nav class="pt-2">
@@ -478,6 +492,27 @@
                     @endif
 
                     {{-- ================================================= --}}
+                    {{-- MENU UNTUK PORTAL TENDIK --}}
+                    {{-- ================================================= --}}
+                    @if (auth()->user()->hasRole('Tendik'))
+                        <li class="nav-header">PORTAL TENDIK</li>
+                        <li class="nav-item">
+                            <a href="{{ route('staff.dashboard') }}"
+                                class="nav-link {{ request()->routeIs('staff.dashboard') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('staff.profile.show') }}"
+                                class="nav-link {{ request()->routeIs('staff.profile.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-user"></i>
+                                <p>Profil Saya</p>
+                            </a>
+                        </li>
+                    @endif
+
+                    {{-- ================================================= --}}
                     {{-- MENU UNTUK PORTAL DOSEN --}}
                     {{-- ================================================= --}}
                     @if (auth()->user()->hasRole('Dosen'))
@@ -517,6 +552,13 @@
                                 class="nav-link {{ request()->routeIs('dosen.grades.input.index') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-edit"></i>
                                 <p>Input Nilai</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('dosen.profile.show') }}"
+                                class="nav-link {{ request()->routeIs('dosen.profile.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-user"></i>
+                                <p>Profil Saya</p>
                             </a>
                         </li>
 
