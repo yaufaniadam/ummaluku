@@ -7,16 +7,16 @@
     <div class="row">
         <!-- Form Section -->
         <div class="col-md-4">
-            <div class="card card-primary">
+            <div class="{{ $isEditing ? 'card card-warning' : 'card card-primary' }}">
                 <div class="card-header">
-                    <h3 class="card-title">Tetapkan Pejabat Baru</h3>
+                    <h3 class="card-title">{{ $isEditing ? 'Edit Data Pejabat' : 'Tetapkan Pejabat Baru' }}</h3>
                 </div>
                 <form wire:submit.prevent="assignOfficial">
                     <div class="card-body">
                         <!-- Position Selection -->
                         <div class="form-group">
                             <label>Jabatan</label>
-                            <select wire:model.live="position" class="form-control">
+                            <select wire:model.live="position" class="form-control" {{ $isEditing ? 'disabled' : '' }}>
                                 <option value="Dekan">Dekan</option>
                                 <option value="Kepala Tata Usaha">Kepala Tata Usaha (KTU)</option>
                                 <option value="Kepala Bagian Administrasi Akademik">Kepala Bagian Administrasi Akademik</option>
@@ -34,7 +34,7 @@
                                 @endif
                             </label>
 
-                            <select wire:model="employee_id" class="form-control">
+                            <select wire:model="employee_id" class="form-control" {{ $isEditing ? 'disabled' : '' }}>
                                 <option value="">-- Pilih --</option>
                                 @if($position === 'Dekan')
                                     @foreach($available_lecturers as $lecturer)
@@ -58,23 +58,46 @@
                             @error('start_date') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
 
+                        @if($isEditing)
+                            <div class="form-group">
+                                <label>Tanggal Selesai (Opsional)</label>
+                                <input type="date" wire:model="edit_end_date" class="form-control @error('edit_end_date') is-invalid @enderror">
+                                <small class="text-muted">Isi jika masa jabatan sudah berakhir.</small>
+                                @error('edit_end_date') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                            </div>
+
+                             <div class="form-group">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="isActiveSwitch" wire:model="edit_is_active">
+                                    <label class="custom-control-label" for="isActiveSwitch">Status Aktif</label>
+                                </div>
+                            </div>
+                        @endif
+
                         <div class="form-group">
                             <label>Nomor SK</label>
                             <input type="text" wire:model="sk_number" class="form-control" placeholder="Contoh: SK-123/2025">
                             @error('sk_number') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-primary btn-block">
-                            <i class="fas fa-save"></i> Simpan
-                        </button>
+                    <div class="card-footer d-flex justify-content-between">
+                         @if($isEditing)
+                            <button type="button" wire:click="cancelEdit" class="btn btn-default">Batal</button>
+                            <button type="submit" class="btn btn-warning">Update Perubahan</button>
+                        @else
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <i class="fas fa-save"></i> Simpan
+                            </button>
+                        @endif
                     </div>
                 </form>
             </div>
 
-            <a href="{{ route('master.faculties.index') }}" class="btn btn-default btn-block mb-3">
-                <i class="fas fa-arrow-left"></i> Kembali ke Daftar Fakultas
-            </a>
+            @if(!$isEditing)
+                <a href="{{ route('master.faculties.index') }}" class="btn btn-default btn-block mb-3">
+                    <i class="fas fa-arrow-left"></i> Kembali ke Daftar Fakultas
+                </a>
+            @endif
         </div>
 
         <!-- History Section (Tabbed) -->
@@ -107,6 +130,7 @@
                                             <th>Selesai</th>
                                             <th>Status</th>
                                             <th>SK</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -125,9 +149,17 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ $official->sk_number ?? '-' }}</td>
+                                                <td>
+                                                    <button wire:click="edit({{ $official->id }})" class="btn btn-xs btn-warning" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button onclick="confirm('Apakah Anda yakin ingin menghapus data ini? Data historis SDM juga akan terhapus.') || event.stopImmediatePropagation()" wire:click="delete({{ $official->id }})" class="btn btn-xs btn-danger" title="Hapus">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         @empty
-                                            <tr><td colspan="5" class="text-center text-muted">Belum ada riwayat.</td></tr>
+                                            <tr><td colspan="6" class="text-center text-muted">Belum ada riwayat.</td></tr>
                                         @endforelse
                                     </tbody>
                                 </table>
@@ -145,6 +177,7 @@
                                             <th>Selesai</th>
                                             <th>Status</th>
                                             <th>SK</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -163,9 +196,17 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ $official->sk_number ?? '-' }}</td>
+                                                <td>
+                                                    <button wire:click="edit({{ $official->id }})" class="btn btn-xs btn-warning" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button onclick="confirm('Apakah Anda yakin ingin menghapus data ini? Data historis SDM juga akan terhapus.') || event.stopImmediatePropagation()" wire:click="delete({{ $official->id }})" class="btn btn-xs btn-danger" title="Hapus">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         @empty
-                                            <tr><td colspan="5" class="text-center text-muted">Belum ada riwayat.</td></tr>
+                                            <tr><td colspan="6" class="text-center text-muted">Belum ada riwayat.</td></tr>
                                         @endforelse
                                     </tbody>
                                 </table>
@@ -183,6 +224,7 @@
                                             <th>Selesai</th>
                                             <th>Status</th>
                                             <th>SK</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -201,9 +243,17 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ $official->sk_number ?? '-' }}</td>
+                                                <td>
+                                                    <button wire:click="edit({{ $official->id }})" class="btn btn-xs btn-warning" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button onclick="confirm('Apakah Anda yakin ingin menghapus data ini? Data historis SDM juga akan terhapus.') || event.stopImmediatePropagation()" wire:click="delete({{ $official->id }})" class="btn btn-xs btn-danger" title="Hapus">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         @empty
-                                            <tr><td colspan="5" class="text-center text-muted">Belum ada riwayat.</td></tr>
+                                            <tr><td colspan="6" class="text-center text-muted">Belum ada riwayat.</td></tr>
                                         @endforelse
                                     </tbody>
                                 </table>

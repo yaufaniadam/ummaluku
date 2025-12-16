@@ -28,9 +28,17 @@ class OfficialManager extends Component
     public $start_date;
     public $sk_number;
 
+    // Editing State
+    public $editingId = null;
+    public $isEditing = false;
+    public $edit_end_date;
+    public $edit_is_active;
+
     // Selection lists
     public $available_lecturers = [];
     public $available_staff = [];
+
+    protected $listeners = ['deleteOfficial' => 'delete'];
 
     public function mount(Faculty $faculty)
     {
@@ -62,7 +70,11 @@ class OfficialManager extends Component
 
     public function updatedPosition()
     {
-        $this->reset(['employee_id', 'start_date', 'sk_number']);
+        if ($this->isEditing) {
+            $this->cancelEdit();
+        } else {
+            $this->reset(['employee_id', 'start_date', 'sk_number']);
+        }
         $this->loadCandidates();
     }
 
@@ -86,8 +98,116 @@ class OfficialManager extends Component
         }
     }
 
+    public function edit($id)
+    {
+        $official = FacultyOfficial::find($id);
+        if (!$official) return;
+
+        $this->isEditing = true;
+        $this->editingId = $official->id;
+        $this->position = $official->position;
+        $this->loadCandidates(); // Reload candidates for the correct position type
+        $this->employee_id = $official->employee_id;
+
+        $this->start_date = $official->start_date->format('Y-m-d');
+        $this->sk_number = $official->sk_number;
+
+        $this->edit_end_date = $official->end_date ? $official->end_date->format('Y-m-d') : null;
+        $this->edit_is_active = $official->is_active;
+    }
+
+    public function cancelEdit()
+    {
+        $this->isEditing = false;
+        $this->editingId = null;
+        $this->reset(['employee_id', 'start_date', 'sk_number', 'edit_end_date', 'edit_is_active']);
+        $this->loadCandidates();
+    }
+
+    public function updateOfficial()
+    {
+        $this->validate([
+            'start_date' => 'required|date',
+            'sk_number' => 'nullable|string',
+            'edit_end_date' => 'nullable|date|after_or_equal:start_date',
+            'edit_is_active' => 'boolean'
+        ]);
+
+        $official = FacultyOfficial::find($this->editingId);
+        if (!$official) return;
+
+        $oldStartDate = $official->start_date;
+
+        $official->update([
+            'start_date' => $this->start_date,
+            'end_date' => $this->edit_end_date,
+            'sk_number' => $this->sk_number,
+            'is_active' => $this->edit_is_active,
+        ]);
+
+        // Sync with EmployeeStructuralHistory
+        $structuralPosition = StructuralPosition::where('name', $official->position)->first();
+
+        if ($structuralPosition && $official->employee) {
+            $history = EmployeeStructuralHistory::where('employee_type', $official->employee_type)
+                ->where('employee_id', $official->employee_id)
+                ->where('structural_position_id', $structuralPosition->id)
+                ->where('start_date', $oldStartDate)
+                ->first();
+
+            if ($history) {
+                $history->update([
+                    'start_date' => $this->start_date,
+                    'end_date' => $this->edit_end_date,
+                    'sk_number' => $this->sk_number,
+                    'is_active' => $this->edit_is_active,
+                ]);
+            }
+        }
+
+        $this->dispatch('alert', type: 'success', message: "Data pejabat ($this->position) berhasil diperbarui.");
+        $this->cancelEdit();
+        $this->refreshOfficials();
+    }
+
+    public function delete($id)
+    {
+        $official = FacultyOfficial::find($id);
+        if (!$official) return;
+
+        // Sync Delete: Find History before deleting
+        $structuralPosition = StructuralPosition::where('name', $official->position)->first();
+
+        if ($structuralPosition && $official->employee) {
+            $history = EmployeeStructuralHistory::where('employee_type', $official->employee_type)
+                ->where('employee_id', $official->employee_id)
+                ->where('structural_position_id', $structuralPosition->id)
+                ->where('start_date', $official->start_date)
+                ->first();
+
+            if ($history) {
+                $history->delete();
+            }
+        }
+
+        // Remove Role if needed (Dekan only)
+        if ($official->position === 'Dekan' && $official->is_active && $official->employee && $official->employee->user) {
+             $official->employee->user->removeRole('Dekan');
+        }
+
+        $official->delete();
+
+        $this->dispatch('alert', type: 'success', message: "Data pejabat berhasil dihapus.");
+        $this->refreshOfficials();
+    }
+
     public function assignOfficial()
     {
+        if ($this->isEditing) {
+            $this->updateOfficial();
+            return;
+        }
+
         $rules = [
             'position' => 'required|in:Dekan,Kepala Tata Usaha,Kepala Bagian Administrasi Akademik',
             'employee_id' => 'required',
@@ -144,8 +264,6 @@ class OfficialManager extends Component
             ) {
                 $currentOfficial->employee->user->removeRole('Dekan');
             }
-
-            // Note: Currently no roles defined for KTU/Kabag in requirements, but can be added if needed.
 
             // Sync: Deactivate Structural History for the OLD employee
             if ($currentOfficial->employee) {

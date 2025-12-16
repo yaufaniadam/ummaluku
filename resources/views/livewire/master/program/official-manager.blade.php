@@ -6,15 +6,15 @@
 
     <div class="row">
         <div class="col-md-4">
-            <div class="card card-primary">
+            <div class="{{ $isEditing ? 'card card-warning' : 'card card-primary' }}">
                 <div class="card-header">
-                    <h3 class="card-title">Tetapkan Pejabat Baru</h3>
+                    <h3 class="card-title">{{ $isEditing ? 'Edit Data Pejabat' : 'Tetapkan Pejabat Baru' }}</h3>
                 </div>
                 <form wire:submit.prevent="assignOfficial">
                     <div class="card-body">
                         <div class="form-group">
                             <label>Jabatan</label>
-                            <select wire:model.live="position" class="form-control @error('position') is-invalid @enderror">
+                            <select wire:model.live="position" class="form-control @error('position') is-invalid @enderror" {{ $isEditing ? 'disabled' : '' }}>
                                 <option value="Kaprodi">Ketua Program Studi</option>
                                 <option value="Sekretaris">Sekretaris Program Studi</option>
                             </select>
@@ -23,7 +23,7 @@
 
                         <div class="form-group">
                             <label>Dosen</label>
-                            <select wire:model="lecturer_id" class="form-control @error('lecturer_id') is-invalid @enderror">
+                            <select wire:model="lecturer_id" class="form-control @error('lecturer_id') is-invalid @enderror" {{ $isEditing ? 'disabled' : '' }}>
                                 <option value="">-- Pilih Dosen --</option>
                                 @foreach($lecturers as $lecturer)
                                     <option value="{{ $lecturer->id }}">{{ $lecturer->full_name_with_degree }}</option>
@@ -31,20 +31,43 @@
                             </select>
                             @error('lecturer_id') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
+
                         <div class="form-group">
                             <label>Tanggal Mulai (SK)</label>
                             <input type="date" wire:model="start_date" class="form-control @error('start_date') is-invalid @enderror">
                             @error('start_date') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
+
+                        @if($isEditing)
+                            <div class="form-group">
+                                <label>Tanggal Selesai (Opsional)</label>
+                                <input type="date" wire:model="edit_end_date" class="form-control @error('edit_end_date') is-invalid @enderror">
+                                <small class="text-muted">Isi jika masa jabatan sudah berakhir.</small>
+                                @error('edit_end_date') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                            </div>
+
+                             <div class="form-group">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="isActiveSwitch" wire:model="edit_is_active">
+                                    <label class="custom-control-label" for="isActiveSwitch">Status Aktif</label>
+                                </div>
+                            </div>
+                        @endif
+
                         <div class="form-group">
                             <label>Nomor SK (Opsional)</label>
                             <input type="text" wire:model="sk_number" class="form-control @error('sk_number') is-invalid @enderror">
                             @error('sk_number') <span class="invalid-feedback">{{ $message }}</span> @enderror
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Simpan & Tetapkan</button>
-                        <a href="{{ route('master.programs.index') }}" class="btn btn-default">Kembali</a>
+                    <div class="card-footer d-flex justify-content-between">
+                        @if($isEditing)
+                            <button type="button" wire:click="cancelEdit" class="btn btn-default">Batal</button>
+                            <button type="submit" class="btn btn-warning">Update Perubahan</button>
+                        @else
+                            <button type="submit" class="btn btn-primary">Simpan & Tetapkan</button>
+                            <a href="{{ route('master.programs.index') }}" class="btn btn-default">Kembali</a>
+                        @endif
                     </div>
                 </form>
             </div>
@@ -71,10 +94,11 @@
                                     <thead>
                                         <tr>
                                             <th>Nama Pejabat</th>
-                                            <th>Mulai Menjabat</th>
-                                            <th>Selesai Menjabat</th>
+                                            <th>Mulai</th>
+                                            <th>Selesai</th>
                                             <th>No SK</th>
                                             <th>Status</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -91,10 +115,18 @@
                                                         <span class="badge badge-secondary">Non-Aktif</span>
                                                     @endif
                                                 </td>
+                                                <td>
+                                                    <button wire:click="edit({{ $head->id }})" class="btn btn-xs btn-warning" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button onclick="confirm('Apakah Anda yakin ingin menghapus data ini? Data historis SDM juga akan terhapus.') || event.stopImmediatePropagation()" wire:click="delete({{ $head->id }})" class="btn btn-xs btn-danger" title="Hapus">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="5" class="text-center">Belum ada riwayat Kaprodi.</td>
+                                                <td colspan="6" class="text-center">Belum ada riwayat Kaprodi.</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -109,10 +141,11 @@
                                     <thead>
                                         <tr>
                                             <th>Nama Pejabat</th>
-                                            <th>Mulai Menjabat</th>
-                                            <th>Selesai Menjabat</th>
+                                            <th>Mulai</th>
+                                            <th>Selesai</th>
                                             <th>No SK</th>
                                             <th>Status</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -129,10 +162,18 @@
                                                         <span class="badge badge-secondary">Non-Aktif</span>
                                                     @endif
                                                 </td>
+                                                <td>
+                                                    <button wire:click="edit({{ $secretary->id }})" class="btn btn-xs btn-warning" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button onclick="confirm('Apakah Anda yakin ingin menghapus data ini? Data historis SDM juga akan terhapus.') || event.stopImmediatePropagation()" wire:click="delete({{ $secretary->id }})" class="btn btn-xs btn-danger" title="Hapus">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="5" class="text-center">Belum ada riwayat Sekretaris.</td>
+                                                <td colspan="6" class="text-center">Belum ada riwayat Sekretaris.</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
