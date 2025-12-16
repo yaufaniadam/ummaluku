@@ -34,7 +34,7 @@ class SdmModuleTest extends TestCase
         $admin->assignRole('Super Admin');
 
         $this->actingAs($admin)
-            ->get(route('admin.master.index'))
+            ->get(route('admin.sdm.master.index'))
             ->assertStatus(200);
 
         Livewire::test(\App\Livewire\Sdm\Master\Index::class)
