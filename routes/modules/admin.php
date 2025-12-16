@@ -61,6 +61,8 @@ Route::prefix('master')->middleware(['auth', 'role:Super Admin|Admin'])->name('m
     Route::get('/work-units', WorkUnitIndex::class)->name('work-units.index');
     Route::get('/programs', App\Livewire\Master\Program\Index::class)->name('programs.index');
     Route::get('/programs/{program}/manage-officials', App\Livewire\Master\Program\OfficialManager::class)->name('programs.manage-head');
+    Route::get('/faculties', App\Livewire\Master\Faculty\Index::class)->name('faculties.index');
+    Route::get('/faculties/{faculty}/manage-officials', App\Livewire\Master\Faculty\OfficialManager::class)->name('faculties.manage-officials');
 });
 
 Route::prefix('admin/executive')->middleware(['auth', 'permission:view-executive-dashboard'])->name('admin.executive.')->group(function () {

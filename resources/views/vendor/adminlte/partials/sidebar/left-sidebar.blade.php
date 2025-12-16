@@ -66,6 +66,13 @@
                                 <p>Program Studi</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('master.faculties.index') }}"
+                                class="nav-link {{ request()->routeIs('master.faculties.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-building"></i>
+                                <p>Fakultas</p>
+                            </a>
+                        </li>
                     @endif
 
                     {{-- ================================================= --}}
