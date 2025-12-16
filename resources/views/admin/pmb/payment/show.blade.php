@@ -96,6 +96,8 @@
 @stop
 
 @section('js')
+<!-- Ensure SweetAlert2 v11 is loaded -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     @if(session('success'))
         Swal.fire({
@@ -122,6 +124,9 @@
         let confirmButtonText = actionType === 'approve' ? 'Ya, Setujui' : 'Ya, Tolak';
         let confirmButtonColor = actionType === 'approve' ? '#28a745' : '#dc3545';
 
+        // Close the bootstrap modal first to prevent overlay issues
+        $(form).closest('.modal').modal('hide');
+
         Swal.fire({
             title: title,
             text: text,
@@ -146,6 +151,9 @@
 
                 // Submit the form
                 form.submit();
+            } else {
+                // If cancelled, re-open the modal if needed, or do nothing.
+                // Re-opening might be annoying if they genuinely cancelled.
             }
         });
     }
