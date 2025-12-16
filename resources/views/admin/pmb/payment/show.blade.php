@@ -68,11 +68,11 @@
                                                 <div class="modal-footer">
                                                     <form action="{{ route('admin.pmb.payment.reject', $installment) }}" method="POST" class="d-inline">
                                                         @csrf
-                                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Anda yakin ingin menolak?')">Tolak</button>
+                                                        <button type="button" class="btn btn-danger" onclick="confirmAction(this.form, 'reject')">Tolak</button>
                                                     </form>
                                                     <form action="{{ route('admin.pmb.payment.approve', $installment) }}" method="POST" class="d-inline">
                                                         @csrf
-                                                        <button type="submit" class="btn btn-success" onclick="return confirm('Anda yakin ingin menyetujui?')">Setujui</button>
+                                                        <button type="button" class="btn btn-success" onclick="confirmAction(this.form, 'approve')">Setujui</button>
                                                     </form>
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                                                 </div>
@@ -93,4 +93,61 @@
         </div>
     </div>
 </div>
+@stop
+
+@section('js')
+<script>
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    @endif
+
+    @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+        });
+    @endif
+
+    function confirmAction(form, actionType) {
+        let title = actionType === 'approve' ? 'Setujui Pembayaran?' : 'Tolak Pembayaran?';
+        let text = actionType === 'approve' ? 'Pastikan bukti pembayaran valid.' : 'Pembayaran akan ditolak.';
+        let icon = actionType === 'approve' ? 'warning' : 'error';
+        let confirmButtonText = actionType === 'approve' ? 'Ya, Setujui' : 'Ya, Tolak';
+        let confirmButtonColor = actionType === 'approve' ? '#28a745' : '#dc3545';
+
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: icon,
+            showCancelButton: true,
+            confirmButtonColor: confirmButtonColor,
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: confirmButtonText,
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Show loading state
+                Swal.fire({
+                    title: 'Memproses...',
+                    html: 'Mohon tunggu sebentar.',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Submit the form
+                form.submit();
+            }
+        });
+    }
+</script>
 @stop
