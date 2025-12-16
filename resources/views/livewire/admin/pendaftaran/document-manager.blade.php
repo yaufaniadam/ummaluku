@@ -166,24 +166,20 @@
         <!-- Ensure SweetAlert2 v11 is loaded -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
-            // Listener untuk menutup loading Swal setelah proses selesai
-            document.addEventListener('document-status-updated', event => {
-                // Tutup loading
-                Swal.close();
-            });
-
              // Listener global show-alert yang mungkin dipanggil oleh backend
             document.addEventListener('show-alert', event => {
                 // Jika event.detail berbentuk array (dari dispatch Livewire), kita ambil detailnya
                 let data = event.detail;
+
                 // Kadang Livewire membungkus dalam array [0] jika dispatch multiple params
                 if (Array.isArray(data) && data.length > 0) {
                      data = data[0]; // Ambil object pertamanya
-                } elseif (Array.isArray(data)) {
+                } else if (Array.isArray(data)) {
                      // Fallback jika kosong atau struktur lain
                      data = { type: 'success', message: 'Operasi berhasil' };
                 }
 
+                // Swal.fire secara otomatis menutup swal yang sedang terbuka (termasuk loading)
                 Swal.fire({
                     title: data.type === 'error' ? 'Gagal' : (data.type === 'warning' ? 'Perhatian' : 'Berhasil'),
                     text: data.message,
