@@ -35,6 +35,9 @@
                                 <li class="list-group-item">
                                     <b>Prodi</b> <a class="float-right">{{ $employee->program->name_id ?? '-' }}</a>
                                 </li>
+                                <li class="list-group-item">
+                                    <b>Jabatan Fungsional</b> <a class="float-right">{{ $employee->functional_position ?? '-' }}</a>
+                                </li>
                             @elseif(class_basename($employee) === 'Staff')
                                 <li class="list-group-item">
                                     <b>NIP</b> <a class="float-right">{{ $employee->nip }}</a>
@@ -46,6 +49,19 @@
                                     </a>
                                 </li>
                             @endif
+                            <li class="list-group-item">
+                                <b>Status</b> <a class="float-right">{{ $employee->employmentStatus->name ?? '-' }}</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>No. HP</b> <a class="float-right">{{ $employee->phone ?? '-' }}</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Rekening</b> <br>
+                                <span class="float-right text-right">
+                                    {{ $employee->bank_name ?? '-' }} <br>
+                                    {{ $employee->account_number ?? '-' }}
+                                </span>
+                            </li>
                         @endif
                     </ul>
 

@@ -105,6 +105,81 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="gender">Jenis Kelamin</label>
+                            <select wire:model="gender" class="form-control @error('gender') is-invalid @enderror" id="gender">
+                                <option value="">-- Pilih --</option>
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
+                            </select>
+                            @error('gender')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="phone">No. HP/WA</label>
+                            <input type="text" wire:model="phone" class="form-control @error('phone') is-invalid @enderror" id="phone">
+                            @error('phone')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="birth_place">Tempat Lahir</label>
+                            <input type="text" wire:model="birth_place" class="form-control @error('birth_place') is-invalid @enderror" id="birth_place">
+                            @error('birth_place')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="birth_date">Tanggal Lahir</label>
+                            <input type="date" wire:model="birth_date" class="form-control @error('birth_date') is-invalid @enderror" id="birth_date">
+                            @error('birth_date')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="bank_name">Nama Bank</label>
+                            <input type="text" wire:model="bank_name" class="form-control @error('bank_name') is-invalid @enderror" id="bank_name" placeholder="Contoh: Bank Mandiri">
+                            @error('bank_name')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="account_number">Nomor Rekening</label>
+                            <input type="text" wire:model="account_number" class="form-control @error('account_number') is-invalid @enderror" id="account_number">
+                            @error('account_number')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Alamat</label>
+                    <textarea wire:model="address" class="form-control @error('address') is-invalid @enderror" id="address" rows="3"></textarea>
+                    @error('address')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+
                 {{-- Baris Password --}}
                 <div class="row">
                     <div class="col-md-6">

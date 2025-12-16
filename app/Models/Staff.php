@@ -22,6 +22,10 @@ class Staff extends Model
         'program_id',
         'work_unit_id',
         'employment_status_id',
+        'bank_name',
+        'account_number',
+        'birth_place',
+        'birth_date',
     ];
 
     public function user(): BelongsTo

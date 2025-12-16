@@ -38,6 +38,19 @@
                             <b>No. HP</b> <a class="float-right">{{ $staff->phone ?? '-' }}</a>
                         </li>
                         <li class="list-group-item">
+                            <b>Tempat, Tanggal Lahir</b>
+                            <a class="float-right">
+                                {{ $staff->birth_place ? $staff->birth_place . ', ' : '' }}
+                                {{ $staff->birth_date ? \Carbon\Carbon::parse($staff->birth_date)->format('d M Y') : '-' }}
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Rekening</b> <br>
+                            <span class="text-muted">
+                                {{ $staff->bank_name ?? '-' }} - {{ $staff->account_number ?? '-' }}
+                            </span>
+                        </li>
+                        <li class="list-group-item">
                             <b>Status Kepegawaian</b> <a class="float-right">{{ $staff->employmentStatus->name ?? '-' }}</a>
                         </li>
                         <li class="list-group-item">

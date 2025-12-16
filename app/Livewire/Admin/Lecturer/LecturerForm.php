@@ -30,6 +30,15 @@ class LecturerForm extends Component
     public $password_confirmation;
     public $photo;
 
+    // Additional fields
+    public $phone;
+    public $address;
+    public $bank_name;
+    public $account_number;
+    public $birth_place;
+    public $birth_date;
+    public $gender;
+
     // Properti untuk menampung data master program studi
     public $programs;
     public $employmentStatuses;
@@ -51,6 +60,14 @@ class LecturerForm extends Component
             $this->email = $lecturer->user->email;
             $this->program_id = $lecturer->program_id;
             $this->employment_status_id = $lecturer->employment_status_id;
+
+            $this->phone = $lecturer->phone;
+            $this->address = $lecturer->address;
+            $this->bank_name = $lecturer->bank_name;
+            $this->account_number = $lecturer->account_number;
+            $this->birth_place = $lecturer->birth_place;
+            $this->birth_date = $lecturer->birth_date;
+            $this->gender = $lecturer->gender;
         }
     }
 
@@ -67,6 +84,13 @@ class LecturerForm extends Component
             'program_id' => 'required|exists:programs,id',
             'employment_status_id' => 'nullable|exists:employment_statuses,id',
             'photo' => 'nullable|image|max:1024',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
+            'bank_name' => 'nullable|string|max:100',
+            'account_number' => 'nullable|string|max:50',
+            'birth_place' => 'nullable|string|max:100',
+            'birth_date' => 'nullable|date',
+            'gender' => 'nullable|in:L,P',
             // Password bersifat opsional saat edit
             'password' => 'nullable|string|min:8|confirmed',
         ];
@@ -108,6 +132,13 @@ class LecturerForm extends Component
                         'nidn' => $this->nidn,
                         'full_name_with_degree' => $this->fullName,
                         'employment_status_id' => $this->employment_status_id,
+                        'phone' => $this->phone,
+                        'address' => $this->address,
+                        'bank_name' => $this->bank_name,
+                        'account_number' => $this->account_number,
+                        'birth_place' => $this->birth_place,
+                        'birth_date' => $this->birth_date,
+                        'gender' => $this->gender,
                     ]);
                     session()->flash('success', 'Data dosen berhasil diperbarui.');
 
@@ -132,6 +163,13 @@ class LecturerForm extends Component
                         'nidn' => $this->nidn,
                         'full_name_with_degree' => $this->fullName,
                         'employment_status_id' => $this->employment_status_id,
+                        'phone' => $this->phone,
+                        'address' => $this->address,
+                        'bank_name' => $this->bank_name,
+                        'account_number' => $this->account_number,
+                        'birth_place' => $this->birth_place,
+                        'birth_date' => $this->birth_date,
+                        'gender' => $this->gender,
                     ]);
                     
                     session()->flash('success', 'Data dosen berhasil ditambahkan.');

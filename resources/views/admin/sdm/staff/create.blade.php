@@ -90,6 +90,28 @@
                                     @enderror
                                 </div>
 
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label>Tempat Lahir</label>
+                                        <input type="text" name="birth_place" class="form-control @error('birth_place') is-invalid @enderror" value="{{ old('birth_place') }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Tanggal Lahir</label>
+                                        <input type="date" name="birth_date" class="form-control @error('birth_date') is-invalid @enderror" value="{{ old('birth_date') }}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label>Nama Bank</label>
+                                        <input type="text" name="bank_name" class="form-control @error('bank_name') is-invalid @enderror" value="{{ old('bank_name') }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>No. Rekening</label>
+                                        <input type="text" name="account_number" class="form-control @error('account_number') is-invalid @enderror" value="{{ old('account_number') }}">
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="address">Alamat</label>
                                     <textarea name="address" class="form-control @error('address') is-invalid @enderror" rows="2">{{ old('address') }}</textarea>

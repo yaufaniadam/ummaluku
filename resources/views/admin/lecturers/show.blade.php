@@ -45,6 +45,29 @@
                             <b>Jabatan Fungsional</b> <a class="float-right">{{ $lecturer->functional_position }}</a>
                         </li>
                         @endif
+                        <li class="list-group-item">
+                            <b>Jenis Kelamin</b> <a class="float-right">{{ $lecturer->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>No. HP/WA</b> <a class="float-right">{{ $lecturer->phone ?? '-' }}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Tempat, Tanggal Lahir</b>
+                            <a class="float-right">
+                                {{ $lecturer->birth_place ? $lecturer->birth_place . ', ' : '' }}
+                                {{ $lecturer->birth_date ? \Carbon\Carbon::parse($lecturer->birth_date)->format('d M Y') : '-' }}
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Rekening</b> <br>
+                            <span class="text-muted">
+                                {{ $lecturer->bank_name ?? '-' }} - {{ $lecturer->account_number ?? '-' }}
+                            </span>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Alamat</b> <br>
+                            <span class="text-muted">{{ $lecturer->address ?? '-' }}</span>
+                        </li>
                     </ul>
 
                     <a href="{{ route('admin.sdm.lecturers.edit', $lecturer->id) }}" class="btn btn-primary btn-block"><b>Edit Profil</b></a>

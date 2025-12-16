@@ -64,6 +64,10 @@ class StaffController extends Controller
             'program_id' => ['nullable', 'required_if:unit_type,prodi', 'exists:programs,id'],
             'work_unit_id' => ['nullable', 'required_if:unit_type,bureau', 'exists:work_units,id'],
             'employment_status_id' => ['nullable', 'exists:employment_statuses,id'],
+            'bank_name' => ['nullable', 'string', 'max:100'],
+            'account_number' => ['nullable', 'string', 'max:50'],
+            'birth_place' => ['nullable', 'string', 'max:100'],
+            'birth_date' => ['nullable', 'date'],
         ]);
 
         DB::transaction(function () use ($request) {
@@ -86,6 +90,10 @@ class StaffController extends Controller
                 'program_id' => $request->unit_type === 'prodi' ? $request->program_id : null,
                 'work_unit_id' => $request->unit_type === 'bureau' ? $request->work_unit_id : null,
                 'employment_status_id' => $request->employment_status_id,
+                'bank_name' => $request->bank_name,
+                'account_number' => $request->account_number,
+                'birth_place' => $request->birth_place,
+                'birth_date' => $request->birth_date,
             ]);
         });
 
@@ -125,6 +133,10 @@ class StaffController extends Controller
             'work_unit_id' => ['nullable', 'required_if:unit_type,bureau', 'exists:work_units,id'],
             'employment_status_id' => ['nullable', 'exists:employment_statuses,id'],
             'photo' => ['nullable', 'image', 'max:1024'],
+            'bank_name' => ['nullable', 'string', 'max:100'],
+            'account_number' => ['nullable', 'string', 'max:50'],
+            'birth_place' => ['nullable', 'string', 'max:100'],
+            'birth_date' => ['nullable', 'date'],
         ]);
 
         DB::transaction(function () use ($request, $staff) {
@@ -156,6 +168,10 @@ class StaffController extends Controller
                 'program_id' => $request->unit_type === 'prodi' ? $request->program_id : null,
                 'work_unit_id' => $request->unit_type === 'bureau' ? $request->work_unit_id : null,
                 'employment_status_id' => $request->employment_status_id,
+                'bank_name' => $request->bank_name,
+                'account_number' => $request->account_number,
+                'birth_place' => $request->birth_place,
+                'birth_date' => $request->birth_date,
             ]);
         });
 
