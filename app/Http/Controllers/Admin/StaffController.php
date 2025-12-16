@@ -123,6 +123,7 @@ class StaffController extends Controller
             'program_id' => ['nullable', 'required_if:unit_type,prodi', 'exists:programs,id'],
             'work_unit_id' => ['nullable', 'required_if:unit_type,bureau', 'exists:work_units,id'],
             'employment_status_id' => ['nullable', 'exists:employment_statuses,id'],
+            'photo' => ['nullable', 'image', 'max:1024'],
         ]);
 
         DB::transaction(function () use ($request, $staff) {
@@ -133,6 +134,13 @@ class StaffController extends Controller
             if ($request->filled('password')) {
                 $user->password = Hash::make($request->password);
             }
+
+            // Handle Profile Photo
+            if ($request->hasFile('photo')) {
+                $path = $request->file('photo')->store('profile-photos', 'public');
+                $user->profile_photo_path = $path;
+            }
+
             $user->save();
 
             // 2. Update Staff

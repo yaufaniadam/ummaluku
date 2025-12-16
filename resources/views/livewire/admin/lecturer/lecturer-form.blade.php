@@ -84,6 +84,25 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="photo">Foto Profil</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input @error('photo') is-invalid @enderror" id="photo" wire:model="photo">
+                                    <label class="custom-file-label" for="photo">Pilih file</label>
+                                </div>
+                            </div>
+                            @error('photo')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                            @if ($user && $user->profile_photo_path)
+                                <div class="mt-2">
+                                    <img src="{{ asset('storage/' . $user->profile_photo_path) }}" alt="Foto Profil" class="img-thumbnail" style="max-height: 100px;">
+                                </div>
+                            @endif
+                        </div>
+                    </div>
                 </div>
 
                 {{-- Baris Password --}}

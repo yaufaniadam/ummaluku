@@ -10,9 +10,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class LecturerForm extends Component
 {
+    use WithFileUploads;
+
     // Properti baru untuk mode edit
     public ?Lecturer $lecturer = null;
     public ?User $user = null;
@@ -24,6 +27,7 @@ class LecturerForm extends Component
     public $program_id;
     public $password;
     public $password_confirmation;
+    public $photo;
 
     // Properti untuk menampung data master program studi
     public $programs;
@@ -61,6 +65,7 @@ class LecturerForm extends Component
             'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($userId)],
             'program_id' => 'required|exists:programs,id',
             'employment_status_id' => 'nullable|exists:employment_statuses,id',
+            'photo' => 'nullable|image|max:1024',
             // Password bersifat opsional saat edit
             'password' => 'nullable|string|min:8|confirmed',
         ];
@@ -75,10 +80,17 @@ class LecturerForm extends Component
             DB::transaction(function () {
                 if ($this->lecturer) {
                     // --- LOGIKA UPDATE ---
-                    $this->user->update([
+                    $userData = [
                         'name' => $this->fullName,
                         'email' => $this->email,
-                    ]);
+                    ];
+
+                    if ($this->photo) {
+                        $path = $this->photo->store('profile-photos', 'public');
+                        $userData['profile_photo_path'] = $path;
+                    }
+
+                    $this->user->update($userData);
 
                     // Update password hanya jika diisi
                     if (!empty($this->password)) {
@@ -97,11 +109,18 @@ class LecturerForm extends Component
 
                 } else {
                     // --- LOGIKA CREATE (TETAP SAMA) ---
-                    $newUser = User::create([
+                    $userData = [
                         'name' => $this->fullName,
                         'email' => $this->email,
                         'password' => Hash::make($this->password),
-                    ]);
+                    ];
+
+                    if ($this->photo) {
+                        $path = $this->photo->store('profile-photos', 'public');
+                        $userData['profile_photo_path'] = $path;
+                    }
+
+                    $newUser = User::create($userData);
                     $newUser->assignRole('Dosen');
                     Lecturer::create([
                         'user_id' => $newUser->id,

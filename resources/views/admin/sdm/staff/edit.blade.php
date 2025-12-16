@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <form action="{{ route('admin.sdm.staff.update', $staff->id) }}" method="POST">
+                <form action="{{ route('admin.sdm.staff.update', $staff->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="card-body">
@@ -26,6 +26,24 @@
                                     @error('name')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="photo">Foto Profil</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input @error('photo') is-invalid @enderror" id="photo" name="photo">
+                                            <label class="custom-file-label" for="photo">Pilih file</label>
+                                        </div>
+                                    </div>
+                                    @error('photo')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                    @if ($staff->user->profile_photo_path)
+                                        <div class="mt-2">
+                                            <img src="{{ asset('storage/' . $staff->user->profile_photo_path) }}" alt="Foto Profil" class="img-thumbnail" style="max-height: 100px;">
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <div class="form-group">
