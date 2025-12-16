@@ -77,137 +77,140 @@
             </a>
         </div>
 
-        <!-- History Section -->
+        <!-- History Section (Tabbed) -->
         <div class="col-md-8">
-            <!-- Dekan History -->
             <div class="card card-outline card-info">
-                <div class="card-header">
-                    <h3 class="card-title">Riwayat Dekan</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-                    </div>
+                <div class="card-header p-0 border-bottom-0">
+                    <ul class="nav nav-tabs" id="official-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="dekan-tab" data-toggle="pill" href="#dekan-content" role="tab" aria-controls="dekan-content" aria-selected="true">Dekan</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="ktu-tab" data-toggle="pill" href="#ktu-content" role="tab" aria-controls="ktu-content" aria-selected="false">Kepala Tata Usaha</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="kabag-tab" data-toggle="pill" href="#kabag-content" role="tab" aria-controls="kabag-content" aria-selected="false">Kabag Adm. Akademik</a>
+                        </li>
+                    </ul>
                 </div>
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-hover text-nowrap">
-                        <thead>
-                            <tr>
-                                <th>Nama</th>
-                                <th>Mulai</th>
-                                <th>Selesai</th>
-                                <th>Status</th>
-                                <th>SK</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($deans as $official)
-                                <tr>
-                                    <td>
-                                        {{ $official->employee->full_name_with_degree ?? $official->employee->user->name ?? 'N/A' }}
-                                    </td>
-                                    <td>{{ $official->start_date->format('d M Y') }}</td>
-                                    <td>{{ $official->end_date ? $official->end_date->format('d M Y') : '-' }}</td>
-                                    <td>
-                                        @if($official->is_active)
-                                            <span class="badge badge-success">Aktif</span>
-                                        @else
-                                            <span class="badge badge-secondary">Non-Aktif</span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $official->sk_number ?? '-' }}</td>
-                                </tr>
-                            @empty
-                                <tr><td colspan="5" class="text-center text-muted">Belum ada riwayat.</td></tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                <div class="card-body">
+                    <div class="tab-content" id="official-tabs-content">
 
-            <!-- KTU History -->
-            <div class="card card-outline card-success">
-                <div class="card-header">
-                    <h3 class="card-title">Riwayat Kepala Tata Usaha (KTU)</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-                    </div>
-                </div>
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-hover text-nowrap">
-                        <thead>
-                            <tr>
-                                <th>Nama</th>
-                                <th>Mulai</th>
-                                <th>Selesai</th>
-                                <th>Status</th>
-                                <th>SK</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($ktus as $official)
-                                <tr>
-                                    <td>
-                                        {{ $official->employee->full_name_with_degree ?? $official->employee->user->name ?? 'N/A' }}
-                                    </td>
-                                    <td>{{ $official->start_date->format('d M Y') }}</td>
-                                    <td>{{ $official->end_date ? $official->end_date->format('d M Y') : '-' }}</td>
-                                    <td>
-                                        @if($official->is_active)
-                                            <span class="badge badge-success">Aktif</span>
-                                        @else
-                                            <span class="badge badge-secondary">Non-Aktif</span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $official->sk_number ?? '-' }}</td>
-                                </tr>
-                            @empty
-                                <tr><td colspan="5" class="text-center text-muted">Belum ada riwayat.</td></tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                        <!-- Dekan Tab -->
+                        <div class="tab-pane fade show active" id="dekan-content" role="tabpanel" aria-labelledby="dekan-tab">
+                            <div class="table-responsive p-0">
+                                <table class="table table-hover text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <th>Mulai</th>
+                                            <th>Selesai</th>
+                                            <th>Status</th>
+                                            <th>SK</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($deans as $official)
+                                            <tr class="{{ $official->is_active ? 'table-success' : '' }}">
+                                                <td>
+                                                    {{ $official->employee->full_name_with_degree ?? $official->employee->user->name ?? 'N/A' }}
+                                                </td>
+                                                <td>{{ $official->start_date->format('d M Y') }}</td>
+                                                <td>{{ $official->end_date ? $official->end_date->format('d M Y') : '-' }}</td>
+                                                <td>
+                                                    @if($official->is_active)
+                                                        <span class="badge badge-success">Aktif</span>
+                                                    @else
+                                                        <span class="badge badge-secondary">Non-Aktif</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{ $official->sk_number ?? '-' }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr><td colspan="5" class="text-center text-muted">Belum ada riwayat.</td></tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
 
-            <!-- Kabag History -->
-            <div class="card card-outline card-warning">
-                <div class="card-header">
-                    <h3 class="card-title">Riwayat Kabag Adm. Akademik</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        <!-- KTU Tab -->
+                        <div class="tab-pane fade" id="ktu-content" role="tabpanel" aria-labelledby="ktu-tab">
+                            <div class="table-responsive p-0">
+                                <table class="table table-hover text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <th>Mulai</th>
+                                            <th>Selesai</th>
+                                            <th>Status</th>
+                                            <th>SK</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($ktus as $official)
+                                            <tr class="{{ $official->is_active ? 'table-success' : '' }}">
+                                                <td>
+                                                    {{ $official->employee->full_name_with_degree ?? $official->employee->user->name ?? 'N/A' }}
+                                                </td>
+                                                <td>{{ $official->start_date->format('d M Y') }}</td>
+                                                <td>{{ $official->end_date ? $official->end_date->format('d M Y') : '-' }}</td>
+                                                <td>
+                                                    @if($official->is_active)
+                                                        <span class="badge badge-success">Aktif</span>
+                                                    @else
+                                                        <span class="badge badge-secondary">Non-Aktif</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{ $official->sk_number ?? '-' }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr><td colspan="5" class="text-center text-muted">Belum ada riwayat.</td></tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Kabag Tab -->
+                        <div class="tab-pane fade" id="kabag-content" role="tabpanel" aria-labelledby="kabag-tab">
+                            <div class="table-responsive p-0">
+                                <table class="table table-hover text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <th>Mulai</th>
+                                            <th>Selesai</th>
+                                            <th>Status</th>
+                                            <th>SK</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($kabags as $official)
+                                            <tr class="{{ $official->is_active ? 'table-success' : '' }}">
+                                                <td>
+                                                    {{ $official->employee->full_name_with_degree ?? $official->employee->user->name ?? 'N/A' }}
+                                                </td>
+                                                <td>{{ $official->start_date->format('d M Y') }}</td>
+                                                <td>{{ $official->end_date ? $official->end_date->format('d M Y') : '-' }}</td>
+                                                <td>
+                                                    @if($official->is_active)
+                                                        <span class="badge badge-success">Aktif</span>
+                                                    @else
+                                                        <span class="badge badge-secondary">Non-Aktif</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{ $official->sk_number ?? '-' }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr><td colspan="5" class="text-center text-muted">Belum ada riwayat.</td></tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-hover text-nowrap">
-                        <thead>
-                            <tr>
-                                <th>Nama</th>
-                                <th>Mulai</th>
-                                <th>Selesai</th>
-                                <th>Status</th>
-                                <th>SK</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($kabags as $official)
-                                <tr>
-                                    <td>
-                                        {{ $official->employee->full_name_with_degree ?? $official->employee->user->name ?? 'N/A' }}
-                                    </td>
-                                    <td>{{ $official->start_date->format('d M Y') }}</td>
-                                    <td>{{ $official->end_date ? $official->end_date->format('d M Y') : '-' }}</td>
-                                    <td>
-                                        @if($official->is_active)
-                                            <span class="badge badge-success">Aktif</span>
-                                        @else
-                                            <span class="badge badge-secondary">Non-Aktif</span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $official->sk_number ?? '-' }}</td>
-                                </tr>
-                            @empty
-                                <tr><td colspan="5" class="text-center text-muted">Belum ada riwayat.</td></tr>
-                            @endforelse
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
