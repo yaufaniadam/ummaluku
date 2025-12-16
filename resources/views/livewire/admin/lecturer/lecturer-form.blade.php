@@ -210,7 +210,7 @@
                     </div>
                     Simpan
                 </button>
-                <a href="{{ route('admin.sdm.lecturers.index') }}" class="btn btn-secondary" wire:navigate>Batal</a>
+                <a href="{{ route('admin.sdm.lecturers.index') }}" class="btn btn-secondary">Batal</a>
             </div>
         </div>
     </form>
