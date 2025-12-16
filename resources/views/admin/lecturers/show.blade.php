@@ -35,8 +35,16 @@
                             <b>Prodi</b> <a class="float-right">{{ $lecturer->program->name_id ?? '-' }}</a>
                         </li>
                         <li class="list-group-item">
-                            <b>Status</b> <a class="float-right">{{ ucfirst($lecturer->status) }}</a>
+                            <b>Status Kepegawaian</b> <a class="float-right">{{ $lecturer->employmentStatus->name ?? '-' }}</a>
                         </li>
+                        <li class="list-group-item">
+                            <b>Status Aktif</b> <a class="float-right">{{ ucfirst($lecturer->status) }}</a>
+                        </li>
+                        @if($lecturer->functional_position)
+                        <li class="list-group-item">
+                            <b>Jabatan Fungsional</b> <a class="float-right">{{ $lecturer->functional_position }}</a>
+                        </li>
+                        @endif
                     </ul>
 
                     <a href="{{ route('admin.sdm.lecturers.edit', $lecturer->id) }}" class="btn btn-primary btn-block"><b>Edit Profil</b></a>
