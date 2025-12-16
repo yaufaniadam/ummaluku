@@ -12,9 +12,16 @@
             <div class="card card-primary card-outline">
                 <div class="card-body box-profile">
                     <div class="text-center">
-                        <img class="profile-user-img img-fluid img-circle"
-                             src="https://ui-avatars.com/api/?name={{ urlencode($lecturer->user->name) }}"
-                             alt="User profile picture">
+                        @if($lecturer->user->profile_photo_path)
+                            <img class="profile-user-img img-fluid img-circle"
+                                src="{{ asset('storage/' . $lecturer->user->profile_photo_path) }}"
+                                alt="User profile picture"
+                                style="width: 100px; height: 100px; object-fit: cover;">
+                        @else
+                            <img class="profile-user-img img-fluid img-circle"
+                                src="https://ui-avatars.com/api/?name={{ urlencode($lecturer->user->name) }}"
+                                alt="User profile picture">
+                        @endif
                     </div>
 
                     <h3 class="profile-username text-center">{{ $lecturer->user->name }}</h3>
