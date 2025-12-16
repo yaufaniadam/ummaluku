@@ -6,6 +6,9 @@ use App\Models\Lecturer;
 use App\Models\Program;
 use App\Models\ProgramHead;
 use App\Models\Staff;
+use App\Models\StructuralPosition;
+use App\Models\WorkUnit;
+use App\Models\EmployeeStructuralHistory;
 use Livewire\Component;
 
 class HeadManager extends Component
@@ -31,12 +34,7 @@ class HeadManager extends Component
     public function updatedLecturerId($value)
     {
         $this->showGenderInput = false;
-        if ($value) {
-            $lecturer = Lecturer::find($value);
-            if ($lecturer && $lecturer->user && !$lecturer->user->staff) {
-                $this->showGenderInput = true;
-            }
-        }
+        // Logic create staff dihapus, jadi gender input tidak diperlukan lagi
     }
 
     public function refreshHeads()
@@ -52,23 +50,44 @@ class HeadManager extends Component
             'sk_number' => 'nullable|string',
         ];
 
-        if ($this->showGenderInput) {
-            $rules['gender'] = 'required|in:L,P';
-        }
-
         $this->validate($rules);
+
+        $structuralPosition = StructuralPosition::firstOrCreate(['name' => 'Ketua Program Studi']);
+
+        // Find or Create WorkUnit for this Program
+        // Assuming WorkUnit name matches Program name + " (Program Studi)" or similar,
+        // or just Program Name. Seeder uses "Program Studi X".
+        // Let's try to match loosely or create one.
+        $workUnit = WorkUnit::firstOrCreate(
+            ['name' => 'Program Studi ' . $this->program->name_id],
+            ['type' => 'Program Studi']
+        );
 
         // 1. Deactivate current active head
         $currentHead = $this->program->currentHead;
         if ($currentHead) {
+            $endDate = date('Y-m-d', strtotime($this->start_date . ' -1 day'));
+
             $currentHead->update([
                 'is_active' => false,
-                'end_date' => date('Y-m-d', strtotime($this->start_date . ' -1 day')), // End date is day before new start
+                'end_date' => $endDate,
             ]);
 
             // Revoke Kaprodi role from old user
             if ($currentHead->lecturer && $currentHead->lecturer->user) {
                 $currentHead->lecturer->user->removeRole('Kaprodi');
+            }
+
+            // Sync: Deactivate Structural History for the OLD lecturer
+            if ($currentHead->lecturer) {
+                EmployeeStructuralHistory::where('employee_type', get_class($currentHead->lecturer))
+                    ->where('employee_id', $currentHead->lecturer->id)
+                    ->where('structural_position_id', $structuralPosition->id)
+                    ->where('is_active', true)
+                    ->update([
+                        'is_active' => false,
+                        'end_date' => $endDate
+                    ]);
             }
         }
 
@@ -86,19 +105,16 @@ class HeadManager extends Component
         if ($lecturer && $lecturer->user) {
             $lecturer->user->assignRole('Kaprodi');
 
-            // Check if staff record exists
-            if (!$lecturer->user->staff) {
-                 // Create staff record
-                 Staff::create([
-                     'user_id' => $lecturer->user->id,
-                     'nip' => $lecturer->nidn, // Use NIDN as NIP
-                     'gender' => $this->gender,
-                     'program_id' => $this->program->id,
-                 ]);
-            } else {
-                // If they are staff, update their program_id to this program so they can see the dashboard
-                 $lecturer->user->staff->update(['program_id' => $this->program->id]);
-            }
+            // Sync: Create Structural History for the NEW lecturer
+            EmployeeStructuralHistory::create([
+                'employee_type' => get_class($lecturer),
+                'employee_id' => $lecturer->id,
+                'structural_position_id' => $structuralPosition->id,
+                'work_unit_id' => $workUnit->id,
+                'sk_number' => $this->sk_number,
+                'start_date' => $this->start_date,
+                'is_active' => true,
+            ]);
         }
 
         $this->reset(['lecturer_id', 'start_date', 'sk_number', 'gender', 'showGenderInput']);
