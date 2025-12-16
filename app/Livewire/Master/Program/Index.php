@@ -33,7 +33,7 @@ class Index extends Component
 
         return view('livewire.master.program.index', [
             'programs' => $programs,
-            'faculties' => Faculty::orderBy('name')->get()
+            'faculties' => Faculty::orderBy('name_id')->get()
         ])->extends('adminlte::page')->section('content');
     }
 
