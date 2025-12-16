@@ -30,7 +30,7 @@
                             <td>{{ $program->code }}</td>
                             <td>{{ $program->name_id }}</td>
                             <td>{{ $program->degree }}</td>
-                            <td>{{ $program->faculty->name ?? '-' }}</td>
+                            <td>{{ $program->faculty->name_id ?? '-' }}</td>
                             <td>
                                 @if($program->currentHead && $program->currentHead->lecturer)
                                     {{ $program->currentHead->lecturer->full_name_with_degree }}
