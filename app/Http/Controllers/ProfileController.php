@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -55,6 +56,10 @@ class ProfileController extends Controller
             $request->validate([
                 'photo' => ['nullable', 'image', 'max:1024'], // 1MB Max
             ]);
+
+            if ($user->profile_photo_path) {
+                Storage::disk('public')->delete($user->profile_photo_path);
+            }
 
             $path = $request->file('photo')->store('profile-photos', 'public');
             $user->profile_photo_path = $path;

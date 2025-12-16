@@ -100,6 +100,10 @@ class EmployeeProfileTabs extends Component
 
     public function save()
     {
+        if ($this->isSelfService && $this->activeTab !== 'documents') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $this->validateData();
 
         $relation = $this->getRelationName();
@@ -128,12 +132,19 @@ class EmployeeProfileTabs extends Component
 
     public function confirmDelete($id)
     {
+        if ($this->isSelfService && $this->activeTab !== 'documents') {
+            abort(403, 'Unauthorized action.');
+        }
         $this->deleteId = $id;
         $this->confirmingDeletion = true;
     }
 
     public function delete()
     {
+        if ($this->isSelfService && $this->activeTab !== 'documents') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $relation = $this->getRelationName();
         $this->employee->$relation()->find($this->deleteId)?->delete();
 

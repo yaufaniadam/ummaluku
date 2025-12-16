@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -86,6 +87,9 @@ class LecturerForm extends Component
                     ];
 
                     if ($this->photo) {
+                        if ($this->user->profile_photo_path) {
+                            Storage::disk('public')->delete($this->user->profile_photo_path);
+                        }
                         $path = $this->photo->store('profile-photos', 'public');
                         $userData['profile_photo_path'] = $path;
                     }

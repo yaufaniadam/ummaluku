@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\DataTables\StaffDataTable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class StaffController extends Controller
@@ -137,6 +138,9 @@ class StaffController extends Controller
 
             // Handle Profile Photo
             if ($request->hasFile('photo')) {
+                if ($user->profile_photo_path) {
+                    Storage::disk('public')->delete($user->profile_photo_path);
+                }
                 $path = $request->file('photo')->store('profile-photos', 'public');
                 $user->profile_photo_path = $path;
             }

@@ -32,10 +32,23 @@
                             <b>Email</b> <a class="float-right">{{ $staff->user->email }}</a>
                         </li>
                         <li class="list-group-item">
+                            <b>Jenis Kelamin</b> <a class="float-right">{{ $staff->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>No. HP</b> <a class="float-right">{{ $staff->phone ?? '-' }}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Status Kepegawaian</b> <a class="float-right">{{ $staff->employmentStatus->name ?? '-' }}</a>
+                        </li>
+                        <li class="list-group-item">
                             <b>Unit Kerja</b>
                             <a class="float-right">
                                 {{ $staff->program ? $staff->program->name_id : ($staff->workUnit ? $staff->workUnit->name : '-') }}
                             </a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Alamat</b> <br>
+                            <span class="text-muted">{{ $staff->address ?? '-' }}</span>
                         </li>
                     </ul>
 
