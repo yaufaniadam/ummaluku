@@ -80,11 +80,67 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-success" onclick="confirmVerifyDocument({{ $uploadedDocument->id }})">
+                                            <div class="modal-footer" x-data>
+                                                <button type="button" class="btn btn-success"
+                                                    @click="
+                                                        $('#documentModal-{{ $uploadedDocument->id }}').modal('hide');
+                                                        Swal.fire({
+                                                            title: 'Terima Dokumen?',
+                                                            text: 'Pastikan dokumen sudah valid dan sesuai persyaratan.',
+                                                            icon: 'question',
+                                                            showCancelButton: true,
+                                                            confirmButtonColor: '#28a745',
+                                                            cancelButtonColor: '#6c757d',
+                                                            confirmButtonText: 'Ya, Terima',
+                                                            cancelButtonText: 'Batal'
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                Swal.fire({
+                                                                    title: 'Memproses...',
+                                                                    html: 'Mohon tunggu sebentar.',
+                                                                    allowOutsideClick: false,
+                                                                    showConfirmButton: false,
+                                                                    willOpen: () => Swal.showLoading()
+                                                                });
+                                                                $wire.verifyDocument({{ $uploadedDocument->id }});
+                                                            } else {
+                                                                $('#documentModal-{{ $uploadedDocument->id }}').modal('show');
+                                                            }
+                                                        })
+                                                    ">
                                                     <i class="fas fa-check"></i> Terima
                                                 </button>
-                                                <button type="button" class="btn btn-warning" onclick="promptForRevision({{ $uploadedDocument->id }})">
+
+                                                <button type="button" class="btn btn-warning"
+                                                    @click="
+                                                        $('#documentModal-{{ $uploadedDocument->id }}').modal('hide');
+                                                        Swal.fire({
+                                                            title: 'Minta Revisi Dokumen',
+                                                            input: 'textarea',
+                                                            inputLabel: 'Catatan Revisi',
+                                                            inputPlaceholder: 'Tuliskan alasan mengapa dokumen ini perlu direvisi...',
+                                                            inputValidator: (value) => {
+                                                                if (!value) { return 'Catatan revisi wajib diisi!' }
+                                                            },
+                                                            showCancelButton: true,
+                                                            confirmButtonText: 'Kirim Permintaan Revisi',
+                                                            confirmButtonColor: '#ffc107',
+                                                            cancelButtonText: 'Batal'
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed && result.value) {
+                                                                Swal.fire({
+                                                                    title: 'Mengirim...',
+                                                                    html: 'Mohon tunggu sebentar.',
+                                                                    allowOutsideClick: false,
+                                                                    showConfirmButton: false,
+                                                                    willOpen: () => Swal.showLoading()
+                                                                });
+                                                                $wire.requireRevision({{ $uploadedDocument->id }}, result.value);
+                                                            } else {
+                                                                $('#documentModal-{{ $uploadedDocument->id }}').modal('show');
+                                                            }
+                                                        })
+                                                    ">
                                                     <i class="fas fa-edit"></i> Minta Revisi
                                                 </button>
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -110,85 +166,6 @@
         <!-- Ensure SweetAlert2 v11 is loaded -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
-            function closeModal(documentId) {
-                $('#documentModal-' + documentId).modal('hide');
-            }
-
-            // Fungsi untuk Verifikasi dengan konfirmasi Swal
-            function confirmVerifyDocument(documentId) {
-                closeModal(documentId); // Tutup modal dulu agar tidak tertutup Swal
-
-                Swal.fire({
-                    title: 'Terima Dokumen?',
-                    text: "Pastikan dokumen sudah valid dan sesuai persyaratan.",
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#28a745',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'Ya, Terima',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Tampilkan Loading
-                        Swal.fire({
-                            title: 'Memproses...',
-                            html: 'Mohon tunggu sebentar.',
-                            allowOutsideClick: false,
-                            showConfirmButton: false,
-                            willOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
-
-                        // Panggil Livewire
-                        @this.call('verifyDocument', documentId);
-                    } else {
-                        // Jika batal, buka kembali modal (opsional, tapi UX bagus)
-                        $('#documentModal-' + documentId).modal('show');
-                    }
-                });
-            }
-
-            // Fungsi untuk Revisi dengan input Swal
-            function promptForRevision(documentId) {
-                closeModal(documentId);
-
-                Swal.fire({
-                    title: 'Minta Revisi Dokumen',
-                    input: 'textarea',
-                    inputLabel: 'Catatan Revisi',
-                    inputPlaceholder: 'Tuliskan alasan mengapa dokumen ini perlu direvisi...',
-                    inputValidator: (value) => {
-                        if (!value) {
-                            return 'Catatan revisi wajib diisi!'
-                        }
-                    },
-                    showCancelButton: true,
-                    confirmButtonText: 'Kirim Permintaan Revisi',
-                    confirmButtonColor: '#ffc107',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed && result.value) {
-                         // Tampilkan Loading
-                         Swal.fire({
-                            title: 'Mengirim...',
-                            html: 'Mohon tunggu sebentar.',
-                            allowOutsideClick: false,
-                            showConfirmButton: false,
-                            willOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
-
-                        // Panggil Livewire
-                        @this.call('requireRevision', documentId, result.value);
-                    } else {
-                         // Jika batal, buka kembali modal
-                         $('#documentModal-' + documentId).modal('show');
-                    }
-                });
-            }
-
             // Listener untuk menutup loading Swal setelah proses selesai
             document.addEventListener('document-status-updated', event => {
                 // Tutup loading
