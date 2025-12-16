@@ -59,7 +59,7 @@ class PaymentVerificationController extends Controller
             $user->notify(new PembayaranCicilanDiterima($installment));
         }
 
-        return back()->with('success', 'Cicilan berhasil diverifikasi.');
+        return back()->with('success', 'Pembayaran berhasil diverifikasi.');
     }
 
     /**
@@ -77,6 +77,6 @@ class PaymentVerificationController extends Controller
             'verified_at' => now(),
         ]);
 
-        return back()->with('success', 'Cicilan telah ditolak dengan catatan.');
+        return back()->with('success', 'Pembayaran telah ditolak dengan catatan.');
     }
 }

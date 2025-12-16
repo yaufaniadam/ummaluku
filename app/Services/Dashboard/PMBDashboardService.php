@@ -138,7 +138,24 @@ class PMBDashboardService
                 });
 
             // Gabung dan sort (yang paling lama menunggu di atas / ASC date)
-            $todoList = $todoDocs->merge($todoPayments)->sortBy('date');
+            $todoList = $todoDocs->sortBy('date');
+
+            $todoPayments = ReRegistrationInstallment::with(['invoice.application.prospective.user'])
+                ->where('status', 'pending_verification')
+                ->get()
+                ->map(function ($installment) {
+                    $user = $installment->invoice->application->prospective->user ?? null;
+                    return [
+                        'type' => 'Verifikasi Pembayaran',
+                        'name' => $user ? $user->name : 'Unknown',
+                        'date' => $installment->updated_at,
+                        'url' => route('admin.pmb.payment.show',  $installment->re_registration_invoice_id),
+                        'status_label' => 'Menunggu Verifikasi Pembayaran',
+                        'badge' => 'primary',
+                    ];
+                });
+
+             $todoPayments = $todoPayments->sortBy('date');
         }
 
 
@@ -158,6 +175,7 @@ class PMBDashboardService
             'batchChartLabels' => $batchChartLabels,
             'batchChartValues' => $batchChartValues,
             'todoList' => $todoList,
+            'todoPayments' => $todoPayments,
         ];
     }
 }
