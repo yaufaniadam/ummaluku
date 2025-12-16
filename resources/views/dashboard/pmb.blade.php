@@ -35,7 +35,7 @@
         {{-- Diterima tapi belum bayar --}}
         <div class="col-lg-4 col-6">
             <x-info-box title="Menunggu Verifikasi Pembayaran" value="{{ $awaitingVerificationPayment }}" icon="fas fa-receipt" color="warning"
-                url="{{ route('admin.pmb.pendaftaran.index') }}" />
+                url="{{ route('admin.pmb.payment.index') }}" />
         </div>
         <div class="col-lg-4 col-6">
             <x-info-box title="Menunggu Verifikasi Dokumen" value="{{ $waitingForVerification }}" icon="fas fa-file" color="danger"
@@ -81,6 +81,7 @@
         </div>
     </div>
 
+
     <div class="row">
         {{-- Tabel To-Do List Admin --}}
         <div class="col-md-12">
@@ -88,7 +89,7 @@
                 <div class="card-header">
                     <h3 class="card-title">
                         <i class="fas fa-clipboard-list mr-1"></i>
-                        Daftar Antrian Verifikasi (Dokumen & Pembayaran)
+                        Daftar Antrian Verifikasi Dokumen 
                     </h3>
                 </div>
                 <div class="card-body p-0">
@@ -130,8 +131,74 @@
                                 @empty
                                     <tr>
                                         <td colspan="5" class="text-center text-muted py-4">
-                                            <i class="fas fa-check-circle fa-2x mb-2"></i><br>
-                                            Tidak ada antrian verifikasi saat ini.
+                                            {{-- <i class="fas fa-check-circle fa-2x mb-2"></i><br> --}}
+                                            Tidak ada antrian verifikasi dokumen saat ini.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {{-- <div class="card-footer text-center">
+                    <span class="text-muted text-sm">Menampilkan semua item yang membutuhkan tindakan admin.</span>
+                </div> --}}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {{-- Tabel To-Do List Admin --}}
+        <div class="col-md-12">
+            <div class="card card-warning card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-clipboard-list mr-1"></i>
+                        Daftar Antrian Verifikasi Pembayaran 
+                    </h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Tipe</th>
+                                    <th>Nama Calon Mahasiswa</th>
+                                    <th>Tanggal Update</th>
+                                    <th>Status</th>
+                                    <th style="width: 10%">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($todoPayments as $item)
+                                    <tr>
+                                        <td>
+                                            @if ($item['type'] == 'Verifikasi Dokumen')
+                                                <span class="badge badge-info"><i class="fas fa-file-alt"></i>
+                                                    Dokumen</span>
+                                            @else
+                                                <span class="badge badge-success"><i class="fas fa-money-bill"></i>
+                                                    Pembayaran</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $item['name'] }}</td>
+                                        <td>{{ $item['date'] ? $item['date']->format('d M Y H:i') : '-' }}</td>
+                                        <td>
+                                            <span
+                                                class="badge badge-{{ $item['badge'] }}">{{ $item['status_label'] }}</span>
+                                        </td>
+                                        <td>
+                                            <a href="{{ $item['url'] }}" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-search"></i> Proses
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-4">
+                                            {{-- <i class="fas fa-check-circle fa-2x mb-2"></i><br> --}}
+                                            Tidak ada antrian verifikasi pembayaran saat ini.
                                         </td>
                                     </tr>
                                 @endforelse
@@ -139,9 +206,9 @@
                         </table>
                     </div>
                 </div>
-                <div class="card-footer text-center">
+                {{-- <div class="card-footer text-center">
                     <span class="text-muted text-sm">Menampilkan semua item yang membutuhkan tindakan admin.</span>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
