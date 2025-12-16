@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ProgramHead extends Model
+class ProgramOfficial extends Model
 {
     use HasFactory;
 
@@ -26,5 +26,15 @@ class ProgramHead extends Model
     public function lecturer(): BelongsTo
     {
         return $this->belongsTo(Lecturer::class);
+    }
+
+    public function scopeKaprodi($query)
+    {
+        return $query->where('position', 'Kaprodi');
+    }
+
+    public function scopeSecretary($query)
+    {
+        return $query->where('position', 'Sekretaris');
     }
 }

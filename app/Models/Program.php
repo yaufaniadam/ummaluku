@@ -20,15 +20,35 @@ class Program extends Model
         return $this->belongsTo(Faculty::class);
     }
 
+    public function officials(): HasMany
+    {
+        return $this->hasMany(ProgramOfficial::class);
+    }
+
+    /**
+     * Alias for backward compatibility or clarity, returns all officials.
+     */
     public function heads(): HasMany
     {
-        return $this->hasMany(ProgramHead::class);
+        return $this->hasMany(ProgramOfficial::class)->where('position', 'Kaprodi');
     }
 
     public function currentHead(): HasOne
     {
-        return $this->hasOne(ProgramHead::class)->where('is_active', true)->latest('start_date');
+        return $this->hasOne(ProgramOfficial::class)
+            ->where('position', 'Kaprodi')
+            ->where('is_active', true)
+            ->latest('start_date');
     }
+
+    public function currentSecretary(): HasOne
+    {
+        return $this->hasOne(ProgramOfficial::class)
+            ->where('position', 'Sekretaris')
+            ->where('is_active', true)
+            ->latest('start_date');
+    }
+
     public function feeStructures(): HasMany
     {
         return $this->hasMany(FeeStructure::class);
