@@ -44,31 +44,116 @@
                         </td>
                         <td>
                             @if ($uploadedDocument)
-                                <a href="{{ Storage::url($uploadedDocument->file_path) }}" target="_blank"
-                                    class="btn btn-sm btn-info">Lihat File</a>
+                                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#documentModal-{{ $uploadedDocument->id }}">
+                                    Verifikasi
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="documentModal-{{ $uploadedDocument->id }}" tabindex="-1" role="dialog" aria-labelledby="documentModalLabel-{{ $uploadedDocument->id }}" aria-hidden="true" wire:ignore.self>
+                                    <div class="modal-dialog modal-xl" role="document" style="max-width: 90vw;">
+                                        <div class="modal-content" style="height: 90vh;">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="documentModalLabel-{{ $uploadedDocument->id }}">Verifikasi: {{ $requirement->name }}</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body p-0" style="height: calc(90vh - 120px);">
+                                                @php
+                                                    $fileUrl = Storage::url($uploadedDocument->file_path);
+                                                    $extension = pathinfo($uploadedDocument->file_path, PATHINFO_EXTENSION);
+                                                    $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+                                                    $isPdf = strtolower($extension) === 'pdf';
+                                                @endphp
+
+                                                @if($isPdf)
+                                                    <iframe src="{{ $fileUrl }}" style="width: 100%; height: 100%; border: none;"></iframe>
+                                                @elseif($isImage)
+                                                    <div class="d-flex justify-content-center align-items-center h-100 bg-light">
+                                                        <img src="{{ $fileUrl }}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                                    </div>
+                                                @else
+                                                    <div class="d-flex justify-content-center align-items-center h-100 flex-column">
+                                                        <i class="fas fa-file fa-5x text-muted mb-3"></i>
+                                                        <p>File type: {{ $extension }}</p>
+                                                        <a href="{{ $fileUrl }}" target="_blank" class="btn btn-primary">Unduh File</a>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="modal-footer" x-data>
+                                                <button type="button" class="btn btn-success"
+                                                    @click="
+                                                        $('#documentModal-{{ $uploadedDocument->id }}').modal('hide');
+                                                        Swal.fire({
+                                                            title: 'Terima Dokumen?',
+                                                            text: 'Pastikan dokumen sudah valid dan sesuai persyaratan.',
+                                                            icon: 'question',
+                                                            showCancelButton: true,
+                                                            confirmButtonColor: '#28a745',
+                                                            cancelButtonColor: '#6c757d',
+                                                            confirmButtonText: 'Ya, Terima',
+                                                            cancelButtonText: 'Batal'
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                Swal.fire({
+                                                                    title: 'Memproses...',
+                                                                    html: 'Mohon tunggu sebentar.',
+                                                                    allowOutsideClick: false,
+                                                                    showConfirmButton: false,
+                                                                    willOpen: () => Swal.showLoading()
+                                                                });
+                                                                $wire.verifyDocument({{ $uploadedDocument->id }});
+                                                            } else {
+                                                                $('#documentModal-{{ $uploadedDocument->id }}').modal('show');
+                                                            }
+                                                        })
+                                                    ">
+                                                    <i class="fas fa-check"></i> Terima
+                                                </button>
+
+                                                <button type="button" class="btn btn-warning"
+                                                    @click="
+                                                        $('#documentModal-{{ $uploadedDocument->id }}').modal('hide');
+                                                        Swal.fire({
+                                                            title: 'Minta Revisi Dokumen',
+                                                            input: 'textarea',
+                                                            inputLabel: 'Catatan Revisi',
+                                                            inputPlaceholder: 'Tuliskan alasan mengapa dokumen ini perlu direvisi...',
+                                                            inputValidator: (value) => {
+                                                                if (!value) { return 'Catatan revisi wajib diisi!' }
+                                                            },
+                                                            showCancelButton: true,
+                                                            confirmButtonText: 'Kirim Permintaan Revisi',
+                                                            confirmButtonColor: '#ffc107',
+                                                            cancelButtonText: 'Batal'
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed && result.value) {
+                                                                Swal.fire({
+                                                                    title: 'Mengirim...',
+                                                                    html: 'Mohon tunggu sebentar.',
+                                                                    allowOutsideClick: false,
+                                                                    showConfirmButton: false,
+                                                                    willOpen: () => Swal.showLoading()
+                                                                });
+                                                                $wire.requireRevision({{ $uploadedDocument->id }}, result.value);
+                                                            } else {
+                                                                $('#documentModal-{{ $uploadedDocument->id }}').modal('show');
+                                                            }
+                                                        })
+                                                    ">
+                                                    <i class="fas fa-edit"></i> Minta Revisi
+                                                </button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             @else
                                 -
                             @endif
                         </td>
                         <td class="text-center">
-                            @if ($uploadedDocument)
-                                <div class="btn-group">
-                                    <button class="btn btn-sm btn-success"
-                                        wire:click="verifyDocument({{ $uploadedDocument->id }})"
-                                        wire:confirm="Anda yakin ingin MENYETUJUI dokumen ini?">
-                                        <i class="fas fa-check"></i> Terima
-                                    </button>
-                                    {{-- <button class="btn btn-sm btn-danger"
-                                        wire:click="rejectDocument({{ $uploadedDocument->id }})"
-                                        wire:confirm="Anda yakin ingin MENOLAK dokumen ini?">
-                                        <i class="fas fa-times"></i>
-                                    </button> --}}
-                                    <button class="btn btn-sm btn-warning"
-                                        onclick="promptForRevision({{ $uploadedDocument->id }})">
-                                        <i class="fas fa-edit"></i> Revisi
-                                    </button>
-                                </div>
-                            @endif
+                           -
                         </td>
                     </tr>
                 @endforeach
@@ -78,26 +163,29 @@
 
     {{-- JANGAN LUPA PINDAHKAN JUGA SCRIPT-NYA KE SINI --}}
     @push('js')
+        <!-- Ensure SweetAlert2 v11 is loaded -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
-            // Fungsi untuk memunculkan kotak input prompt bawaan browser
-            function promptForRevision(documentId) {
-                const notes = prompt('Silakan masukkan catatan revisi untuk dokumen ini:');
-
-                // Kirim data ke Livewire HANYA JIKA user mengisi catatan dan mengklik OK
-                if (notes != null && notes.trim() !== "") {
-                    // Panggil method 'requireRevision' di komponen DocumentManager.php
-                    // dengan membawa ID dokumen dan isi catatannya.
-                    @this.call('requireRevision', documentId, notes);
-                }
-            }
-
-            // Listener ini tetap berguna untuk notifikasi setelah aksi (Setujui/Tolak/Revisi)
+             // Listener global show-alert yang mungkin dipanggil oleh backend
             document.addEventListener('show-alert', event => {
+                // Jika event.detail berbentuk array (dari dispatch Livewire), kita ambil detailnya
+                let data = event.detail;
+
+                // Kadang Livewire membungkus dalam array [0] jika dispatch multiple params
+                if (Array.isArray(data) && data.length > 0) {
+                     data = data[0]; // Ambil object pertamanya
+                } else if (Array.isArray(data)) {
+                     // Fallback jika kosong atau struktur lain
+                     data = { type: 'success', message: 'Operasi berhasil' };
+                }
+
+                // Swal.fire secara otomatis menutup swal yang sedang terbuka (termasuk loading)
                 Swal.fire({
-                    title: "Berhasil",
-                    text: "Dokumen sudah diverifikasi",
-                    type: "success",
-                    confirmButtonText: 'Oke'
+                    title: data.type === 'error' ? 'Gagal' : (data.type === 'warning' ? 'Perhatian' : 'Berhasil'),
+                    text: data.message,
+                    icon: data.type || 'success',
+                    timer: 3000,
+                    showConfirmButton: false
                 });
             });
         </script>
