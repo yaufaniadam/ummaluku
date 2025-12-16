@@ -366,6 +366,14 @@
 
 
                         @can('dosen-list')
+                            <li class="nav-item">
+                                <a href="{{ route('admin.sdm.master.index') }}"
+                                    class="nav-link {{ request()->routeIs('admin.sdm.master.index') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-database"></i>
+                                    <p>Master Data SDM</p>
+                                </a>
+                            </li>
+
                             @php
                                 $dosen = ['admin.sdm.lecturers.index', 'admin.sdm.lecturers.create'];
                             @endphp
@@ -397,8 +405,12 @@
 
                                 </ul>
                             </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
+
+                            @php
+                                $tendik = ['admin.sdm.staff.index', 'admin.sdm.staff.create'];
+                            @endphp
+                            <li class="nav-item {{ request()->routeIs($tendik) ? 'menu-open' : '' }}">
+                                <a href="#" class="nav-link {{ request()->routeIs($tendik) ? 'active' : '' }}">
                                     <i class="nav-icon fas fa-user-tie"></i>
                                     <p>
                                         Tenaga Kependidikan
