@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use App\Imports\StaffImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class StaffController extends Controller
 {
@@ -192,5 +195,27 @@ class StaffController extends Controller
 
         return redirect()->route('admin.sdm.staff.index')
             ->with('success', 'Data staf berhasil dihapus.');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'import_file' => 'required|file|mimes:xlsx,xls,csv'
+        ]);
+
+        try {
+            Excel::import(new StaffImport, $request->file('import_file'));
+        } catch (ValidationException $e) {
+            $failures = $e->failures();
+            $errorMessages = [];
+            foreach ($failures as $failure) {
+                 $errorMessages[] = 'Baris ' . $failure->row() . ': ' . implode(', ', $failure->errors());
+            }
+            return back()->with('error', 'Gagal Import: ' . implode('<br>', $errorMessages));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+
+        return redirect()->route('admin.sdm.staff.index')->with('success', 'Data tendik berhasil diimpor!');
     }
 }

@@ -75,6 +75,7 @@ Route::prefix('admin/sdm')->middleware(['auth', 'permission:dosen-list'])->name(
         return $dataTable->ajax();
     })->name('lecturers.data');
 
+    Route::post('staff/import', [StaffController::class, 'import'])->name('staff.import');
     Route::resource('staff', StaffController::class);
     Route::get('staff-data', function (StaffDataTable $dataTable) {
         return $dataTable->ajax();
