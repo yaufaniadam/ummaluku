@@ -44,15 +44,41 @@
                             </td>
                             <td>
                                 @if($installment->status == 'pending_verification')
-                                    <a href="{{ Storage::url($installment->proof_of_payment) }}" target="_blank" class="btn btn-xs btn-info">Lihat Bukti</a>
-                                    <form action="{{ route('admin.pmb.payment.approve', $installment) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-xs btn-success" onclick="return confirm('Anda yakin?')">Setujui</button>
-                                    </form>
-                                    <form action="{{ route('admin.pmb.payment.reject', $installment) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-xs btn-danger" onclick="return confirm('Anda yakin?')">Tolak</button>
-                                    </form>
+                                    <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#verificationModal-{{ $installment->id }}">
+                                        Verifikasi
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="verificationModal-{{ $installment->id }}" tabindex="-1" role="dialog" aria-labelledby="verificationModalLabel-{{ $installment->id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="verificationModalLabel-{{ $installment->id }}">Verifikasi Cicilan ke-{{ $installment->installment_number }}</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    @if($installment->proof_of_payment)
+                                                        <img src="{{ Storage::url($installment->proof_of_payment) }}" class="img-fluid" alt="Bukti Pembayaran" style="max-height: 500px;">
+                                                    @else
+                                                        <p class="text-danger">Tidak ada bukti pembayaran yang diunggah.</p>
+                                                    @endif
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form action="{{ route('admin.pmb.payment.reject', $installment) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Anda yakin ingin menolak?')">Tolak</button>
+                                                    </form>
+                                                    <form action="{{ route('admin.pmb.payment.approve', $installment) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-success" onclick="return confirm('Anda yakin ingin menyetujui?')">Setujui</button>
+                                                    </form>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @elseif($installment->status == 'paid')
                                     <span class="text-success">Diverifikasi oleh {{ $installment->verifiedBy->name ?? 'Sistem' }}</span>
                                 @else
