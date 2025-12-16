@@ -75,10 +75,15 @@ Route::prefix('admin/sdm')->middleware(['auth', 'permission:dosen-list'])->name(
         return $dataTable->ajax();
     })->name('lecturers.data');
 
+    Route::post('staff/import', [StaffController::class, 'import'])->name('staff.import');
     Route::resource('staff', StaffController::class);
     Route::get('staff-data', function (StaffDataTable $dataTable) {
         return $dataTable->ajax();
     })->name('staff.data');
+
+    Route::prefix('master')->name('master.')->group(function () {
+        Route::get('/', App\Livewire\Sdm\Master\Index::class)->name('index');
+    });
 });
 
 Route::prefix('admin/keuangan')->middleware(['auth', 'permission:biaya-list'])->name('admin.keuangan.')->group(function () {

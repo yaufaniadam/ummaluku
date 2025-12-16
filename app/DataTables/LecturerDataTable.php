@@ -16,6 +16,7 @@ class LecturerDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function(Lecturer $row){
+                $showUrl = route('admin.sdm.lecturers.show', $row->id);
                 $editUrl = route('admin.sdm.lecturers.edit', $row->id);
                 $toggleStatusEvent = "Livewire.dispatch('confirm-toggle-status', { lecturer: {$row->id} })";
                 $deleteEvent = "Livewire.dispatch('confirm-delete', { lecturer: {$row->id} })";
@@ -23,7 +24,8 @@ class LecturerDataTable extends DataTable
                 $toggleBtnText = $row->status === 'active' ? 'Non-Aktifkan' : 'Aktifkan';
                 $toggleBtnClass = $row->status === 'active' ? 'btn-warning' : 'btn-success';
 
-                $buttons = '<a href="' . $editUrl . '" class="btn btn-primary btn-sm" wire:navigate>Edit</a> ';
+                $buttons = '<a href="' . $showUrl . '" class="btn btn-info btn-sm">Detail</a> ';
+                $buttons .= '<a href="' . $editUrl . '" class="btn btn-primary btn-sm" wire:navigate>Edit</a> ';
                 $buttons .= '<button onclick="' . $toggleStatusEvent . '" class="btn ' . $toggleBtnClass . ' btn-sm">' . $toggleBtnText . '</button> ';
                 $buttons .= '<button onclick="' . $deleteEvent . '" class="btn btn-danger btn-sm">Hapus</button>';
 

@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <form action="{{ route('admin.sdm.staff.update', $staff->id) }}" method="POST">
+                <form action="{{ route('admin.sdm.staff.update', $staff->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="card-body">
@@ -26,6 +26,24 @@
                                     @error('name')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="photo">Foto Profil</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input @error('photo') is-invalid @enderror" id="photo" name="photo">
+                                            <label class="custom-file-label" for="photo">Pilih file</label>
+                                        </div>
+                                    </div>
+                                    @error('photo')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                    @if ($staff->user->profile_photo_path)
+                                        <div class="mt-2">
+                                            <img src="{{ asset('storage/' . $staff->user->profile_photo_path) }}" alt="Foto Profil" class="img-thumbnail" style="max-height: 100px;">
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <div class="form-group">
@@ -91,10 +109,56 @@
                                     @enderror
                                 </div>
 
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label>Tempat Lahir</label>
+                                        <input type="text" name="birth_place" class="form-control @error('birth_place') is-invalid @enderror" value="{{ old('birth_place', $staff->birth_place) }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Tanggal Lahir</label>
+                                        <input type="date" name="birth_date" class="form-control @error('birth_date') is-invalid @enderror" value="{{ old('birth_date', $staff->birth_date) }}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label>Nama Bank</label>
+                                        <input type="text" name="bank_name" class="form-control @error('bank_name') is-invalid @enderror" value="{{ old('bank_name', $staff->bank_name) }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>No. Rekening</label>
+                                        <input type="text" name="account_number" class="form-control @error('account_number') is-invalid @enderror" value="{{ old('account_number', $staff->account_number) }}">
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="address">Alamat</label>
                                     <textarea name="address" class="form-control @error('address') is-invalid @enderror" rows="2">{{ old('address', $staff->address) }}</textarea>
                                     @error('address')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Status Aktif</label>
+                                    <select name="status" class="form-control @error('status') is-invalid @enderror">
+                                        <option value="active" {{ old('status', $staff->status) == 'active' ? 'selected' : '' }}>Aktif</option>
+                                        <option value="inactive" {{ old('status', $staff->status) == 'inactive' ? 'selected' : '' }}>Non-Aktif</option>
+                                    </select>
+                                    @error('status')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Status Kepegawaian</label>
+                                    <select name="employment_status_id" class="form-control @error('employment_status_id') is-invalid @enderror">
+                                        <option value="">-- Pilih Status --</option>
+                                        @foreach($employmentStatuses as $status)
+                                            <option value="{{ $status->id }}" {{ old('employment_status_id', $staff->employment_status_id) == $status->id ? 'selected' : '' }}>{{ $status->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('employment_status_id')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>
