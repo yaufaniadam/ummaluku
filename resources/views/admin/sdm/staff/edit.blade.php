@@ -140,6 +140,17 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label>Status Aktif</label>
+                                    <select name="status" class="form-control @error('status') is-invalid @enderror">
+                                        <option value="active" {{ old('status', $staff->status) == 'active' ? 'selected' : '' }}>Aktif</option>
+                                        <option value="inactive" {{ old('status', $staff->status) == 'inactive' ? 'selected' : '' }}>Non-Aktif</option>
+                                    </select>
+                                    @error('status')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
                                     <label>Status Kepegawaian</label>
                                     <select name="employment_status_id" class="form-control @error('employment_status_id') is-invalid @enderror">
                                         <option value="">-- Pilih Status --</option>

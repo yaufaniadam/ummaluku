@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\HasEmployeeHistory;
 
 class Staff extends Model
 {
-    use HasFactory, HasEmployeeHistory;
+    use HasFactory, HasEmployeeHistory, SoftDeletes;
 
     protected $table = 'staffs';
 
@@ -19,6 +20,7 @@ class Staff extends Model
         'gender',
         'phone',
         'address',
+        'status',
         'program_id',
         'work_unit_id',
         'employment_status_id',

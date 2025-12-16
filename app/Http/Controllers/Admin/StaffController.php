@@ -140,6 +140,7 @@ class StaffController extends Controller
             'account_number' => ['nullable', 'string', 'max:50'],
             'birth_place' => ['nullable', 'string', 'max:100'],
             'birth_date' => ['nullable', 'date'],
+            'status' => ['required', 'in:active,inactive'],
         ]);
 
         DB::transaction(function () use ($request, $staff) {
@@ -175,6 +176,7 @@ class StaffController extends Controller
                 'account_number' => $request->account_number,
                 'birth_place' => $request->birth_place,
                 'birth_date' => $request->birth_date,
+                'status' => $request->status,
             ]);
         });
 
