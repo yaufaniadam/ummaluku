@@ -7,20 +7,6 @@
         @include('adminlte::partials.common.brand-logo-xs')
     @endif
 
-    {{-- User Profile Block --}}
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-            @if(auth()->user() && auth()->user()->profile_photo_path)
-                <img src="{{ asset('storage/' . auth()->user()->profile_photo_path) }}" class="img-circle elevation-2" alt="User Image" style="width: 33px; height: 33px; object-fit: cover;">
-            @else
-                <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'Guest') }}" class="img-circle elevation-2" alt="User Image">
-            @endif
-        </div>
-        <div class="info">
-            <a href="#" class="d-block">{{ auth()->user()->name ?? 'Guest' }}</a>
-        </div>
-    </div>
-
     {{-- Sidebar menu --}}
     <div class="sidebar">
         <nav class="pt-2">
@@ -32,14 +18,52 @@
                 {{-- AWAL DARI LOGIKA MENU MANUAL KITA --}}
                 @auth
 
-
                     @if (auth()->user()->hasRole(['Super Admin']))
-                      
                         <li class="nav-item">
                             <a href="{{ route('admin.dashboard') }}"
                                 class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-user-lock"></i>
                                 <p>Super Admin</p>
+                            </a>
+                        </li>
+                    @endif
+
+                    {{-- ================================================= --}}
+                    {{-- MENU MASTER DATA & SYSTEM (SUPER ADMIN/ADMIN) --}}
+                    {{-- ================================================= --}}
+
+                    @if (auth()->user()->hasRole('Super Admin'))
+                        <li class="nav-header">SYSTEM</li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.system.roles.index') }}"
+                                class="nav-link {{ request()->routeIs('admin.system.roles.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-user-shield"></i>
+                                <p>Manajemen Role</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.system.users.index') }}"
+                                class="nav-link {{ request()->routeIs('admin.system.users.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-users-cog"></i>
+                                <p>Manajemen User</p>
+                            </a>
+                        </li>
+                    @endif
+
+                    @if (auth()->user()->hasRole(['Super Admin', 'Admin']))
+                        <li class="nav-header">MASTER DATA</li>
+                        <li class="nav-item">
+                            <a href="{{ route('master.work-units.index') }}"
+                                class="nav-link {{ request()->routeIs('master.work-units.index') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-building"></i>
+                                <p>Unit Kerja</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('master.programs.index') }}"
+                                class="nav-link {{ request()->routeIs('master.programs.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-university"></i>
+                                <p>Program Studi</p>
                             </a>
                         </li>
                     @endif
@@ -59,52 +83,34 @@
                         </li>
 
                         @can('kurikulum-list')
-                        <li class="nav-item">
-                            <a href="{{ route('prodi.course.index') }}"
-                                class="nav-link {{ request()->routeIs('prodi.course.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-book"></i>
-                                <p>Manajemen Matakuliah</p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="{{ route('prodi.course.index') }}"
+                                    class="nav-link {{ request()->routeIs('prodi.course.*') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-book"></i>
+                                    <p>Manajemen Matakuliah</p>
+                                </a>
+                            </li>
                         @endcan
 
                         @can('kelas-list')
-                        <li class="nav-item">
-                            <a href="{{ route('prodi.course-class.index') }}"
-                                class="nav-link {{ request()->routeIs('prodi.course-class.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-chalkboard-teacher"></i>
-                                <p>Manajemen Kelas</p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="{{ route('prodi.course-class.index') }}"
+                                    class="nav-link {{ request()->routeIs('prodi.course-class.*') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                                    <p>Manajemen Kelas</p>
+                                </a>
+                            </li>
                         @endcan
 
                         @role('Kaprodi')
-                        <li class="nav-item">
-                            <a href="{{ route('prodi.krs-approval.index') }}"
-                                class="nav-link {{ request()->routeIs('prodi.krs-approval.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-check-double"></i>
-                                <p>Persetujuan KRS</p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="{{ route('prodi.krs-approval.index') }}"
+                                    class="nav-link {{ request()->routeIs('prodi.krs-approval.*') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-check-double"></i>
+                                    <p>Persetujuan KRS</p>
+                                </a>
+                            </li>
                         @endrole
-                    @endif
-
-                    @if (auth()->user()->hasRole('Super Admin'))
-                        <li class="nav-header">SYSTEM</li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.system.roles.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.system.roles.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-user-shield"></i>
-                                <p>Manajemen Role</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.system.users.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.system.users.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-users-cog"></i>
-                                <p>Manajemen User</p>
-                            </a>
-                        </li>
                     @endif
 
                     {{-- ================================================= --}}
@@ -143,6 +149,7 @@
                                     'admin.pmb.seleksi.index',
                                     'admin.pmb.diterima.index',
                                     'admin.pmb.payment.index',
+                                    'admin.pmb.payment.show',
                                 ];
                             @endphp
 
@@ -171,14 +178,14 @@
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('admin.pmb.diterima.index') }}"
-                                            class="nav-link {{ request()->routeIs('admin.diterima.index') ? 'active' : '' }}">
+                                            class="nav-link {{ request()->routeIs('admin.pmb.diterima.index') ? 'active' : '' }}">
                                             <i class="nav-icon far fa-circle"></i>
                                             <p>Diterima</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('admin.pmb.payment.index') }}"
-                                            class="nav-link {{ request()->routeIs('admin.pmb.payment.index') ? 'active' : '' }}">
+                                            class="nav-link {{ request()->routeIs('admin.pmb.payment.index','admin.pmb.payment.show') ? 'active' : '' }}">
                                             <i class="nav-icon far fa-circle"></i>
                                             <p>Pembayaran Registrasi</p>
                                         </a>
@@ -190,8 +197,9 @@
                         @can('manage pmb settings')
                             @php
                                 $pengaturanPMB = [
-                                    'admin.pmb.gelombang.index', // Route untuk gelombang
+                                    'admin.pmb.gelombang.*', // Route untuk gelombang
                                     'admin.pmb.jalur-pendaftaran.index', // Contoh route lain yang namanya tidak berurutan
+                                    'admin.pmb.jalur-pendaftaran.create', // Contoh route lain yang namanya tidak berurutan
                                 ];
                             @endphp
                             <li class="nav-item {{ request()->routeIs($pengaturanPMB) ? 'menu-open' : '' }}">
@@ -206,14 +214,14 @@
                                     @can('manage batches')
                                         <li class="nav-item">
                                             <a href="{{ route('admin.pmb.gelombang.index') }}"
-                                                class="nav-link {{ request()->routeIs('admin.pmb.gelombang.index') ? 'active' : '' }}">
+                                                class="nav-link {{ request()->routeIs('admin.pmb.gelombang.index','admin.pmb.gelombang.*') ? 'active' : '' }}">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>Manajemen Gelombang</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="{{ route('admin.pmb.jalur-pendaftaran.index') }}"
-                                                class="nav-link {{ request()->routeIs('admin.pmg.jalur-pendaftaran.index') ? 'active' : '' }}">
+                                                class="nav-link {{ request()->routeIs('admin.pmb.jalur-pendaftaran.index','admin.pmb.jalur-pendaftaran.*') ? 'active' : '' }}">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>Jalur Pendaftaran</p>
                                             </a>
@@ -222,27 +230,6 @@
                                 </ul>
                             </li>
                         @endcan
-                    @endif
-
-                    {{-- ================================================= --}}
-                    {{-- MENU MASTER DATA (SUPER ADMIN/ADMIN) --}}
-                    {{-- ================================================= --}}
-                    @if (auth()->user()->hasRole(['Super Admin', 'Admin']))
-                        <li class="nav-header">MASTER DATA</li>
-                        <li class="nav-item">
-                            <a href="{{ route('master.work-units.index') }}"
-                                class="nav-link {{ request()->routeIs('master.work-units.index') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-building"></i>
-                                <p>Unit Kerja</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('master.programs.index') }}"
-                                class="nav-link {{ request()->routeIs('master.programs.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-university"></i>
-                                <p>Program Studi</p>
-                            </a>
-                        </li>
                     @endif
 
                     {{-- ================================================= --}}
@@ -265,8 +252,6 @@
                             @php
                                 $mahasiswa = [
                                     'admin.akademik.students.index',
-                                    'admin.akademik.students.import',
-                                    'admin.akademik.students.import.form',
                                 ];
                             @endphp
 
@@ -286,51 +271,35 @@
                                             <p>Data Mahasiswa</p>
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="{{ route('admin.akademik.students.import.form') }}"
-                                            class="nav-link {{ request()->routeIs('admin.akademik.students.import.form') ? 'active' : '' }}">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Import Mahasiswa Lama</p>
-                                        </a>
-                                    </li>
+                                    
 
                                 </ul>
                             </li>
-                        @endcan
-
-
-
-
-                        @can('mahasiswa-list')
-                            @php
-                                $kurikulum = ['admin.akademik.curriculums.*', 'admin.akademik.curriculums.courses.*'];
-                            @endphp
                             <li class="nav-item">
-                                <a href="{{ route('admin.akademik.curriculums.index') }}"
-                                    class="nav-link {{ request()->routeIs($kurikulum) ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-folder"></i>
-                                    <p>Kurikulum</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('admin.akademik.courses.index') }}"
-                                    class="nav-link {{ request()->routeIs('admin.akademik.courses.index') ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-book"></i>
-                                    <p>Master Mata Kuliah</p>
+                                <a href="{{ route('admin.akademik.academic-events.index') }}"
+                                    class="nav-link {{ request()->routeIs('admin.akademik.academic-events.index') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-calendar-check"></i>
+                                    <p>Kalender Akademik</p>
                                 </a>
                             </li>
                         @endcan
 
-                        @can('mahasiswa-list')
-                            @php
-                                $akademik = [
-                                    'admin.akademik.academic-years.index',
-                                    'admin.akademik.academic-years.show',
-                                    'admin.akademik.academic-years.programs.*',
-                                    'admin.akademik.academic-events.index',
-                                ];
-                            @endphp
+                        @php
+                            $akademik = [
+                                'admin.akademik.academic-years.index',
+                                'admin.akademik.academic-years.*',
+                                'admin.akademik.academic-years.show',
+                                'admin.akademik.academic-years.programs.*',
+                                'admin.akademik.curriculums.index',
+                                'admin.akademik.curriculums.*',
+                                'admin.akademik.courses.index',
+                                'admin.akademik.courses.*',
+                                'admin.akademik.students.import.*',    
+                            ];
 
+                        @endphp
+
+                        @can('kurikulum-create')
                             <li class="nav-item {{ request()->routeIs($akademik) ? 'menu-open' : '' }}">
                                 <a href="#" class="nav-link {{ request()->routeIs($akademik) ? 'active' : '' }}">
                                     <i class="nav-icon fas fa-cog"></i>
@@ -343,19 +312,34 @@
 
                                     <li class="nav-item">
                                         <a href="{{ route('admin.akademik.academic-years.index') }}"
-                                            class="nav-link {{ request()->routeIs('admin.akademik.academic-years.index') ? 'active' : '' }}">
+                                            class="nav-link {{ request()->routeIs('admin.akademik.academic-years.index', 'admin.akademik.academic-years.*') ? 'active' : '' }}">
                                             <i class="nav-icon far fa-circle"></i>
                                             <p>Tahun Ajaran</p>
                                         </a>
                                     </li>
+
                                     <li class="nav-item">
-                                        <a href="{{ route('admin.akademik.academic-events.index') }}"
-                                            class="nav-link {{ request()->routeIs('admin.akademik.academic-events.index') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.akademik.courses.index') }}"
+                                            class="nav-link {{ request()->routeIs('admin.akademik.courses.index', 'admin.akademik.courses.*') ? 'active' : '' }}">
                                             <i class="nav-icon far fa-circle"></i>
-                                            <p>Kalender Akademik</p>
+                                            <p>Master Mata Kuliah</p>
                                         </a>
                                     </li>
 
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.akademik.curriculums.index') }}"
+                                            class="nav-link {{ request()->routeIs('admin.akademik.curriculums.index', 'admin.akademik.curriculums.*') ? 'active' : '' }}">
+                                            <i class="nav-icon far fa-circle""></i>
+                                            <p>Kurikulum</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.akademik.students.import.form') }}"
+                                            class="nav-link {{ request()->routeIs('admin.akademik.students.import.form') ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Import Mahasiswa Lama</p>
+                                        </a>
+                                    </li>
 
                                 </ul>
                             </li>
@@ -366,7 +350,7 @@
                     {{-- MENU UNTUK PORTAL SDM (STAF, DIREKTUR, SUPER ADMIN) --}}
                     {{-- ================================================= --}}
 
-                    @if (auth()->user()->hasRole(['Super Admin', 'Direktur Akademik', 'Staf Akademik']))
+                    @if (auth()->user()->hasRole(['Super Admin', 'Direktur SDM', 'Staf SDM']))
                         <li class="nav-header">SDM</li>
                         @can('dosen-list')
                             <li class="nav-item">
@@ -539,13 +523,7 @@
                                 <p>Persetujuan KRS</p>
                             </a>
                         </li>
-                        {{-- <li class="nav-item">
-                                <a href=""
-                                    class="nav-link">
-                                    <i class="nav-icon fas fa-calendar-alt"></i>
-                                    <p>Jadwal Perkuliahan</p>
-                                </a>
-                            </li> --}}
+
 
                         <li class="nav-item">
                             <a href="{{ route('dosen.grades.input.index') }}"
@@ -561,16 +539,6 @@
                                 <p>Profil Saya</p>
                             </a>
                         </li>
-
-                        {{-- Contoh untuk nanti jika sudah jadi mahasiswa --}}
-                        {{-- @can('fill krs')
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-edit"></i>
-                                <p>Isi KRS</p>
-                            </a>
-                        </li>
-                        @endcan --}}
                     @endif
 
 
@@ -617,16 +585,6 @@
                                 </a>
                             </li>
                         @endcan
-
-                        {{-- Contoh untuk nanti jika sudah jadi mahasiswa --}}
-                        {{-- @can('fill krs')
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-edit"></i>
-                                <p>Isi KRS</p>
-                            </a>
-                        </li>
-                        @endcan --}}
                     @endif
 
                     <li class="nav-header">LAIN-LAIN</li>
