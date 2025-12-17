@@ -30,12 +30,12 @@
 
         <div class="card mb-4">
             <div class="card-header">
-                <h6 class="card-title mb-0">Lengkapi Biodata Anda</h6>
+                <h6 class="card-title mb-0">Lengkapi Data Diri Anda</h6>
             </div>
             <div class="card-body">
                 <form wire:submit.prevent="saveBiodata">
                     <div class="row">
-                        <h6> Data Diri</h6>
+                        <h6> Data Pribadi</h6>
                         <hr>
                         <div class="col-md-6 mb-3">
                             <label class="form-label required">NIK (Nomor Induk Kependudukan)</label>

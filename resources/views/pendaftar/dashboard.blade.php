@@ -86,6 +86,47 @@
             </div>
         @endif
 
+        @if ($application->status == 'lengkapi_data')
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-title">Lengkapi Data Diri</h4>
+                <div class="text-muted">
+                    Silakan lengkapi data diri untuk melanjutkan proses pendaftaran.
+                </div>
+                <div class="mt-3">
+                    <a href="{{ route('pendaftar.biodata') }}" class="btn btn-warning">
+                        Lengkapi Data Diri
+                    </a>
+                </div>
+            </div>
+        @endif
+
+        @if ($application->status == 'upload_dokumen')
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-title">Upload Dokumen</h4>
+                <div class="text-muted">
+                    Silakan upload dokumen yang diperlukan untuk melanjutkan proses pendaftaran.
+                </div>
+                <div class="mt-3">
+                    <a href="{{ route('pendaftar.document.form') }}" class="btn btn-warning">
+                        Upload Dokumen
+                    </a>
+                </div>
+            </div>
+        @endif
+        @if ($application->status == 'proses_verifikasi')
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-title">Proses Verifikasi</h4>
+                <div class="text-muted">
+                    Pendaftaran Anda sedang diverifikasi. Silakan tunggu informasi selanjutnya dari tim Admisi.
+                </div>
+                {{-- <div class="mt-3">
+                    <a href="{{ route('pendaftar.document.form') }}" class="btn btn-warning">
+                        Upload Dokumen
+                    </a>
+                </div> --}}
+            </div>
+        @endif
+
         @if (session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif

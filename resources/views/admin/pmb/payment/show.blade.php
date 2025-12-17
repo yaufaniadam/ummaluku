@@ -13,7 +13,19 @@
                 <p><strong>Nama:</strong> {{ $invoice->application->prospective->user->name }}</p>
                 <p><strong>No. Pendaftaran:</strong> {{ $invoice->application->registration_number }}</p>
                 <p><strong>Total Tagihan:</strong> <span class="h5">Rp {{ number_format($invoice->total_amount, 0, ',', '.') }}</span></p>
-                <p><strong>Status Tagihan:</strong> <span class="badge badge-lg badge-primary">{{ Str::title(str_replace('_', ' ', $invoice->status)) }}</span></p>
+                <p><strong>Status Tagihan:</strong> 
+                    @if($invoice->status == 'paid') 
+                        <span class="badge badge-success">Lunas</span>
+                    @elseif($invoice->status == 'partially_paid') 
+                        <span class="badge badge-info">Dibayar Sebagian</span>
+                    @elseif($invoice->status == 'pending_verification') 
+                        <span class="badge badge-warning">Menunggu Verifikasi</span>
+                    @elseif($invoice->status == 'rejected') 
+                        <span class="badge badge-danger">Ditolak</span>
+                    @else 
+                        <span class="badge badge-secondary">Belum Dibayar</span>
+                    @endif
+                </p>
             </div>
         </div>
     </div>
