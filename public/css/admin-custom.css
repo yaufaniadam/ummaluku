@@ -1,0 +1,34 @@
+/* Sidebar Background */
+.main-sidebar.sidebar-custom-orange,
+.main-sidebar.sidebar-custom-orange .brand-link {
+    background-color: rgb(247, 102, 3) !important;
+}
+
+/* Sidebar Text Color (Force White for better contrast on orange) */
+.main-sidebar.sidebar-custom-orange .nav-sidebar .nav-item .nav-link,
+.main-sidebar.sidebar-custom-orange .brand-link {
+    color: #ffffff !important;
+}
+
+/* Sidebar Icons */
+.main-sidebar.sidebar-custom-orange .nav-sidebar .nav-item .nav-link i {
+    color: #ffffff !important;
+}
+
+/* Hover State */
+.main-sidebar.sidebar-custom-orange .nav-sidebar .nav-item .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+}
+
+/* Active State */
+.main-sidebar.sidebar-custom-orange .nav-sidebar .nav-item .nav-link.active {
+    background-color: #ffffff !important;
+    color: rgb(247, 102, 3) !important;
+    font-weight: bold;
+}
+
+/* Submenu Header */
+.main-sidebar.sidebar-custom-orange .nav-header {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
