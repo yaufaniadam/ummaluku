@@ -91,25 +91,28 @@ class ApplicationsExport implements FromQuery, WithHeadings, WithMapping, Should
         $choice1 = $application->programChoices->where('choice_order', 1)->first();
         $choice2 = $application->programChoices->where('choice_order', 2)->first();
 
+        // Use null-safe operator or optional() helper for safe access
+        // Note: In Laravel environment, optional() helper is available, but PHP 8.0 null-safe operator ?-> is cleaner
+
         return [
             $application->registration_number,
-            $p->user->name ?? '',
-            $p->user->email ?? '',
+            $p->user?->name ?? '',
+            $p->user?->email ?? '',
             $p->phone,
             $p->nisn,
             $p->id_number,
             $p->birth_place,
             $p->birth_date,
             $p->gender,
-            $p->religion->name ?? '',
+            $p->religion?->name ?? '',
             $p->address,
-            $p->province->name ?? '',
-            $p->city->name ?? '',
-            $p->district->name ?? '',
-            $p->village->name ?? '',
+            $p->province?->name ?? '',
+            $p->city?->name ?? '',
+            $p->district?->name ?? '',
+            $p->village?->name ?? '',
             $p->postal_code,
-            $p->highSchool->name ?? '',
-            $p->highSchoolMajor->name ?? '',
+            $p->highSchool?->name ?? '',
+            $p->highSchoolMajor?->name ?? '',
             $p->father_name,
             $p->father_nik,
             $p->father_occupation,
@@ -123,11 +126,11 @@ class ApplicationsExport implements FromQuery, WithHeadings, WithMapping, Should
             $p->guardian_phone,
             $p->guardian_occupation,
             $p->guardian_income,
-            $choice1 ? ($choice1->program->name_id ?? '') : '',
-            $choice2 ? ($choice2->program->name_id ?? '') : '',
-            $application->admissionCategory->name ?? '',
-            $application->batch->name ?? '',
-            $application->batch->year ?? '',
+            $choice1?->program?->name_id ?? '',
+            $choice2?->program?->name_id ?? '',
+            $application->admissionCategory?->name ?? '',
+            $application->batch?->name ?? '',
+            $application->batch?->year ?? '',
             $application->status,
         ];
     }
