@@ -59,6 +59,7 @@ Route::prefix('admin/system')->middleware(['auth', 'role:Super Admin'])->name('a
 
 Route::prefix('master')->middleware(['auth', 'role:Super Admin|Admin'])->name('master.')->group(function () {
     Route::get('/work-units', WorkUnitIndex::class)->name('work-units.index');
+    Route::get('/work-units/officials/{workUnit}', \App\Livewire\Master\WorkUnit\OfficialManager::class)->name('work-units.manage-officials');
     Route::get('/programs', App\Livewire\Master\Program\Index::class)->name('programs.index');
     Route::get('/programs/{program}/manage-officials', App\Livewire\Master\Program\OfficialManager::class)->name('programs.manage-head');
     Route::get('/faculties', App\Livewire\Master\Faculty\Index::class)->name('faculties.index');
