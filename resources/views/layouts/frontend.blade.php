@@ -179,7 +179,7 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-ummaluku-light-80">
             <div class="container px-5">
-                <a class="navbar-brand" href=""><img src="{{ asset('assets/logo-orange.png') }}"
+                <a class="navbar-brand" href="{{ route('gateway') }}"><img src="{{ asset('assets/logo-orange.png') }}"
                         width="270" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -194,7 +194,23 @@
                      
                         @auth
                             {{-- MENU INI HANYA MUNCUL JIKA USER SUDAH LOGIN --}}
-                            <li class="nav-item"><a class="nav-link" href="{{ route('pendaftar') }}">Dashboard
+                            @php
+                                $dashboardRoute = '#';
+                                $user = Auth::user();
+                                if ($user->hasRole(['Super Admin', 'Direktur Admisi', 'Staf Admisi', 'Direktur SDM', 'Staf SDM', 'Direktur Keuangan', 'Staf Keuangan', 'Kaprodi', 'Staf Prodi'])) {
+                                    $dashboardRoute = route('admin.dashboard');
+                                } elseif ($user->hasRole('Dosen')) {
+                                    $dashboardRoute = route('dosen.dashboard');
+                                } elseif ($user->hasRole('Mahasiswa')) {
+                                    $dashboardRoute = route('mahasiswa.dashboard');
+                                } elseif ($user->hasRole('Camaru')) {
+                                    $dashboardRoute = route('pendaftar');
+                                } elseif ($user->staff) {
+                                     // Fallback for staff without specific admin roles (Tendik)
+                                     $dashboardRoute = route('staff.dashboard'); // Assuming this route exists based on context
+                                }
+                            @endphp
+                            <li class="nav-item"><a class="nav-link" href="{{ $dashboardRoute }}">Dashboard
                                     Saya</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
