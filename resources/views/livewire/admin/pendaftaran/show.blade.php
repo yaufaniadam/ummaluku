@@ -207,6 +207,14 @@
                         <a href="{{ route('admin.pmb.pendaftaran.index') }}"
                             class="btn btn-outline-primary rounded-0">Kembali</a>
                         @if ($application->status == 'proses_verifikasi')
+                            <button class="btn btn-outline-success rounded-0" wire:click="finalizeVerification"
+                                @if($this->hasUnverifiedDocuments) disabled @endif
+                                wire:confirm="Anda yakin semua dokumen sudah diperiksa dan pendaftar ini lolos ke tahap seleksi?">
+                                Loloskan Verifikasi</button>
+                           
+                            <button class="btn btn-outline-danger rounded-0" onclick="promptForApplicationRejection()">
+                                Tolak Pendaftaran
+                            </button>
                             {{-- Hanya tampilkan tombol jika tidak ada dokumen pending --}}
                             @if (!$this->hasPendingDocuments)
                                 <button class="btn btn-outline-success rounded-0" wire:click="finalizeVerification"

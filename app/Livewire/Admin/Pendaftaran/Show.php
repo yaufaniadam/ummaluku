@@ -20,9 +20,9 @@ class Show extends Component
         $this->application->load('documents');
     }
 
-    public function getHasPendingDocumentsProperty()
+    public function getHasUnverifiedDocumentsProperty()
     {
-        return $this->application->documents()->where('status', 'pending')->exists();
+        return $this->application->documents()->where('status', '!=', 'verified')->exists();
     }
 
     public function mount(Application $application)
@@ -83,12 +83,11 @@ class Show extends Component
 
     public function finalizeVerification()
     {
-        // 1. Cek apakah ada dokumen yang masih berstatus 'pending' (belum diperiksa)
-        // Kita tidak boleh meloloskan verifikasi jika petugas belum memeriksa semua dokumen yang diupload
-        if ($this->application->documents()->where('status', 'pending')->exists()) {
+        // 1. Cek apakah ada dokumen yang belum terverifikasi
+        if ($this->hasUnverifiedDocuments) {
             $this->dispatch('show-alert', [
                 'type' => 'error',
-                'message' => 'Gagal! Masih ada dokumen yang belum diperiksa (status pending). Silakan verifikasi atau tolak dokumen tersebut.'
+                'message' => 'Gagal! Masih ada dokumen yang belum sesuai atau belum terverifikasi.'
             ]);
             return;
         }
