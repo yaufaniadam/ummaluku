@@ -3,7 +3,12 @@
 @section('title', 'Data Pendaftar')
 
 @section('content_header')
-    <h1>Data Pendaftar</h1>
+    <div class="d-flex justify-content-between">
+        <h1>Data Pendaftar</h1>
+        <a href="{{ route('admin.pmb.pendaftaran.export') }}" class="btn btn-success">
+            <i class="fas fa-file-excel"></i> Export Data Lengkap
+        </a>
+    </div>
 @stop
 
 

@@ -8,6 +8,8 @@ use App\DataTables\ApplicationsDataTable;
 use App\Models\AdmissionCategory;
 use App\Models\Application;
 use App\Models\Batch;
+use App\Exports\ApplicationsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminPendaftaranController extends Controller
 {
@@ -35,5 +37,10 @@ class AdminPendaftaranController extends Controller
     {
 
         return view('admin.pendaftaran.show'); // <-- livewire dipanggil di blade ini
+    }
+
+    public function export()
+    {
+        return Excel::download(new ApplicationsExport, 'data_pendaftar.xlsx');
     }
 }

@@ -190,6 +190,7 @@ Route::prefix('admin/pmb')->middleware(['auth', 'permission:view applications'])
     Route::get('/dashboard', [PMBDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/pendaftaran', [AdminPendaftaranController::class, 'index'])->name('pendaftaran.index');
+    Route::get('/pendaftaran/export', [AdminPendaftaranController::class, 'export'])->name('pendaftaran.export');
     Route::get('/pendaftaran/{application}', PendaftaranShow::class)->name('pendaftaran.show');
 
     Route::get('/seleksi', [AdminSeleksiController::class, 'index'])->name('seleksi.index');
