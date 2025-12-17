@@ -71,6 +71,21 @@
             </div>
         @endif
 
+        @if ($application->status == 'dokumen_ditolak')
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-title">Dokumen Anda Perlu Diperbaiki</h4>
+                <div class="text-muted">
+                    Beberapa dokumen yang Anda upload tidak memenuhi persyaratan. Silakan periksa kembali dokumen Anda dan
+                    upload ulang dokumen yang diperlukan.
+                </div>
+                <div class="mt-3">
+                    <a href="{{ route('pendaftar.document.form') }}" class="btn btn-warning">
+                        Upload Ulang Dokumen
+                    </a>
+                </div>
+            </div>
+        @endif
+
         @if (session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
