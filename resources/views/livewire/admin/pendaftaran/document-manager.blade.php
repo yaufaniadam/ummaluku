@@ -1,12 +1,12 @@
 <div>
     <div class="table-responsive">
-        <table class="table table-vcenter card-table">
+        <table class="table table-vcenter card-table table-striped">
             <thead>
                 <tr>
                     <th>Nama Dokumen</th>
                     <th>Status</th>
                     <th>File Diunggah</th>
-                    <th class="w-1 text-center">Aksi</th>
+                    <th class="w-1 text-center">Catatan</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,13 +34,7 @@
                                 <span class="badge bg-secondary me-1"></span> Belum Diunggah
                             @endif
 
-                            {{-- BLOK BARU UNTUK MENAMPILKAN CATATAN REVISI --}}
-                            @if ($uploadedDocument && $uploadedDocument->status == 'revision_needed' && !empty($uploadedDocument->notes))
-                                <div class="text-danger mt-2" style="font-size: 0.8rem;">
-                                    <i class="fas fa-fw fa-comment"></i>
-                                    <strong></strong> {{ $uploadedDocument->notes }}
-                                </div>
-                            @endif
+                            
                         </td>
                         <td>
                             @if ($uploadedDocument)
@@ -153,7 +147,12 @@
                             @endif
                         </td>
                         <td class="text-center">
-                           -
+                           {{-- BLOK BARU UNTUK MENAMPILKAN CATATAN REVISI --}}
+                            @if ($uploadedDocument && $uploadedDocument->status == 'revision_needed' && !empty($uploadedDocument->notes))
+                                <div class="text-danger">                                  
+                                    <strong>{{ $uploadedDocument->notes }}</strong> 
+                                </div>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
