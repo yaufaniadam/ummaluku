@@ -10,10 +10,10 @@
         <a class="nav-link {{ request()->routeIs('pendaftar.biodata') ? 'active' : '' }}"
             href="{{ route('pendaftar.biodata') }}">
             @if ($current === 'lengkapi_data')
-                <i class="bi bi-exclamation-triangle text-danger"></i>
+                <i class="bi bi-check-circle text-success"></i>
             @endif
 
-            Biodata
+            Data Diri
         </a>
     </li>
 
@@ -22,7 +22,7 @@
         <a class="nav-link {{ request()->routeIs('pendaftar.document.form') ? 'active' : '' }}"
             href="{{ route('pendaftar.document.form') }}">
             @if ($current === 'upload_dokumen')
-                <i class="bi bi-exclamation-triangle text-danger"></i>
+                <i class="bi bi-check-circle text-success"></i>
             @endif
             Dokumen
         </a>

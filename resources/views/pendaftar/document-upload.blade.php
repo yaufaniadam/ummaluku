@@ -35,8 +35,8 @@
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title mb-0">Upload Dokumen Persyaratan</h4>
-                <small class="text-muted"><i class="bi bi-exclamation-triangle"></i> Upload dokumen satu-persatu. Jenis file
-                    JPG/JPEG/PDF maksimal 1 MB</small>
+                <small class="text-danger"><i class="bi bi-exclamation-triangle"></i> Upload dokumen satu-persatu. Jenis file
+                    JPG/JPEG maksimal 1 MB</small>
             </div>
             <div class="card-body">
                 @if (session('success'))
