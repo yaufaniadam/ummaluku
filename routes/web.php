@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GatewayController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationsController;
@@ -19,7 +20,11 @@ use App\Http\Controllers\Modules\PMB\PendaftaranController;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [GatewayController::class, 'index'])->name('gateway');
+
+// PMB Landing (Moved from Home)
+Route::get('/camaru/index', [HomeController::class, 'index'])->name('pmb.index');
+Route::get('/pmb', [HomeController::class, 'index'])->name('pmb.home'); // Alias
 
 // Common Auth Routes (Profile, Notifications)
 Route::middleware('auth')->group(function () {
