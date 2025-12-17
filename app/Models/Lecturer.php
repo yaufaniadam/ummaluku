@@ -53,4 +53,9 @@ class Lecturer extends Model
     {
         return $this->hasMany(ProgramHead::class);
     }
+
+    public function workUnitOfficials(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
+        return $this->morphMany(WorkUnitOfficial::class, 'employee');
+    }
 }
