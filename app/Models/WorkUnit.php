@@ -29,11 +29,8 @@ class WorkUnit extends Model
         return $this->hasMany(WorkUnit::class, 'parent_id');
     }
 
-    public function officials(): MorphMany
+    public function officials(): HasMany
     {
-        // Actually this is a direct HasMany if we had a non-polymorphic table,
-        // but wait, `work_unit_officials` has `work_unit_id`, so it is a HasMany.
-        // It's the `employee` that is polymorphic.
         return $this->hasMany(WorkUnitOfficial::class);
     }
 
