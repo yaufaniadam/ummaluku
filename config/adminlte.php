@@ -196,7 +196,7 @@ return [
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-warning elevation-4',
+    'classes_sidebar' => 'sidebar-dark-primary sidebar-custom-orange elevation-4',
     'classes_sidebar_nav' => '',
     'classes_topnav' => 'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
@@ -645,15 +645,25 @@ return [
             ],
         ],
         'FullCalendar' => [
-        'active' => true, // Cukup ubah baris ini menjadi true
-        'files' => [
-            [
-                'type' => 'js',
-                'asset' => true,
-                'location' => 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js',
+            'active' => true, // Cukup ubah baris ini menjadi true
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js',
+                ],
             ],
         ],
-    ],
+        'CustomTheme' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'css/admin-custom.css',
+                ],
+            ],
+        ],
     ],
 
     /*
