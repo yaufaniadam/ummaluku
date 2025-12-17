@@ -202,10 +202,9 @@
                 <div class="card-header border-0">
                     <h3 class="card-title">Tindakan</h3>
                 </div>
-                <div class="card-body p-3">
+                <div class="card-body p-0">
                     <div class="btn-group w-100" role="group">
-                        <a href="{{ route('admin.pmb.pendaftaran.index') }}"
-                            class="btn btn-outline-primary rounded-0">Kembali</a>
+                        <a href="{{ route('admin.pmb.pendaftaran.index') }}" class="btn btn-outline-primary rounded-0">Kembali</a>
                         @if ($application->status == 'proses_verifikasi')
                             <button class="btn btn-outline-success rounded-0" wire:click="finalizeVerification"
                                 @if($this->hasUnverifiedDocuments) disabled @endif
