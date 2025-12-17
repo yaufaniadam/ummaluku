@@ -7,7 +7,7 @@
 /* Sidebar Text Color (Force White for better contrast on orange) */
 .main-sidebar.sidebar-custom-orange .nav-sidebar .nav-item .nav-link,
 .main-sidebar.sidebar-custom-orange .brand-link {
-    color: #ffffff !important;
+    color: #fde2d3 !important;
 }
 
 /* Sidebar Icons */
@@ -23,12 +23,21 @@
 
 /* Active State */
 .main-sidebar.sidebar-custom-orange .nav-sidebar .nav-item .nav-link.active {
-    background-color: #ffffff !important;
-    color: rgb(247, 102, 3) !important;
+    background-color: #ffffff40 !important;
+    color: #ffffff !important;
     font-weight: bold;
 }
 
 /* Submenu Header */
 .main-sidebar.sidebar-custom-orange .nav-header {
     color: rgba(255, 255, 255, 0.8) !important;
+}
+
+[class*=sidebar-dark] .brand-link {
+    border-bottom: 1px solid #fde2d3;
+}
+
+[class*=sidebar-dark-] .nav-sidebar>.nav-item>.nav-link.active {
+    color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 1px 2px rgb(255 255 255 / 100%);
 }

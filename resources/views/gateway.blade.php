@@ -17,7 +17,7 @@
                 <div class="card h-100 shadow-sm border-0 hover-lift text-center">
                     <div class="card-body p-4">
                         <div class="icon-box bg-warning text-white rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <i class="fas fa-user-plus fa-lg"></i>
+                           <i class="bi bi-person-plus-fill"></i>
                         </div>
                         <h5 class="card-title fw-bold">Calon Mahasiswa</h5>
                         <p class="card-text text-muted small">Informasi pendaftaran dan seleksi masuk mahasiswa baru.</p>
@@ -34,7 +34,7 @@
                 <div class="card h-100 shadow-sm border-0 hover-lift text-center">
                     <div class="card-body p-4">
                         <div class="icon-box bg-primary text-white rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <i class="fas fa-user-graduate fa-lg"></i>
+                            <i class="bi bi-person-badge-fill"></i>
                         </div>
                         <h5 class="card-title fw-bold">Mahasiswa</h5>
                         <p class="card-text text-muted small">Akses Kartu Rencana Studi (KRS), KHS, dan layanan akademik.</p>
@@ -50,7 +50,7 @@
                 <div class="card h-100 shadow-sm border-0 hover-lift text-center">
                     <div class="card-body p-4">
                         <div class="icon-box bg-success text-white rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <i class="fas fa-chalkboard-teacher fa-lg"></i>
+                           <i class="bi bi-people"></i>
                         </div>
                         <h5 class="card-title fw-bold">Dosen & Tendik</h5>
                         <p class="card-text text-muted small">Portal layanan untuk Dosen dan Tenaga Kependidikan.</p>
@@ -66,7 +66,7 @@
                 <div class="card h-100 shadow-sm border-0 hover-lift text-center">
                     <div class="card-body p-4">
                         <div class="icon-box bg-dark text-white rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <i class="fas fa-user-shield fa-lg"></i>
+                            <i class="bi bi-gear"></i>
                         </div>
                         <h5 class="card-title fw-bold">Administrator</h5>
                         <p class="card-text text-muted small">Panel pengelolaan sistem informasi akademik.</p>
