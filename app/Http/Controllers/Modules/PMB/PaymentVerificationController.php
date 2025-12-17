@@ -6,6 +6,7 @@ use App\DataTables\ReRegistrationInvoicesDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\ReRegistrationInvoice;
 use App\Models\ReRegistrationInstallment;
+use App\Services\TransactionService;
 use Illuminate\Http\Request;
 use App\Notifications\PembayaranCicilanDiterima;
 use App\Notifications\PembayaranLunas;
@@ -48,6 +49,12 @@ class PaymentVerificationController extends Controller
         // Cek apakah semua cicilan lain sudah lunas
         $allPaid = $installment->invoice->installments()->where('status', '!=', 'paid')->count() === 0;
 
+        // --- BARIS BARU: Buat Transaksi Masuk (Auto-Sync) ---
+        TransactionService::recordPayment(
+            $installment,
+            $installment->amount,
+            'Pembayaran PMB Invoice #' . $installment->invoice->id . ' - Cicilan ' . $installment->installment_number . ' oleh ' . $user->name
+        );
         
         if ($allPaid) {
             $installment->invoice->update(['status' => 'paid']);
