@@ -73,7 +73,7 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group">
-                                        <a href="{{ route('admin.master.work-units.manage-officials', $unit->id) }}" class="btn btn-info btn-sm" title="Kelola Pejabat">
+                                        <a href="{{ route('master.work-units.manage-officials', $unit->id) }}" class="btn btn-info btn-sm" title="Kelola Pejabat">
                                             <i class="fas fa-user-tie"></i> Pejabat
                                         </a>
                                         @if($unit->type == 'Lembaga' || $unit->type == 'Unit Pendukung')
@@ -108,7 +108,7 @@
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group">
-                                            <a href="{{ route('admin.master.work-units.manage-officials', $child->id) }}" class="btn btn-info btn-xs" title="Kelola Pejabat">
+                                            <a href="{{ route('master.work-units.manage-officials', $child->id) }}" class="btn btn-info btn-xs" title="Kelola Pejabat">
                                                 <i class="fas fa-user-tie"></i>
                                             </a>
                                             <button wire:click="edit({{ $child->id }})" class="btn btn-warning btn-xs" title="Edit Unit">
@@ -185,7 +185,7 @@
                         <div class="modal-footer p-0 mt-3 d-flex justify-content-between">
                             <div>
                                 @if($isEditMode)
-                                <a href="{{ route('admin.master.work-units.manage-officials', $workUnitId) }}" class="btn btn-info">
+                                <a href="{{ route('master.work-units.manage-officials', $workUnitId) }}" class="btn btn-info">
                                     <i class="fas fa-user-tie"></i> Kelola Pejabat
                                 </a>
                                 @endif
