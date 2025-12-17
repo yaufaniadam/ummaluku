@@ -144,6 +144,8 @@ class RolePermissionSeeder extends Seeder
         $tendikRole = Role::firstOrCreate(['name' => 'Tendik']);
         $mahasiswaRole = Role::firstOrCreate(['name' => 'Mahasiswa']);
         $camaruRole = Role::firstOrCreate(['name' => 'Camaru']);
+        $dekanRole = Role::firstOrCreate(['name' => 'Dekan']);
+        $stafFakRole = Role::firstOrCreate(['name' => 'Staf Fakultas']);
 
 
 

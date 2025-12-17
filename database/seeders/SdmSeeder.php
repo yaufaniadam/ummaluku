@@ -44,15 +44,17 @@ class SdmSeeder extends Seeder
         // 2. Structural Positions (Generic)
         $structuralPositions = [
             'Rektor',
-            'Wakil Rektor',
+            'Wakil Rektor Bidang AIK, Akademik, dan Kerja Sama',
+            'Wakil Rektor Bidang Kemahasiswaan, SDM, dan Keuangan',
             'Dekan',
             'Wakil Dekan',
+            'Kepala TU Fakultas',
+            'Kepala Bagian Administrasi Akademik',
             'Ketua Program Studi',
-            'Kepala Biro',
-            'Kepala Bagian',
-            'Kepala Sub Bagian',
-            'Kepala UPT',
-            'Direktur Pascasarjana',
+            'Sekretaris Program Studi',
+            'Kepala Divisi',
+            'Ketua Senat Universitas',
+            'Sekretaris Senat Universitas',
         ];
 
         foreach ($structuralPositions as $name) {
