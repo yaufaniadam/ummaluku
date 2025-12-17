@@ -1,10 +1,14 @@
-<div>
+<div wire:init="loadProvinces">
     {{-- Baris Dropdown Pencarian Wilayah --}}
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">
                 <label>Provinsi</label>
-                <select wire:model.live="selectedProvinsi" class="form-control">
+                <div wire:loading wire:target="loadProvinces" class="text-muted small">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Memuat Data Provinsi...
+                </div>
+                <select wire:model.live="selectedProvinsi" class="form-control" wire:loading.attr="disabled" wire:target="loadProvinces">
                     <option value="">-- Pilih Provinsi --</option>
                     @foreach ($provinsis as $provinsi)
                         <option value="{{ $provinsi['district']['kodeWilayah'] }}">{{ $provinsi['district']['namaWilayah'] }}

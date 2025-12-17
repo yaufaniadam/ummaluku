@@ -22,11 +22,14 @@ class ModalCariSekolah extends Component
     // Method yang pertama kali dijalankan saat komponen dimuat
     public function mount()
     {
+        //
+    }
+
+    public function loadProvinces()
+    {
         // Ambil data provinsi saat komponen pertama kali dimuat
         $response = Http::get('https://api.data.belajar.id/data-portal-backend/v1/master-data/satuan-pendidikan/statistics/360/descendants?level=1');
         $this->provinsis = $response->json('data') ?? [];
-
-        // dd($response);
     }
 
     // Lifecycle hook: dijalankan setiap kali $selectedProvinsi berubah
