@@ -126,7 +126,7 @@ class Show extends Component
 
         // 2. Update status aplikasi dan simpan alasan penolakan
         $this->application->update([
-            'status' => 'dokumen _ditolak',
+            'status' => 'documents_rejected',
             'rejection_reason' => $reason
         ]);
 
