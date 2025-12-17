@@ -135,7 +135,8 @@ class Index extends Component
 
         $query = WorkUnit::query()
             ->with(['children', 'officials.employee', 'parent'])
-            ->whereNull('parent_id'); // Only show roots
+            ->whereNull('parent_id') // Only show roots
+            ->whereNotIn('type', ['Fakultas', 'Program Studi']); // Exclude Academic Units
 
         if ($this->search) {
              // If searching, we might want to search everything, but displaying hierarchy breaks.
