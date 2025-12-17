@@ -90,6 +90,7 @@ class ApplicationsDataTable extends DataTable
             ])
             ->buttons([
                 Button::make('export'),
+                Button::make('excel')->text('Export Data Lengkap')->action('window.location.href = "' . route('admin.pmb.pendaftaran.export') . '"'),
                 Button::make('print'),
                 Button::make('reset'),
                 Button::make('reload')
