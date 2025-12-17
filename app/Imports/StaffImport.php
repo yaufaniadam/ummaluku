@@ -18,11 +18,11 @@ class StaffImport implements ToCollection, WithHeadingRow, WithValidation
         foreach ($rows as $row) {
             DB::transaction(function () use ($row) {
                 // Generate email dummy jika tidak ada (karena required di User)
-                $email = $row['nip'] . '@staff.ac.id';
+       
 
                 // 1. Buat User baru
                 $newUser = User::firstOrCreate(
-                    ['email' => $email],
+                    ['email' => $row['email']],
                     [
                         'name'     => $row['nama'],
                         'password' => Hash::make($row['nip']), // Password default = NIP

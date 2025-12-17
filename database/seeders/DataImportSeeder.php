@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Imports\CoursesImport;
 use App\Imports\LecturersImport;
+use App\Imports\StaffImport;
 use App\Imports\OldStudentsImport;
 use App\Models\Program;
 use Illuminate\Database\Seeder;
@@ -45,6 +46,14 @@ class DataImportSeeder extends Seeder
                 Excel::import(new CoursesImport($program->id), $mkProdiFile);
                 $this->command->line("  -> Data Mata Kuliah untuk prodi '{$program->name_id}' berhasil diimpor.");
             }
+        }
+
+
+        // 5. Import Tendik
+        $tendikFile = database_path('seeders/data/tendik.xlsx');
+        if (file_exists($tendikFile)) {
+            Excel::import(new StaffImport, $tendikFile);
+            $this->command->line('  -> Data Tendik berhasil diimpor.');
         }
 
         $this->command->info('Proses import data selesai.');
