@@ -479,6 +479,29 @@
                                     <p>Komponen Biaya</p>
                                 </a>
                             </li>
+                            {{-- Menu Baru Transaksi Keuangan --}}
+                            <li class="nav-header">TRANSAKSI</li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.keuangan.categories.index') }}"
+                                    class="nav-link {{ request()->routeIs('admin.keuangan.categories.index') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-tags"></i>
+                                    <p>Kategori Transaksi</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.keuangan.income.index') }}"
+                                    class="nav-link {{ request()->routeIs('admin.keuangan.income.index') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-arrow-down"></i>
+                                    <p>Uang Masuk</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.keuangan.expense.index') }}"
+                                    class="nav-link {{ request()->routeIs('admin.keuangan.expense.index') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-arrow-up"></i>
+                                    <p>Uang Keluar</p>
+                                </a>
+                            </li>
                         @endcan
                     @endif
 

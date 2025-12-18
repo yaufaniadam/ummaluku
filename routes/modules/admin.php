@@ -110,6 +110,11 @@ Route::prefix('admin/keuangan')->middleware(['auth', 'permission:biaya-list'])->
     Route::get('payment-verification-data', function(AcademicInvoiceDataTable $dataTable) {
         return $dataTable->ajax();
     })->name('payment-verification.data');
+
+    // Transaksi Keuangan (Categories & Transactions)
+    Route::get('categories', App\Livewire\Keuangan\Category\Index::class)->name('categories.index');
+    Route::get('income', App\Livewire\Keuangan\Transaction\Index::class)->name('income.index'); // Type inferred in component
+    Route::get('expense', App\Livewire\Keuangan\Transaction\Index::class)->name('expense.index'); // Type inferred in component
 });
 
 
