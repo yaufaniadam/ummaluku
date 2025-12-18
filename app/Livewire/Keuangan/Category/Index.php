@@ -39,12 +39,10 @@ class Index extends Component
     {
         $category = TransactionCategory::find($id);
         if ($category) {
-            if ($category->transactions()->exists()) {
-                $this->dispatch('error', 'Kategori tidak dapat dihapus karena sudah memiliki transaksi.');
-                return;
-            }
+            // With SoftDeletes, we can safely delete the category.
+            // Existing transactions will still reference the record (which is just marked deleted).
             $category->delete();
-            $this->dispatch('success', 'Kategori berhasil dihapus.');
+            $this->dispatch('success', 'Kategori berhasil dihapus (diarsipkan).');
         }
     }
 }

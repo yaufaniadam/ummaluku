@@ -22,7 +22,7 @@ class Transaction extends Model
      */
     public function category(): BelongsTo
     {
-        return $this->belongsTo(TransactionCategory::class, 'category_id');
+        return $this->belongsTo(TransactionCategory::class, 'category_id')->withTrashed();
     }
 
     /**
