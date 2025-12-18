@@ -74,13 +74,12 @@ class PaymentVerificationController extends Controller
      */
     public function rejectInstallment(Request $request, ReRegistrationInstallment $installment)
     {
-        // $request->validate(['notes' => 'required|string|max:255']);
+        $request->validate(['notes' => 'required|string|max:255']);
 
         $installment->update([
             'status' => 'rejected',
             'verified_by' => auth()->id(),
-            // 'notes' => $request->input('notes'), // Simpan catatan penolakan
-            'notes' => 'Catatan', // Simpan catatan penolakan
+            'notes' => $request->input('notes'),
             'verified_at' => now(),
         ]);
 

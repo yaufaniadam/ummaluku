@@ -12,25 +12,29 @@ def test_payment_modal_swal(page: Page):
     modal = page.locator("#verificationModal-1")
     expect(modal).to_be_visible()
 
-    # 2. Click "Setujui" to trigger Swal Confirm
-    approve_btn = modal.locator("button.btn-success").first
-    approve_btn.click()
+    # 2. Click "Tolak" to trigger Swal Reason Prompt
+    reject_btn = modal.locator("button.btn-danger").first
+    reject_btn.click()
 
-    # 3. Verify SweetAlert Confirmation appears
+    # 3. Verify SweetAlert Rejection Prompt appears
     swal_popup = page.locator(".swal2-popup")
     expect(swal_popup).to_be_visible()
-    expect(swal_popup).to_contain_text("Setujui Pembayaran?")
+    expect(swal_popup).to_contain_text("Tolak Pembayaran?")
 
-    # 4. Click Confirm
-    swal_confirm_btn = page.locator(".swal2-confirm")
+    # 4. Fill in rejection reason
+    reason_textarea = swal_popup.locator("textarea.swal2-textarea")
+    expect(reason_textarea).to_be_visible()
+    reason_textarea.fill("Bukti pembayaran tidak jelas.")
+
+    # 5. Click Confirm Reject
+    swal_confirm_btn = swal_popup.locator(".swal2-confirm")
     swal_confirm_btn.click()
 
-    # 5. Verify Loading State
-    # We expect the title to change to "Memproses..."
+    # 6. Verify Loading State
     expect(swal_popup).to_contain_text("Memproses...")
 
-    # Take screenshot of loading state
-    page.screenshot(path="payment_verification_swal.png")
+    # Take screenshot of loading state after rejection
+    page.screenshot(path="payment_rejection_swal.png")
 
 if __name__ == "__main__":
     with sync_playwright() as p:
