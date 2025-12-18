@@ -57,8 +57,8 @@ class Show extends Component
             return false;
         }
 
-        // 2. Pastikan minimal ada satu dokumen yang ditolak
-        if ($documents->where('status', 'rejected')->isEmpty()) {
+        // 2. Pastikan minimal ada satu dokumen yang ditolak atau perlu revisi
+        if ($documents->whereIn('status', ['rejected', 'revision_needed'])->isEmpty()) {
             return false;
         }
 
