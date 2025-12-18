@@ -46,7 +46,8 @@ class Index extends Component
             ->when($this->dateEnd, function ($query) {
                 $query->whereDate('transaction_date', '<=', $this->dateEnd);
             })
-            ->latest('transaction_date')
+            ->orderByDesc('transaction_date')
+            ->orderByDesc('id')
             ->paginate(10);
 
         return view('livewire.keuangan.transaction.index', [
