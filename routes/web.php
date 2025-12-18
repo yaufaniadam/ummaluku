@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Public Pages (PMB)
+Route::get('/api/locations/cities', [App\Http\Controllers\LocationController::class, 'cities'])->name('api.locations.cities');
 Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.form');
 
 Route::get('/pendaftaran/sukses', function () {
