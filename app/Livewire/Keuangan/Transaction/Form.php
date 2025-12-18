@@ -25,6 +25,19 @@ class Form extends Component
         'description' => 'nullable|string',
     ];
 
+    protected function messages()
+    {
+        return [
+            'amount.required' => 'Jumlah wajib diisi.',
+            'amount.numeric' => 'Jumlah harus berupa angka.',
+            'amount.min' => 'Jumlah tidak boleh kurang dari 0.',
+            'transaction_date.required' => 'Tanggal wajib diisi.',
+            'transaction_date.date' => 'Format tanggal tidak valid.',
+            'category_id.required' => 'Kategori wajib dipilih.',
+            'category_id.exists' => 'Kategori yang dipilih tidak valid.',
+        ];
+    }
+
     public function mount($type)
     {
         $this->type = $type;
