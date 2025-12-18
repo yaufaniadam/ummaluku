@@ -12,26 +12,70 @@ class TransactionCategorySeeder extends Seeder
      */
     public function run(): void
     {
-        // Default Income Categories
-        TransactionCategory::firstOrCreate(
-            ['name' => 'Pembayaran Mahasiswa', 'type' => 'income'],
-            ['description' => 'Pemasukan otomatis dari pembayaran SPP/PMB mahasiswa']
-        );
+        // --- KATEGORI PEMASUKAN (INCOME) ---
+        $incomes = [
+            [
+                'name' => 'Pembayaran Mahasiswa',
+                'description' => 'Pemasukan otomatis dari pembayaran SPP, PMB, dan tagihan akademik lainnya.'
+            ],
+            [
+                'name' => 'Donasi & Hibah',
+                'description' => 'Sumbangan dari alumni, hibah pemerintah, atau pihak ketiga.'
+            ],
+            [
+                'name' => 'Penjualan Aset',
+                'description' => 'Pemasukan dari penjualan aset atau inventaris kampus.'
+            ],
+            [
+                'name' => 'Sewaan Gedung/Fasilitas',
+                'description' => 'Penyewaan aula, kantin, atau fasilitas olahraga.'
+            ],
+            [
+                'name' => 'Bunga Bank & Investasi',
+                'description' => 'Pendapatan dari bagi hasil bank atau instrumen investasi.'
+            ],
+        ];
 
-        TransactionCategory::firstOrCreate(
-            ['name' => 'Donasi', 'type' => 'income'],
-            ['description' => 'Sumbangan atau hibah']
-        );
+        foreach ($incomes as $income) {
+            TransactionCategory::firstOrCreate(
+                ['name' => $income['name'], 'type' => 'income'],
+                ['description' => $income['description']]
+            );
+        }
 
-        // Default Expense Categories
-        TransactionCategory::firstOrCreate(
-            ['name' => 'Operasional', 'type' => 'expense'],
-            ['description' => 'Biaya operasional sehari-hari']
-        );
+        // --- KATEGORI PENGELUARAN (EXPENSE) ---
+        $expenses = [
+            [
+                'name' => 'Gaji & Tunjangan',
+                'description' => 'Pembayaran gaji dosen, staf, dan honorarium.'
+            ],
+            [
+                'name' => 'Operasional Kantor',
+                'description' => 'Biaya ATK, fotokopi, konsumsi rapat, dll.'
+            ],
+            [
+                'name' => 'Listrik, Air, Internet',
+                'description' => 'Tagihan utilitas bulanan.'
+            ],
+            [
+                'name' => 'Pemeliharaan Gedung & Sarpras',
+                'description' => 'Renovasi, perbaikan AC, kebersihan lingkungan.'
+            ],
+            [
+                'name' => 'Pemasaran & Promosi',
+                'description' => 'Biaya iklan PMB, brosur, dan event promosi.'
+            ],
+            [
+                'name' => 'Penelitian & Pengabdian',
+                'description' => 'Dana hibah internal untuk dosen dan mahasiswa.'
+            ],
+        ];
 
-        TransactionCategory::firstOrCreate(
-            ['name' => 'Gaji Pegawai', 'type' => 'expense'],
-            ['description' => 'Pembayaran gaji dosen dan staf']
-        );
+        foreach ($expenses as $expense) {
+            TransactionCategory::firstOrCreate(
+                ['name' => $expense['name'], 'type' => 'expense'],
+                ['description' => $expense['description']]
+            );
+        }
     }
 }
