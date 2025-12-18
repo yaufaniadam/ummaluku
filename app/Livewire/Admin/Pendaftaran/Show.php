@@ -25,6 +25,46 @@ class Show extends Component
         return $this->application->documents()->where('status', '!=', 'verified')->exists();
     }
 
+    public function getReadyToPassProperty()
+    {
+        // Gunakan koleksi yang sudah diload untuk menghindari query tambahan
+        $documents = $this->application->documents;
+
+        // 1. Cek apakah ada dokumen yang statusnya bukan verified (pending, revision_needed, rejected)
+        if ($documents->where('status', '!=', 'verified')->isNotEmpty()) {
+            return false;
+        }
+
+        // 2. Cek apakah ada dokumen wajib yang belum diunggah sama sekali
+        $requiredDocuments = $this->application->admissionCategory->documentRequirements;
+        $uploadedRequirementIds = $documents->pluck('document_requirement_id');
+
+        foreach ($requiredDocuments as $requirement) {
+            if ($requirement->is_mandatory && !$uploadedRequirementIds->contains($requirement->id)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function getCanRejectProperty()
+    {
+        $documents = $this->application->documents;
+
+        // 1. Pastikan tidak ada dokumen pending (verifikasi harus selesai)
+        if ($documents->where('status', 'pending')->isNotEmpty()) {
+            return false;
+        }
+
+        // 2. Pastikan minimal ada satu dokumen yang ditolak atau perlu revisi
+        if ($documents->whereIn('status', ['rejected', 'revision_needed'])->isEmpty()) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function mount(Application $application)
     {
         // Kita tambahkan relasi baru untuk dimuat di sini
