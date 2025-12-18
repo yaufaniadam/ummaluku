@@ -62,7 +62,7 @@
 
                                     <!-- Modal -->
                                     <div class="modal fade" id="verificationModal-{{ $installment->id }}" tabindex="-1" role="dialog" aria-labelledby="verificationModalLabel-{{ $installment->id }}" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-dialog modal-xl" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="verificationModalLabel-{{ $installment->id }}">Verifikasi Cicilan ke-{{ $installment->installment_number }}</h5>
@@ -70,17 +70,32 @@
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
-                                                <div class="modal-body text-center">
+                                                <div class="modal-body text-center p-0" style="height: 70vh;">
                                                     @if($installment->proof_of_payment)
-                                                        <img src="{{ Storage::url($installment->proof_of_payment) }}" class="img-fluid" alt="Bukti Pembayaran" style="max-height: 500px;">
+                                                        @php
+                                                            $fileUrl = Storage::url($installment->proof_of_payment);
+                                                            $extension = pathinfo($installment->proof_of_payment, PATHINFO_EXTENSION);
+                                                            $isPdf = strtolower($extension) === 'pdf';
+                                                        @endphp
+
+                                                        @if($isPdf)
+                                                            <iframe src="{{ $fileUrl }}" style="width: 100%; height: 100%; border: none;"></iframe>
+                                                        @else
+                                                            <div class="d-flex justify-content-center align-items-center h-100">
+                                                                <img src="{{ $fileUrl }}" class="img-fluid" alt="Bukti Pembayaran" style="max-height: 100%; object-fit: contain;">
+                                                            </div>
+                                                        @endif
                                                     @else
-                                                        <p class="text-danger">Tidak ada bukti pembayaran yang diunggah.</p>
+                                                        <div class="d-flex justify-content-center align-items-center h-100">
+                                                            <p class="text-danger">Tidak ada bukti pembayaran yang diunggah.</p>
+                                                        </div>
                                                     @endif
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <form action="{{ route('admin.pmb.payment.reject', $installment) }}" method="POST" class="d-inline">
+                                                    <form action="{{ route('admin.pmb.payment.reject', $installment) }}" method="POST" class="d-inline" id="reject-form-{{ $installment->id }}">
                                                         @csrf
-                                                        <button type="button" class="btn btn-danger" onclick="confirmAction(this.form, 'reject')">Tolak</button>
+                                                        <input type="hidden" name="notes" id="reject-notes-{{ $installment->id }}">
+                                                        <button type="button" class="btn btn-danger" onclick="confirmReject({{ $installment->id }})">Tolak</button>
                                                     </form>
                                                     <form action="{{ route('admin.pmb.payment.approve', $installment) }}" method="POST" class="d-inline">
                                                         @csrf
@@ -93,6 +108,10 @@
                                     </div>
                                 @elseif($installment->status == 'paid')
                                     <span class="text-success">Diverifikasi oleh {{ $installment->verifiedBy->name ?? 'Sistem' }}</span>
+                                @elseif($installment->status == 'rejected')
+                                    <div class="text-danger">
+                                        <strong>Alasan:</strong> {{ $installment->notes }}
+                                    </div>
                                 @else
                                     -
                                 @endif
@@ -164,8 +183,51 @@
                 // Submit the form
                 form.submit();
             } else {
-                // If cancelled, re-open the modal if needed, or do nothing.
-                // Re-opening might be annoying if they genuinely cancelled.
+                // Return to modal if cancelled? 
+                // $(form).closest('.modal').modal('show');
+            }
+        });
+    }
+
+    function confirmReject(installmentId) {
+        const form = document.getElementById('reject-form-' + installmentId);
+        
+        // Hide Bootstrap Modal
+        $('#verificationModal-' + installmentId).modal('hide');
+
+        Swal.fire({
+            title: 'Tolak Pembayaran?',
+            text: 'Berikan alasan penolakan pembayaran ini.',
+            icon: 'warning',
+            input: 'textarea',
+            inputPlaceholder: 'Tuliskan alasan penolakan di sini...',
+            inputValidator: (value) => {
+                if (!value) {
+                    return 'Alasan penolakan wajib diisi!'
+                }
+            },
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Ya, Tolak',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('reject-notes-' + installmentId).value = result.value;
+                
+                Swal.fire({
+                    title: 'Memproses...',
+                    html: 'Mohon tunggu sebentar.',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                form.submit();
+            } else {
+                $('#verificationModal-' + installmentId).modal('show');
             }
         });
     }
