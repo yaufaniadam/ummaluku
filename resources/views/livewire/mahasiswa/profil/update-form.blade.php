@@ -73,13 +73,14 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div class="col-md-6 form-group" wire:ignore>
-                        <label>Asal Sekolah <span class="text-danger">*</span></label>
-                        <select id="school-select" class="form-control select2" style="width: 100%;">
-                            @if ($high_school_id && $nama_sekolah)
-                                <option value="{{ $high_school_id }}" selected>{{ $nama_sekolah }}</option>
-                            @endif
-                        </select>
+                    <div class="col-md-6 form-group"><label>Asal Sekolah <span class="text-danger">*</span></label>
+                        <div class="input-group"><input type="text"
+                                class="form-control @error('high_school_id') is-invalid @enderror"
+                                placeholder="Pilih sekolah..." readonly wire:model="nama_sekolah">
+                            <div class="input-group-append"><button type="button" class="btn btn-secondary"
+                                    data-toggle="modal" data-target="#schoolModal"><i class="fas fa-search"></i> Cari
+                                    Sekolah</button></div>
+                        </div>
                         @error('high_school_id')
                             <span class="text-danger small mt-1">{{ $message }}</span>
                         @enderror
@@ -278,13 +279,37 @@
         </div>
     </form>
 
+    {{-- Modal Pencarian Sekolah --}}
+    <div class="modal fade" id="schoolModal" tabindex="-1" role="dialog" aria-labelledby="schoolModalLabel" aria-hidden="true" wire:ignore>
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="schoolModalLabel">Cari dan Pilih Sekolah</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Ketik Nama Sekolah</label>
+                        <select id="school-select" class="form-control select2" style="width: 100%;">
+                            <option></option>
+                        </select>
+                        <small class="text-muted">Ketik minimal 3 karakter untuk mencari sekolah.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @push('js')
     <script>
         $(document).ready(function() {
+            // Initialize Select2 inside the modal
             $('#school-select').select2({
                 theme: 'bootstrap4',
+                dropdownParent: $('#schoolModal'), // Important for modal
                 placeholder: 'Ketik nama sekolah...',
                 allowClear: true,
                 minimumInputLength: 3,
@@ -306,15 +331,17 @@
                 }
             });
 
+            // Handle selection
             $('#school-select').on('select2:select', function(e) {
                 var data = e.params.data;
                 // Pass the full data object to Livewire
                 @this.setSchool(data);
-            });
 
-             $('#school-select').on('select2:clear', function(e) {
-                 @this.set('high_school_id', null);
-                 @this.set('nama_sekolah', null);
+                // Hide modal
+                $('#schoolModal').modal('hide');
+
+                // Clear the selection for next time (optional)
+                $('#school-select').val(null).trigger('change');
             });
         });
     </script>
