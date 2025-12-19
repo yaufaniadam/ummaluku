@@ -328,8 +328,32 @@
                         };
                     },
                     cache: true
-                }
+                },
+                templateResult: formatSchool,
+                templateSelection: formatSchoolSelection,
+                width: '100%'
             });
+
+            function formatSchool(school) {
+                if (school.loading) {
+                    return school.text;
+                }
+                var $container = $(
+                    "<div class='clearfix'>" +
+                    "<div class='float-left'>" +
+                    "<strong>" + school.text + "</strong>" +
+                    "</div>" +
+                    "</div>"
+                );
+                if (school.address) {
+                    $container.append("<div class='small text-muted'>" + school.address + "</div>");
+                }
+                return $container;
+            }
+
+            function formatSchoolSelection(school) {
+                return school.text || school.nama || school.id;
+            }
 
             // Handle selection
             $('#school-select').on('select2:select', function(e) {
@@ -339,8 +363,10 @@
 
                 // Hide modal
                 $('#schoolModal').modal('hide');
+            });
 
-                // Clear the selection for next time (optional)
+            // Clear selection when modal is hidden
+            $('#schoolModal').on('hidden.bs.modal', function () {
                 $('#school-select').val(null).trigger('change');
             });
         });
