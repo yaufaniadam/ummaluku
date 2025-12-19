@@ -12,6 +12,7 @@ use App\DataTables\StudentDataTable;
 use App\Models\Student; 
 use App\Models\Program; 
 use App\Models\ClassEnrollment;
+use App\Services\AutoEnrollmentService;
 
 class StudentController extends Controller
 {
@@ -80,5 +81,16 @@ class StudentController extends Controller
     public function edit(Student $student)
     {
         return view('admin.students.edit', compact('student'));
+    }
+
+    public function generateKrs(Student $student)
+    {
+        $result = AutoEnrollmentService::enrollStudent($student);
+
+        if ($result['status'] === 'success') {
+            return back()->with('success', $result['message']);
+        } else {
+            return back()->with('error', $result['message']);
+        }
     }
 }

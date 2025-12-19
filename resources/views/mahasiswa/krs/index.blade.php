@@ -18,8 +18,9 @@
         <div class="alert alert-warning">Tidak ada semester akademik yang sedang aktif.</div>
     @elseif($enrollments->isEmpty())
         <div class="alert alert-info">
-            Anda belum memiliki KRS yang disetujui untuk semester <strong>{{ $activeSemester->name }}</strong>.
-            Silakan lengkapi di menu <a href="{{ route('mahasiswa.krs.proses') }}">Pengisian KRS</a>.
+            Anda belum memiliki jadwal paket semester <strong>{{ $activeSemester->name }}</strong>.
+            {{-- Silakan lengkapi di menu <a href="{{ route('mahasiswa.krs.proses') }}">Pengisian KRS</a>. --}}
+            Silakan hubungi bagian Akademik/Keuangan jika Anda sudah melakukan pembayaran.
         </div>
     @else
         <div class="card">
