@@ -24,6 +24,31 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @if ($reRegistrationInvoice)
+                        <tr>
+                            <td>{{ $reRegistrationInvoice->invoice_number }}</td>
+                            <td><span class="badge badge-info">Biaya Registrasi Ulang</span></td>
+                            <td>Rp {{ number_format($reRegistrationInvoice->total_amount, 0, ',', '.') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($reRegistrationInvoice->due_date)->isoFormat('D MMMM YYYY') }}</td>
+                            <td>
+                                @if ($reRegistrationInvoice->status == 'paid')
+                                    <span class="badge badge-success">Lunas</span>
+                                @elseif($reRegistrationInvoice->status == 'unpaid')
+                                    <span class="badge badge-warning">Belum Lunas</span>
+                                @elseif($reRegistrationInvoice->status == 'partially_paid')
+                                    <span class="badge badge-primary">Dibayar Sebagian</span>
+                                @else
+                                    <span class="badge badge-danger">Jatuh Tempo</span>
+                                @endif
+                            </td>
+                            <td>
+                                <a href="{{ route('mahasiswa.keuangan.re-registration') }}"
+                                    class="btn btn-primary btn-sm" wire:navigate>
+                                    Lihat Detail
+                                </a>
+                            </td>
+                        </tr>
+                    @endif
                     @forelse ($invoices as $invoice)
                         <tr>
                             <td>{{ $invoice->invoice_number }}</td>

@@ -171,6 +171,24 @@
 
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container--default .select2-selection--single {
+            height: calc(3.5rem + 2px);
+            padding: 1rem .75rem;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 1.5;
+            padding-left: 0;
+            color: #212529;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: calc(3.5rem + 2px);
+            right: .75rem;
+        }
+    </style>
     @livewireStyles
 </head>
 
@@ -275,6 +293,9 @@
 
     <!-- Core theme JS-->
     <script src="{{ asset('js/scripts.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://unpkg.com/imask"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @livewireScripts
