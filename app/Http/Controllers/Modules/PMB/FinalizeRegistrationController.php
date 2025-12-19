@@ -32,14 +32,16 @@ class FinalizeRegistrationController extends Controller
                 // 2. Ambil data program studi tempat mahasiswa diterima
                 $acceptedProgramId = $application->programChoices->where('is_accepted', true)->first()->program_id;
 
-                // 3. Buat record baru di tabel 'students'
-                $student = Student::create([
-                    'user_id' => $application->prospective->user_id,
-                    'program_id' => $acceptedProgramId,
-                    'nim' => $this->generateNim($application, $acceptedProgramId), // Hasilkan NIM
-                    'entry_year' => $application->batch->year,
-                    'status' => 'Aktif',
-                ]);
+                // 3. Buat record baru di tabel 'students' (Gunakan updateOrCreate karena mungkin sudah dibuat saat Accept)
+                $student = Student::updateOrCreate(
+                    ['user_id' => $application->prospective->user_id],
+                    [
+                        'program_id' => $acceptedProgramId,
+                        'nim' => $this->generateNim($application, $acceptedProgramId), // Hasilkan NIM
+                        'entry_year' => $application->batch->year,
+                        'status' => 'Aktif',
+                    ]
+                );
 
                 // 4. Ubah Role User dari 'Camaru' menjadi 'Mahasiswa'
                 $application->prospective->user->syncRoles(['Mahasiswa']);

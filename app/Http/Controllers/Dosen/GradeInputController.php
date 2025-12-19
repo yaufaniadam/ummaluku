@@ -22,14 +22,8 @@ class GradeInputController extends Controller
                 ->where('academic_year_id', $activeSemester->id)
                 ->with('course')
                 // Menghitung jumlah mahasiswa yang KRS-nya sudah di-approve
-                ->withCount(['enrollments' => function ($query) use ($activeSemester) {
-                    $query->where('status', 'approved')
-                        ->whereHas('student', function ($q_student) use ($activeSemester) {
-                            $q_student->whereHas('academicInvoices', function ($q_invoice) use ($activeSemester) {
-                                $q_invoice->where('academic_year_id', $activeSemester->id)
-                                    ->where('status', 'paid');
-                            });
-                        });
+                ->withCount(['enrollments' => function ($query) {
+                    $query->where('status', 'approved');
                 }])
                 ->get();
         }
