@@ -171,6 +171,11 @@ class Biodata extends Component
         $this->reset(['district_code', 'village_code']);
     }
 
+    public function updatedWithGuardian($value)
+    {
+        $this->dispatch('re-init-masking');
+    }
+
     public function updatedDistrictCode($value)
     {
         $this->villages = Village::where('district_code', $value)->get();

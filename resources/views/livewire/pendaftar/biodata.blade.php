@@ -236,8 +236,10 @@
                         <div class="col-md-4 mb-3">
                             <label class="form-label required">Penghasilan Ayah (Rp)</label>
 
-                            <input type="text" class="form-control @error('father_income') is-invalid @enderror"
-                                wire:model.live="father_income">
+                            <div wire:ignore>
+                                <input type="text" id="father_income" class="form-control @error('father_income') is-invalid @enderror"
+                                    wire:model.defer="father_income">
+                            </div>
 
                             @error('father_income')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -263,8 +265,10 @@
                         <div class="col-md-4 mb-3">
                             <label class="form-label required">Penghasilan Ibu (Rp)</label>
 
-                            <input type="text" class="form-control @error('mother_income') is-invalid @enderror"
-                                wire:model.live="mother_income">
+                            <div wire:ignore>
+                                <input type="text" id="mother_income" class="form-control @error('mother_income') is-invalid @enderror"
+                                    wire:model.defer="mother_income">
+                            </div>
 
                             @error('mother_income')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -319,9 +323,11 @@
                             <div class="col-md-4 mb-3">
                                 <label class="form-label required">Penghasilan Wali (Rp)</label>
 
-                                <input type="text"
-                                    class="form-control @error('guardian_income') is-invalid @enderror"
-                                    wire:model.live="guardian_income">
+                                <div wire:ignore>
+                                    <input type="text" id="guardian_income"
+                                        class="form-control @error('guardian_income') is-invalid @enderror"
+                                        wire:model.defer="guardian_income">
+                                </div>
 
                                 @error('guardian_income')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -393,6 +399,45 @@
                             window.location.href = "{{ route('pendaftar.document.form') }}";
                         }
                     });
+                });
+
+                function initIncomeMask(selector, wireModel) {
+                    var element = document.getElementById(selector);
+                    if (!element) return;
+
+                    var maskOptions = {
+                        mask: Number,
+                        thousandsSeparator: '.',
+                        padFractionalZeros: false,
+                        normalizeZeros: true,
+                        radix: ',',
+                        mapToRadix: ['.']
+                    };
+                    var mask = IMask(element, maskOptions);
+
+                    // Ensure initial value is formatted
+                    if (element.value) {
+                         mask.value = element.value;
+                    }
+
+                    element.addEventListener('blur', function() {
+                        @this.set(wireModel, mask.unmaskedValue);
+                    });
+                }
+
+                function initAllMasks() {
+                    initIncomeMask('father_income', 'father_income');
+                    initIncomeMask('mother_income', 'mother_income');
+                    if (document.getElementById('guardian_income')) {
+                        initIncomeMask('guardian_income', 'guardian_income');
+                    }
+                }
+
+                initAllMasks();
+
+                // Handle guardian income when field appears/disappears
+                Livewire.on('re-init-masking', () => {
+                   initAllMasks();
                 });
             </script>
         @endpush
