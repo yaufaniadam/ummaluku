@@ -170,12 +170,31 @@ class UpdateForm extends Component
         session()->flash('success', 'Profil Anda berhasil diperbarui.');
     }
 
-    #[On('sekolahDipilih')]
-    public function handleSekolahDipilih($id, $nama)
+    public function setSchool($data)
     {
-        $this->high_school_id = $id;
-        $this->nama_sekolah = $nama;
-        $this->showModal = false; // Tutup modal secara otomatis
+        // Expecting data to contain: npsn, name, address, village, etc.
+        // Or if it comes from existing database, it might have id.
+        // But our Search API returns NPSN as ID.
+
+        $npsn = $data['npsn'] ?? null;
+        if (!$npsn) {
+            return;
+        }
+
+        $sekolah = HighSchool::updateOrCreate(
+            ['npsn' => $npsn],
+            [
+                'name' => $data['name'],
+                'satuanPendidikanId' => $data['satuanPendidikanId'] ?? null,
+                'address' => $data['address'] ?? null,
+                'village' => $data['village'] ?? null,
+                // 'city' => $data['city'] ?? null,
+                // 'province' => $data['province'] ?? null,
+            ]
+        );
+
+        $this->high_school_id = $sekolah->id;
+        $this->nama_sekolah = $sekolah->name;
     }
 
     public function render()

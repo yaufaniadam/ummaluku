@@ -73,14 +73,13 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div class="col-md-6 form-group"><label>Asal Sekolah <span class="text-danger">*</span></label>
-                        <div class="input-group"><input type="text"
-                                class="form-control @error('high_school_id') is-invalid @enderror"
-                                placeholder="Pilih sekolah..." readonly wire:model="nama_sekolah">
-                            <div class="input-group-append"><button type="button" class="btn btn-secondary"
-                                    wire:click="$set('showModal', true)"><i class="fas fa-search"></i> Cari
-                                    Sekolah</button></div>
-                        </div>
+                    <div class="col-md-6 form-group" wire:ignore>
+                        <label>Asal Sekolah <span class="text-danger">*</span></label>
+                        <select id="school-select" class="form-control select2" style="width: 100%;">
+                            @if ($high_school_id && $nama_sekolah)
+                                <option value="{{ $high_school_id }}" selected>{{ $nama_sekolah }}</option>
+                            @endif
+                        </select>
                         @error('high_school_id')
                             <span class="text-danger small mt-1">{{ $message }}</span>
                         @enderror
@@ -279,23 +278,44 @@
         </div>
     </form>
 
-    {{-- Modal Pencarian Sekolah --}}
-    @if ($showModal)
-        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Cari dan Pilih Sekolah</h5>
-                        <button type="button" class="close" wire:click="$set('showModal', false)"
-                            aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <livewire:pendaftar.modal-cari-sekolah />
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
 </div>
+
+@push('js')
+    <script>
+        $(document).ready(function() {
+            $('#school-select').select2({
+                theme: 'bootstrap4',
+                placeholder: 'Ketik nama sekolah...',
+                allowClear: true,
+                minimumInputLength: 3,
+                ajax: {
+                    url: '{{ route('api.schools.search') }}',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            q: params.term // search term
+                        };
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data.results
+                        };
+                    },
+                    cache: true
+                }
+            });
+
+            $('#school-select').on('select2:select', function(e) {
+                var data = e.params.data;
+                // Pass the full data object to Livewire
+                @this.setSchool(data);
+            });
+
+             $('#school-select').on('select2:clear', function(e) {
+                 @this.set('high_school_id', null);
+                 @this.set('nama_sekolah', null);
+            });
+        });
+    </script>
+@endpush

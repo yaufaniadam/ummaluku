@@ -9,5 +9,14 @@ class HighSchool extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['npsn', 'name', 'address', 'type'];
+    protected $fillable = [
+        'npsn',
+        'satuanPendidikanId',
+        'name',
+        'address',
+        'type',
+        'village',
+        'city',
+        'province',
+    ];
 }
