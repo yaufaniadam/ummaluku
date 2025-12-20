@@ -174,6 +174,7 @@ Route::prefix('admin/akademik')->middleware(['auth'])->name('admin.akademik.')->
 
     Route::get('students/import', [StudentController::class, 'showImportForm'])->name('students.import.form');
     Route::post('students/import', [StudentController::class, 'importOld'])->name('students.import.old');
+    Route::post('students/{student}/generate-krs', [StudentController::class, 'generateKrs'])->name('students.generate-krs');
     Route::resource('students', StudentController::class);
     Route::get('students-data', function (StudentDataTable $dataTable) {
         return $dataTable->ajax();
