@@ -12,6 +12,7 @@ use App\DataTables\StudentDataTable;
 use App\Models\Student; 
 use App\Models\Program; 
 use App\Models\ClassEnrollment;
+use App\Models\AcademicYear;
 use App\Services\AutoEnrollmentService;
 
 class StudentController extends Controller
@@ -85,6 +86,24 @@ class StudentController extends Controller
 
     public function generateKrs(Student $student)
     {
+        // 1. Cek Tahun Ajaran Aktif
+        $activeYear = AcademicYear::where('is_active', true)->first();
+        if (!$activeYear) {
+            return back()->with('error', 'Tidak ada tahun ajaran aktif.');
+        }
+
+        // 2. Cek Pembayaran (Invoice Lunas)
+        // Cari invoice untuk mahasiswa ini di semester aktif dengan status 'paid'
+        $hasPaidInvoice = $student->academicInvoices()
+            ->where('academic_year_id', $activeYear->id)
+            ->where('status', 'paid')
+            ->exists();
+
+        if (!$hasPaidInvoice) {
+            return back()->with('error', 'Mahasiswa belum melunasi tagihan (Invoice) untuk semester ini. Silakan hubungi bagian keuangan.');
+        }
+
+        // 3. Proses Enroll
         $result = AutoEnrollmentService::enrollStudent($student);
 
         if ($result['status'] === 'success') {

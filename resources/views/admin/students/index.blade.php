@@ -19,11 +19,11 @@
     <div class="card card-outline card-primary">
         <div class="card-header">
             <h3 class="card-title">Filter Data Mahasiswa</h3>
-            <div class="card-tools">
+            {{-- <div class="card-tools">
                 <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-generate-krs-massal">
                     <i class="fas fa-magic mr-1"></i> Generate KRS Paket Massal
                 </button>
-            </div>
+            </div> --}}
         </div>
         <div class="card-body">
             <div class="row">
@@ -80,7 +80,7 @@
 @push('js')
     {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 
-    <livewire:admin.student.generate-krs-massal />
+    {{-- <livewire:admin.student.generate-krs-massal /> --}}
 
     <script type="module">
         $(function() {
