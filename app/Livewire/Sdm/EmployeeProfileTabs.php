@@ -133,6 +133,11 @@ class EmployeeProfileTabs extends Component
                 $data['certificate_path'] = $path;
             }
         } elseif ($this->activeTab === 'inpassing') {
+            // Convert empty dates to null
+            if (empty($data['sk_date'])) {
+                $data['sk_date'] = null;
+            }
+            
             if ($this->uploadFile) {
                 // Delete old document if updating
                 if ($this->editId) {
