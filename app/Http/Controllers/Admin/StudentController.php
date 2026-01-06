@@ -14,6 +14,7 @@ use App\Models\Program;
 use App\Models\ClassEnrollment;
 use App\Models\AcademicYear;
 use App\Services\AutoEnrollmentService;
+use App\Http\Requests\Admin\ImportStudentsRequest;
 
 class StudentController extends Controller
 {
@@ -61,10 +62,9 @@ class StudentController extends Controller
    
     }
 
-    public function importOld(Request $request)
+    public function importOld(ImportStudentsRequest $request)
     {
-        $request->validate(['import_file' => 'required|mimes:csv']);
-
+        // Validation and authorization handled by FormRequest
         try {
             Excel::import(new OldStudentsImport, $request->file('import_file'));
 
