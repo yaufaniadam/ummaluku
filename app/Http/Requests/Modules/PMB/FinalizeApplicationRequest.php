@@ -11,7 +11,9 @@ class FinalizeApplicationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        // Only users with PMB management permission can finalize
+        return $this->user()->hasPermission('manage pmb settings') || 
+               $this->user()->hasPermission('view applications');
     }
 
     /**
@@ -22,7 +24,32 @@ class FinalizeApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            // No additional validation needed - Application model binding handles existence
+            // Authorization is checked in authorize() and controller policy
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array
+     */
+    public function messages(): array
+    {
+        return [
+            // Add custom messages if needed in future
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes(): array
+    {
+        return [
+            // Add custom attributes if needed
         ];
     }
 }
