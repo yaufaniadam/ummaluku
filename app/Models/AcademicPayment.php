@@ -12,11 +12,21 @@ class AcademicPayment extends Model
     use HasFactory;
 
     /**
-     * The attributes that aren't mass assignable.
+     * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $fillable = [
+        'academic_invoice_id',
+        'amount',
+        'payment_date',
+        'payment_method',
+        'proof_path',
+        'status',
+        'verified_by',
+        'verified_at',
+        'rejection_reason',
+    ];
 
     /**
      * Mendapatkan invoice yang terhubung dengan pembayaran ini.

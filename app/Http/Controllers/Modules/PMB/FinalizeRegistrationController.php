@@ -21,7 +21,10 @@ class FinalizeRegistrationController extends Controller
     public function finalize(Application $application)
     {
         // 1. Pengecekan Keamanan: Pastikan pendaftar sudah diterima dan pembayaran lunas / partially paid.
-        if ($application->status !== 'diterima' && ($application->reRegistrationInvoice->status !== 'partially_paid' || $application->reRegistrationInvoice->status !== 'paid' ) ) {
+        $validPaymentStatuses = ['partially_paid', 'paid'];
+        
+        if ($application->status !== 'diterima' || 
+            !in_array($application->reRegistrationInvoice->status, $validPaymentStatuses)) {
             return back()->with('error', 'Pendaftar ini belum memenuhi syarat untuk difinalisasi.');
         }
 

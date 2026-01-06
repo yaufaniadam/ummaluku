@@ -11,7 +11,17 @@ class TransactionCategory extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = [];
+    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'type',
+        'description',
+    ];
 
     /**
      * Get the transactions for the category.

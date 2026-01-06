@@ -10,7 +10,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class FeeStructure extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $guarded = [];
+    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'fee_component_id',
+        'tuition_fee_id',
+        'amount',
+    ];
 
     public function feeComponent(): BelongsTo
     {
