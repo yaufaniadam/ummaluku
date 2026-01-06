@@ -17,7 +17,7 @@ class EmployeeProfileTabs extends Component
 
     public $employee; // Can be Lecturer or Staff (Polymorphic)
     public $isSelfService = false; // Flag to indicate if user is editing their own profile
-    public $activeTab = 'structural'; // structural, functional, rank, documents
+    public $activeTab = 'structural'; // structural, functional, rank, documents, education
 
     // Modal State
     public $isOpen = false;
@@ -61,6 +61,8 @@ class EmployeeProfileTabs extends Component
                 return $this->employee->rankHistories()->with('employeeRank')->latest('tmt')->get();
             case 'documents':
                 return $this->employee->employeeDocuments()->with('documentType')->latest()->get();
+            case 'education':
+                return $this->employee->educationHistories()->latest('graduation_year')->get();
             default:
                 return collect();
         }
@@ -116,6 +118,18 @@ class EmployeeProfileTabs extends Component
                 $data['file_path'] = $path;
                 $data['file_name'] = $this->uploadFile->getClientOriginalName();
             }
+        } elseif ($this->activeTab === 'education') {
+            if ($this->uploadFile) {
+                // Delete old certificate if updating
+                if ($this->editId) {
+                    $old = $this->employee->$relation()->find($this->editId);
+                    if ($old && $old->certificate_path) {
+                        \Illuminate\Support\Facades\Storage::delete($old->certificate_path);
+                    }
+                }
+                $path = $this->uploadFile->store('certificates', 'public');
+                $data['certificate_path'] = $path;
+            }
         }
 
         if ($this->editId) {
@@ -160,6 +174,7 @@ class EmployeeProfileTabs extends Component
             'functional' => 'functionalHistories',
             'rank' => 'rankHistories',
             'documents' => 'employeeDocuments',
+            'education' => 'educationHistories',
         };
     }
 
@@ -178,6 +193,8 @@ class EmployeeProfileTabs extends Component
             $this->formData += ['employee_rank_id' => '', 'sk_number' => '', 'tmt' => '', 'years_of_service' => 0, 'months_of_service' => 0];
         } elseif ($this->activeTab === 'documents') {
             $this->formData += ['employee_document_type_id' => '', 'description' => ''];
+        } elseif ($this->activeTab === 'education') {
+            $this->formData += ['education_level' => '', 'institution_name' => '', 'graduation_year' => '', 'major' => ''];
         }
     }
 
@@ -217,6 +234,18 @@ class EmployeeProfileTabs extends Component
             ];
             if (!$this->editId) {
                 $rules['uploadFile'] = 'required|file|max:10240'; // 10MB
+            }
+        } elseif ($this->activeTab === 'education') {
+            $rules = [
+                'formData.education_level' => 'required|in:SD,SMP,SMA,D3,D4,S1,S2,S3',
+                'formData.institution_name' => 'required|string|max:255',
+                'formData.graduation_year' => 'required|integer|min:1950|max:' . (date('Y') + 10),
+                'formData.major' => 'nullable|string|max:255',
+            ];
+            if (!$this->editId) {
+                $rules['uploadFile'] = 'nullable|file|mimes:pdf|max:5120'; // 5MB, PDF only
+            } else {
+                $rules['uploadFile'] = 'nullable|file|mimes:pdf|max:5120';
             }
         }
 

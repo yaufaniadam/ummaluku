@@ -108,15 +108,14 @@ class SdmSeeder extends Seeder
 
         // 5. Document Types
         $docs = [
-            ['name' => 'Ijazah S1', 'is_mandatory' => true],
-            ['name' => 'Transkrip Nilai S1', 'is_mandatory' => true],
-            ['name' => 'Ijazah S2', 'is_mandatory' => false],
-            ['name' => 'Transkrip Nilai S2', 'is_mandatory' => false],
-            ['name' => 'Ijazah S3', 'is_mandatory' => false],
-            ['name' => 'Transkrip Nilai S3', 'is_mandatory' => false],
             ['name' => 'KTP', 'is_mandatory' => true],
             ['name' => 'Kartu Keluarga', 'is_mandatory' => true],
             ['name' => 'NPWP', 'is_mandatory' => false],
+            ['name' => 'Passport', 'is_mandatory' => false],
+            ['name' => 'BPJS Kesehatan', 'is_mandatory' => false],
+            ['name' => 'BPJS Ketenagakerjaan', 'is_mandatory' => false],
+            ['name' => 'NBM (Nomor Buku Muhammadiyah)', 'is_mandatory' => false],
+            ['name' => 'NIDN', 'is_mandatory' => false],
             ['name' => 'SK Pengangkatan', 'is_mandatory' => true],
             ['name' => 'Sertifikat Pendidik (Serdos)', 'is_mandatory' => false],
             ['name' => 'Sertifikat Kompetensi', 'is_mandatory' => false],
