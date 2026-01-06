@@ -7,8 +7,8 @@ use App\Http\Controllers\Pendaftar\DocumentUploadController;
 use App\Http\Controllers\Pendaftar\ReRegistrationController;
 use App\Http\Controllers\Pendaftar\InstallmentPaymentController;
 
-// Untuk Calon Mahasiswa
-Route::middleware(['auth', 'role:Camaru'])->group(function () {
+// Untuk Calon Mahasiswa (termasuk yang sudah diterima tapi belum finalisasi)
+Route::middleware(['auth', 'role:Camaru|Mahasiswa', 'camaru.not_finalized'])->group(function () {
     Route::get('/camaru', [PendaftarDashboardController::class, 'showDashboard'])->name('pendaftar');
     Route::get('/camaru/biodata', [PendaftarBiodataController::class, 'showDashboard'])->name('pendaftar.biodata');
     Route::get('/camaru/upload-dokumen', [PendaftarBiodataController::class, 'showDocumentUploadForm'])->name('pendaftar.document.form');
