@@ -72,31 +72,14 @@ class FinalizeRegistrationController extends Controller
     }
 
     /**
-     * Logika untuk membuat NIM.
+     * Logika untuk membuat NIM menggunakan NimGeneratorService.
      * Contoh: 25(Tahun Masuk) . 11(Kode Prodi) . 001(No Urut)
      */
     private function generateNim(Application $application, int $programId): string
     {
-        // 1. Ambil tahun masuk (penuh, bukan hanya 2 digit)
-        $year = $application->batch->year;
-
-        // 2. Ambil objek program studi untuk mendapatkan kodenya
-        $program = Program::find($programId);
-        if (!$program || !$program->code) {
-            // Fallback jika kode prodi belum diatur
-            throw new \Exception('Kode untuk program studi ' . ($program->name_id ?? '') . ' belum diatur.');
-        }
-        $programCode = $program->code;
-
-        // 3. Hitung nomor urut mahasiswa di prodi dan tahun yang sama
-        $sequence = Student::where('entry_year', $year)
-            ->where('program_id', $programId)
-            ->count() + 1;
-
-        $sequentialNumber = str_pad($sequence, 3, '0', STR_PAD_LEFT);
-
-        // 4. Gabungkan semuanya sesuai format baru
-        return $year . $programCode . $sequentialNumber;
+        // Use service to handle race conditions with database locking
+        $nimGenerator = app(\App\Services\NimGeneratorService::class);
+        return $nimGenerator->generate($application, $programId);
     }
 
     /**
