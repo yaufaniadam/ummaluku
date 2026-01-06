@@ -14,11 +14,19 @@ class Lecturer extends Model
     use HasFactory, SoftDeletes, HasEmployeeHistory;
 
     /**
-     * The attributes that aren't mass assignable.
+     * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $fillable = [
+        'user_id',
+        'program_id',
+        'nidn',
+        'nip',
+        'full_name_with_degree',
+        'front_degree',
+        'back_degree',
+    ];
 
     /**
      * Get the user that owns the lecturer record.

@@ -10,7 +10,18 @@ class AcademicInvoiceItem extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'academic_invoice_id',
+        'fee_component_id',
+        'description',
+        'amount',
+    ];
 
     public function invoice(): BelongsTo
     {

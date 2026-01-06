@@ -10,7 +10,19 @@ class ProgramOfficial extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'program_id',
+        'lecturer_id',
+        'position',
+        'start_date',
+        'end_date',
+    ];
 
     protected $casts = [
         'start_date' => 'date',

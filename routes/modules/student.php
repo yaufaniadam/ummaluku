@@ -11,7 +11,7 @@ use App\Http\Controllers\Mahasiswa\HasilStudiController;
 Route::prefix('mahasiswa')->middleware(['auth', 'role:Mahasiswa'])->name('mahasiswa.')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('krs', [KrsController::class, 'index'])->name('krs.index');
-    Route::get('krs/proses', [KrsController::class, 'prosesKrs'])->name('krs.proses');
+    // Route::get('krs/proses', [KrsController::class, 'prosesKrs'])->name('krs.proses'); // Hidden as per request (Paket Flow)
     Route::get('profil', [MhsProfileController::class, 'index'])->name('profil.index');
     Route::get('keuangan', [KeuanganController::class, 'index'])->name('keuangan.index');
     Route::get('keuangan/re-registration', [KeuanganController::class, 'showReRegistration'])->name('keuangan.re-registration');

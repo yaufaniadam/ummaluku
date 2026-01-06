@@ -11,7 +11,22 @@ class Transaction extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'category_id',
+        'user_id',
+        'reference_type',
+        'reference_id',
+        'type',
+        'amount',
+        'description',
+        'transaction_date',
+        'notes',
+    ];
 
     protected $casts = [
         'transaction_date' => 'date',

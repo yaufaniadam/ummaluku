@@ -9,7 +9,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class FeeComponent extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'code',
+        'description',
+        'type',
+    ];
 
     public function feeStructures(): HasMany
     {
