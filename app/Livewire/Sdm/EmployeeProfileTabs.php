@@ -17,7 +17,7 @@ class EmployeeProfileTabs extends Component
 
     public $employee; // Can be Lecturer or Staff (Polymorphic)
     public $isSelfService = false; // Flag to indicate if user is editing their own profile
-    public $activeTab = 'structural'; // structural, functional, rank, documents, education
+    public $activeTab = 'structural'; // structural, functional, rank, documents, education, inpassing
 
     // Modal State
     public $isOpen = false;
@@ -63,6 +63,8 @@ class EmployeeProfileTabs extends Component
                 return $this->employee->employeeDocuments()->with('documentType')->latest()->get();
             case 'education':
                 return $this->employee->educationHistories()->latest('graduation_year')->get();
+            case 'inpassing':
+                return $this->employee->inpassingHistories()->with('employeeRank')->latest('tmt')->get();
             default:
                 return collect();
         }
@@ -130,6 +132,18 @@ class EmployeeProfileTabs extends Component
                 $path = $this->uploadFile->store('certificates', 'public');
                 $data['certificate_path'] = $path;
             }
+        } elseif ($this->activeTab === 'inpassing') {
+            if ($this->uploadFile) {
+                // Delete old document if updating
+                if ($this->editId) {
+                    $old = $this->employee->$relation()->find($this->editId);
+                    if ($old && $old->document_path) {
+                        \Illuminate\Support\Facades\Storage::delete($old->document_path);
+                    }
+                }
+                $path = $this->uploadFile->store('inpassing-documents', 'public');
+                $data['document_path'] = $path;
+            }
         }
 
         if ($this->editId) {
@@ -175,6 +189,7 @@ class EmployeeProfileTabs extends Component
             'rank' => 'rankHistories',
             'documents' => 'employeeDocuments',
             'education' => 'educationHistories',
+            'inpassing' => 'inpassingHistories',
         };
     }
 
@@ -195,6 +210,8 @@ class EmployeeProfileTabs extends Component
             $this->formData += ['employee_document_type_id' => '', 'description' => ''];
         } elseif ($this->activeTab === 'education') {
             $this->formData += ['education_level' => '', 'institution_name' => '', 'graduation_year' => '', 'major' => ''];
+        } elseif ($this->activeTab === 'inpassing') {
+            $this->formData += ['employee_rank_id' => '', 'sk_number' => '', 'sk_date' => '', 'tmt' => ''];
         }
     }
 
@@ -247,6 +264,15 @@ class EmployeeProfileTabs extends Component
             } else {
                 $rules['uploadFile'] = 'nullable|file|mimes:pdf|max:5120';
             }
+        } elseif ($this->activeTab === 'inpassing') {
+            $rules = [
+                'formData.employee_rank_id' => 'required|exists:employee_ranks,id',
+                'formData.sk_number' => 'nullable|string|max:255',
+                'formData.sk_date' => 'nullable|date',
+                'formData.tmt' => 'required|date',
+                'formData.is_active' => 'boolean',
+            ];
+            $rules['uploadFile'] = 'nullable|file|mimes:pdf|max:5120'; // 5MB, PDF only
         }
 
         $this->validate($rules);

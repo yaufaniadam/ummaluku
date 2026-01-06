@@ -74,4 +74,12 @@ class Lecturer extends Model
     {
         return $this->morphMany(EducationHistory::class, 'employee');
     }
+
+    /**
+     * Get all of the inpassing histories for this lecturer.
+     */
+    public function inpassingHistories(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
+        return $this->morphMany(EmployeeInpassingHistory::class, 'employee');
+    }
 }
