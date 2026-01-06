@@ -36,6 +36,9 @@ class StudentController extends Controller
 
     public function show(Student $student)
     {
+        // Authorization: Prevent IDOR - only allow authorized users to view student data
+        $this->authorize('view', $student);
+        
         // Eager load semua relasi yang dibutuhkan untuk ditampilkan
         $student->load(['user.prospective', 'program', 'academicAdvisor.user', 'enrollments.courseClass.course']);
         
@@ -86,6 +89,9 @@ class StudentController extends Controller
 
     public function generateKrs(Student $student)
     {
+        // Authorization: Ensure user has permission to generate KRS for this student
+        $this->authorize('generateKrs', $student);
+        
         // 1. Cek Tahun Ajaran Aktif
         $activeYear = AcademicYear::where('is_active', true)->first();
         if (!$activeYear) {

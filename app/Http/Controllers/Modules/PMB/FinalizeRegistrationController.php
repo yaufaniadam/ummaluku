@@ -20,6 +20,9 @@ class FinalizeRegistrationController extends Controller
      */
     public function finalize(Application $application)
     {
+        // Authorization: Only PMB staff can finalize applications
+        $this->authorize('finalize', $application);
+        
         // 1. Pengecekan Keamanan: Pastikan pendaftar sudah diterima dan pembayaran lunas / partially paid.
         $validPaymentStatuses = ['partially_paid', 'paid'];
         
