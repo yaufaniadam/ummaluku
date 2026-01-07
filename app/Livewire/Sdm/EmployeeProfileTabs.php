@@ -17,6 +17,7 @@ class EmployeeProfileTabs extends Component
 
     public $employee; // Can be Lecturer or Staff (Polymorphic)
     public $isSelfService = false; // Flag to indicate if user is editing their own profile
+    public $isReadOnly = false; // Flag for read-only view (e.g., executive dashboard)
     public $activeTab = 'structural'; // structural, functional, rank, documents, education, inpassing
 
     // Modal State
@@ -31,10 +32,11 @@ class EmployeeProfileTabs extends Component
 
     protected $listeners = ['refreshComponent' => '$refresh'];
 
-    public function mount($employee, $isSelfService = false)
+    public function mount($employee, $isSelfService = false, $isReadOnly = false)
     {
         $this->employee = $employee;
         $this->isSelfService = $isSelfService;
+        $this->isReadOnly = $isReadOnly;
         $this->resetForm();
     }
 
