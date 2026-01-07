@@ -3,18 +3,18 @@
 @section('title', 'Detail Dosen')
 
 @section('content_header')
-    <h1>Detail Dosen: {{ $lecturer->full_name_with_degree ?? $lecturer->user->name }}</h1>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Detail Dosen: {{ $lecturer->full_name_with_degree ?? $lecturer->user->name }}</h1>
+        <a href="{{ route('executive.lecturers.index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Kembali
+        </a>
+    </div>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-header">
             <h3 class="card-title"><i class="fas fa-user-tie mr-2"></i>Data Pribadi</h3>
-            <div class="card-tools">
-                <a href="{{ route('admin.sdm.lecturers.edit', $lecturer->id) }}" class="btn btn-primary btn-sm">
-                    <i class="fas fa-edit"></i> Edit Profil
-                </a>
-            </div>
         </div>
         <div class="card-body">
             <div class="row">
@@ -117,7 +117,7 @@
 
     {{-- Tabs Section Below Profile --}}
     <div class="mt-3">
-        @livewire('sdm.employee-profile-tabs', ['employee' => $lecturer])
+        @livewire('sdm.employee-profile-tabs', ['employee' => $lecturer, 'isReadOnly' => true])
     </div>
 @stop
 
@@ -128,8 +128,4 @@
             border: none !important;
         }
     </style>
-@stop
-
-@section('js')
-    {{-- Add any extra JS here --}}
 @stop

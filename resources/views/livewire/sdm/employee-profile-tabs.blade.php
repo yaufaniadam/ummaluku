@@ -26,6 +26,18 @@
                        <i class="fas fa-file-alt mr-1"></i> Dokumen
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ $activeTab === 'education' ? 'active' : '' }}"
+                       wire:click="setTab('education')" href="javascript:void(0)">
+                       <i class="fas fa-graduation-cap mr-1"></i> Riwayat Pendidikan
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ $activeTab === 'inpassing' ? 'active' : '' }}"
+                       wire:click="setTab('inpassing')" href="javascript:void(0)">
+                       <i class="fas fa-award mr-1"></i> Inpasing
+                    </a>
+                </li>
             </ul>
         </div>
         <div class="card-body">
@@ -36,7 +48,7 @@
                 </div>
             @endif
 
-            @if(!$isSelfService || ($isSelfService && $activeTab === 'documents'))
+            @if(!$isReadOnly && (!$isSelfService || ($isSelfService && $activeTab === 'documents')))
                 <button wire:click="create" class="btn btn-primary btn-sm mb-3">
                     <i class="fas fa-plus"></i> Tambah Data
                 </button>
@@ -78,6 +90,24 @@
                                 <th>Nama File</th>
                                 <th>Deskripsi</th>
                                 <th>Tgl Upload</th>
+                                <th>Aksi</th>
+                            </tr>
+                        @elseif ($activeTab === 'education')
+                            <tr>
+                                <th>Jenjang</th>
+                                <th>Institusi</th>
+                                <th>Tahun Lulus</th>
+                                <th>Jurusan</th>
+                                <th>Ijazah</th>
+                                <th>Aksi</th>
+                            </tr>
+                        @elseif ($activeTab === 'inpassing')
+                            <tr>
+                                <th>Kepangkatan</th>
+                                <th>No. SK</th>
+                                <th>Tgl. SK</th>
+                                <th>TMT</th>
+                                <th>Dokumen SK</th>
                                 <th>Aksi</th>
                             </tr>
                         @endif
@@ -124,16 +154,48 @@
                                     </td>
                                     <td>{{ $item->description }}</td>
                                     <td>{{ $item->created_at->format('d M Y H:i') }}</td>
+                                @elseif ($activeTab === 'education')
+                                    <td>
+                                        <span class="badge badge-primary">{{ $item->education_level }}</span>
+                                    </td>
+                                    <td>{{ $item->institution_name }}</td>
+                                    <td>{{ $item->graduation_year }}</td>
+                                    <td>{{ $item->major ?? '-' }}</td>
+                                    <td>
+                                        @if($item->certificate_path)
+                                            <a href="{{ Storage::url($item->certificate_path) }}" target="_blank" class="btn btn-sm btn-info">
+                                                <i class="fas fa-file-pdf"></i> Lihat
+                                            </a>
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
+                                @elseif ($activeTab === 'inpassing')
+                                    <td>{{ $item->employeeRank->name }} ({{ $item->employeeRank->grade }})</td>
+                                    <td>{{ $item->sk_number ?? '-' }}</td>
+                                    <td>{{ $item->sk_date ? $item->sk_date->format('d-m-Y') : '-' }}</td>
+                                    <td>{{ $item->tmt ? $item->tmt->format('d-m-Y') : '-' }}</td>
+                                    <td>
+                                        @if($item->document_path)
+                                            <a href="{{ Storage::url($item->document_path) }}" target="_blank" class="btn btn-sm btn-info">
+                                                <i class="fas fa-file-pdf"></i> Download
+                                            </a>
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
                                 @endif
 
                                 <td>
-                                    @if(!$isSelfService || ($isSelfService && $activeTab === 'documents'))
+                                    @if(!$isReadOnly && (!$isSelfService || ($isSelfService && $activeTab === 'documents')))
                                         <button wire:click="edit({{ $item->id }})" class="btn btn-xs btn-warning">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button wire:click="confirmDelete({{ $item->id }})" class="btn btn-xs btn-danger">
                                             <i class="fas fa-trash"></i>
                                         </button>
+                                    @else
+                                        <span class="text-muted">-</span>
                                     @endif
                                 </td>
                             </tr>
@@ -292,6 +354,131 @@
                                 <div class="form-group">
                                     <label>Deskripsi/Keterangan</label>
                                     <textarea class="form-control" wire:model="formData.description"></textarea>
+                                </div>
+
+                            {{-- Education Form --}}
+                            @elseif ($activeTab === 'education')
+                                <div class="row">
+                                    <div class="col-md-6 form-group">
+                                        <label>Jenjang Pendidikan <span class="text-danger">*</span></label>
+                                        <select class="form-control @error('formData.education_level') is-invalid @enderror"
+                                                wire:model="formData.education_level">
+                                            <option value="">Pilih Jenjang...</option>
+                                            <option value="SD">SD</option>
+                                            <option value="SMP">SMP</option>
+                                            <option value="SMA">SMA</option>
+                                            <option value="D3">D3</option>
+                                            <option value="D4">D4</option>
+                                            <option value="S1">S1</option>
+                                            <option value="S2">S2</option>
+                                            <option value="S3">S3</option>
+                                        </select>
+                                        @error('formData.education_level') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <div class="col-md-6 form-group">
+                                        <label>Tahun Lulus <span class="text-danger">*</span></label>
+                                        <input type="number" min="1950" max="{{ date('Y') + 10 }}"
+                                               class="form-control @error('formData.graduation_year') is-invalid @enderror"
+                                               wire:model="formData.graduation_year"
+                                               placeholder="{{ date('Y') }}">
+                                        @error('formData.graduation_year') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <div class="col-md-12 form-group">
+                                        <label>Nama Institusi <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control @error('formData.institution_name') is-invalid @enderror"
+                                               wire:model="formData.institution_name"
+                                               placeholder="Contoh: Universitas Indonesia">
+                                        @error('formData.institution_name') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <div class="col-md-12 form-group">
+                                        <label>Jurusan/Bidang Studi</label>
+                                        <input type="text" class="form-control @error('formData.major') is-invalid @enderror"
+                                               wire:model="formData.major"
+                                               placeholder="Contoh: Teknik Informatika (opsional)">
+                                        @error('formData.major') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <div class="col-md-12 form-group">
+                                        <label>Upload Ijazah (PDF)</label>
+                                        <input type="file" accept=".pdf"
+                                               class="form-control-file @error('uploadFile') is-invalid @enderror"
+                                               wire:model="uploadFile">
+                                        <small class="form-text text-muted">Format: PDF, Max 5MB (Opsional)</small>
+                                        @error('uploadFile') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
+                                        
+                                        @if($editId && $formData['certificate_path'] ?? false)
+                                            <div class="mt-2">
+                                                <small class="text-info">
+                                                    <i class="fas fa-info-circle"></i> Ijazah saat ini: 
+                                                    <a href="{{ Storage::url($formData['certificate_path']) }}" target="_blank">Lihat <i class="fas fa-external-link-alt"></i></a>
+                                                </small>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                            {{-- Inpasing Form --}}
+                            @elseif ($activeTab === 'inpassing')
+                                <div class="row">
+                                    <div class="col-md-6 form-group">
+                                        <label>Pangkat/Golongan <span class="text-danger">*</span></label>
+                                        <select class="form-control @error('formData.employee_rank_id') is-invalid @enderror"
+                                                wire:model="formData.employee_rank_id">
+                                            <option value="">Pilih...</option>
+                                            @foreach ($ranks as $rank)
+                                                <option value="{{ $rank->id }}">{{ $rank->grade }} - {{ $rank->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('formData.employee_rank_id') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <div class="col-md-6 form-group">
+                                        <label>Nomor SK</label>
+                                        <input type="text" class="form-control @error('formData.sk_number') is-invalid @enderror"
+                                               wire:model="formData.sk_number"
+                                               placeholder="Nomor SK (opsional)">
+                                        @error('formData.sk_number') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <div class="col-md-6 form-group">
+                                        <label>Tanggal SK</label>
+                                        <input type="date" class="form-control @error('formData.sk_date') is-invalid @enderror"
+                                               wire:model="formData.sk_date">
+                                        @error('formData.sk_date') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <div class="col-md-6 form-group">
+                                        <label>TMT (Terhitung Mulai Tanggal) <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control @error('formData.tmt') is-invalid @enderror"
+                                               wire:model="formData.tmt">
+                                        @error('formData.tmt') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <div class="col-md-12 form-group">
+                                        <label>Upload Dokumen SK (PDF)</label>
+                                        <input type="file" accept=".pdf"
+                                               class="form-control-file @error('uploadFile') is-invalid @enderror"
+                                               wire:model="uploadFile">
+                                        <small class="form-text text-muted">Format: PDF, Max 5MB (Opsional)</small>
+                                        @error('uploadFile') <span class="invalid-feedback d-block">{{ $message }}</span> @enderror
+                                        
+                                        @if($editId && $formData['document_path'] ?? false)
+                                            <div class="mt-2">
+                                                <small class="text-info">
+                                                    <i class="fas fa-info-circle"></i> Dokumen saat ini: 
+                                                    <a href="{{ Storage::url($formData['document_path']) }}" target="_blank">Lihat <i class="fas fa-external-link-alt"></i></a>
+                                                </small>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <div class="col-md-12 form-check">
+                                        <input type="checkbox" class="form-check-input" id="isActive" wire:model="formData.is_active">
+                                        <label class="form-check-label" for="isActive">Aktif</label>
+                                    </div>
                                 </div>
                             @endif
 

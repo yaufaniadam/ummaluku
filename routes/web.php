@@ -52,6 +52,7 @@ Route::get('/admisi/{category:slug}', [PendaftaranController::class, 'showCatego
 
 // Load Module Routes
 require __DIR__ . '/modules/admin.php';
+require __DIR__ . '/modules/executive.php'; // Executive subdomain
 require __DIR__ . '/modules/student.php';
 require __DIR__ . '/modules/lecturer.php';
 require __DIR__ . '/modules/camaru.php';
