@@ -13,14 +13,17 @@ class Index extends Component
 
     public $search = '';
 
-    // Edit Modal Properties
-    public $editProgramId;
-    public $editNameId;
-    public $editNameEn;
-    public $editCode;
-    public $editDegree;
-    public $editFacultyId;
-    public $showEditModal = false;
+    // Modal Properties
+    public $showModal = false;
+    public $isEdit = false;
+
+    // Form Properties
+    public $programId;
+    public $nameId;
+    public $nameEn;
+    public $code;
+    public $degree;
+    public $facultyId;
 
     protected $listeners = ['refreshTable' => '$refresh'];
 
@@ -37,49 +40,67 @@ class Index extends Component
         ])->extends('adminlte::page')->section('content');
     }
 
+    public function create()
+    {
+        $this->reset(['programId', 'nameId', 'nameEn', 'code', 'degree', 'facultyId']);
+        $this->isEdit = false;
+        $this->showModal = true;
+    }
+
     public function edit($id)
     {
         $program = Program::findOrFail($id);
-        $this->editProgramId = $program->id;
-        $this->editNameId = $program->name_id;
-        $this->editNameEn = $program->name_en;
-        $this->editCode = $program->code;
-        $this->editDegree = $program->degree;
-        $this->editFacultyId = $program->faculty_id;
+        $this->programId = $program->id;
+        $this->nameId = $program->name_id;
+        $this->nameEn = $program->name_en;
+        $this->code = $program->code;
+        $this->degree = $program->degree;
+        $this->facultyId = $program->faculty_id;
 
-        $this->showEditModal = true;
+        $this->isEdit = true;
+        $this->showModal = true;
     }
 
-    public function update()
+    public function save()
     {
-        $this->validate([
-            'editNameId' => 'required|string|max:255',
-            'editCode' => 'nullable|string|max:4|unique:programs,code,' . $this->editProgramId,
-            'editDegree' => 'required|string',
-            'editFacultyId' => 'required|exists:faculties,id',
-        ]);
+        $rules = [
+            'nameId' => 'required|string|max:255',
+            'nameEn' => 'nullable|string|max:255',
+            'code' => 'required|string|max:10|unique:programs,code,' . ($this->programId ?? 'NULL'),
+            'degree' => 'required|string',
+            'facultyId' => 'required|exists:faculties,id',
+        ];
 
-        $program = Program::findOrFail($this->editProgramId);
-        $program->update([
-            'name_id' => $this->editNameId,
-            'name_en' => $this->editNameEn,
-            'code' => $this->editCode,
-            'degree' => $this->editDegree,
-            'faculty_id' => $this->editFacultyId,
-        ]);
+        $this->validate($rules);
 
-        $this->showEditModal = false;
-        $this->reset(['editProgramId', 'editNameId', 'editNameEn', 'editCode', 'editDegree', 'editFacultyId']);
+        if ($this->isEdit) {
+            $program = Program::findOrFail($this->programId);
+            $program->update([
+                'name_id' => $this->nameId,
+                'name_en' => $this->nameEn,
+                'code' => $this->code,
+                'degree' => $this->degree,
+                'faculty_id' => $this->facultyId,
+            ]);
+            session()->flash('success', 'Program Studi berhasil diperbarui.');
+        } else {
+            Program::create([
+                'name_id' => $this->nameId,
+                'name_en' => $this->nameEn,
+                'code' => $this->code,
+                'degree' => $this->degree,
+                'faculty_id' => $this->facultyId,
+            ]);
+            session()->flash('success', 'Program Studi berhasil ditambahkan.');
+        }
 
-        // Ensure modal closes in UI
+        $this->closeModal();
+    }
+
+    public function closeModal()
+    {
+        $this->showModal = false;
+        $this->reset(['programId', 'nameId', 'nameEn', 'code', 'degree', 'facultyId', 'isEdit']);
         $this->dispatch('close-modal');
-
-        session()->flash('success', 'Program Studi berhasil diperbarui.');
-    }
-
-    public function cancelEdit()
-    {
-        $this->showEditModal = false;
-        $this->reset(['editProgramId', 'editNameId', 'editNameEn', 'editCode', 'editDegree', 'editFacultyId']);
     }
 }
