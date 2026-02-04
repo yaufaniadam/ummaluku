@@ -61,21 +61,7 @@
                 </div>
             </div>
 
-            <!-- Administrator -->
-            <div class="col-md-6 col-lg-3 mb-4">
-                <div class="card h-100 shadow-sm border-0 hover-lift text-center">
-                    <div class="card-body p-4">
-                        <div class="icon-box bg-dark text-white rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <i class="bi bi-gear"></i>
-                        </div>
-                        <h5 class="card-title fw-bold">Administrator</h5>
-                        <p class="card-text text-muted small">Panel pengelolaan sistem informasi akademik.</p>
-                        <div class="d-grid">
-                            <a href="{{ route('login.admin') }}" class="btn btn-dark">Login Admin</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
 
         <div class="text-center mt-5 text-muted small">
