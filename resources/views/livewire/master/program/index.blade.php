@@ -8,7 +8,14 @@
         <div class="card-header">
             <h3 class="card-title">Daftar Program Studi</h3>
             <div class="card-tools">
-                <input type="text" wire:model.live="search" class="form-control form-control-sm" placeholder="Cari Prodi...">
+                <div class="input-group input-group-sm" style="width: 250px;">
+                    <input type="text" wire:model.live="search" class="form-control float-right" placeholder="Cari Prodi...">
+                    <div class="input-group-append">
+                        <button wire:click="create" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Tambah
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card-body table-responsive p-0">
@@ -67,37 +74,37 @@
         </div>
     </div>
 
-    <!-- Edit Modal -->
-    @if($showEditModal)
+    <!-- Form Modal -->
+    @if($showModal)
         <div class="modal fade show" style="display: block; padding-right: 17px;" aria-modal="true" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Edit Program Studi</h4>
-                        <button type="button" class="close" wire:click="cancelEdit" aria-label="Close">
+                        <h4 class="modal-title">{{ $isEdit ? 'Edit Program Studi' : 'Tambah Program Studi' }}</h4>
+                        <button type="button" class="close" wire:click="closeModal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <form wire:submit.prevent="update">
+                    <form wire:submit.prevent="save">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="editCode">Kode</label>
-                                <input type="text" class="form-control @error('editCode') is-invalid @enderror" id="editCode" wire:model="editCode">
-                                @error('editCode') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                <label for="code">Kode</label>
+                                <input type="text" class="form-control @error('code') is-invalid @enderror" id="code" wire:model="code">
+                                @error('code') <span class="invalid-feedback">{{ $message }}</span> @enderror
                             </div>
                             <div class="form-group">
-                                <label for="editNameId">Nama (ID)</label>
-                                <input type="text" class="form-control @error('editNameId') is-invalid @enderror" id="editNameId" wire:model="editNameId">
-                                @error('editNameId') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                <label for="nameId">Nama (ID)</label>
+                                <input type="text" class="form-control @error('nameId') is-invalid @enderror" id="nameId" wire:model="nameId">
+                                @error('nameId') <span class="invalid-feedback">{{ $message }}</span> @enderror
                             </div>
                             <div class="form-group">
-                                <label for="editNameEn">Nama (EN)</label>
-                                <input type="text" class="form-control @error('editNameEn') is-invalid @enderror" id="editNameEn" wire:model="editNameEn">
-                                @error('editNameEn') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                <label for="nameEn">Nama (EN)</label>
+                                <input type="text" class="form-control @error('nameEn') is-invalid @enderror" id="nameEn" wire:model="nameEn">
+                                @error('nameEn') <span class="invalid-feedback">{{ $message }}</span> @enderror
                             </div>
                             <div class="form-group">
-                                <label for="editDegree">Jenjang</label>
-                                <select class="form-control @error('editDegree') is-invalid @enderror" id="editDegree" wire:model="editDegree">
+                                <label for="degree">Jenjang</label>
+                                <select class="form-control @error('degree') is-invalid @enderror" id="degree" wire:model="degree">
                                     <option value="">-- Pilih Jenjang --</option>
                                     <option value="D3">D3</option>
                                     <option value="D4">D4</option>
@@ -106,22 +113,22 @@
                                     <option value="S3">S3</option>
                                     <option value="Profesi">Profesi</option>
                                 </select>
-                                @error('editDegree') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                @error('degree') <span class="invalid-feedback">{{ $message }}</span> @enderror
                             </div>
                             <div class="form-group">
-                                <label for="editFacultyId">Fakultas</label>
-                                <select class="form-control @error('editFacultyId') is-invalid @enderror" id="editFacultyId" wire:model="editFacultyId">
+                                <label for="facultyId">Fakultas</label>
+                                <select class="form-control @error('facultyId') is-invalid @enderror" id="facultyId" wire:model="facultyId">
                                     <option value="">-- Pilih Fakultas --</option>
                                     @foreach($faculties as $faculty)
-                                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                                        <option value="{{ $faculty->id }}">{{ $faculty->name_id }}</option>
                                     @endforeach
                                 </select>
-                                @error('editFacultyId') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                @error('facultyId') <span class="invalid-feedback">{{ $message }}</span> @enderror
                             </div>
                         </div>
                         <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" wire:click="cancelEdit">Batal</button>
-                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                            <button type="button" class="btn btn-default" wire:click="closeModal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </form>
                 </div>
