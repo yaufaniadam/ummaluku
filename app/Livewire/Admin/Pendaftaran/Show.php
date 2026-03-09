@@ -12,6 +12,59 @@ class Show extends Component
     // berkat Route Model Binding
     public Application $application;
 
+    protected $listeners = ['document-status-updated' => 'refreshApplication'];
+
+    public function refreshApplication()
+    {
+        $this->application->refresh();
+        $this->application->load('documents');
+    }
+
+    public function getHasUnverifiedDocumentsProperty()
+    {
+        return $this->application->documents()->where('status', '!=', 'verified')->exists();
+    }
+
+    public function getReadyToPassProperty()
+    {
+        // Gunakan koleksi yang sudah diload untuk menghindari query tambahan
+        $documents = $this->application->documents;
+
+        // 1. Cek apakah ada dokumen yang statusnya bukan verified (pending, revision_needed, rejected)
+        if ($documents->where('status', '!=', 'verified')->isNotEmpty()) {
+            return false;
+        }
+
+        // 2. Cek apakah ada dokumen wajib yang belum diunggah sama sekali
+        $requiredDocuments = $this->application->admissionCategory->documentRequirements;
+        $uploadedRequirementIds = $documents->pluck('document_requirement_id');
+
+        foreach ($requiredDocuments as $requirement) {
+            if ($requirement->is_mandatory && !$uploadedRequirementIds->contains($requirement->id)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function getCanRejectProperty()
+    {
+        $documents = $this->application->documents;
+
+        // 1. Pastikan tidak ada dokumen pending (verifikasi harus selesai)
+        if ($documents->where('status', 'pending')->isNotEmpty()) {
+            return false;
+        }
+
+        // 2. Pastikan minimal ada satu dokumen yang ditolak atau perlu revisi
+        if ($documents->whereIn('status', ['rejected', 'revision_needed'])->isEmpty()) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function mount(Application $application)
     {
         // Kita tambahkan relasi baru untuk dimuat di sini
@@ -70,6 +123,14 @@ class Show extends Component
 
     public function finalizeVerification()
     {
+        // 1. Cek apakah ada dokumen yang belum terverifikasi
+        if ($this->hasUnverifiedDocuments) {
+            $this->dispatch('show-alert', [
+                'type' => 'error',
+                'message' => 'Gagal! Masih ada dokumen yang belum sesuai atau belum terverifikasi.'
+            ]);
+            return;
+        }
 
         $requiredDocuments = $this->application->admissionCategory->documentRequirements;
         $verifiedDocuments = $this->application->documents()->where('status', 'verified')->pluck('document_requirement_id');
@@ -89,12 +150,7 @@ class Show extends Component
         $this->application->update(['status' => 'lolos_verifikasi_data']);
 
         // Ganti dengan perintah redirect
-        return redirect()->route('admin.seleksi.index')->with('success', 'Verifikasi Selesai! Pendaftar berhasil diloloskan ke tahap seleksi.');
-
-        // $this->dispatch('show-alert', [
-        //     'type' => 'success', 
-        //     'message' => 'Verifikasi Selesai! Pendaftar berhasil diloloskan ke tahap seleksi.'
-        // ]);
+        return redirect()->route('admin.pmb.seleksi.index')->with('success', 'Verifikasi Selesai! Pendaftar berhasil diloloskan ke tahap seleksi.');
     }
 
     public function rejectApplication($reason)
@@ -110,7 +166,7 @@ class Show extends Component
 
         // 2. Update status aplikasi dan simpan alasan penolakan
         $this->application->update([
-            'status' => 'documents_rejected',
+            'status' => 'dokumen_ditolak',
             'rejection_reason' => $reason
         ]);
 
@@ -126,6 +182,8 @@ class Show extends Component
 
     public function render()
     {
-        return view('livewire.admin.pendaftaran.show');
+        return view('livewire.admin.pendaftaran.show')
+            ->extends('adminlte::page')
+            ->section('content');
     }
 }

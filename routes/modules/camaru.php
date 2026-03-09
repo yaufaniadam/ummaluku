@@ -7,8 +7,8 @@ use App\Http\Controllers\Pendaftar\DocumentUploadController;
 use App\Http\Controllers\Pendaftar\ReRegistrationController;
 use App\Http\Controllers\Pendaftar\InstallmentPaymentController;
 
-// Untuk Calon Mahasiswa
-Route::middleware(['auth', 'role:Camaru'])->group(function () {
+// Untuk Calon Mahasiswa (termasuk yang sudah diterima tapi belum finalisasi)
+Route::middleware(['auth', 'role:Camaru|Mahasiswa', 'camaru.not_finalized'])->group(function () {
     Route::get('/camaru', [PendaftarDashboardController::class, 'showDashboard'])->name('pendaftar');
     Route::get('/camaru/biodata', [PendaftarBiodataController::class, 'showDashboard'])->name('pendaftar.biodata');
     Route::get('/camaru/upload-dokumen', [PendaftarBiodataController::class, 'showDocumentUploadForm'])->name('pendaftar.document.form');
@@ -16,4 +16,8 @@ Route::middleware(['auth', 'role:Camaru'])->group(function () {
     Route::get('/camaru/registrasi', [ReRegistrationController::class, 'show'])->name('pendaftar.registrasi');
     Route::post('/camaru/registrasi/pilih-skema', [ReRegistrationController::class, 'choosePaymentScheme'])->name('pendaftar.registrasi.scheme');
     Route::post('/camaru/pembayaran-cicilan/{installment}', [InstallmentPaymentController::class, 'store'])->name('pendaftar.installment.store');
+
+    // Route untuk mendaftar kembali (re-apply)
+    Route::get('/camaru/reapply', [PendaftarDashboardController::class, 'showReApplyForm'])->name('pendaftar.reapply.form');
+    Route::post('/camaru/reapply', [PendaftarDashboardController::class, 'storeReApply'])->name('pendaftar.reapply.store');
 });

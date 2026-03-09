@@ -16,12 +16,14 @@ class StaffDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function(Staff $row){
+                $showUrl = route('admin.sdm.staff.show', $row->id);
                 $editUrl = route('admin.sdm.staff.edit', $row->id);
                 $csrf = csrf_field();
                 $method = method_field('DELETE');
                 $actionUrl = route('admin.sdm.staff.destroy', $row->id);
 
-                $buttons = '<a href="' . $editUrl . '" class="btn btn-primary btn-sm">Edit</a> ';
+                $buttons = '<a href="' . $showUrl . '" class="btn btn-info btn-sm">Detail</a> ';
+                $buttons .= '<a href="' . $editUrl . '" class="btn btn-primary btn-sm">Edit</a> ';
                 $buttons .= '<form action="'.$actionUrl.'" method="POST" class="d-inline" onsubmit="return confirm(\'Apakah Anda yakin?\')">
                                 '.$csrf.'
                                 '.$method.'

@@ -56,6 +56,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Executive Subdomain
+    |--------------------------------------------------------------------------
+    |
+    | Define the executive subdomain for multi-subdomain routing.
+    | This allows executive dashboard to be accessed via subdomain.
+    | Example: executive.ummaluku.test or executive.yourdomain.com
+    |
+    */
+
+    'executive_domain' => env('EXECUTIVE_DOMAIN', 'executive.ummaluku.test'),
+
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |

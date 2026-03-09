@@ -10,10 +10,16 @@ use App\Models\Program;
 use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Lecturer;
+use App\Services\CourseClassService;
 
 class CourseClassController extends Controller
 {
-    // app/Http/Controllers/Admin/CourseClassController.php
+    protected $courseClassService;
+
+    public function __construct(CourseClassService $courseClassService)
+    {
+        $this->courseClassService = $courseClassService;
+    }
 
     public function index(AcademicYear $academicYear, Program $program)
     {
@@ -73,13 +79,20 @@ class CourseClassController extends Controller
         // Ambil daftar dosen dari prodi ini (logika ini tetap sama)
         $lecturers = Lecturer::where('program_id', 'like', "%{$program->id}%")->orderBy('full_name_with_degree')->get();
 
+        // --- DATA UNTUK FITUR COPY --
+        // Ambil tahun ajaran lain untuk opsi copy (kecuali tahun ini)
+        $previousAcademicYears = AcademicYear::where('id', '!=', $academicYear->id)
+            ->orderBy('year_code', 'desc')
+            ->get();
+
         return view('admin.course-classes.index', compact(
             'academicYear',
             'program',
             'availableCourses',
             'createdClassesBySemester',
             'lecturers',
-            'activeCurriculum' // Kirim data kurikulum aktif ke view untuk info
+            'activeCurriculum', // Kirim data kurikulum aktif ke view untuk info
+            'previousAcademicYears'
         ));
     }
 
@@ -108,7 +121,6 @@ class CourseClassController extends Controller
         return back()->with('success', 'Kelas untuk mata kuliah ' . $course->name . ' berhasil dibuat.');
     }
 
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -118,5 +130,33 @@ class CourseClassController extends Controller
         $courseClass = CourseClass::findOrFail($course_class_id);
 
         return view('admin.course-classes.edit', compact('academicYear', 'program', 'courseClass'));
+    }
+
+    public function autoGenerate(AcademicYear $academicYear, Program $program)
+    {
+        $count = $this->courseClassService->autoGenerateClasses($academicYear, $program);
+
+        if ($count > 0) {
+            return back()->with('success', $count . ' kelas berhasil dibuat secara otomatis dari kurikulum.');
+        } else {
+            return back()->with('warning', 'Tidak ada kelas baru yang dibuat. Mungkin semua kelas sudah ada atau kurikulum tidak aktif.');
+        }
+    }
+
+    public function copyFromPrevious(Request $request, AcademicYear $academicYear, Program $program)
+    {
+        $request->validate([
+            'source_academic_year_id' => 'required|exists:academic_years,id',
+        ]);
+
+        $sourceYear = AcademicYear::findOrFail($request->source_academic_year_id);
+
+        $count = $this->courseClassService->copyClassesFromPreviousYear($academicYear, $sourceYear, $program);
+
+        if ($count > 0) {
+            return back()->with('success', $count . ' kelas berhasil disalin dari ' . $sourceYear->name . '.');
+        } else {
+            return back()->with('warning', 'Tidak ada kelas yang disalin. Mungkin kelas sudah ada di tahun ajaran ini.');
+        }
     }
 }

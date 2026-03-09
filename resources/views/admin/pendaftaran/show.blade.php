@@ -1,6 +1,6 @@
 
 <div>
-  <div class="card mt-3">
+  <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Verifikasi Dokumen Persyaratan</h3>
                 </div>

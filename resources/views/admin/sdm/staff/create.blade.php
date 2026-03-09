@@ -90,10 +90,45 @@
                                     @enderror
                                 </div>
 
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label>Tempat Lahir</label>
+                                        <input type="text" name="birth_place" class="form-control @error('birth_place') is-invalid @enderror" value="{{ old('birth_place') }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Tanggal Lahir</label>
+                                        <input type="date" name="birth_date" class="form-control @error('birth_date') is-invalid @enderror" value="{{ old('birth_date') }}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label>Nama Bank</label>
+                                        <input type="text" name="bank_name" class="form-control @error('bank_name') is-invalid @enderror" value="{{ old('bank_name') }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>No. Rekening</label>
+                                        <input type="text" name="account_number" class="form-control @error('account_number') is-invalid @enderror" value="{{ old('account_number') }}">
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="address">Alamat</label>
                                     <textarea name="address" class="form-control @error('address') is-invalid @enderror" rows="2">{{ old('address') }}</textarea>
                                     @error('address')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Status Kepegawaian</label>
+                                    <select name="employment_status_id" class="form-control @error('employment_status_id') is-invalid @enderror">
+                                        <option value="">-- Pilih Status --</option>
+                                        @foreach($employmentStatuses as $status)
+                                            <option value="{{ $status->id }}" {{ old('employment_status_id') == $status->id ? 'selected' : '' }}>{{ $status->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('employment_status_id')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>

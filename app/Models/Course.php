@@ -14,11 +14,18 @@ class Course extends Model
     use HasFactory, SoftDeletes;
 
     /**
-     * The attributes that aren't mass assignable.
+     * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $fillable = [
+        'program_id',
+        'code',
+        'name',
+        'sks',
+        'type',
+        'description',
+    ];
 
     /**
      * Get the curriculum that owns the course.

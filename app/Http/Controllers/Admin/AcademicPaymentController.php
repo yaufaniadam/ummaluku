@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\DataTables\AcademicInvoiceDataTable;
 use App\Models\AcademicPayment; 
+use App\Services\TransactionService;
 use Illuminate\Support\Facades\Auth;
 
 class AcademicPaymentController extends Controller
@@ -33,6 +34,13 @@ class AcademicPaymentController extends Controller
 
         // Update status mahasiswa menjadi 'active'
         $invoice->student->update(['status' => 'active']);
+
+        // --- BARIS BARU: Buat Transaksi Masuk (Auto-Sync) ---
+        TransactionService::recordPayment(
+            $payment,
+            $payment->amount,
+            'Pembayaran Invoice #' . $invoice->invoice_number . ' oleh ' . $invoice->student->name
+        );
 
         // Kirim notifikasi ke mahasiswa (bisa ditambahkan nanti)
 

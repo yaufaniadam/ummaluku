@@ -39,10 +39,10 @@ class FormPendaftaran extends Component
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'phone' => 'required|numeric|digits_between:10,15',
+            'phone' => 'required|numeric|digits_between:10,15|different:parent_phone',
             'birth_date' => 'required|date',
             'gender' => 'required|in:Laki-laki,Perempuan',
-            'parent_phone' => 'required|string|regex:/^[0-9]+$/|between:10,15',
+            'parent_phone' => 'required|string|regex:/^[0-9]+$/|between:10,15|different:phone',
             'program_choice_1' => 'required|exists:programs,id',
             'program_choice_2' => 'nullable|exists:programs,id|different:program_choice_1',
             'birth_place' => 'required|string|max:255',           
@@ -55,16 +55,18 @@ class FormPendaftaran extends Component
         return [
             'name.required' => 'Mohon isi nama lengkap Anda sesuai ijazah.',
             'email.required' => 'Alamat email wajib diisi.',
-            'email.unique' => 'Alamat email ini sudah pernah digunakan untuk mendaftar.',
+            'email.unique' => 'Email ini sudah terdaftar. Jika Anda sebelumnya tidak diterima dan ingin mendaftar kembali, silakan Login.',
             'birth_date.required' => 'Tanggal lahir wajib diisi.',
             'birth_place.required' => 'Tempat lahir wajib diisi.',
             'gender.required' => 'Jenis kelamin wajib diisi.',
             'phone.required' => 'Nomor telepon wajib diisi.',
             'phone.regex' => 'Nomor telepon harus berupa angka.',
             'phone.between' => 'Nomor telepon minimal 10 digit dan maksimal 15 digit.',
+            'phone.different' => 'Nomor telepon calon mahasiswa tidak boleh sama dengan nomor telepon orang tua.',
             'parent_phone.required' => 'Nomor telepon Orang Tua / Wali wajib diisi.',
             'parent_phone.regex' => 'Nomor telepon harus berupa angka.',
             'parent_phone.between' => 'Nomor telepon minimal 10 digit dan maksimal 15 digit.',
+            'parent_phone.different' => 'Nomor telepon orang tua tidak boleh sama dengan nomor telepon calon mahasiswa.',
             'program_choice_1.required' => 'Anda harus memilih minimal satu Program Studi.',
             'program_choice_2.different' => 'Anda harus memilih program studi yang berbeda.',
         ];
@@ -82,7 +84,7 @@ class FormPendaftaran extends Component
     {
         if ($categorySlug) {
             // Cari kategori pendaftaran di database berdasarkan slug-nya
-            $this->selectedCategory = AdmissionCategory::where('slug', $categorySlug)->first();
+            $this->selectedCategory = AdmissionCategory::where('slug', $categorySlug)->with('programs')->first();
         }
 
         if ($batchId) {
@@ -199,7 +201,15 @@ class FormPendaftaran extends Component
         // $religions = Religion::orderBy('name')->get();
         // $highSchools = HighSchool::orderBy('name')->get();
         // Kita ambil program studi dan kita kelompokkan berdasarkan fakultasnya
-        $programs = Program::with('faculty')->orderBy('faculty_id')->get()->groupBy('faculty.name_id');
+        $query = Program::with('faculty')->orderBy('faculty_id');
+
+        // Jika kategori pendaftaran memiliki relasi program (ada program khusus yang dipilih)
+        if ($this->selectedCategory && $this->selectedCategory->programs()->count() > 0) {
+            $programIds = $this->selectedCategory->programs()->pluck('programs.id');
+            $query->whereIn('id', $programIds);
+        }
+
+        $programs = $query->get()->groupBy('faculty.name_id');
 
         // 2. Kirim data tersebut ke view
         return view('livewire.pendaftaran.form-pendaftaran', [
@@ -207,6 +217,6 @@ class FormPendaftaran extends Component
             // 'highSchools' => $highSchools,
             'programs' => $programs,
         ]);
-        return view('livewire.pendaftaran.form-pendaftaran');
+
     }
 }

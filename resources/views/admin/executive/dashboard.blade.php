@@ -11,7 +11,7 @@
     <div class="row">
         <!-- Mahasiswa -->
         <div class="col-lg-3 col-6">
-            <div class="small-box bg-info">
+            <div class="small-box bg-white" style="border: 1px solid #ddd;">
                 <div class="inner">
                     <h3>{{ $totalStudents }}</h3>
                     <p>Total Mahasiswa</p>
@@ -19,13 +19,13 @@
                 <div class="icon">
                     <i class="fas fa-user-graduate"></i>
                 </div>
-                <a href="{{ route('admin.akademik.students.index') }}" class="small-box-footer">Lihat Detail <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ route('executive.students.index') }}" class="small-box-footer">Lihat Detail <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
 
         <!-- Dosen -->
         <div class="col-lg-3 col-6">
-            <div class="small-box bg-success">
+            <div class="small-box bg-white" style="border: 1px solid #ddd;">
                 <div class="inner">
                     <h3>{{ $totalLecturers }}</h3>
                     <p>Total Dosen</p>
@@ -33,13 +33,14 @@
                 <div class="icon">
                     <i class="fas fa-chalkboard-teacher"></i>
                 </div>
-                <a href="{{ route('admin.sdm.lecturers.index') }}" class="small-box-footer">Lihat Detail <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ route('executive.lecturers.index') }}" class="small-box-footer">Lihat Detail <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
 
+
         <!-- Tendik -->
         <div class="col-lg-3 col-6">
-            <div class="small-box bg-warning">
+            <div class="small-box bg-white" style="border: 1px solid #ddd;">
                 <div class="inner">
                     <h3>{{ $totalTendik }}</h3>
                     <p>Tenaga Kependidikan</p>
@@ -47,21 +48,22 @@
                 <div class="icon">
                     <i class="fas fa-user-tie"></i>
                 </div>
-                <a href="#" class="small-box-footer">Lihat Detail <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ route('executive.staff.index') }}" class="small-box-footer">Lihat Detail <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
 
-        <!-- Prodi -->
+
+        <!-- Mahasiswa Diterima (Admisi) -->
         <div class="col-lg-3 col-6">
-            <div class="small-box bg-danger">
+            <div class="small-box bg-white" style="border: 1px solid #ddd;">
                 <div class="inner">
-                    <h3>{{ $totalPrograms }}</h3>
-                    <p>Program Studi</p>
+                    <h3>{{ $acceptedApplicants }}</h3>
+                    <p>Mahasiswa Diterima</p>
                 </div>
                 <div class="icon">
-                    <i class="fas fa-university"></i>
+                    <i class="fas fa-user-check"></i>
                 </div>
-                <a href="#" class="small-box-footer">Lihat Detail <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ route('executive.pmb.index') }}" class="small-box-footer">Lihat Detail <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
     </div>

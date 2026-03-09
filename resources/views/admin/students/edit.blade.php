@@ -3,7 +3,7 @@
 @section('content_header')
     <h1>Edit Data Mahasiswa</h1>
     <h5 class="font-weight-light">
-        <a href="{{ route('admin.akademik.students.index') }}" wire:navigate>Manajemen Mahasiswa</a> > {{ $student->user->name }}
+        <a href="{{ route('admin.akademik.students.index') }}">Manajemen Mahasiswa</a> > {{ $student->user->name }}
     </h5>
 @stop
 @section('content')

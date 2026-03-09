@@ -10,7 +10,20 @@ class ClassEnrollment extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'student_id',
+        'course_class_id',
+        'academic_year_id',
+        'status',
+        'approved_by',
+        'grade_letter',
+        'grade_index',
+    ];
 
     /**
      * Get the student associated with the enrollment.

@@ -12,40 +12,45 @@ class AcademicYearSeeder extends Seeder
      */
     public function run(): void
     {
-        // Contoh Tahun Ajaran 2024/2025 Ganjil
-        AcademicYear::create([
-            'year_code' => '20241',
-            'name' => 'Semester Ganjil 2024/2025',
-            'semester_type' => 'Ganjil',
-            'start_date' => '2024-09-01',
-            'end_date' => '2025-01-31',
-            'krs_start_date' => '2024-08-15',
-            'krs_end_date' => '2024-08-30',
-            'is_active' => false,
-        ]);
+        // Konfigurasi Rentang Tahun
+        $startYear = 2021;
+        $endYear   = 2028;
+        
+        // Tentukan kode tahun yang aktif (2026/2027 Ganjil)
+        $activeYearCode = '20261'; 
 
-        // Contoh Tahun Ajaran 2024/2025 Genap
-        AcademicYear::create([
-            'year_code' => '20242',
-            'name' => 'Semester Genap 2024/2025',
-            'semester_type' => 'Genap',
-            'start_date' => '2025-02-01',
-            'end_date' => '2025-06-30',
-            'krs_start_date' => '2025-01-15',
-            'krs_end_date' => '2025-01-30',
-            'is_active' => false,
-        ]);
+        for ($year = $startYear; $year <= $endYear; $year++) {
+            $nextYear = $year + 1;
 
-        // Contoh Tahun Ajaran 2025/2026 Ganjil (Aktif)
-        AcademicYear::create([
-            'year_code' => '20251',
-            'name' => 'Semester Ganjil 2025/2026',
-            'semester_type' => 'Ganjil',
-            'start_date' => '2025-11-01',
-            'end_date' => '2026-01-31',
-            'krs_start_date' => '2025-08-15',
-            'krs_end_date' => '2025-10-30',
-            'is_active' => true, // Set semester ini sebagai yang aktif
-        ]);
+            // --- 1. SEMESTER GANJIL ---
+            // Pola: Kode Tahun + '1' (Misal: 20211)
+            $codeGanjil = $year . '1';
+            
+            AcademicYear::create([
+                'year_code'      => $codeGanjil,
+                'name'           => "Semester Ganjil $year/$nextYear",
+                'semester_type'  => 'Ganjil',
+                'start_date'     => "$year-09-01",
+                'end_date'       => "$nextYear-01-31",
+                'krs_start_date' => "$year-08-15",
+                'krs_end_date'   => "$year-08-30",
+                'is_active'      => ($codeGanjil === $activeYearCode),
+            ]);
+
+            // --- 2. SEMESTER GENAP ---
+            // Pola: Kode Tahun + '2' (Misal: 20212)
+            $codeGenap = $year . '2';
+
+            AcademicYear::create([
+                'year_code'      => $codeGenap,
+                'name'           => "Semester Genap $year/$nextYear",
+                'semester_type'  => 'Genap',
+                'start_date'     => "$nextYear-02-01",
+                'end_date'       => "$nextYear-06-30",
+                'krs_start_date' => "$nextYear-01-15",
+                'krs_end_date'   => "$nextYear-01-30",
+                'is_active'      => false, // Genap tidak aktif sesuai request
+            ]);
+        }
     }
 }

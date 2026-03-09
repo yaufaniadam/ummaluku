@@ -7,11 +7,16 @@ use App\Models\User;
 use App\Models\Staff;
 use App\Models\Program;
 use App\Models\WorkUnit;
+use App\Models\EmploymentStatus;
 use Illuminate\Http\Request;
 use App\DataTables\StaffDataTable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use App\Imports\StaffImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class StaffController extends Controller
 {
@@ -24,13 +29,22 @@ class StaffController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(Staff $staff)
+    {
+        return view('admin.sdm.staff.show', compact('staff'));
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
         $programs = Program::all();
         $workUnits = WorkUnit::all();
-        return view('admin.sdm.staff.create', compact('programs', 'workUnits'));
+        $employmentStatuses = EmploymentStatus::all();
+        return view('admin.sdm.staff.create', compact('programs', 'workUnits', 'employmentStatuses'));
     }
 
     /**
@@ -52,6 +66,11 @@ class StaffController extends Controller
             'unit_type' => ['required', 'in:prodi,bureau'], // To decide which foreign key to use
             'program_id' => ['nullable', 'required_if:unit_type,prodi', 'exists:programs,id'],
             'work_unit_id' => ['nullable', 'required_if:unit_type,bureau', 'exists:work_units,id'],
+            'employment_status_id' => ['nullable', 'exists:employment_statuses,id'],
+            'bank_name' => ['nullable', 'string', 'max:100'],
+            'account_number' => ['nullable', 'string', 'max:50'],
+            'birth_place' => ['nullable', 'string', 'max:100'],
+            'birth_date' => ['nullable', 'date'],
         ]);
 
         DB::transaction(function () use ($request) {
@@ -73,6 +92,11 @@ class StaffController extends Controller
                 'address' => $request->address,
                 'program_id' => $request->unit_type === 'prodi' ? $request->program_id : null,
                 'work_unit_id' => $request->unit_type === 'bureau' ? $request->work_unit_id : null,
+                'employment_status_id' => $request->employment_status_id,
+                'bank_name' => $request->bank_name,
+                'account_number' => $request->account_number,
+                'birth_place' => $request->birth_place,
+                'birth_date' => $request->birth_date,
             ]);
         });
 
@@ -87,7 +111,8 @@ class StaffController extends Controller
     {
         $programs = Program::all();
         $workUnits = WorkUnit::all();
-        return view('admin.sdm.staff.edit', compact('staff', 'programs', 'workUnits'));
+        $employmentStatuses = EmploymentStatus::all();
+        return view('admin.sdm.staff.edit', compact('staff', 'programs', 'workUnits', 'employmentStatuses'));
     }
 
     /**
@@ -109,6 +134,13 @@ class StaffController extends Controller
             'unit_type' => ['required', 'in:prodi,bureau'],
             'program_id' => ['nullable', 'required_if:unit_type,prodi', 'exists:programs,id'],
             'work_unit_id' => ['nullable', 'required_if:unit_type,bureau', 'exists:work_units,id'],
+            'employment_status_id' => ['nullable', 'exists:employment_statuses,id'],
+            'photo' => ['nullable', 'image', 'max:1024'],
+            'bank_name' => ['nullable', 'string', 'max:100'],
+            'account_number' => ['nullable', 'string', 'max:50'],
+            'birth_place' => ['nullable', 'string', 'max:100'],
+            'birth_date' => ['nullable', 'date'],
+            'status' => ['required', 'in:active,inactive'],
         ]);
 
         DB::transaction(function () use ($request, $staff) {
@@ -119,6 +151,16 @@ class StaffController extends Controller
             if ($request->filled('password')) {
                 $user->password = Hash::make($request->password);
             }
+
+            // Handle Profile Photo
+            if ($request->hasFile('photo')) {
+                if ($user->profile_photo_path) {
+                    Storage::disk('public')->delete($user->profile_photo_path);
+                }
+                $path = $request->file('photo')->store('profile-photos', 'public');
+                $user->profile_photo_path = $path;
+            }
+
             $user->save();
 
             // 2. Update Staff
@@ -129,6 +171,12 @@ class StaffController extends Controller
                 'address' => $request->address,
                 'program_id' => $request->unit_type === 'prodi' ? $request->program_id : null,
                 'work_unit_id' => $request->unit_type === 'bureau' ? $request->work_unit_id : null,
+                'employment_status_id' => $request->employment_status_id,
+                'bank_name' => $request->bank_name,
+                'account_number' => $request->account_number,
+                'birth_place' => $request->birth_place,
+                'birth_date' => $request->birth_date,
+                'status' => $request->status,
             ]);
         });
 
@@ -149,5 +197,27 @@ class StaffController extends Controller
 
         return redirect()->route('admin.sdm.staff.index')
             ->with('success', 'Data staf berhasil dihapus.');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'import_file' => 'required|file|mimes:xlsx,xls,csv'
+        ]);
+
+        try {
+            Excel::import(new StaffImport, $request->file('import_file'));
+        } catch (ValidationException $e) {
+            $failures = $e->failures();
+            $errorMessages = [];
+            foreach ($failures as $failure) {
+                 $errorMessages[] = 'Baris ' . $failure->row() . ': ' . implode(', ', $failure->errors());
+            }
+            return back()->with('error', 'Gagal Import: ' . implode('<br>', $errorMessages));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+
+        return redirect()->route('admin.sdm.staff.index')->with('success', 'Data tendik berhasil diimpor!');
     }
 }

@@ -23,6 +23,7 @@ class ReRegistrationInstallment extends Model
         'proof_of_payment',
         'verified_by',
         'verified_at',
+        'notes',
     ];
 
     /**

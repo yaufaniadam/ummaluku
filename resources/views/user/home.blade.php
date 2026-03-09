@@ -183,18 +183,27 @@
                 <p class="lead fw-normal text-muted">hubungi Admisi Universitas Muhammadiyah Maluku.
                 </p>
             </div>
-            <div class="row gx-4">
-                <div class="col-12 mb-4">
-                    <a href="#!" class="text-decoration-none">
+            <div class="row gx-4 justify-content-center">
+                <div class="col-md-6 mb-4">
+                    <a href="https://wa.me/6282313359910" target="_blank" class="text-decoration-none">
                         <div
                             class="d-flex flex-column align-items-center text-center p-4 border rounded-3 h-100 shadow-sm">
                             <div class="feature bg-success bg-gradient text-white rounded-3 mb-3"><i
                                     class="bi bi-whatsapp"></i></div>
-                            <h5 class="fw-bolder text-dark">085612345678</h5>
+                            <h5 class="fw-bolder text-dark">+62 823-1335-9910 - Admisi UM Maluku</h5>
                         </div>
                     </a>
                 </div>
-                
+                <div class="col-md-6 mb-4">
+                    <a href="https://wa.me/6281313196697" target="_blank" class="text-decoration-none">
+                        <div
+                            class="d-flex flex-column align-items-center text-center p-4 border rounded-3 h-100 shadow-sm">
+                            <div class="feature bg-success bg-gradient text-white rounded-3 mb-3"><i
+                                    class="bi bi-whatsapp"></i></div>
+                            <h5 class="fw-bolder text-dark">+62 813-1319-6697 - Humas Um Maluku</h5>
+                        </div>
+                    </a>
+                </div>
             </div>
 
         </div>

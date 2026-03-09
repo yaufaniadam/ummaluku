@@ -13,7 +13,7 @@ class AcceptedStudentController extends Controller
     public function index(AcceptedStudentsDataTable $dataTable)
     {
         $categories = AdmissionCategory::all();
-        $batches = Batch::all();
+        $batches = Batch::where('is_active', true)->get();
         $programs = Program::all();
 
         // Data baru untuk filter status pembayaran

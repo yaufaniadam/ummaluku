@@ -19,7 +19,26 @@ class KeuanganController extends Controller
                             ->orderBy('created_at', 'desc')
                             ->get();
 
-        return view('mahasiswa.keuangan.index', compact('invoices'));
+        // Ambil tagihan registrasi ulang (jika ada)
+        $reRegistrationInvoice = \App\Models\ReRegistrationInvoice::whereHas('application.prospective', function ($query) use ($student) {
+            $query->where('user_id', $student->user_id);
+        })->first();
+
+        return view('mahasiswa.keuangan.index', compact('invoices', 'reRegistrationInvoice'));
+    }
+
+    public function showReRegistration()
+    {
+        $user = Auth::user();
+        $invoice = \App\Models\ReRegistrationInvoice::whereHas('application.prospective', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->with(['application.admissionCategory', 'application.batch', 'installments'])->first();
+
+        if (!$invoice) {
+            abort(404, 'Tagihan registrasi ulang tidak ditemukan.');
+        }
+
+        return view('mahasiswa.keuangan.re-registration', compact('invoice'));
     }
 
     public function show(AcademicInvoice $invoice)

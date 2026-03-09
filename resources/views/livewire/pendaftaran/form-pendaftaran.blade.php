@@ -58,12 +58,16 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-4 mb-3" wire:ignore>
                                 <label class="form-label required">Tempat Lahir <sup class="text-danger">*</sup></label>
-                                <input type="text" class="form-control @error('birth_place') is-invalid @enderror"
+                                <select id="birth_place_select" class="form-select @error('birth_place') is-invalid @enderror"
                                     wire:model.defer="birth_place">
+                                    @if($birth_place)
+                                        <option value="{{ $birth_place }}" selected>{{ $birth_place }}</option>
+                                    @endif
+                                </select>
                                 @error('birth_place')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-4 mb-3">
@@ -200,4 +204,46 @@
             </button>
         </div>
     </form>
+    @push('js')
+    <script>
+        $(document).ready(function() {
+            function initSelect2() {
+                $('#birth_place_select').select2({
+                    placeholder: '-- Pilih Tempat Lahir --',
+                    allowClear: true,
+                    minimumInputLength: 3,
+                    ajax: {
+                        url: '{{ route("api.locations.cities") }}',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                q: params.term
+                            };
+                        },
+                        processResults: function (data) {
+                            return {
+                                results: data.results
+                            };
+                        },
+                        cache: true
+                    }
+                });
+            }
+
+            initSelect2();
+
+            $('#birth_place_select').on('change', function (e) {
+                var data = $('#birth_place_select').select2("val");
+                @this.set('birth_place', data);
+            });
+
+            // Re-init select2 after Livewire updates if necessary
+            // (though wire:ignore should handle the container)
+            Livewire.on('re-init-select2', () => {
+                initSelect2();
+            });
+        });
+    </script>
+    @endpush
 </div>

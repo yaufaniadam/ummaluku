@@ -14,6 +14,7 @@ Route::prefix('mahasiswa')->middleware(['auth', 'role:Mahasiswa'])->name('mahasi
     Route::get('krs/proses', [KrsController::class, 'prosesKrs'])->name('krs.proses');
     Route::get('profil', [MhsProfileController::class, 'index'])->name('profil.index');
     Route::get('keuangan', [KeuanganController::class, 'index'])->name('keuangan.index');
+    Route::get('keuangan/re-registration', [KeuanganController::class, 'showReRegistration'])->name('keuangan.re-registration');
     Route::get('keuangan/{invoice}', [KeuanganController::class, 'show'])->name('keuangan.show');
     Route::get('keuangan/{invoice}/confirm', [PaymentConfirmationController::class, 'create'])->name('keuangan.confirm.create');
     Route::post('keuangan/{invoice}/confirm', [PaymentConfirmationController::class, 'store'])->name('keuangan.confirm');

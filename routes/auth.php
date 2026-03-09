@@ -17,8 +17,19 @@ Route::middleware('guest')->group(function () {
 
     // Route::post('register', [RegisteredUserController::class, 'store']);
 
+    // Generic Login (redirects or defaults)
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
+
+    // Portal Specific Logins
+    Route::get('mahasiswa/login', [AuthenticatedSessionController::class, 'createMahasiswa'])
+        ->name('login.mahasiswa');
+    Route::get('staff/login', [AuthenticatedSessionController::class, 'createStaff'])
+        ->name('login.staff');
+    Route::get('admin/login', [AuthenticatedSessionController::class, 'createAdmin'])
+        ->name('login.admin');
+    Route::get('camaru/login', [AuthenticatedSessionController::class, 'createCamaru'])
+        ->name('login.camaru');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 

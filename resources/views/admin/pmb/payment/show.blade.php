@@ -13,7 +13,19 @@
                 <p><strong>Nama:</strong> {{ $invoice->application->prospective->user->name }}</p>
                 <p><strong>No. Pendaftaran:</strong> {{ $invoice->application->registration_number }}</p>
                 <p><strong>Total Tagihan:</strong> <span class="h5">Rp {{ number_format($invoice->total_amount, 0, ',', '.') }}</span></p>
-                <p><strong>Status Tagihan:</strong> <span class="badge badge-lg badge-primary">{{ Str::title(str_replace('_', ' ', $invoice->status)) }}</span></p>
+                <p><strong>Status Tagihan:</strong> 
+                    @if($invoice->status == 'paid') 
+                        <span class="badge badge-success">Lunas</span>
+                    @elseif($invoice->status == 'partially_paid') 
+                        <span class="badge badge-info">Dibayar Sebagian</span>
+                    @elseif($invoice->status == 'pending_verification') 
+                        <span class="badge badge-warning">Menunggu Verifikasi</span>
+                    @elseif($invoice->status == 'rejected') 
+                        <span class="badge badge-danger">Ditolak</span>
+                    @else 
+                        <span class="badge badge-secondary">Belum Dibayar</span>
+                    @endif
+                </p>
             </div>
         </div>
     </div>
@@ -44,17 +56,62 @@
                             </td>
                             <td>
                                 @if($installment->status == 'pending_verification')
-                                    <a href="{{ Storage::url($installment->proof_of_payment) }}" target="_blank" class="btn btn-xs btn-info">Lihat Bukti</a>
-                                    <form action="{{ route('admin.payment.approve', $installment) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-xs btn-success" onclick="return confirm('Anda yakin?')">Setujui</button>
-                                    </form>
-                                    <form action="{{ route('admin.payment.reject', $installment) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-xs btn-danger" onclick="return confirm('Anda yakin?')">Tolak</button>
-                                    </form>
+                                    <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#verificationModal-{{ $installment->id }}">
+                                        Verifikasi
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="verificationModal-{{ $installment->id }}" tabindex="-1" role="dialog" aria-labelledby="verificationModalLabel-{{ $installment->id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-xl" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="verificationModalLabel-{{ $installment->id }}">Verifikasi Cicilan ke-{{ $installment->installment_number }}</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body text-center p-0" style="height: 70vh;">
+                                                    @if($installment->proof_of_payment)
+                                                        @php
+                                                            $fileUrl = Storage::url($installment->proof_of_payment);
+                                                            $extension = pathinfo($installment->proof_of_payment, PATHINFO_EXTENSION);
+                                                            $isPdf = strtolower($extension) === 'pdf';
+                                                        @endphp
+
+                                                        @if($isPdf)
+                                                            <iframe src="{{ $fileUrl }}" style="width: 100%; height: 100%; border: none;"></iframe>
+                                                        @else
+                                                            <div class="d-flex justify-content-center align-items-center h-100">
+                                                                <img src="{{ $fileUrl }}" class="img-fluid" alt="Bukti Pembayaran" style="max-height: 100%; object-fit: contain;">
+                                                            </div>
+                                                        @endif
+                                                    @else
+                                                        <div class="d-flex justify-content-center align-items-center h-100">
+                                                            <p class="text-danger">Tidak ada bukti pembayaran yang diunggah.</p>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form action="{{ route('admin.pmb.payment.reject', $installment) }}" method="POST" class="d-inline" id="reject-form-{{ $installment->id }}">
+                                                        @csrf
+                                                        <input type="hidden" name="notes" id="reject-notes-{{ $installment->id }}">
+                                                        <button type="button" class="btn btn-danger" onclick="confirmReject({{ $installment->id }})">Tolak</button>
+                                                    </form>
+                                                    <form action="{{ route('admin.pmb.payment.approve', $installment) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        <button type="button" class="btn btn-success" onclick="confirmAction(this.form, 'approve')">Setujui</button>
+                                                    </form>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @elseif($installment->status == 'paid')
                                     <span class="text-success">Diverifikasi oleh {{ $installment->verifiedBy->name ?? 'Sistem' }}</span>
+                                @elseif($installment->status == 'rejected')
+                                    <div class="text-danger">
+                                        <strong>Alasan:</strong> {{ $installment->notes }}
+                                    </div>
                                 @else
                                     -
                                 @endif
@@ -67,4 +124,112 @@
         </div>
     </div>
 </div>
+@stop
+
+@section('js')
+<!-- Ensure SweetAlert2 v11 is loaded -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    @endif
+
+    @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '{{ session('error') }}',
+        });
+    @endif
+
+    function confirmAction(form, actionType) {
+        let title = actionType === 'approve' ? 'Setujui Pembayaran?' : 'Tolak Pembayaran?';
+        let text = actionType === 'approve' ? 'Pastikan bukti pembayaran valid.' : 'Pembayaran akan ditolak.';
+        let icon = actionType === 'approve' ? 'warning' : 'error';
+        let confirmButtonText = actionType === 'approve' ? 'Ya, Setujui' : 'Ya, Tolak';
+        let confirmButtonColor = actionType === 'approve' ? '#28a745' : '#dc3545';
+
+        // Close the bootstrap modal first to prevent overlay issues
+        $(form).closest('.modal').modal('hide');
+
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: icon,
+            showCancelButton: true,
+            confirmButtonColor: confirmButtonColor,
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: confirmButtonText,
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Show loading state
+                Swal.fire({
+                    title: 'Memproses...',
+                    html: 'Mohon tunggu sebentar.',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Submit the form
+                form.submit();
+            } else {
+                // Return to modal if cancelled? 
+                // $(form).closest('.modal').modal('show');
+            }
+        });
+    }
+
+    function confirmReject(installmentId) {
+        const form = document.getElementById('reject-form-' + installmentId);
+        
+        // Hide Bootstrap Modal
+        $('#verificationModal-' + installmentId).modal('hide');
+
+        Swal.fire({
+            title: 'Tolak Pembayaran?',
+            text: 'Berikan alasan penolakan pembayaran ini.',
+            icon: 'warning',
+            input: 'textarea',
+            inputPlaceholder: 'Tuliskan alasan penolakan di sini...',
+            inputValidator: (value) => {
+                if (!value) {
+                    return 'Alasan penolakan wajib diisi!'
+                }
+            },
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Ya, Tolak',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('reject-notes-' + installmentId).value = result.value;
+                
+                Swal.fire({
+                    title: 'Memproses...',
+                    html: 'Mohon tunggu sebentar.',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                form.submit();
+            } else {
+                $('#verificationModal-' + installmentId).modal('show');
+            }
+        });
+    }
+</script>
 @stop

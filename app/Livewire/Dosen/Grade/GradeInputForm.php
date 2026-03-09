@@ -32,18 +32,9 @@ class GradeInputForm extends Component
         $this->courseClass = $courseClass;
         $activeSemesterId = $this->courseClass->academic_year_id;
 
-        // Logika BARU: Mengecek status KRS DAN status pembayaran
+        // Logika BARU: Hanya mengecek status KRS
         $this->enrollments = ClassEnrollment::where('course_class_id', $this->courseClass->id)
             ->where('status', 'approved')
-            // Tambahkan filter 'whereHas' untuk mengecek ke tabel lain
-            ->whereHas('student', function ($query) use ($activeSemesterId) {
-                // Mahasiswa tersebut harus memiliki relasi academicInvoices...
-                $query->whereHas('academicInvoices', function ($q) use ($activeSemesterId) {
-                    // ...di mana academic_year_id-nya cocok DAN statusnya 'paid' (lunas)
-                    $q->where('academic_year_id', $activeSemesterId)
-                        ->where('status', 'paid');
-                });
-            })
             ->with('student.user')
             ->get();
 

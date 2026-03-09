@@ -42,14 +42,16 @@ class ApprovalDetail extends Component
 
         foreach ($this->enrollments as $enrollment) {
             $enrollment->update([
-                'status' => 'approved',
-                'approved_by' => $lecturerId,
+                'status' => 'approved_advisor',
+                'approved_by' => null, // approved_by tracks final approval (Kaprodi), advisor status implies advisor approval
+                // Ideally we would have 'advisor_approved_by' but we agreed to keep schema simple.
+                // We can assume if status is approved_advisor, the advisor (PA) did it.
             ]);
         }
 
-        KrsApproved::dispatch($this->student, $this->activeSemester);
+        // KrsApproved::dispatch($this->student, $this->activeSemester); // Don't dispatch final approval event yet
 
-        session()->flash('success', 'KRS untuk mahasiswa ' . $this->student->user->name . ' berhasil disetujui.');
+        session()->flash('success', 'KRS untuk mahasiswa ' . $this->student->user->name . ' telah disetujui dan diteruskan ke Kaprodi.');
         return $this->redirect(route('dosen.krs-approval.index'), navigate: true);
     }
 

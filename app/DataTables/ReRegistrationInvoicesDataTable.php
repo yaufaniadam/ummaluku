@@ -18,7 +18,7 @@ class ReRegistrationInvoicesDataTable extends DataTable
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
                 // Perbaiki nama route di sini
-                return '<a href="' . route('admin.payment.show', $row) . '" class="btn btn-primary btn-sm">Lihat & Verifikasi</a>';
+                return '<a href="' . route('admin.pmb.payment.show', $row) . '" class="btn btn-primary btn-sm">Lihat & Verifikasi</a>';
             })
             // Kolom baru untuk menghitung jumlah yang sudah dibayar
             ->addColumn('amount_paid', function ($row) {

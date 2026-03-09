@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_photo_path',
     ];
 
     /**
@@ -58,5 +59,15 @@ class User extends Authenticatable
     public function lecturer(): HasOne
     {
         return $this->hasOne(Lecturer::class);
+    }
+
+    public function staff(): HasOne
+    {
+        return $this->hasOne(Staff::class);
+    }
+
+    public function adminlte_profile_url()
+    {
+        return route('profile.edit');
     }
 }

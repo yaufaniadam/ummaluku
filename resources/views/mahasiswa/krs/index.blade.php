@@ -18,8 +18,9 @@
         <div class="alert alert-warning">Tidak ada semester akademik yang sedang aktif.</div>
     @elseif($enrollments->isEmpty())
         <div class="alert alert-info">
-            Anda belum memiliki KRS yang disetujui untuk semester <strong>{{ $activeSemester->name }}</strong>.
-            Silakan lengkapi di menu <a href="{{ route('mahasiswa.krs.proses') }}">Pengisian KRS</a>.
+            Anda belum memiliki jadwal paket semester <strong>{{ $activeSemester->name }}</strong>.
+            {{-- Silakan lengkapi di menu <a href="{{ route('mahasiswa.krs.proses') }}">Pengisian KRS</a>. --}}
+            Silakan hubungi bagian Akademik/Keuangan jika Anda sudah melakukan pembayaran.
         </div>
     @else
         <div class="card">
@@ -53,7 +54,7 @@
                                 <td>{{ $enrollment->courseClass->course->name }}</td>
                                 <td>{{ $enrollment->courseClass->course->sks }}</td>
                                 {{-- <td>{{ $enrollment->courseClass->name }}</td> --}}
-                                <td>{{ $enrollment->courseClass->lecturer->full_name_with_degree }}</td>
+                                <td>{{ $enrollment->courseClass->lecturer?->full_name_with_degree ?? 'TBA' }}</td>
                                 {{-- <td>{{ $enrollment->courseClass->day ?? '-' }}, {{ $enrollment->courseClass->start_time ? date('H:i', strtotime($enrollment->courseClass->start_time)) : '-' }}</td> --}}
                             </tr>
                         @endforeach

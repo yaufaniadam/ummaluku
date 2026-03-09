@@ -138,7 +138,7 @@ return [
     'usermenu_header_class' => 'bg-warning',
     'usermenu_image' => false,
     'usermenu_desc' => false,
-    'usermenu_profile_url' => false,
+    'usermenu_profile_url' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -196,7 +196,7 @@ return [
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-warning elevation-4',
+    'classes_sidebar' => 'sidebar-dark-primary sidebar-custom-orange elevation-4',
     'classes_sidebar_nav' => '',
     'classes_topnav' => 'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
@@ -263,7 +263,7 @@ return [
     'register_url' => '',
     'password_reset_url' => '',
     'password_email_url' => '',
-    'profile_url' => false,
+    'profile_url' => 'profile.edit',
     'disable_darkmode_routes' => false,
 
     /*
@@ -645,15 +645,25 @@ return [
             ],
         ],
         'FullCalendar' => [
-        'active' => true, // Cukup ubah baris ini menjadi true
-        'files' => [
-            [
-                'type' => 'js',
-                'asset' => true,
-                'location' => 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js',
+            'active' => true, // Cukup ubah baris ini menjadi true
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js',
+                ],
             ],
         ],
-    ],
+        'CustomTheme' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'css/admin-custom.css',
+                ],
+            ],
+        ],
     ],
 
     /*

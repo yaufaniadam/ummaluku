@@ -39,6 +39,14 @@
                     @if (auth()->user()->hasRole(['Super Admin', 'Staf Akademik']))
                         <a href="{{ route('admin.akademik.students.edit', $student->id) }}"
                             class="btn btn-primary btn-block" wire:navigate><b>Edit Data</b></a>
+
+                        <form action="{{ route('admin.akademik.students.generate-krs', $student->id) }}" method="POST"
+                            class="mt-2" onsubmit="return confirm('Apakah Anda yakin ingin men-generate KRS Paket Semester untuk mahasiswa ini?');">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-success btn-block">
+                                <i class="fas fa-magic mr-1"></i> Generate KRS Paket
+                            </button>
+                        </form>
                     @endif
                 </div>
             </div>

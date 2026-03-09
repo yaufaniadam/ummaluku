@@ -26,7 +26,12 @@ class AcceptedStudentsDataTable extends DataTable
                 $acceptedChoice = $row->programChoices->where('is_accepted', true)->first();
                 return $acceptedChoice ? $acceptedChoice->program->name_id : 'N/A';
             })
-            ->editColumn('status', fn($row) => '<span class="badge badge-success">Diterima</span>')
+            ->editColumn('status', function ($row) {
+                if ($row->status == 'sudah_registrasi') {
+                    return '<span class="badge badge-primary">Sudah Registrasi</span>';
+                }
+                return '<span class="badge badge-success">Diterima</span>';
+            })
             ->addColumn('payment_status', function ($row) {
                 // Cek status dari relasi reRegistrationInvoice
                 $invoice = $row->reRegistrationInvoice;
@@ -45,11 +50,14 @@ class AcceptedStudentsDataTable extends DataTable
                 }
             })
             ->addColumn('action', function ($row) {
+                if ($row->status == 'sudah_registrasi') {
+                    return '<button class="btn btn-success btn-sm" disabled>Sudah Registrasi</button>';
+                }
+
                 $invoice = $row->reRegistrationInvoice;
                 // Tombol finalisasi sekarang menjadi form yang hanya aktif jika status lunas
-                if ($invoice && $invoice->status == 'paid') {
+                if ($invoice && ($invoice->status == 'paid' || $invoice->status == 'partially_paid')) {
                     $finalizeUrl = route('admin.pmb.accepted.finalize', $row->id);
-                    // $finalizeUrl = route('admin.accepted.finalize', $row->id);
                     return '
                     <form action="' . $finalizeUrl . '" method="POST">
                         ' . csrf_field() . '
@@ -59,7 +67,7 @@ class AcceptedStudentsDataTable extends DataTable
                     </form>
                 ';
                 }
-                return '<button class="btn btn-secondary btn-sm" disabled>Menunggu Pelunasan</button>';
+                return '<button class="btn btn-secondary btn-sm" disabled>Pending</button>';
             })
 
            
@@ -70,7 +78,7 @@ class AcceptedStudentsDataTable extends DataTable
     {
         return $model->newQuery()
             ->with(['prospective.user', 'batch', 'admissionCategory', 'programChoices.program', 'reRegistrationInvoice'])
-            ->where('status', 'diterima')
+            ->whereIn('status', ['diterima', 'sudah_registrasi'])
             ->when(request('category'), fn($q, $v) => $q->where('admission_category_id', $v))
             ->when(request('batch'), fn($q, $v) => $q->where('batch_id', $v))
             ->when(request('program'), function ($q, $programId) {

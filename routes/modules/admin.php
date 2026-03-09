@@ -6,8 +6,8 @@ use App\Livewire\Master\WorkUnit\Index as WorkUnitIndex;
 use App\Http\Controllers\Admin\ExecutiveDashboardController;
 use App\Http\Controllers\SDM\SDMDashboardController;
 use App\Http\Controllers\Admin\LecturerController;
-use App\DataTables\LecturerDataTable;
 use App\Http\Controllers\Admin\StaffController;
+use App\DataTables\LecturerDataTable;
 use App\DataTables\StaffDataTable;
 use App\Http\Controllers\Keuangan\KeuanganDashboardController;
 use App\Http\Controllers\Admin\TuitionFeeController;
@@ -43,12 +43,27 @@ use App\Http\Controllers\Modules\PMB\PaymentVerificationController;
 use App\Http\Controllers\Modules\PMB\FinalizeRegistrationController;
 
 
-Route::prefix('admin')->middleware(['auth', 'role:Super Admin|Direktur Admisi|Staf Admisi'])->name('admin.')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:Super Admin'])->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+});
+
+Route::prefix('admin/system')->middleware(['auth', 'role:Super Admin'])->name('admin.system.')->group(function () {
+    Route::get('/roles', App\Livewire\System\Role\Index::class)->name('roles.index');
+    Route::get('/roles/create', App\Livewire\System\Role\Form::class)->name('roles.create');
+    Route::get('/roles/{role}/edit', App\Livewire\System\Role\Form::class)->name('roles.edit');
+
+    Route::get('/users', App\Livewire\System\User\Index::class)->name('users.index');
+    Route::get('/users/create', App\Livewire\System\User\Form::class)->name('users.create');
+    Route::get('/users/{user}/edit', App\Livewire\System\User\Form::class)->name('users.edit');
 });
 
 Route::prefix('master')->middleware(['auth', 'role:Super Admin|Admin'])->name('master.')->group(function () {
     Route::get('/work-units', WorkUnitIndex::class)->name('work-units.index');
+    Route::get('/work-units/officials/{workUnit}', \App\Livewire\Master\WorkUnit\OfficialManager::class)->name('work-units.manage-officials');
+    Route::get('/programs', App\Livewire\Master\Program\Index::class)->name('programs.index');
+    Route::get('/programs/{program}/manage-officials', App\Livewire\Master\Program\OfficialManager::class)->name('programs.manage-head');
+    Route::get('/faculties', App\Livewire\Master\Faculty\Index::class)->name('faculties.index');
+    Route::get('/faculties/{faculty}/manage-officials', App\Livewire\Master\Faculty\OfficialManager::class)->name('faculties.manage-officials');
 });
 
 Route::prefix('admin/executive')->middleware(['auth', 'permission:view-executive-dashboard'])->name('admin.executive.')->group(function () {
@@ -63,10 +78,15 @@ Route::prefix('admin/sdm')->middleware(['auth', 'permission:dosen-list'])->name(
         return $dataTable->ajax();
     })->name('lecturers.data');
 
+    Route::post('staff/import', [StaffController::class, 'import'])->name('staff.import');
     Route::resource('staff', StaffController::class);
     Route::get('staff-data', function (StaffDataTable $dataTable) {
         return $dataTable->ajax();
     })->name('staff.data');
+
+    Route::prefix('master')->name('master.')->group(function () {
+        Route::get('/', App\Livewire\Sdm\Master\Index::class)->name('index');
+    });
 });
 
 Route::prefix('admin/keuangan')->middleware(['auth', 'permission:biaya-list'])->name('admin.keuangan.')->group(function () {
@@ -90,6 +110,11 @@ Route::prefix('admin/keuangan')->middleware(['auth', 'permission:biaya-list'])->
     Route::get('payment-verification-data', function(AcademicInvoiceDataTable $dataTable) {
         return $dataTable->ajax();
     })->name('payment-verification.data');
+
+    // Transaksi Keuangan (Categories & Transactions)
+    Route::get('categories', App\Livewire\Keuangan\Category\Index::class)->name('categories.index');
+    Route::get('income', App\Livewire\Keuangan\Transaction\Index::class)->name('income.index'); // Type inferred in component
+    Route::get('expense', App\Livewire\Keuangan\Transaction\Index::class)->name('expense.index'); // Type inferred in component
 });
 
 
@@ -137,8 +162,19 @@ Route::prefix('admin/akademik')->middleware(['auth'])->name('admin.akademik.')->
         [CourseClassController::class, 'quickCreate']
     )->name('academic-years.programs.course-classes.quickCreate');
 
+    Route::post(
+        'academic-years/{academic_year}/programs/{program}/course-classes/auto-generate',
+        [CourseClassController::class, 'autoGenerate']
+    )->name('academic-years.programs.course-classes.autoGenerate');
+
+    Route::post(
+        'academic-years/{academic_year}/programs/{program}/course-classes/copy-previous',
+        [CourseClassController::class, 'copyFromPrevious']
+    )->name('academic-years.programs.course-classes.copyFromPrevious');
+
     Route::get('students/import', [StudentController::class, 'showImportForm'])->name('students.import.form');
     Route::post('students/import', [StudentController::class, 'importOld'])->name('students.import.old');
+    Route::post('students/{student}/generate-krs', [StudentController::class, 'generateKrs'])->name('students.generate-krs');
     Route::resource('students', StudentController::class);
     Route::get('students-data', function (StudentDataTable $dataTable) {
         return $dataTable->ajax();
@@ -150,16 +186,17 @@ Route::prefix('admin/akademik')->middleware(['auth'])->name('admin.akademik.')->
 });
 
 // permission minimal manage pmb/role dir pmb
-Route::prefix('admin/pmb')->middleware(['auth', 'permission:manage pmb'])->name('admin.pmb.')->group(function () {
+Route::prefix('admin/pmb')->middleware(['auth', 'permission:manage pmb settings'])->name('admin.pmb.')->group(function () {
     Route::resource('jalur-pendaftaran', AdmissionCategoryController::class);
     Route::resource('gelombang', BatchController::class);
 });
 
 // akses untuk user dengan permission view pmb
-Route::prefix('admin/pmb')->middleware(['auth', 'permission:view pmb'])->name('admin.pmb.')->group(function () {
+Route::prefix('admin/pmb')->middleware(['auth', 'permission:view applications'])->name('admin.pmb.')->group(function () {
     Route::get('/dashboard', [PMBDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/pendaftaran', [AdminPendaftaranController::class, 'index'])->name('pendaftaran.index');
+    Route::get('/pendaftaran/export', [AdminPendaftaranController::class, 'export'])->name('pendaftaran.export');
     Route::get('/pendaftaran/{application}', PendaftaranShow::class)->name('pendaftaran.show');
 
     Route::get('/seleksi', [AdminSeleksiController::class, 'index'])->name('seleksi.index');

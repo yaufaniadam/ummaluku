@@ -9,7 +9,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class TuitionFee extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'program_id',
+        'name',
+        'amount',
+        'academic_year',
+        'type',
+    ];
 
     public function program(): BelongsTo
     {

@@ -6,6 +6,7 @@ use App\DataTables\ReRegistrationInvoicesDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\ReRegistrationInvoice;
 use App\Models\ReRegistrationInstallment;
+use App\Services\TransactionService;
 use Illuminate\Http\Request;
 use App\Notifications\PembayaranCicilanDiterima;
 use App\Notifications\PembayaranLunas;
@@ -48,6 +49,12 @@ class PaymentVerificationController extends Controller
         // Cek apakah semua cicilan lain sudah lunas
         $allPaid = $installment->invoice->installments()->where('status', '!=', 'paid')->count() === 0;
 
+        // --- BARIS BARU: Buat Transaksi Masuk (Auto-Sync) ---
+        TransactionService::recordPayment(
+            $installment,
+            $installment->amount,
+            'Pembayaran PMB Invoice #' . $installment->invoice->id . ' - Cicilan ' . $installment->installment_number . ' oleh ' . $user->name
+        );
         
         if ($allPaid) {
             $installment->invoice->update(['status' => 'paid']);
@@ -59,7 +66,7 @@ class PaymentVerificationController extends Controller
             $user->notify(new PembayaranCicilanDiterima($installment));
         }
 
-        return back()->with('success', 'Cicilan berhasil diverifikasi.');
+        return back()->with('success', 'Pembayaran berhasil diverifikasi.');
     }
 
     /**
@@ -67,16 +74,15 @@ class PaymentVerificationController extends Controller
      */
     public function rejectInstallment(Request $request, ReRegistrationInstallment $installment)
     {
-        // $request->validate(['notes' => 'required|string|max:255']);
+        $request->validate(['notes' => 'required|string|max:255']);
 
         $installment->update([
             'status' => 'rejected',
             'verified_by' => auth()->id(),
-            // 'notes' => $request->input('notes'), // Simpan catatan penolakan
-            'notes' => 'Catatan', // Simpan catatan penolakan
+            'notes' => $request->input('notes'),
             'verified_at' => now(),
         ]);
 
-        return back()->with('success', 'Cicilan telah ditolak dengan catatan.');
+        return back()->with('success', 'Pembayaran telah ditolak dengan catatan.');
     }
 }

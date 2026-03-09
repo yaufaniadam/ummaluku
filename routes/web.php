@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GatewayController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationsController;
@@ -19,7 +20,11 @@ use App\Http\Controllers\Modules\PMB\PendaftaranController;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [GatewayController::class, 'index'])->name('gateway');
+
+// PMB Landing (Moved from Home)
+Route::get('/camaru/index', [HomeController::class, 'index'])->name('pmb.index');
+Route::get('/pmb', [HomeController::class, 'index'])->name('pmb.home'); // Alias
 
 // Common Auth Routes (Profile, Notifications)
 Route::middleware('auth')->group(function () {
@@ -35,6 +40,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Public Pages (PMB)
+Route::get('/api/locations/cities', [App\Http\Controllers\LocationController::class, 'cities'])->name('api.locations.cities');
 Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.form');
 
 Route::get('/pendaftaran/sukses', function () {
@@ -46,8 +52,11 @@ Route::get('/admisi/{category:slug}', [PendaftaranController::class, 'showCatego
 
 // Load Module Routes
 require __DIR__ . '/modules/admin.php';
+require __DIR__ . '/modules/executive.php'; // Executive subdomain
 require __DIR__ . '/modules/student.php';
 require __DIR__ . '/modules/lecturer.php';
 require __DIR__ . '/modules/camaru.php';
+require __DIR__ . '/modules/prodi.php';
+require __DIR__ . '/modules/staff.php';
 
 require __DIR__ . '/auth.php';

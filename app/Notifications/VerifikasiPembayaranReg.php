@@ -33,7 +33,7 @@ class VerifikasiPembayaranReg extends Notification implements ShouldQueue // <--
             ->subject('Dokumen Menunggu Verifikasi - PMB UM Maluku')
             ->greeting('Assalamualaikum Wr. Wb. ' . $notifiable->name . ',')
             ->line('Pembayaran Registrasi menunggu verifikasi Anda.')
-            ->action('Buka dashboard admin.', route('admin.payment.show', $this->invoiceId))
+            ->action('Buka dashboard admin.', route('admin.pmb.payment.show', $this->invoiceId))
             ->line('Terima kasih');
     }
 

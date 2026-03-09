@@ -171,6 +171,24 @@
 
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container--default .select2-selection--single {
+            height: calc(3.5rem + 2px);
+            padding: 1rem .75rem;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 1.5;
+            padding-left: 0;
+            color: #212529;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: calc(3.5rem + 2px);
+            right: .75rem;
+        }
+    </style>
     @livewireStyles
 </head>
 
@@ -179,7 +197,7 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-ummaluku-light-80">
             <div class="container px-5">
-                <a class="navbar-brand" href=""><img src="{{ asset('assets/logo-orange.png') }}"
+                <a class="navbar-brand" href="{{ route('gateway') }}"><img src="{{ asset('assets/logo-orange.png') }}"
                         width="270" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -194,7 +212,23 @@
                      
                         @auth
                             {{-- MENU INI HANYA MUNCUL JIKA USER SUDAH LOGIN --}}
-                            <li class="nav-item"><a class="nav-link" href="{{ route('pendaftar') }}">Dashboard
+                            @php
+                                $dashboardRoute = '#';
+                                $user = Auth::user();
+                                if ($user->hasRole(['Super Admin', 'Direktur Admisi', 'Staf Admisi', 'Direktur SDM', 'Staf SDM', 'Direktur Keuangan', 'Staf Keuangan', 'Kaprodi', 'Staf Prodi'])) {
+                                    $dashboardRoute = route('admin.dashboard');
+                                } elseif ($user->hasRole('Dosen')) {
+                                    $dashboardRoute = route('dosen.dashboard');
+                                } elseif ($user->hasRole('Mahasiswa')) {
+                                    $dashboardRoute = route('mahasiswa.dashboard');
+                                } elseif ($user->hasRole('Camaru')) {
+                                    $dashboardRoute = route('pendaftar');
+                                } elseif ($user->staff) {
+                                     // Fallback for staff without specific admin roles (Tendik)
+                                     $dashboardRoute = route('staff.dashboard'); // Assuming this route exists based on context
+                                }
+                            @endphp
+                            <li class="nav-item"><a class="nav-link" href="{{ $dashboardRoute }}">Dashboard
                                     Saya</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
@@ -259,6 +293,9 @@
 
     <!-- Core theme JS-->
     <script src="{{ asset('js/scripts.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://unpkg.com/imask"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @livewireScripts

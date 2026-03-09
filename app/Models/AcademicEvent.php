@@ -10,7 +10,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class AcademicEvent extends Model
 {
      use HasFactory, SoftDeletes;
-    protected $guarded = [];
+     
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'academic_year_id',
+        'title',
+        'description',
+        'start_date',
+        'end_date',
+        'color',
+    ];
 
     /**
      * The attributes that should be cast.

@@ -38,7 +38,9 @@ class DatabaseSeeder extends Seeder
             FeeComponentSeeder::class,    
             FeeStructureSeeder::class,
             AcademicYearSeeder::class,    
-            CurriculumSeeder::class,    
+            CurriculumSeeder::class,
+            SdmSeeder::class,
+            TransactionCategorySeeder::class, // Added Finance Categories
         ]);
 
         // Panggil seeder pengimpor data dari file Excel/CSV utuk dosen, mahasiswa lama, dan mata kuliah

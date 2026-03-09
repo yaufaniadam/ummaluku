@@ -60,14 +60,90 @@
                 <div class="text-muted">
                     Anda telah diterima sebagai calon mahasiswa baru di Program Studi
                     <strong>{{ $acceptedProgram->name_id }}</strong>.
-                    Silakan <a href="{{ route('pendaftar.registrasi') }}">klik di sini</a> untuk informasi selanjutnya
+                    Silakan klik tombol di bawah untuk informasi selanjutnya
                     mengenai pembayaran dan registrasi ulang.
                 </div>
+                <div class="mt-3">
+                    <a href="{{ route('pendaftar.registrasi') }}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-arrow-right-circle me-2"></i> Lakukan Registrasi Ulang
+                    </a>
+                </div>
+            </div>
+        @endif
+
+        @if ($application->status == 'dokumen_ditolak')
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-title">Dokumen Anda Perlu Diperbaiki</h4>
+                <div class="text-muted">
+                    Beberapa dokumen yang Anda upload tidak memenuhi persyaratan. Silakan periksa kembali dokumen Anda dan
+                    upload ulang dokumen yang diperlukan.
+                </div>
+                <div class="mt-3">
+                    <a href="{{ route('pendaftar.document.form') }}" class="btn btn-warning">
+                        Upload Ulang Dokumen
+                    </a>
+                </div>
+            </div>
+        @endif
+
+        @if ($application->status == 'lengkapi_data')
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-title">Lengkapi Data Diri</h4>
+                <div class="text-muted">
+                    Silakan lengkapi data diri untuk melanjutkan proses pendaftaran.
+                </div>
+                <div class="mt-3">
+                    <a href="{{ route('pendaftar.biodata') }}" class="btn btn-warning">
+                        Lengkapi Data Diri
+                    </a>
+                </div>
+            </div>
+        @endif
+
+        @if ($application->status == 'upload_dokumen')
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-title">Upload Dokumen</h4>
+                <div class="text-muted">
+                    Silakan upload dokumen yang diperlukan untuk melanjutkan proses pendaftaran.
+                </div>
+                <div class="mt-3">
+                    <a href="{{ route('pendaftar.document.form') }}" class="btn btn-warning">
+                        Upload Dokumen
+                    </a>
+                </div>
+            </div>
+        @endif
+        @if ($application->status == 'proses_verifikasi')
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-title">Proses Verifikasi</h4>
+                <div class="text-muted">
+                    Pendaftaran Anda sedang diverifikasi. Silakan tunggu informasi selanjutnya dari tim Admisi.
+                </div>
+                {{-- <div class="mt-3">
+                    <a href="{{ route('pendaftar.document.form') }}" class="btn btn-warning">
+                        Upload Dokumen
+                    </a>
+                </div> --}}
             </div>
         @endif
 
         @if (session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+
+        {{-- Jika ditolak, tampilkan alert dan tombol daftar lagi --}}
+        @if ($application->status == 'ditolak')
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-title">Maaf, Pendaftaran Anda Belum Diterima.</h4>
+                <div class="text-muted">
+                    Jangan patah semangat! Anda masih bisa mencoba mendaftar kembali di gelombang berikutnya atau memilih program studi lain.
+                </div>
+                <div class="mt-3">
+                    <a href="{{ route('pendaftar.reapply.form') }}" class="btn btn-danger">
+                        Daftar Kembali (Buat Lamaran Baru)
+                    </a>
+                </div>
+            </div>
         @endif
 
         <h5 class="card-title mb-2">Selamat Datang, {{ $application->prospective->user->name }}!</h5>

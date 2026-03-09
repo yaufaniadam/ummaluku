@@ -12,6 +12,9 @@ use App\DataTables\StudentDataTable;
 use App\Models\Student; 
 use App\Models\Program; 
 use App\Models\ClassEnrollment;
+use App\Models\AcademicYear;
+use App\Services\AutoEnrollmentService;
+use App\Http\Requests\Admin\ImportStudentsRequest;
 
 class StudentController extends Controller
 {
@@ -34,6 +37,9 @@ class StudentController extends Controller
 
     public function show(Student $student)
     {
+        // Authorization: Prevent IDOR - only allow authorized users to view student data
+        $this->authorize('view', $student);
+        
         // Eager load semua relasi yang dibutuhkan untuk ditampilkan
         $student->load(['user.prospective', 'program', 'academicAdvisor.user', 'enrollments.courseClass.course']);
         
@@ -56,10 +62,9 @@ class StudentController extends Controller
    
     }
 
-    public function importOld(Request $request)
+    public function importOld(ImportStudentsRequest $request)
     {
-        $request->validate(['import_file' => 'required|mimes:csv']);
-
+        // Validation and authorization handled by FormRequest
         try {
             Excel::import(new OldStudentsImport, $request->file('import_file'));
 
@@ -80,5 +85,37 @@ class StudentController extends Controller
     public function edit(Student $student)
     {
         return view('admin.students.edit', compact('student'));
+    }
+
+    public function generateKrs(Student $student)
+    {
+        // Authorization: Ensure user has permission to generate KRS for this student
+        $this->authorize('generateKrs', $student);
+        
+        // 1. Cek Tahun Ajaran Aktif
+        $activeYear = AcademicYear::where('is_active', true)->first();
+        if (!$activeYear) {
+            return back()->with('error', 'Tidak ada tahun ajaran aktif.');
+        }
+
+        // 2. Cek Pembayaran (Invoice Lunas)
+        // Cari invoice untuk mahasiswa ini di semester aktif dengan status 'paid'
+        $hasPaidInvoice = $student->academicInvoices()
+            ->where('academic_year_id', $activeYear->id)
+            ->where('status', 'paid')
+            ->exists();
+
+        if (!$hasPaidInvoice) {
+            return back()->with('error', 'Mahasiswa belum melunasi tagihan (Invoice) untuk semester ini. Silakan hubungi bagian keuangan.');
+        }
+
+        // 3. Proses Enroll
+        $result = AutoEnrollmentService::enrollStudent($student);
+
+        if ($result['status'] === 'success') {
+            return back()->with('success', $result['message']);
+        } else {
+            return back()->with('error', $result['message']);
+        }
     }
 }

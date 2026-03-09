@@ -11,11 +11,20 @@ class AcademicYear extends Model
     use HasFactory;
 
     /**
-     * The attributes that aren't mass assignable.
+     * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'year_code',
+        'semester_type',
+        'start_date',
+        'end_date',
+        'krs_start_date',
+        'krs_end_date',
+        'is_active',
+    ];
 
     /**
      * The attributes that should be cast.

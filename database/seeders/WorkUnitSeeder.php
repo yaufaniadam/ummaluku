@@ -58,11 +58,9 @@ class WorkUnitSeeder extends Seeder
                 $type = 'Fakultas';
             } elseif (stripos($name, 'Program Studi') !== false) {
                 $type = 'Program Studi';
-            } elseif (stripos($name, 'Biro') !== false) {
-                $type = 'Biro';
-            } elseif (stripos($name, 'UPT') !== false) {
-                $type = 'UPT';
-            }
+            } elseif (stripos($name, 'Divisi') !== false) {
+                $type = 'Divisi';
+            } 
 
             // Create or Update
             WorkUnit::firstOrCreate(
