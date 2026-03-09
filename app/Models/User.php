@@ -65,4 +65,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Staff::class);
     }
+
+    public function adminlte_profile_url()
+    {
+        return route('profile.edit');
+    }
 }
