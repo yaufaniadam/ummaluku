@@ -12,6 +12,14 @@ class Program extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name_id',
+        'name_en',
+        'code',
+        'degree',
+        'faculty_id',
+    ];
+
     /**
      * Mendapatkan data fakultas dari program studi ini.
      */
