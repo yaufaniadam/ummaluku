@@ -138,7 +138,7 @@ return [
     'usermenu_header_class' => 'bg-warning',
     'usermenu_image' => false,
     'usermenu_desc' => false,
-    'usermenu_profile_url' => false,
+    'usermenu_profile_url' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -263,7 +263,7 @@ return [
     'register_url' => '',
     'password_reset_url' => '',
     'password_email_url' => '',
-    'profile_url' => false,
+    'profile_url' => 'profile.edit',
     'disable_darkmode_routes' => false,
 
     /*

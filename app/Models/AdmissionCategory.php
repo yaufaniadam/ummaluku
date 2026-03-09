@@ -40,4 +40,9 @@ class AdmissionCategory extends Model
     {
         return $this->belongsToMany(Batch::class, 'admission_category_batch');
     }
+
+    public function programs(): BelongsToMany
+    {
+        return $this->belongsToMany(Program::class, 'admission_category_program');
+    }
 }

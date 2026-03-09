@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Modules\PMB;
 use App\Http\Controllers\Controller;
 use App\Models\AdmissionCategory;
 use App\Models\DocumentRequirement;
+use App\Models\Program;
 use Illuminate\Http\Request;
 
 class AdmissionCategoryController extends Controller
@@ -18,7 +19,8 @@ class AdmissionCategoryController extends Controller
     public function create()
     {
         $documents = DocumentRequirement::all();
-        return view('admin.pmb.categories.create', compact('documents'));
+        $programs = Program::with('faculty')->get();
+        return view('admin.pmb.categories.create', compact('documents', 'programs'));
     }
 
     public function store(Request $request)
@@ -39,14 +41,19 @@ class AdmissionCategoryController extends Controller
             $category->documentRequirements()->sync($request->documents);
         }
 
+        if ($request->has('programs')) {
+            $category->programs()->sync($request->programs);
+        }
+
         return redirect()->route('admin.pmb.jalur-pendaftaran.index')->with('success', 'Jalur pendaftaran berhasil ditambahkan.');
     }
 
     public function edit(AdmissionCategory $jalur_pendaftaran)
     {
         $documents = DocumentRequirement::all();
-        $jalur_pendaftaran->load('documentRequirements');
-        return view('admin.pmb.categories.edit', ['category' => $jalur_pendaftaran, 'documents' => $documents]);
+        $programs = Program::with('faculty')->get();
+        $jalur_pendaftaran->load(['documentRequirements', 'programs']);
+        return view('admin.pmb.categories.edit', ['category' => $jalur_pendaftaran, 'documents' => $documents, 'programs' => $programs]);
     }
 
     public function update(Request $request, AdmissionCategory $jalur_pendaftaran)
@@ -65,6 +72,9 @@ class AdmissionCategoryController extends Controller
 
         // Sync documents (handle empty selection by defaulting to empty array)
         $jalur_pendaftaran->documentRequirements()->sync($request->input('documents', []));
+
+        // Sync programs
+        $jalur_pendaftaran->programs()->sync($request->input('programs', []));
 
         return redirect()->route('admin.pmb.jalur-pendaftaran.index')->with('success', 'Jalur pendaftaran berhasil diperbarui.');
     }

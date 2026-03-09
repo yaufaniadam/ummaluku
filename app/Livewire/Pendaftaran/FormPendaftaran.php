@@ -84,7 +84,7 @@ class FormPendaftaran extends Component
     {
         if ($categorySlug) {
             // Cari kategori pendaftaran di database berdasarkan slug-nya
-            $this->selectedCategory = AdmissionCategory::where('slug', $categorySlug)->first();
+            $this->selectedCategory = AdmissionCategory::where('slug', $categorySlug)->with('programs')->first();
         }
 
         if ($batchId) {
@@ -201,7 +201,15 @@ class FormPendaftaran extends Component
         // $religions = Religion::orderBy('name')->get();
         // $highSchools = HighSchool::orderBy('name')->get();
         // Kita ambil program studi dan kita kelompokkan berdasarkan fakultasnya
-        $programs = Program::with('faculty')->orderBy('faculty_id')->get()->groupBy('faculty.name_id');
+        $query = Program::with('faculty')->orderBy('faculty_id');
+
+        // Jika kategori pendaftaran memiliki relasi program (ada program khusus yang dipilih)
+        if ($this->selectedCategory && $this->selectedCategory->programs()->count() > 0) {
+            $programIds = $this->selectedCategory->programs()->pluck('programs.id');
+            $query->whereIn('id', $programIds);
+        }
+
+        $programs = $query->get()->groupBy('faculty.name_id');
 
         // 2. Kirim data tersebut ke view
         return view('livewire.pendaftaran.form-pendaftaran', [
@@ -209,6 +217,6 @@ class FormPendaftaran extends Component
             // 'highSchools' => $highSchools,
             'programs' => $programs,
         ]);
-        return view('livewire.pendaftaran.form-pendaftaran');
+
     }
 }
