@@ -46,6 +46,14 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Nama Referral (Dosen / Staf) <span class="text-muted small">(Opsional)</span></label>
+                                <input type="text" class="form-control @error('referral_name') is-invalid @enderror"
+                                    wire:model.defer="referral_name" placeholder="Siapa yang mengajak Anda?">
+                                @error('referral_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label required">Jenis Kelamin <sup class="text-danger">*</sup></label>
                                 <select class="form-select @error('gender') is-invalid @enderror"

@@ -52,6 +52,7 @@ class Prospective extends Model
         'guardian_income',
         'high_school_major_id',
         'registration_source',
+        'referral_name',
         'photo_path',
     ];
 
