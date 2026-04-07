@@ -99,6 +99,10 @@
                             <td width="70%">
                                 {{ $application->prospective?->is_kps_recipient ?? false ? 'Ya' : 'Tidak' }}</td>
                         </tr>
+                        <tr>
+                            <td>Referral (Dosen / Staf):</td>
+                            <td width="70%">{{ $application->prospective?->referral_name ?? '-' }}</td>
+                        </tr>
                     </table>
                 </div>
             </div>

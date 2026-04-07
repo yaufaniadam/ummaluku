@@ -30,6 +30,7 @@ class FormPendaftaran extends Component
     public ?int $program_choice_1 = null;
     public ?int $program_choice_2 = null;
     public string $birth_place = '';
+    public string $referral_name = '';
 
     public $selectedCategory;
     public $selectedBatch;
@@ -46,6 +47,7 @@ class FormPendaftaran extends Component
             'program_choice_1' => 'required|exists:programs,id',
             'program_choice_2' => 'nullable|exists:programs,id|different:program_choice_1',
             'birth_place' => 'required|string|max:255',           
+            'referral_name' => 'nullable|string|max:255',
 
         ];
     }
@@ -137,6 +139,7 @@ class FormPendaftaran extends Component
                 'gender' => $validatedData['gender'],
                 'phone' => $validatedData['phone'],
                 'parent_phone' => $validatedData['parent_phone'],
+                'referral_name' => $validatedData['referral_name'],
             ]);           
 
             // 3. Buat data Aplikasi dengan nomor registrasi KOSONG terlebih dahulu
