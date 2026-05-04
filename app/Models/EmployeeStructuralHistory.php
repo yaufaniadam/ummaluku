@@ -11,7 +11,16 @@ class EmployeeStructuralHistory extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'employee_type',
+        'employee_id',
+        'structural_position_id',
+        'work_unit_id',
+        'sk_number',
+        'start_date',
+        'end_date',
+        'is_active'
+    ];
 
     protected $casts = [
         'start_date' => 'date',

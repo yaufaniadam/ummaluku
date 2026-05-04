@@ -11,7 +11,16 @@ class EmployeeRankHistory extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'employee_type',
+        'employee_id',
+        'employee_rank_id',
+        'sk_number',
+        'tmt',
+        'years_of_service',
+        'months_of_service',
+        'is_active'
+    ];
 
     protected $casts = [
         'tmt' => 'date',

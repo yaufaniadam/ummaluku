@@ -9,7 +9,7 @@ class EmployeeDocumentType extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = ['name', 'is_mandatory', 'description'];
 
     protected $casts = [
         'is_mandatory' => 'boolean',

@@ -11,7 +11,15 @@ class EmployeeDocument extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'employee_type',
+        'employee_id',
+        'employee_document_type_id',
+        'file_path',
+        'file_name',
+        'description',
+        'verified_at'
+    ];
 
     protected $casts = [
         'verified_at' => 'datetime',

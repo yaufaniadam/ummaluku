@@ -96,7 +96,7 @@
 
                                 @if ($isReadOnly)
                                     @if ($uploadedDocument)
-                                        <a href="{{ Storage::url($uploadedDocument->file_path) }}" target="_blank"
+                                        <a href="{{ route('secure.files', ['path' => $uploadedDocument->file_path]) }}" target="_blank"
                                             class="btn btn-sm btn-secondary">
                                             <i class="bi bi-eye"></i> Lihat File
                                         </a>
@@ -116,7 +116,7 @@
                                             </div>
                                         </form>
                                     @else
-                                        <a href="{{ Storage::url($uploadedDocument->file_path) }}" target="_blank"
+                                        <a href="{{ route('secure.files', ['path' => $uploadedDocument->file_path]) }}" target="_blank"
                                             class="btn btn-sm btn-secondary">
                                             <i class="bi bi-eye"></i> Lihat File
                                         </a>

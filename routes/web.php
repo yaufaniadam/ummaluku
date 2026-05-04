@@ -60,3 +60,6 @@ require __DIR__ . '/modules/prodi.php';
 require __DIR__ . '/modules/staff.php';
 
 require __DIR__ . '/auth.php';
+
+// Secure File Access
+Route::get('/secure/files', [App\Http\Controllers\FileAccessController::class, 'serve'])->name('secure.files')->middleware('auth');

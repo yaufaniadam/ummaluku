@@ -11,7 +11,14 @@ class EmployeeFunctionalHistory extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'employee_type',
+        'employee_id',
+        'functional_position_id',
+        'sk_number',
+        'tmt',
+        'is_active'
+    ];
 
     protected $casts = [
         'tmt' => 'date',

@@ -43,14 +43,20 @@ class ReRegistrationController extends Controller
         $invoice->installments()->delete();
 
         if ($request->payment_scheme === 'full') {
+            // Cek promo Early Bird (sebelum 31 Mei 2026)
+            $finalAmount = $totalAmount;
+            if (now()->lt(\Carbon\Carbon::parse('2026-05-31'))) {
+                $finalAmount = 2900000;
+            }
+
             // Jika bayar lunas, buat 1 cicilan
             $invoice->installments()->create([
                 'installment_number' => 1,
-                'amount' => $totalAmount,
+                'amount' => $finalAmount,
                 'due_date' => now()->addWeeks(2),
             ]);
         } elseif ($request->payment_scheme === 'installment') {
-            // Jika cicilan, buat 2 cicilan
+            // Jika cicilan, buat 2 cicilan (tidak dapat diskon)
             $invoice->installments()->create([
                 'installment_number' => 1,
                 'amount' => $totalAmount * 0.5, // 50%

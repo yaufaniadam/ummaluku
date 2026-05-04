@@ -79,7 +79,7 @@
                                     </td>
                                     <td>
                                         @if($installment->proof_of_payment)
-                                            <a href="{{ Storage::url($installment->proof_of_payment) }}" target="_blank" class="btn btn-xs btn-info">
+                                            <a href="{{ route('secure.files', ['path' => $installment->proof_of_payment]) }}" target="_blank" class="btn btn-xs btn-info">
                                                 <i class="fas fa-eye"></i> Lihat Bukti
                                             </a>
                                         @else
