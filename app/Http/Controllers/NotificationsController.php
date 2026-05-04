@@ -24,7 +24,7 @@ class NotificationsController extends Controller
                 <form action="' . $formAction . '" method="POST" class="dropdown-item-form">
                     ' . csrf_field() . '
                     <button type="submit" class="dropdown-item-button">
-                        ' . $icon . $notification->data['message'] . $time . '
+                        ' . $icon . e($notification->data['message']) . $time . '
                     </button>
                 </form>
             ';

@@ -73,7 +73,7 @@
                                                 <div class="modal-body text-center p-0" style="height: 70vh;">
                                                     @if($installment->proof_of_payment)
                                                         @php
-                                                            $fileUrl = Storage::url($installment->proof_of_payment);
+                                                            $fileUrl = route('secure.files', ['path' => $installment->proof_of_payment]);
                                                             $extension = pathinfo($installment->proof_of_payment, PATHINFO_EXTENSION);
                                                             $isPdf = strtolower($extension) === 'pdf';
                                                         @endphp

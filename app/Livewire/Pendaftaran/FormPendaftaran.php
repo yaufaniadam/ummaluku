@@ -38,7 +38,7 @@ class FormPendaftaran extends Component
     protected function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|not_regex:/[<>]/',
             'email' => 'required|email|unique:users,email',
             'phone' => 'required|numeric|digits_between:10,15|different:parent_phone',
             'birth_date' => 'required|date',
@@ -114,10 +114,8 @@ class FormPendaftaran extends Component
     // Variabel untuk menampung objek aplikasi
     $applicationObject = null;
 
-        // 2. Hasilkan password acak yang aman
-        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        // Acak kumpulan karakter dan ambil 10 karakter pertama
-        $generatedPassword = substr(str_shuffle($characters), 0, 4);
+        // 2. Hasilkan password acak yang aman (10 karakter alphanumeric)
+        // $generatedPassword sudah dihasilkan di baris 112 menggunakan Str::random(10)
 
         // 2. Mulai Database Transaction
         $user = DB::transaction(function () use ($validatedData, $generatedPassword) {

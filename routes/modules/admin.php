@@ -118,7 +118,7 @@ Route::prefix('admin/keuangan')->middleware(['auth', 'permission:biaya-list'])->
 });
 
 
-Route::prefix('admin/akademik')->middleware(['auth'])->name('admin.akademik.')->group(function () {
+Route::prefix('admin/akademik')->middleware(['auth', 'role:Super Admin|Admin'])->name('admin.akademik.')->group(function () {
     Route::get('/dashboard', [AkademikDashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('curriculums', CurriculumController::class);

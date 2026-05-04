@@ -51,7 +51,7 @@ class SettingSeeder extends Seeder
 
             [
                 'key' => 're_registration_fee',
-                'value' => '1500000', // Biaya tahun ini sesuai permintaan Anda
+                'value' => '2957000', // Biaya tahun ini sesuai permintaan Anda
                 'type' => 'integer',
                 'created_at' => now(),
                 'updated_at' => now()

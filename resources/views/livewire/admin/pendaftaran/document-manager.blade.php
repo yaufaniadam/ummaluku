@@ -54,7 +54,7 @@
                                             </div>
                                             <div class="modal-body p-0" style="height: calc(90vh - 120px);">
                                                 @php
-                                                    $fileUrl = Storage::url($uploadedDocument->file_path);
+                                                    $fileUrl = route('secure.files', ['path' => $uploadedDocument->file_path]);
                                                     $extension = pathinfo($uploadedDocument->file_path, PATHINFO_EXTENSION);
                                                     $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
                                                     $isPdf = strtolower($extension) === 'pdf';

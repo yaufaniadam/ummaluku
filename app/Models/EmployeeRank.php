@@ -9,5 +9,5 @@ class EmployeeRank extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = ['grade', 'name', 'description'];
 }

@@ -9,5 +9,5 @@ class FunctionalPosition extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = ['name', 'code', 'type', 'description'];
 }

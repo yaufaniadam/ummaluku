@@ -9,5 +9,5 @@ class StructuralPosition extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = ['name', 'code', 'description'];
 }
