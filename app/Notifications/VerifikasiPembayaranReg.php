@@ -42,7 +42,7 @@ class VerifikasiPembayaranReg extends Notification implements ShouldQueue // <--
         return [
             'message' => 'Dokumen menunggu verifikasi',
             'icon'    => 'fas fa-user-plus text-info',
-            'url'     => route('admin.pendaftaran.show', $this->invoiceId),
+            'url'     => route('admin.pmb.payment.show', $this->invoiceId),
         ];
     }
 

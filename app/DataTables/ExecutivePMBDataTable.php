@@ -32,6 +32,16 @@ class ExecutivePMBDataTable extends DataTable
             ->filterColumn('status', function($query, $keyword) {
                 $query->where('status', $keyword);
             })
+            ->filterColumn('admissionCategory.name', function($query, $keyword) {
+                $query->whereHas('admissionCategory', function($q) use ($keyword) {
+                    $q->where('name', 'like', "%{$keyword}%");
+                });
+            })
+            ->filterColumn('batch.name', function($query, $keyword) {
+                $query->whereHas('batch', function($q) use ($keyword) {
+                    $q->where('name', 'like', "%{$keyword}%");
+                });
+            })
             ->rawColumns(['status']);
     }
 
@@ -82,7 +92,7 @@ class ExecutivePMBDataTable extends DataTable
             Column::make('DT_RowIndex')->title('No')->searchable(false)->orderable(false)->width(50),
             Column::make('registration_number')->title('No. Registrasi'),
             Column::make('prospective.user.name')->title('Nama'),
-            Column::make('admission_category.name')->title('Jalur'),
+            Column::make('admissionCategory.name')->title('Jalur'),
             Column::make('batch.name')->title('Gelombang'),
             Column::computed('program')->title('Prodi Pilihan 1'),
             Column::make('status')->title('Status'),

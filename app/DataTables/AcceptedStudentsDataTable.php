@@ -71,6 +71,16 @@ class AcceptedStudentsDataTable extends DataTable
             })
 
            
+            ->filterColumn('admissionCategory.name', function($query, $keyword) {
+                $query->whereHas('admissionCategory', function($q) use ($keyword) {
+                    $q->where('name', 'like', "%{$keyword}%");
+                });
+            })
+            ->filterColumn('batch.name', function($query, $keyword) {
+                $query->whereHas('batch', function($q) use ($keyword) {
+                    $q->where('name', 'like', "%{$keyword}%");
+                });
+            })
             ->rawColumns(['action', 'status', 'payment_status']);
     }
 
@@ -122,7 +132,7 @@ class AcceptedStudentsDataTable extends DataTable
             Column::make('DT_RowIndex')->title('No')->searchable(false)->orderable(false),
             Column::make('registration_number')->title('No. Registrasi'),
             Column::make('prospective.user.name')->title('Nama Mahasiswa'),
-            Column::make('admission_category.name')->title('Jalur'),
+            Column::make('admissionCategory.name')->title('Jalur'),
             Column::make('batch.name')->title('Gelombang'),
             Column::computed('accepted_program')->title('Diterima di Prodi'),
             Column::make('status')->title('Status'),

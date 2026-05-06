@@ -18,27 +18,33 @@ class ApplicationsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addIndexColumn() // Menambahkan kolom nomor urut
+            ->addIndexColumn()
             ->addColumn('action', function ($row) {
-                // Membuat tombol aksi untuk setiap baris
                 $viewUrl = route('admin.pmb.pendaftaran.show', $row->id);
-                $button = ''; // Initialize an empty string for the button
-
-                // Only show the "Lihat Detail" button if the status is 'menunggu_verifikasi'
-                if (($row->status === 'proses_verifikasi') || ($row->status === 'sudah_registrasi') || ($row->status === 'lolos_verifikasi')) {
+                $button = '';
+                if (in_array($row->status, ['proses_verifikasi', 'sudah_registrasi', 'lolos_verifikasi'])) {
                     $button = '<a href="' . $viewUrl . '" class="btn btn-info btn-sm">Lihat Detail</a>';
                 }
                 return $button;
             })
             ->editColumn('prospective.user.name', function ($row) {
-                // Membuat nama pendaftar bisa diklik dan mengarah ke detail
                 return '<a href="' . route('admin.pmb.pendaftaran.show', $row->id) . '">' . $row->prospective->user->name . '</a>';
             })
             ->editColumn('status', function ($row) {
-                // Mengubah tampilan status menjadi badge
                 return '<span class="badge badge-info">' . \Str::title(str_replace('_', ' ', $row->status)) . '</span>';
             })
-            // Memberitahu Yajra bahwa kolom action dan status berisi HTML
+            ->editColumn('admission_category_name', function ($row) {
+                return $row->admission_category_name ?? '-';
+            })
+            ->editColumn('batch_name', function ($row) {
+                return $row->batch_name ?? '-';
+            })
+            ->filterColumn('admission_category_name', function ($query, $keyword) {
+                $query->where('admission_categories.name', 'like', "%{$keyword}%");
+            })
+            ->filterColumn('batch_name', function ($query, $keyword) {
+                $query->where('batches.name', 'like', "%{$keyword}%");
+            })
             ->rawColumns(['action', 'status', 'prospective.user.name']);
     }
 
@@ -47,22 +53,24 @@ class ApplicationsDataTable extends DataTable
      */
     public function query(Application $model): QueryBuilder
     {
-        // Kita mulai dengan query dasar
-        $query = $model->newQuery()->with(['prospective.user', 'batch', 'admissionCategory']);
+        $query = $model->newQuery()
+            ->select('applications.*')
+            ->with(['prospective.user'])
+            ->leftJoin('admission_categories', 'applications.admission_category_id', '=', 'admission_categories.id')
+            ->leftJoin('batches', 'applications.batch_id', '=', 'batches.id')
+            ->selectRaw('admission_categories.name as admission_category_name')
+            ->selectRaw('batches.name as batch_name');
 
-        // Terapkan filter status secara kondisional
-        // Blok ini hanya akan berjalan jika request('status') tidak kosong atau null.
         $query->when(request('status'), function ($q, $status) {
-            return $q->where('status', $status);
+            return $q->where('applications.status', $status);
         });
 
-        // Terapkan filter lain dengan cara yang sama
         $query->when(request('category'), function ($q, $categoryId) {
-            return $q->where('admission_category_id', $categoryId);
+            return $q->where('applications.admission_category_id', $categoryId);
         });
 
         $query->when(request('batch'), function ($q, $batchId) {
-            return $q->where('batch_id', $batchId);
+            return $q->where('applications.batch_id', $batchId);
         });
 
         return $query;
@@ -105,8 +113,8 @@ class ApplicationsDataTable extends DataTable
             Column::make('DT_RowIndex')->title('No')->searchable(false)->orderable(false),
             Column::make('registration_number')->title('No. Registrasi'),
             Column::make('prospective.user.name')->title('Nama Pendaftar'),
-            Column::make('admission_category.name')->title('Jalur'),
-            Column::make('batch.name')->title('Gelombang'),
+            Column::make('admission_category_name')->title('Jalur'),
+            Column::make('batch_name')->title('Gelombang'),
             Column::make('status')->title('Status'),
             Column::computed('action')
                 ->exportable(false)

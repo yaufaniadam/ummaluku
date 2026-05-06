@@ -44,9 +44,9 @@
                         <p class="mb-1 text-muted">Total biaya registrasi ulang normal:</p>
                         <h4 class="mb-3">Rp 2.957.000</h4>
 
-                        @if(now()->lt(\Carbon\Carbon::parse('2026-05-31')))
+                        @if(now()->lt(\Carbon\Carbon::parse('2026-06-01')))
                             <div class="alert alert-success bg-success-lt border-success">
-                                <p class="mb-0">Dapatkan harga spesial <strong>Rp 2.900.000</strong> jika Anda melakukan pembayaran lunas sebelum <strong>31 Mei 2026</strong>.</p>
+                                <p class="mb-0">Dapatkan harga spesial <strong>Rp 2.500.000</strong> jika Anda melakukan pembayaran lunas sebelum <strong>1 Juni 2026</strong>.</p>
                             </div>
                         @endif
                     </div>
@@ -89,7 +89,7 @@
                                                     @endif
                                                 </div>
                                                 <div class="text-primary h4 mb-1">
-                                                    @if($installment->installment_number == 1 && $installment->invoice->installments->count() == 1 && now()->lt(\Carbon\Carbon::parse('2026-05-31')))
+                                                    @if($installment->installment_number == 1 && $installment->invoice->installments->count() == 1 && now()->lt(\Carbon\Carbon::parse('2026-06-01')))
                                                         Rp {{ number_format($installment->amount, 0, ',', '.') }}
                                                         <small class="text-muted text-decoration-line-through small ms-1">Rp 2.957.000</small>
                                                     @else
@@ -148,8 +148,8 @@
                                     <input class="form-check-input" type="radio" name="payment_scheme" id="scheme_full"
                                         value="full" checked>
                                     <label class="form-check-label" for="scheme_full">
-                                        @if(now()->lt(\Carbon\Carbon::parse('2026-05-31')))
-                                            Bayar Lunas Sekarang (<strong class="text-success">Rp 2.900.000</strong> <del class="text-muted small">Rp 2.957.000</del>)
+                                        @if(now()->lt(\Carbon\Carbon::parse('2026-06-01')))
+                                            Bayar Lunas Sekarang (<strong class="text-success">Rp 2.500.000</strong> <del class="text-muted small">Rp 2.957.000</del>)
                                         @else
                                             Bayar Lunas Sekarang (Rp 2.957.000)
                                         @endif

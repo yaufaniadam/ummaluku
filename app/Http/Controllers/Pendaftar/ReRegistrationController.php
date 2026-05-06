@@ -45,8 +45,8 @@ class ReRegistrationController extends Controller
         if ($request->payment_scheme === 'full') {
             // Cek promo Early Bird (sebelum 31 Mei 2026)
             $finalAmount = $totalAmount;
-            if (now()->lt(\Carbon\Carbon::parse('2026-05-31'))) {
-                $finalAmount = 2900000;
+            if (now()->lt(\Carbon\Carbon::parse('2026-06-01'))) {
+                $finalAmount = 2500000;
             }
 
             // Jika bayar lunas, buat 1 cicilan

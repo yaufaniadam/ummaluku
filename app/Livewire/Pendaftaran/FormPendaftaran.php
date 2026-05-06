@@ -124,6 +124,7 @@ class FormPendaftaran extends Component
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
                 'password' => Hash::make($generatedPassword), // Password di-set oleh sistem
+                'email_verified_at' => now(), // Langsung verifikasi karena password dikirim via email
             ]);
 
             $newUser->assignRole('Camaru');

@@ -33,7 +33,7 @@ class MenungguVerifikasi extends Notification implements ShouldQueue
             ->subject('Dokumen Menunggu Verifikasi - PMB UM Maluku')
             ->greeting('Assalamualaikum Wr. Wb. ' . $notifiable->name . ',')
             ->line('Dokumen pendaftaran menunggu verifikasi Anda.')
-            ->action('Buka dashboard admin.', route('admin.pendaftaran.show', $this->applicationId))
+            ->action('Buka dashboard admin.', route('admin.pmb.pendaftaran.show', $this->applicationId))
             ->line('Terima kasih');
     }
 
@@ -42,7 +42,7 @@ class MenungguVerifikasi extends Notification implements ShouldQueue
         return [
             'message' => 'Dokumen menunggu verifikasi',
             'icon'    => 'fas fa-user-plus text-info',
-            'url'     => route('admin.pendaftaran.show', $this->applicationId),
+            'url'     => route('admin.pmb.pendaftaran.show', $this->applicationId),
         ];
     }
 

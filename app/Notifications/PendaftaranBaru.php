@@ -62,7 +62,7 @@ class PendaftaranBaru extends Notification implements ShouldQueue // <-- Impleme
         return [
             'message' => 'Pendaftar baru telah masuk: ' . $notifiable->name,
             'icon'    => 'fas fa-user-plus text-info', // Ikon dari Font Awesome
-            'url'     => route('admin.pendaftaran.show', $this->application->id),
+            'url'     => route('admin.pmb.pendaftaran.show', $this->application->id),
         ];
     }
 }
