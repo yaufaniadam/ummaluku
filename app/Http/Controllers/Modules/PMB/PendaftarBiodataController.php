@@ -23,13 +23,13 @@ class PendaftarBiodataController extends Controller
             'documents'
         ])->firstOrFail();
 
-
-        //  // 3. Penjaga Gerbang: Jika tidak ada tagihan, atau statusnya bukan 'accepted'
-        // $allowedStatuses = ['upload_dokumen', 'proses_verifikasi', 'diterima', 'sudah_registrasi','document_rejected'];
-        // if (!in_array($application->status, $allowedStatuses)) {
-        //     // Arahkan ke dashboard dengan pesan error
-        //     return redirect()->route('pendaftar')->with('error', 'Anda belum bisa mengakses halaman upload dokumen.');
-        // }
+        // Penjaga Gerbang: Upload dokumen hanya boleh diakses jika data diri sudah dilengkapi
+        // Status 'lengkapi_data' berarti user belum submit form biodata
+        $allowedStatuses = ['upload_dokumen', 'proses_verifikasi', 'lolos_verifikasi_data', 'diterima', 'sudah_registrasi', 'document_rejected'];
+        if (!in_array($application->status, $allowedStatuses)) {
+            return redirect()->route('pendaftar.biodata')
+                ->with('error', 'Harap lengkapi Data Diri terlebih dahulu sebelum mengupload dokumen.');
+        }
 
         // Tampilkan view baru dan kirim data aplikasi
         return view('pendaftar.document-upload', ['application' => $application]);

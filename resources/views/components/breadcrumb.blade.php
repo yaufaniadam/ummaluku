@@ -19,13 +19,20 @@
 
 
     <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('pendaftar.document.form') ? 'active' : '' }}"
-            href="{{ route('pendaftar.document.form') }}">
-            @if ($current === 'upload_dokumen')
-                <i class="bi bi-check-circle text-success"></i>
-            @endif
-            Dokumen
-        </a>
+        @if ($current === 'lengkapi_data')
+            {{-- Tab dikunci: data diri belum diisi --}}
+            <span class="nav-link disabled text-muted" style="cursor: not-allowed;" title="Lengkapi Data Diri terlebih dahulu">
+                <i class="bi bi-lock-fill me-1"></i> Dokumen
+            </span>
+        @else
+            <a class="nav-link {{ request()->routeIs('pendaftar.document.form') ? 'active' : '' }}"
+                href="{{ route('pendaftar.document.form') }}">
+                @if (in_array($current, ['proses_verifikasi', 'lolos_verifikasi_data', 'diterima', 'sudah_registrasi']))
+                    <i class="bi bi-check-circle text-success me-1"></i>
+                @endif
+                Dokumen
+            </a>
+        @endif
     </li>
 
     @if ($current === 'diterima')
